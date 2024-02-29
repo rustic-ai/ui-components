@@ -1,0 +1,7 @@
+.rustic-messages-space {
+  overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 16px;
+}

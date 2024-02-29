@@ -1,0 +1,119 @@
+{
+  "name": "@rustic-ai/ui-components",
+  "version": "0.0.1",
+  "keywords": [
+    "rustic-ai",
+    "conversational-ui"
+  ],
+  "license": "MIT",
+  "description": "A collection of components crafted for building interactive multimodal chat interfaces",
+  "main": "dist/index.js",
+  "files": [
+    "dist"
+  ],
+  "dependencies": {
+    "@emotion/react": "11.11.1",
+    "@emotion/styled": "11.11.0",
+    "@fullcalendar/core": "6.1.10",
+    "@fullcalendar/daygrid": "6.1.10",
+    "@fullcalendar/react": "6.1.10",
+    "@mui/icons-material": "5.15.8",
+    "@mui/material": "^5.15.7",
+    "@mui/styled-engine-sc": "^5.14.11",
+    "@mui/system": "^5.15.8",
+    "dompurify": "3.0.6",
+    "marked": "10.0.0",
+    "ol": "8.2.0",
+    "pluralize": "8.0.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "recharts": "2.10.3",
+    "uuid": "9.0.1"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "18.4.2",
+    "@commitlint/config-conventional": "18.4.2",
+    "@storybook/addon-essentials": "7.6.17",
+    "@storybook/addon-interactions": "7.6.17",
+    "@storybook/addon-links": "7.6.17",
+    "@storybook/addon-viewport": "7.6.17",
+    "@storybook/blocks": "7.6.17",
+    "@storybook/react": "7.6.17",
+    "@storybook/react-webpack5": "7.6.17",
+    "@storybook/testing-library": "0.2.2",
+    "@testing-library/cypress": "10.0.1",
+    "@testing-library/react": "13.4.0",
+    "@testing-library/user-event": "13.5.0",
+    "@types/dompurify": "3.0.5",
+    "@types/node": "20.11.20",
+    "@types/pluralize": "0.0.33",
+    "@types/react": "18.2.37",
+    "@types/react-dom": "18.2.15",
+    "@types/uuid": "9.0.7",
+    "@typescript-eslint/eslint-plugin": "7.0.2",
+    "commitizen": "4.3.0",
+    "css-loader": "6.10.0",
+    "cypress": "13.6.5",
+    "cz-conventional-changelog": "3.3.0",
+    "eslint": "8.56.0",
+    "eslint-config-prettier": "9.1.0",
+    "eslint-plugin-cypress": "2.15.1",
+    "eslint-plugin-mui-path-imports": "0.0.15",
+    "eslint-plugin-react": "7.33.2",
+    "eslint-plugin-simple-import-sort": "12.0.0",
+    "eslint-plugin-storybook": "0.8.0",
+    "eslint-plugin-unused-imports": "3.1.0",
+    "husky": "8.0.3",
+    "lint-staged": "15.2.2",
+    "mini-css-extract-plugin": "2.8.1",
+    "prettier": "3.2.5",
+    "prop-types": "15.8.1",
+    "storybook": "7.6.17",
+    "style-loader": "3.3.4",
+    "ts-loader": "9.5.1",
+    "ts-node": "10.9.2",
+    "typescript": "5.3.3",
+    "webpack": "5.89.0",
+    "webpack-cli": "5.1.4",
+    "webpack-node-externals": "3.0.0"
+  },
+  "peerDependencies": {
+    "@mui/material": "^5.15.7",
+    "@mui/styled-engine-sc": "^5.14.11",
+    "@mui/system": "^5.15.8",
+    "@types/react": "^18.2.37",
+    "@types/react-dom": "^18.2.15",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "scripts": {
+    "build": "webpack --config webpack.prod.config.js",
+    "setup-dev-env": "husky install",
+    "test": "LANG='en-US' TZ='America/Vancouver' cypress run --component",
+    "test:interactive": "LANG='en-US' TZ='America/Vancouver' cypress open",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  }
+}

@@ -1,0 +1,38 @@
+.rustic-participant-list {
+  padding: 24px;
+}
+
+.rustic-participant-list-no-participants-message {
+  padding: 24px;
+}
+
+.rustic-participants-container-title {
+  padding: 24px 32px 16px 32px;
+}
+
+.rustic-participant-list-item {
+  justify-content: space-between;
+  gap: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.rustic-participant-list-subheader {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.rustic-participant-list-subheader-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.rustic-participants-container-divider {
+  margin-inline: 24px;
+}

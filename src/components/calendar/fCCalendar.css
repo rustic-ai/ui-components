@@ -1,0 +1,20 @@
+.rustic-fc-calendar .fc-event {
+  overflow: hidden;
+}
+
+.rustic-fc-calendar .fc-button {
+  font-size: 12px;
+  padding: 2px 4px;
+}
+
+.rustic-fc-calendar .fc-toolbar-title {
+  font-size: 16px;
+  padding-inline: 8px;
+  text-align: center;
+}
+
+@media (max-width: 900px) {
+  .rustic-fc-calendar {
+    font-size: 12px;
+  }
+}

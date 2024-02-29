@@ -1,0 +1,74 @@
+import { Source, Meta } from '@storybook/addon-docs'
+
+<Meta title="Documentation/Theme And Styling" />
+
+# Theme and Styling Guide
+
+## Font Family
+
+Our demos and docs use the [Inter font family](https://fonts.google.com/specimen/Inter). If you want to use Inter in your project, add the code below to the `<head>` of your `index.html` file:
+
+```
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+```
+
+## Use Rustic Theme
+
+The Rustic theme is a custom theme used in our library. You can use it by importing it from the library package.
+
+```
+import { rusticTheme } from '@rustic-ai/ui-components'
+```
+
+You can then pass the theme to the theme provider like this:
+
+```
+<StyledEngineProvider injectFirst>
+    <ThemeProvider theme={rusticTheme}>
+        {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+        <CssBaseline />
+        {children}
+    </ThemeProvider>
+</StyledEngineProvider>
+```
+
+## Customize Theme
+
+If you want to tailor the visual appearance of the project to better suit your needs, you can simply use your theme file and pass it to the theme provider like this:
+
+```
+<StyledEngineProvider injectFirst>
+    <ThemeProvider theme={yourTheme}>
+        {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+        <CssBaseline />
+        {children}
+    </ThemeProvider>
+</StyledEngineProvider>
+```
+
+Make sure the structure of your theme follows [MUI’s theme structure](https://mui.com/material-ui/customization/default-theme/). You need to wrap the components inside the theme provider so that the theme can be applied to them.
+
+Here are some key areas you can customize:
+
+- **Colors**: Define primary, secondary, and other custom colors to match your brand or design preferences.
+- **Typography**: Customize font families, sizes, and weights for text elements throughout the project.
+- **Spacing**: Adjust spacing values to control the layout and spacing between elements.
+- **Breakpoints**: Define breakpoints for responsive design to adapt the layout for different screen sizes.
+- **Components Styling**: Customize specific components' styles, such as buttons, cards, and typography components.
+
+After customizing the theme, remember to test your changes:
+
+- Verify that the colors, typography, and spacing match your design expectations.
+- Test the responsiveness of the layout across various devices and screen sizes.
+- Check for any visual inconsistencies or layout issues caused by the theme customization.
+
+## Alter CSS Styles
+
+You can override the CSS styles in your own project. Here's how you can do it:
+
+- **Inspect Library Styles**: You can use browser developer tools to inspect the styles applied by the library. Identify the selectors and properties you want to override.
+- **Increase Specificity**: Ensure that the CSS selectors you use to override the library styles have higher specificity than the selectors used in the library. This means you may need to use more specific selectors or add additional classes to your HTML elements.
+
+We are actively working on providing CSS variables for customization in future releases. Keep an eye out for updates and enhancements to the library's customization options.

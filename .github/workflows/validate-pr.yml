@@ -1,0 +1,27 @@
+name: Validate PR
+
+# Controls when the action will run.
+on:
+  pull_request:
+    branches: [main]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  cypress-run:
+    if: github.repository_owner == 'rustic-ai'
+    runs-on: ubuntu-latest
+    env:
+      TZ: America/Vancouver
+      LANG: en-US
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Cypress run
+        uses: cypress-io/github-action@v6
+        with:
+          component: true

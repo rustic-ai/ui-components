@@ -1,0 +1,14 @@
+.rustic-youtube-video {
+  display: flex;
+  position: relative;
+}
+
+.rustic-youtube-video-loading-container {
+  position: absolute;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}

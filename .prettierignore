@@ -1,0 +1,7 @@
+CODEOWNERS
+# Ignore artifacts:
+.vscode
+.husky
+
+.gitignore
+.prettierignore

@@ -1,0 +1,63 @@
+import { Source, Meta } from '@storybook/addon-docs'
+
+<Meta title="Documentation/Quick Start" />
+
+# Quick Start
+
+Follow these steps to quickly integrate Rustic UI Components into your application and start leveraging its features and functionalities.
+
+1. Install the core package of Rustic UI Components using npm:
+
+   ```bash
+   npm install @rustic-ai/ui-components
+   ```
+
+   Additionally, ensure you have the necessary [Material UI](https://mui.com/material-ui/) packages installed:
+
+   ```bash
+   npm install @mui/material @emotion/react @emotion/styled
+   ```
+
+2. Start integrating Rustic UI Components into your application by importing the necessary components. Below is a sample code snippet demonstrating how to use the MessageSpace component to render messages:
+
+   ```
+   import {
+     FCCalendar,
+     Image,
+     MarkedMarkdown,
+     MarkedStreamingMarkdown,
+     MessageSpace,
+     OpenLayersMap,
+     RechartsTimeSeries,
+     StreamingText,
+     Table,
+     Text,
+     YoutubeVideo,
+   } from '@rustic-ai/ui-components'
+
+   export default function YourApp() {
+       // Sample data for messages. Please make sure your message data uses props we defined for each message format.
+       const messages = [/* Your message data array */];
+
+       return (
+           <>
+               <MessageSpace
+                   messages={messages}
+                   supportedElements={{
+                   text: Text,
+                   streamingText: StreamingText,
+                   markdown: MarkedMarkdown,
+                   streamingMarkdown: MarkedStreamingMarkdown,
+                   image: Image,
+                   timeSeries: RechartsTimeSeries,
+                   map: OpenLayersMap,
+                   youtubeVideo: YoutubeVideo,
+                   table: Table,
+                   calendar: FCCalendar,
+               }}
+               // Include other components as needed
+               />
+           </>
+       )
+   }
+   ```
