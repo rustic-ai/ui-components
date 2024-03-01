@@ -87,3 +87,28 @@ export function formatTimestamp(
 
   return date.toLocaleString(userLocale, options)
 }
+
+export function calculateTimeDiffInDays(
+  startTimestampInMillis: number,
+  endTimestampInMillis: number
+): number {
+  const oneDay = 24 * 60 * 60 * 1000 // hours*minutes*seconds*milliseconds
+  const startDate = new Date(startTimestampInMillis)
+  const endDate = new Date(endTimestampInMillis)
+  const differenceInDays = Math.round(
+    Math.abs((endDate.getTime() - startDate.getTime()) / oneDay)
+  )
+
+  return differenceInDays
+}
+
+export function formatTimestampLabel(
+  timestampInMillis: number,
+  timeDiffInDays: number
+) {
+  if (timeDiffInDays <= 1) {
+    return formatTimestamp(timestampInMillis, TimeFormat.HOUR)
+  } else {
+    return formatTimestamp(timestampInMillis, TimeFormat.MONTH_DATE)
+  }
+}
