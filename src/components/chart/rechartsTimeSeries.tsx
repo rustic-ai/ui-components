@@ -25,7 +25,7 @@ import {
   YAxis,
 } from 'recharts'
 
-import { formatTimestamp, TimeFormat } from '../helper'
+import { calculateTimeDiffInDays, formatTimestampLabel } from '../helper'
 
 export interface TimeSeriesData {
   timestamp: number
@@ -242,29 +242,6 @@ function RechartsTimeSeries(props: RechartsTimeSeriesProps) {
     return datasetsVisibility[dataKey] ? 'none' : 'line-through'
   }
 
-  function calculateTimeDuration(): number {
-    const lastTimeSeriesItem = props.timeSeries[props.timeSeries.length - 1]
-    const firstTimeSeriesItem = props.timeSeries[0]
-
-    const timeDifference =
-      lastTimeSeriesItem[xAxisField] - firstTimeSeriesItem[xAxisField]
-
-    const durationInDays =
-      // eslint-disable-next-line no-magic-numbers
-      props.timeSeries.length > 0 ? timeDifference / 60 / 60 / 24 : 0
-    return durationInDays
-  }
-
-  function formatTimeLabel(timestamp: number) {
-    const durationInDays = calculateTimeDuration()
-
-    if (durationInDays <= 1) {
-      return formatTimestamp(timestamp, TimeFormat.HOUR)
-    } else {
-      return formatTimestamp(timestamp, TimeFormat.MONTH_DATE)
-    }
-  }
-
   function renderLegend() {
     return (
       <Box className="rustic-recharts-time-series-legend">
@@ -295,9 +272,18 @@ function RechartsTimeSeries(props: RechartsTimeSeriesProps) {
       </Box>
     )
   }
+
   if (timeSeries.length === 0) {
     return <Typography variant="body2">No data available</Typography>
   } else {
+    const lastTimeSeriesItem = props.timeSeries[props.timeSeries.length - 1]
+    const firstTimeSeriesItem = props.timeSeries[0]
+
+    const timeSeriesDuration = calculateTimeDiffInDays(
+      firstTimeSeriesItem[xAxisField],
+      lastTimeSeriesItem[xAxisField]
+    )
+
     return (
       <Box
         className="rustic-recharts-time-series"
@@ -379,14 +365,21 @@ function RechartsTimeSeries(props: RechartsTimeSeriesProps) {
               data={timeSeries}
               margin={props.chartContainerMargin}
             >
-              <XAxis dataKey={xAxisField} tickFormatter={formatTimeLabel} />
+              <XAxis
+                dataKey={xAxisField}
+                tickFormatter={(value) =>
+                  formatTimestampLabel(value, timeSeriesDuration)
+                }
+              />
               <YAxis
                 domain={['auto', 'auto']}
                 width={props.yAxisLabelWidth}
                 tickFormatter={props.yAxisTickFormatter}
               />
               <Tooltip
-                labelFormatter={(label: number) => [formatTimeLabel(label)]}
+                labelFormatter={(label: number) => [
+                  formatTimestampLabel(label, timeSeriesDuration),
+                ]}
                 formatter={props.tooltipFormatter}
               />
               <Legend content={renderLegend} />
