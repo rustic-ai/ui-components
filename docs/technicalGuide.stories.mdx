@@ -1,0 +1,299 @@
+import { Source, Meta } from '@storybook/addon-docs'
+
+<Meta title="Documentation/Technical Guide" />
+
+# Technical Guide
+
+Rendering messages in different formats is important to enrich the user experience. Our library provides a set of components to render messages in different formats. Guidance on how to use our components are shown below. Links to each section are listed here for quick navigation:
+
+- [Rendering Messages with MessageSpace](https://rustic-ai.github.io/ui-components/?path=/docs/documentation-technical-guide--docs#rendering-messages-with-messagespace)
+- [Rendering Components with ElementRenderer](https://rustic-ai.github.io/ui-components/?path=/docs/documentation-technical-guide--docs#rendering-components-with-elementrenderer)
+- [Supported Elements](https://rustic-ai.github.io/ui-components/?path=/docs/documentation-technical-guide--docs#supported-elements)
+- [Message Structure](https://rustic-ai.github.io/ui-components/?path=/docs/documentation-technical-guide--docs#message-structure)
+- [Format-Specific Data](https://rustic-ai.github.io/ui-components/?path=/docs/documentation-technical-guide--docs#format-specific-data)
+- [Rendering Components Without ElementRenderer](https://rustic-ai.github.io/ui-components/?path=/docs/documentation-technical-guide--docs#rendering-components-without-elementrenderer)
+- [Extending Components](https://rustic-ai.github.io/ui-components/?path=/docs/documentation-technical-guide--docs#extending-components)
+
+## Rendering Messages with MessageSpace
+
+`MessageSpace` serves as the central hub for rendering messages within your application. It offers a streamlined approach to message rendering, simplifying integration and enhancing user experience.
+It combines all of the multimodal components we have and efficiently renders a list of messages by accepting the necessary props.
+
+To render messages using `MessageSpace`, utilize the following syntax:
+
+```
+<MessageSpace messages={messages} supportedElements={supportedElements} messageInteractions={messageInteractions} />
+```
+
+Things to remember when you use `MessageSpace`:
+
+- **Import Supported Components**: Ensure that all supported components are imported before using the `ElementRenderer`.
+- **Customization**: You can customize the supported components by passing them as props to the `ElementRenderer`. Define the components you want to render for each message format according to your requirements. Refer to the [Supported Elements](https://rustic-ai.github.io/ui-components/?path=/docs/documentation-technical-guide--docs#supported-elements) section for the default supported components.
+- **Message Format and Data Structure**: Each message must adhere to the specified data structure for its corresponding format. Refer to the [Format-specific Data](https://rustic-ai.github.io/ui-components/?path=/docs/documentation-technical-guide--docs#format-specific-data) section for detailed information on the props required for each message format.
+- **Add Interactions**: You can add interactions to the messages by passing them as props to the `MessageSpace`. This is optional. Examples of possible interactions include copy, forward, and delete.
+
+## Rendering Components with ElementRenderer
+
+`ElementRenderer` forms the core of the message rendering process. It dynamically renders components based on message formats, abstracting away complexity and promoting modularity.
+
+### Benefits of Using ElementRenderer:
+
+**Dynamic Rendering**: `ElementRenderer` enables dynamic rendering of content based on message formats, eliminating the need for manual switching or conditional rendering based on message types.
+
+**Modularity and Extensibility**: By separating the rendering logic into individual components and using a component map, `ElementRenderer` promotes modularity and allows for easy extension or customization of supported formats.
+
+**Consistency and Maintainability**: `ElementRenderer` ensures consistency in rendering across different message formats, making it easier to maintain and update rendering logic centrally.
+
+**Scalability**: As your application grows and evolves, `ElementRenderer` scales with it, accommodating new message formats and components seamlessly.
+
+To use `ElementRenderer`, you need to pass the following props:
+
+```
+<ElementRenderer message={message} supportedElements={supportedElements} />
+```
+
+Similar to `MessageSpace`, all of the supported elements need to be imported. Refer to the [Supported Elements](https://rustic-ai.github.io/ui-components/?path=/docs/documentation-technical-guide--docs#supported-elements), [Message Structure](https://rustic-ai.github.io/ui-components/?path=/docs/documentation-technical-guide--docs#message-structure) and [Format-Specific Data](https://rustic-ai.github.io/ui-components/?path=/docs/documentation-technical-guide--docs#format-specific-data) sections for more information about what to pass as props.
+
+## Supported Elements
+
+Both `MessageSpace` and `ElementRender` need you to pass a list of supported elements to the library. This object is used to match the message format with the correct component. The key should be the format of the message and the value should be the component that will be rendered for the message format. Below are the default supported elements. You could simply copy and paste the list to your code and pass it as `supportedElements` props.
+
+```
+{
+  text: Text,
+  streamingText: StreamingText,
+  markdown: MarkedMarkdown,
+  streamingMarkdown: MarkedStreamingMarkdown,
+  image: Image,
+  timeSeries: RechartsTimeSeries,
+  map: OpenLayersMap,
+  youtubeVideo: YoutubeVideo,
+  table: Table,
+  calendar: FCCalendar,
+}
+```
+
+## Message Structure
+
+If you want to use our library to build your conversational UI interface, you will need to understand the message structure that required by the library.
+
+MessageProps is used to support all of the message formats. Currently, `inReplyTo`, `threadId`, `priority`, `taggedParticipants` and `topicId` are not being used, but we are planing to incorperate them later.
+
+```
+interface MessageProps {
+  id: string //unique identifier for the message
+  timestamp: string //time when the message was sent
+  sender: string //sender of the message
+  conversationId: string //each message belong to a conversation
+  format: string //format of message content, currently supporting 'text','markdown', 'image','timeSeries','map', 'youtubeVideo', 'table', 'streamingText', 'streamingMarkdown' and 'weather'.
+  data: MessageData //message content, varies based on the format
+  inReplyTo?: string //id of the message being replied to
+  threadId?: string //supports updating messages
+  priority?: string //priority level of message
+  taggedParticipants?: string[] //can tag participants
+  topicId?: string //one conversation can have multiple topics
+}
+```
+
+We use `ThreadableMessage` in both `MessageSpace` and `ElementRenderer` to support the updating feature. So if your App doesn't need to support the updating feature, you can pass the `MessageProps` instead.
+
+```
+Interface ThreadableMessage extends MessageProps {
+  lastThreadMessage?: MessageProps
+  threadMessagesData?: MessageData[]
+}
+
+Interface MessageData { [key: string]: any }
+```
+
+## Format-Specific Data
+
+The data props in the MessageProps is format-specific. Below are the format-specific data props.
+
+### calendar:
+
+```
+events: {
+  id: string
+  allDay?: boolean
+  start: string
+  end?: string
+  title: string
+}
+initialView?: 'dayGridMonth' | 'dayGridWeek' | 'dayGridDay'
+```
+
+### timeSeries:
+
+```
+timeSeries: {
+  timestamp: number
+  [key: string]: number
+}
+chartColors: string[]
+referenceLineYAxis?: number[]
+referenceLineColor?: string[]
+referenceLineLabel?: string[]
+referenceLineStrokeWidth?: number[]
+title?: string
+description?: string
+onClick?: (...args: any[]) => any
+yAxisLabelWidth?: number
+minChartWidth?: number
+maxHeight?: number
+updatedData?: { timeSeries: {
+  timestamp: number
+  [key: string]: number
+  }[]
+}[]
+aspectRatio?: number
+width?: number
+disableChartTypeToggle?: boolean
+defaultChartType?: TimeSeriesType
+yAxisTickFormatter?: (value: number) => string
+tooltipFormatter?: (value: number, name: string) => [string, string]
+chartContainerMargin?: Margin
+```
+
+### image
+
+```
+url: string
+width?: number
+height?: number
+alt?: string
+```
+
+### map
+
+```
+longitude: number
+latitude: number
+zoom?: number
+width?: number
+height?: number
+markerSize?: number
+```
+
+### markdown/streamingMarkdown
+
+```
+text: string
+updatedData?: { text: string }[]
+```
+
+### table
+
+```
+data: Array<Record<string, string | number>>
+title?: string
+description?: string
+headers?: string[]
+```
+
+### text
+
+```
+text: string
+```
+
+### streamingText
+
+```
+text: string
+updatedData?: { text: string }[]
+```
+
+### youtubeVideo
+
+```
+youtubeVideoId: string
+height?: number
+width?: number
+title?: string
+```
+
+## Rendering Components Without ElementRenderer
+
+If you don't want to use `ElementRenderer` to render components, you can incorporate UI components into your application just like any other React component. Refer to the [Format-specific Data](https://rustic-ai.github.io/ui-components/?path=/docs/documentation-technical-guide--docs#format-specific-data) section for the available props you can pass to each component. Here's an example of how to use the `RechartsTimeSeries` component:
+
+```
+import { RechartsTimeSeries } from '@rustic-ai/ui-components';
+
+// Define your data and formatters
+const yourTimeSeriesData = [
+  // Your time series data
+];
+
+const yourYAxisTickFormatter = (value) => `${value}M`; // Example formatter
+const yourTooltipFormatter = (value, name) => [`${value}M`, name]; // Example formatter
+const yourChartContainerMargin = { top: 20, left: 25, right: 25, bottom: 20 }; // Example margin
+
+function YourComponent() {
+  return (
+    <RechartsTimeSeries
+      title="Your Chart Title"
+      description="Your Description"
+      timeSeries={yourTimeSeriesData}
+      yAxisTickFormatter={yourYAxisTickFormatter}
+      tooltipFormatter={yourTooltipFormatter}
+      chartContainerMargin={yourChartContainerMargin}
+    />
+  );
+}
+
+export default YourComponent;
+```
+
+### Extending Components
+
+To extend a component, you can create a new component that inherits properties and functionality from the base component while adding new features or customizing existing behavior.
+
+Here's an example of how you can extend a component:
+
+```
+import Box from '@mui/material/Box'
+import React from 'react'
+
+
+import Image, { ImageProps } from './image'
+
+
+interface ExtendedImageProps extends ImageProps {
+ borderRadius?: string
+}
+
+
+const ExtendedImage: React.FC<ExtendedImageProps> = ({
+ borderRadius,
+ ...props
+}) => {
+ // Customize behavior or add new features
+ return (
+   <Box borderRadius={borderRadius} overflow="hidden" position="relative">
+     <Image {...props} />
+
+   </Box>
+ )
+}
+
+
+export default ExtendedImage
+```
+
+In this extension:
+
+- We create a new interface `ExtendedImageProps` that extends `ImageProps` and adds an optional `borderRadius` prop.
+- We create a new functional component `ExtendedImage` that accepts props of type `ExtendedImageProps`.
+- Inside the `ExtendedImage` component, we customize the behavior by wrapping the `Image` component inside a `Box` component to allow customizing the border radius and overflow behavior.
+- We render the `Image` component with the extended props.
+
+**Note**: If the extended component is going to be displayed as a message, please remember to add the extended component to the `supportedElements.json` file so that the component can be rendered successfully. Otherwise, the message containing your extended component will be displayed as ‘unsupported data format’.
+
+You can use the `ExtendedImage` component in your application like any other React component:
+
+```jsx
+<ExtendedImage url="your-image-url" borderRadius="10px" />
+```
+
+This will render the image with a border radius of 10px and inherit default width, height, and alt props from the Image component. You can also override these props as needed when using the ExtendedImage component.
