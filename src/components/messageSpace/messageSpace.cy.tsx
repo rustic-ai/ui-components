@@ -72,10 +72,12 @@ describe('MessageSpace Component', () => {
     cy.mount(
       <MessageSpace messages={messages} supportedElements={supportedElements} />
     )
-    cy.get('[data-cy=currentConversation]').should('exist')
+    const messageSpace = '[data-cy=message-space]'
+
+    cy.get(messageSpace).should('exist')
 
     messages.forEach((message) => {
-      cy.get('[data-cy=currentConversation]')
+      cy.get(messageSpace)
         .should('contain', message.sender)
         .and('contain', message.data.text)
     })
