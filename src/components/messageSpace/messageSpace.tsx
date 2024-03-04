@@ -16,7 +16,7 @@ export interface MessageSpaceProps {
 
 const MessageSpace = (props: MessageSpaceProps) => {
   return (
-    <Box data-cy="currentConversation" className="rustic-messages-space">
+    <Box data-cy="message-space" className="rustic-messages-space">
       {props.messages &&
         props.messages.length > 0 &&
         props.messages.map((message) => {
