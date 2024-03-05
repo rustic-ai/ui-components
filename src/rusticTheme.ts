@@ -4,54 +4,9 @@ import { createTheme, responsiveFontSizes } from '@mui/material/styles'
 
 const dividerColor = '#DDD0CA'
 const disabledColor = '#C7C2C0'
-
-let theme = createTheme({
+const muiGeneralSetting = {
   shape: {
     borderRadius: 16,
-  },
-  palette: {
-    mode: 'light',
-    divider: dividerColor,
-    text: {
-      secondary: '#4E443F',
-      disabled: disabledColor,
-    },
-    primary: {
-      main: '#3D3834',
-      contrastText: '#FFFFFF',
-      dark: '#2D2825',
-      light: dividerColor,
-    },
-    secondary: {
-      main: '#FF6928',
-      light: '#FFDBCC',
-      dark: '#E54500',
-    },
-    error: {
-      main: '#F82A43',
-      dark: '#B51616',
-    },
-    warning: {
-      main: '#FFB800',
-    },
-    info: {
-      main: '#0094FF',
-    },
-    success: {
-      main: '#35A700',
-    },
-    background: {
-      default: '#F4F0EF',
-      paper: '#FFFFFF',
-    },
-    action: {
-      active: '#5F5C5A',
-      hover: '#F1ECEA',
-      selected: disabledColor,
-      disabledBackground: '#E5E5E5',
-      focus: '#F4F0EF',
-      disabled: disabledColor,
-    },
   },
   typography: {
     fontFamily: 'Inter',
@@ -142,7 +97,104 @@ let theme = createTheme({
       }
     }),
   ] as Shadows,
+}
+
+let rusticLightTheme = createTheme({
+  ...muiGeneralSetting,
+  palette: {
+    mode: 'light',
+    divider: dividerColor,
+    text: {
+      secondary: '#4E443F',
+      disabled: disabledColor,
+    },
+    primary: {
+      main: '#3D3834',
+      contrastText: '#FFFFFF',
+      dark: '#2D2825',
+      light: dividerColor,
+    },
+    secondary: {
+      main: '#FF6928',
+      light: '#FFDBCC',
+      dark: '#E54500',
+    },
+    error: {
+      main: '#F82A43',
+      dark: '#B51616',
+    },
+    warning: {
+      main: '#FFB800',
+    },
+    info: {
+      main: '#0094FF',
+    },
+    success: {
+      main: '#35A700',
+    },
+    background: {
+      default: '#F4F0EF',
+      paper: '#FFFFFF',
+    },
+    action: {
+      active: '#5F5C5A',
+      hover: '#F1ECEA',
+      selected: disabledColor,
+      disabledBackground: '#E5E5E5',
+      focus: '#F4F0EF',
+      disabled: disabledColor,
+    },
+  },
 })
 
-theme = responsiveFontSizes(theme)
-export default theme
+let rusticDarkTheme = createTheme({
+  ...muiGeneralSetting,
+  palette: {
+    mode: 'dark',
+    primary: {
+      main: '#FFFCFB',
+      dark: '#E54500',
+      light: '#FFDBCC',
+    },
+    secondary: {
+      main: '#FF6928',
+      light: '#FFA983',
+      dark: '#E54500',
+    },
+    error: {
+      main: '#F82A43',
+    },
+    warning: {
+      main: '#FFB800',
+    },
+    info: {
+      main: '#0094FF',
+    },
+    success: {
+      main: '#35A700',
+    },
+    background: {
+      default: '#040404',
+      paper: '#2F2F2F',
+    },
+    divider: '#D0C4BE',
+    text: {
+      primary: '#FFFFFF',
+      secondary: '#EBEBEB',
+      disabled: '#C1C1C1',
+    },
+    action: {
+      active: '#5F5C5A',
+      hover: '#9A9A9A',
+      selected: '#D6D0D0',
+      focus: '#FDFDFD',
+      disabledBackground: '#E5E5E5',
+      disabled: '#C7C2C0',
+    },
+  },
+})
+
+rusticLightTheme = responsiveFontSizes(rusticLightTheme)
+rusticDarkTheme = responsiveFontSizes(rusticDarkTheme)
+export default rusticLightTheme
+export { rusticDarkTheme, rusticLightTheme }

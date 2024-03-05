@@ -9,10 +9,26 @@ import {
   ArgTypes,
   Stories,
 } from '@storybook/blocks'
-import rusticTheme from '../src/rusticTheme'
+import { rusticLightTheme, rusticDarkTheme } from '../src/rusticTheme'
+
 import React from 'react'
 
+export const globalTypes = {
+  theme: {
+    name: 'Theme',
+    description: 'Global theme for components',
+    defaultValue: 'light',
+    toolbar: {
+      icon: 'paintbrush',
+      title: 'Theme',
+      items: ['light', 'dark'],
+      showName: true,
+    },
+  },
+}
+
 const preview = {
+  globalTypes,
   parameters: {
     options: {
       storySort: {
@@ -40,18 +56,36 @@ const preview = {
   },
 }
 
-export const withMuiTheme = (Story) => (
-  <StyledEngineProvider injectFirst>
-    <ThemeProvider theme={rusticTheme}>
-      <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet"
-      />
-      <CssBaseline />
-      <Story />
-    </ThemeProvider>
-  </StyledEngineProvider>
-)
+export const withMuiTheme = (Story, context) => {
+  const theme =
+    context.globals.theme === 'light' ? rusticLightTheme : rusticDarkTheme
+
+  React.useEffect(() => {
+    document.body.style.backgroundColor = theme.palette.background.default
+  }, [context.globals.theme])
+
+  return (
+    <StyledEngineProvider injectFirst>
+      <ThemeProvider theme={theme}>
+        {/* add a div wrapper to show dark mode properly. Otherwise the background color would be white. */}
+        <div
+          style={{
+            backgroundColor: theme.palette.background.default,
+            padding: '24px',
+            borderRadius: '8px',
+          }}
+        >
+          <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+            rel="stylesheet"
+          />
+          <CssBaseline />
+          <Story />
+        </div>
+      </ThemeProvider>
+    </StyledEngineProvider>
+  )
+}
 
 export const decorators = [withMuiTheme]
 

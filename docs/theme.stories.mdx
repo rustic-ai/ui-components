@@ -14,15 +14,18 @@ Our demos and docs use the [Inter font family](https://fonts.google.com/specimen
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
 ```
 
-## Use Rustic Theme
+## Use Rustic Themes
 
-The Rustic theme is a custom theme used in our library. You can use it by importing it from the library package.
+The Rustic library provides customized light and dark themes, which you can easily integrate into your application. Here's how you can use Rustic themes effectively:
+
+You can import Rustic themes directly from the library package. For instance:
 
 ```
+// Light theme is the default rustic theme
 import { rusticTheme } from '@rustic-ai/ui-components'
 ```
 
-You can then pass the theme to the theme provider like this:
+After importing the desired theme, pass it to the ThemeProvider component:
 
 ```
 <StyledEngineProvider injectFirst>
@@ -32,6 +35,44 @@ You can then pass the theme to the theme provider like this:
         {children}
     </ThemeProvider>
 </StyledEngineProvider>
+```
+
+### **Toggling Between Light and Dark Mode**
+
+You can empower users to switch between light and dark modes seamlessly. Here's how you can implement this feature:
+
+```
+import React, { useState } from 'react';
+import { ThemeProvider, createTheme, CssBaseline, IconButton } from '@mui/material';
+import { Brightness4 as DarkModeIcon, Brightness7 as LightModeIcon } from '@mui/icons-material';
+import {
+  rusticDarkTheme,
+  rusticLightTheme,
+} from '@rustic-ai/ui-components'
+
+const App = () => {
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  // Toggle dark mode
+  const toggleDarkMode = () => {
+    setIsDarkMode(!isDarkMode);
+  };
+
+  return (
+    <ThemeProvider theme={isDarkMode ? rusticDarkTheme : rusticLightTheme}>
+      <CssBaseline />
+      <div>
+        {/* Dark mode toggle button */}
+        <IconButton onClick={toggleDarkMode}>
+          {isDarkMode ? <LightModeIcon /> : <DarkModeIcon />}
+        </IconButton>
+        {/* Your application content */}
+      </div>
+    </ThemeProvider>
+  );
+};
+
+export default App;
 ```
 
 ## Customize Theme

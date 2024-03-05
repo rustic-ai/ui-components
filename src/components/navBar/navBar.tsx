@@ -2,11 +2,10 @@ import './navBar.css'
 
 import AppBar from '@mui/material/AppBar'
 import IconButton from '@mui/material/IconButton'
+import { useTheme } from '@mui/material/styles'
 import Toolbar from '@mui/material/Toolbar'
 import type { ReactNode } from 'react'
 import React from 'react'
-
-import rusticTheme from '../../rusticTheme'
 
 interface NavBarProps {
   /** Desktop version: Logo is displayed in the top left corner. Tablet and mobile versions: position will be different if you add the drawer icons. */
@@ -26,11 +25,12 @@ interface NavBarProps {
 }
 
 const NavBar = (props: NavBarProps) => {
+  const theme = useTheme()
   return (
     <AppBar
       position="fixed"
       color="inherit"
-      sx={{ borderBottom: `1px solid ${rusticTheme.palette.divider}` }}
+      sx={{ borderBottom: `1px solid ${theme.palette.divider}` }}
       data-cy="nav-bar"
     >
       <Toolbar className="rustic-nav-bar">
