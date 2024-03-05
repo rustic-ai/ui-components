@@ -1,3 +1,4 @@
+import { rusticDarkTheme, rusticLightTheme } from '../rusticTheme'
 import rusticTheme from '../rusticTheme'
 import FCCalendar from './calendar/fCCalendar'
 import RechartsTimeSeries from './chart/rechartsTimeSeries'
@@ -30,6 +31,8 @@ export {
   ParticipantsContainer,
   RechartsTimeSeries,
   rusticTheme,
+  rusticDarkTheme,
+  rusticLightTheme,
   StreamingText,
   Table,
   Text,
