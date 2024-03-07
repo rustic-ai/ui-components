@@ -1,3 +1,6 @@
+import type { StoryFn } from '@storybook/react'
+import React from 'react'
+
 import Image from './image'
 
 export default {
@@ -21,7 +24,22 @@ export const Default = {
   },
 }
 
-export const Customized = {
+export const InsideSmallerParentContainer = {
+  args: {
+    url: 'https://assets-global.website-files.com/629d4351d174c60f32a4141a/647bfa926280c5b1cbccd03b_dragonscale_full_colour_rgb_icon_logo-p-500.png',
+  },
+  decorators: [
+    (Story: StoryFn) => {
+      return (
+        <div style={{ width: '200px' }}>
+          <Story />
+        </div>
+      )
+    },
+  ],
+}
+
+export const CustomizedWidthAndHeight = {
   args: {
     url: 'https://assets-global.website-files.com/629d4351d174c60f32a4141a/647bfa926280c5b1cbccd03b_dragonscale_full_colour_rgb_icon_logo-p-500.png',
     width: '100px',
