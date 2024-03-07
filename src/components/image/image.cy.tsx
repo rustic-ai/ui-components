@@ -16,12 +16,17 @@ describe('Image', () => {
     cy.get('img').should('have.attr', 'alt', 'An image is displayed')
   })
 
-  it('should set the width and height attributes to 200 if no width or height prop is provided', () => {
-    cy.mount(<Image {...defaultProps} />)
+  it('renders responsively if no width or height props are provided', () => {
+    const divWidth = 200
 
-    cy.get('img')
-      .should('have.attr', 'width', '200')
-      .should('have.attr', 'height', '200')
+    cy.mount(
+      <div style={{ width: `${divWidth}px` }}>
+        <Image {...defaultProps} />
+      </div>
+    )
+
+    cy.get('img').should('have.class', 'rustic-image-responsive')
+    cy.get('img').invoke('width').should('equal', divWidth)
   })
 
   it('renders image with provided props', () => {
