@@ -13,6 +13,7 @@ import {
   YoutubeVideo,
 } from '..'
 import MessageSpace from './messageSpace'
+import CodeSnippet from '../codeSnippet/codeSnippet'
 
 export default {
   title: 'Rustic UI/Message Space/Message Space',
@@ -90,6 +91,11 @@ const timeSeriesData = [
   },
 ]
 
+const code = `function greet(name) {
+  console.log('Hello, ' + name + '!');
+}
+
+greet('JavaScript');`
 const tableData = [
   {
     food: 'chocolate milk',
@@ -288,6 +294,23 @@ export const Default = {
           latitude: 49.2856,
         },
       },
+      {
+        ...humanMessageData,
+        timestamp: '2024-01-02T00:14:00.000Z',
+        format: 'text',
+        data: {
+          text: 'Could you show me an example of the code snippet component?',
+        },
+      },
+      {
+        ...agentMessageData,
+        timestamp: '2024-01-02T00:15:00.000Z',
+        format: 'codeSnippet',
+        data: {
+          code: code,
+          language: 'javascript',
+        },
+      },
     ],
     supportedElements: {
       text: Text,
@@ -300,6 +323,7 @@ export const Default = {
       youtubeVideo: YoutubeVideo,
       table: Table,
       calendar: FCCalendar,
+      codeSnippet: CodeSnippet,
     },
   },
 }

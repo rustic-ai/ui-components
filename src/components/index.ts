@@ -2,6 +2,7 @@ import { rusticDarkTheme, rusticLightTheme } from '../rusticTheme'
 import rusticTheme from '../rusticTheme'
 import FCCalendar from './calendar/fCCalendar'
 import RechartsTimeSeries from './chart/rechartsTimeSeries'
+import CodeSnippet from './codeSnippet/codeSnippet'
 import ElementRenderer from './elementRenderer/elementRenderer'
 import Image from './image/image'
 import OpenLayersMap from './map/openLayersMap'
@@ -30,6 +31,7 @@ export {
   OpenLayersMap,
   ParticipantsContainer,
   RechartsTimeSeries,
+  CodeSnippet,
   rusticTheme,
   rusticDarkTheme,
   rusticLightTheme,
