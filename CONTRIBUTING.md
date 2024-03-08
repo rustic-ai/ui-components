@@ -93,7 +93,7 @@ Ready to contribute? Here's how to set up `@rustic-ai/ui-components` for local d
 
     ```bash
     npm install
-    npm setup-dev-env
+    npm run setup-dev-env
     ```
 
 5.  Create a branch for local development:
