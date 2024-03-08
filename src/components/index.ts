@@ -20,6 +20,7 @@ import Timestamp from './timestamp/timestamp'
 import YoutubeVideo from './video/youtubeVideo'
 
 export {
+  CodeSnippet,
   ElementRenderer,
   FCCalendar,
   Image,
@@ -31,10 +32,9 @@ export {
   OpenLayersMap,
   ParticipantsContainer,
   RechartsTimeSeries,
-  CodeSnippet,
-  rusticTheme,
   rusticDarkTheme,
   rusticLightTheme,
+  rusticTheme,
   StreamingText,
   Table,
   Text,
@@ -42,3 +42,5 @@ export {
   Timestamp,
   YoutubeVideo,
 }
+
+export * from './types'

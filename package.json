@@ -1,6 +1,6 @@
 {
   "name": "@rustic-ai/ui-components",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "keywords": [
     "rustic-ai",
     "conversational-ui"
@@ -8,6 +8,7 @@
   "license": "MIT",
   "description": "A collection of components crafted for building interactive multimodal chat interfaces",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "files": [
     "dist"
   ],
