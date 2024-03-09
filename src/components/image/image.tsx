@@ -1,9 +1,11 @@
-import './image.css'
+import '../../index.css'
 
 import CircularProgress from '@mui/material/CircularProgress'
 import Typography from '@mui/material/Typography'
 import { useState } from 'react'
 import React from 'react'
+
+import { getSizeStyles } from '../helper'
 
 export interface ImageProps {
   /** Path to the image source. */
@@ -29,30 +31,11 @@ export default function Image(props: ImageProps) {
     return <Typography variant="body2">{errorMessage}</Typography>
   }
 
-  let stylingAttributes = {}
-
-  if (props.width) {
-    stylingAttributes = {
-      width: props.width,
-    }
-  }
-  if (props.height) {
-    stylingAttributes = {
-      ...stylingAttributes,
-      height: props.height,
-    }
-  }
-  if (!props.width && !props.height) {
-    stylingAttributes = {
-      className: 'rustic-image-responsive',
-    }
-  }
-
   return (
     <>
       {isLoading && <CircularProgress data-cy="spinner" />}
       <img
-        {...stylingAttributes}
+        {...getSizeStyles(props.width, props.height)}
         src={props.url}
         alt={props.alt}
         onError={handleImageError}
