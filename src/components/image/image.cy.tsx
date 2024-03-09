@@ -25,7 +25,7 @@ describe('Image', () => {
       </div>
     )
 
-    cy.get('img').should('have.class', 'rustic-image-responsive')
+    cy.get('img').should('have.class', 'rustic-fit-container')
     cy.get('img').invoke('width').should('equal', divWidth)
   })
 

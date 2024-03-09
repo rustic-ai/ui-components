@@ -112,3 +112,29 @@ export function formatTimestampLabel(
     return formatTimestamp(timestampInMillis, TimeFormat.MONTH_DATE)
   }
 }
+
+export function getSizeStyles(
+  maybeWidth: number | undefined,
+  maybeHeight: number | undefined
+): { width?: number; height?: number; className?: string } {
+  let stylingAttributes = {}
+
+  if (maybeWidth) {
+    stylingAttributes = {
+      width: maybeWidth,
+    }
+  }
+  if (maybeHeight) {
+    stylingAttributes = {
+      ...stylingAttributes,
+      height: maybeHeight,
+    }
+  }
+  if (!maybeWidth && !maybeHeight) {
+    stylingAttributes = {
+      className: 'rustic-fit-container',
+    }
+  }
+
+  return stylingAttributes
+}

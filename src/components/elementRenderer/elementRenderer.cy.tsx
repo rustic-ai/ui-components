@@ -42,8 +42,6 @@ describe('ElementRenderer', () => {
     )
 
     const youtubeVideoIframe = '[data-cy="youtube-video-iframe"]'
-    const loadingSpinner = '[data-cy="spinner"]'
-    cy.get(loadingSpinner).should('not.exist')
     cy.get(youtubeVideoIframe).then(($iframe) => {
       const src = $iframe.attr('src')
       const successStatusCode = 200

@@ -1,3 +1,6 @@
+import type { StoryFn } from '@storybook/react'
+import React from 'react'
+
 import YoutubeVideo from './youtubeVideo'
 
 export default {
@@ -15,19 +18,38 @@ export default {
   },
 }
 
+const youtubeVideoId = 'MtN1YnoL46Q'
+
 export const Default = {
   args: {
-    youtubeVideoId: 'MtN1YnoL46Q',
+    youtubeVideoId,
   },
 }
-export const Customized = {
+
+export const InsideSmallerParentContainer = {
   args: {
-    youtubeVideoId: 'MtN1YnoL46Q',
-    height: 200,
+    youtubeVideoId,
+  },
+  decorators: [
+    (Story: StoryFn) => {
+      return (
+        <div style={{ width: '200px', height: '200px' }}>
+          <Story />
+        </div>
+      )
+    },
+  ],
+}
+
+export const CustomizedWidthAndHeight = {
+  args: {
+    youtubeVideoId,
+    height: 300,
     width: 300,
     title: 'My Video',
   },
 }
+
 export const InvalidUrl = {
   args: {
     youtubeVideoId: 'InvalidVideoId',
