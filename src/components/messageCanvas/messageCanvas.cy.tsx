@@ -25,7 +25,7 @@ describe('MessageCanvas', () => {
     },
   }
 
-  it('renders children', () => {
+  it('renders the component', () => {
     cy.mount(
       <MessageCanvas message={testMessage}>
         <p>Hello World</p>
@@ -33,25 +33,7 @@ describe('MessageCanvas', () => {
     )
 
     cy.contains('Hello World').should('be.visible')
-  })
-
-  it('renders sender name if provided', () => {
-    cy.mount(
-      <MessageCanvas message={testMessage}>
-        <p>Hello World</p>
-      </MessageCanvas>
-    )
-
-    cy.get('[data-cy="sender"]').should('contain', 'senderId')
-  })
-
-  it('renders formatted timestamp', () => {
-    cy.mount(
-      <MessageCanvas message={testMessage}>
-        <p>Hello World</p>
-      </MessageCanvas>
-    )
-
+    cy.contains('senderId').should('be.visible')
     cy.contains('Jan 1 2020').should('be.visible')
   })
 

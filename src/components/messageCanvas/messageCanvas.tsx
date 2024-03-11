@@ -21,9 +21,7 @@ export interface MessageCanvasProps {
 export default function MessageCanvas(props: MessageCanvasProps) {
   return (
     <Box id={props.message.id} className="rustic-message-canvas">
-      <Typography variant="body1" data-cy="sender">
-        {props.message.sender}:
-      </Typography>
+      <Typography variant="body1">{props.message.sender}:</Typography>
       <Card variant="outlined" className="rustic-message-canvas-card">
         {props.children}
       </Card>

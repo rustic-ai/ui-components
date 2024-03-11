@@ -1,12 +1,13 @@
 import './codeSnippet.css'
-import React, { useEffect, useState } from 'react'
-import { minimalSetup } from 'codemirror'
-import { EditorView, gutter } from '@codemirror/view'
-import { EditorState } from '@codemirror/state'
-import { Box } from '@mui/system'
-import { Typography } from '@mui/material'
-import { v4 as getUUID } from 'uuid'
+
 import { languages } from '@codemirror/language-data'
+import { EditorState } from '@codemirror/state'
+import { EditorView } from '@codemirror/view'
+import Typography from '@mui/material/Typography'
+import { Box } from '@mui/system'
+import { minimalSetup } from 'codemirror'
+import React, { useEffect } from 'react'
+import { v4 as getUUID } from 'uuid'
 
 export interface CodeSnippetProps {
   /** Code that will be displayed. */
