@@ -42,7 +42,6 @@ const preview = {
     },
     controls: { expanded: true },
     docs: {
-      source: { type: 'code' },
       page: () => (
         <>
           <Title />

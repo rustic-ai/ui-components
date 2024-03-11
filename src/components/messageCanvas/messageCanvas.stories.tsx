@@ -2,9 +2,6 @@ import React from 'react'
 
 import Text from '../text/text'
 import MessageCanvas from './messageCanvas'
-import { ElementRenderer, MessageSpace, type ThreadableMessage } from '..'
-import IconButton from '@mui/material/IconButton'
-import FileCopyIcon from '@mui/icons-material/FileCopy'
 
 export default {
   title: 'Rustic UI/Message Canvas/Message Canvas',
@@ -35,33 +32,7 @@ const message = {
 
 export const Default = {
   args: {
-    children: (
-      <ElementRenderer message={message} supportedElements={{ text: Text }} />
-    ),
+    children: <Text text={message.data.text} />,
     message,
-  },
-}
-
-export const WithCopyFunction = {
-  args: {
-    children: (
-      <ElementRenderer message={message} supportedElements={{ text: Text }} />
-    ),
-    message,
-    messageInteractions: (message: ThreadableMessage) => {
-      return (
-        <IconButton
-          color="inherit"
-          aria-label="copy to clipboard"
-          onClick={() => {
-            if (message.data.text) {
-              navigator.clipboard.writeText(message.data.text)
-            }
-          }}
-        >
-          <FileCopyIcon />
-        </IconButton>
-      )
-    },
   },
 }
