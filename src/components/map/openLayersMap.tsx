@@ -1,4 +1,5 @@
 import 'ol/ol.css'
+import './openLayersMap.css'
 
 import PlaceIcon from '@mui/icons-material/Place'
 import Alert from '@mui/material/Alert'
@@ -19,12 +20,6 @@ export interface OpenLayersMapProps {
   latitude: number
   /** Zoom level. It is recommended that this unit stays below 20 for useful results. */
   zoom?: number
-  /** Width rendered in pixels. */
-  width?: number
-  /** Height rendered in pixels. */
-  height?: number
-  /** Size of the location marker rendered in rems. */
-  markerSize?: number
 }
 
 export default function OpenLayersMap(props: OpenLayersMapProps) {
@@ -79,30 +74,28 @@ export default function OpenLayersMap(props: OpenLayersMapProps) {
         newMap.removeOverlay(markerOverlay)
       }
     }
-  }, [props.longitude, props.latitude, props.zoom])
+  }, [])
 
   return (
-    <Box data-cy="map">
-      <Box>
-        {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
-      </Box>
-      <Box ref={markerElement}>
-        <PlaceIcon sx={{ fontSize: props.markerSize }} />
-      </Box>
-      <div
-        ref={mapTargetElement}
-        style={{
-          width: `${props.width}px`,
-          height: `${props.height}px`,
-        }}
-      ></div>
-    </Box>
+    <>
+      {errorMessage.length > 0 ? (
+        <Alert severity="error">{errorMessage}</Alert>
+      ) : (
+        <Box>
+          <Box data-cy="marker-container" ref={markerElement}>
+            <PlaceIcon className="rustic-open-layers-map-marker" />
+          </Box>
+          <div
+            ref={mapTargetElement}
+            data-cy="map-canvas"
+            className="rustic-open-layers-map-canvas"
+          ></div>
+        </Box>
+      )}
+    </>
   )
 }
 
 OpenLayersMap.defaultProps = {
   zoom: 12,
-  width: 300,
-  height: 300,
-  markerSize: 50,
 }

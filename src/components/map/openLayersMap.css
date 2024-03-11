@@ -1,0 +1,8 @@
+.rustic-open-layers-map-canvas {
+  height: 200px;
+  width: 100%;
+}
+
+.rustic-open-layers-map-marker {
+  font-size: 40px;
+}
