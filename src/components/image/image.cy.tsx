@@ -57,4 +57,10 @@ describe('Image', () => {
 
     cy.get('[data-cy="spinner"]').should('be.visible')
   })
+
+  it('shows image description', () => {
+    cy.mount(<Image {...defaultProps} description="image description" />)
+
+    cy.get('p').should('contain', 'image description')
+  })
 })

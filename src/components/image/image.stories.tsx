@@ -1,6 +1,5 @@
 import type { StoryFn } from '@storybook/react'
 import React from 'react'
-
 import Image from './image'
 
 export default {
@@ -20,13 +19,24 @@ export default {
 
 export const Default = {
   args: {
-    url: 'https://assets-global.website-files.com/629d4351d174c60f32a4141a/647bfa926280c5b1cbccd03b_dragonscale_full_colour_rgb_icon_logo-p-500.png',
+    alt: 'A curved facade covered in white latticework',
+    url: '/images/image-component-example.png',
+  },
+}
+
+export const ImageWithDescription = {
+  args: {
+    url: '/images/image-component-example.png',
+    alt: 'A curved facade covered in white latticework',
+    description:
+      'Lorem ipsum dolor sit amet consectetur. Aliquam vulputate sit non non tincidunt pellentesque varius euismod est. Lobortis feugiat euismod lorem viverra. Ipsum justo pellentesque.',
   },
 }
 
 export const InsideSmallerParentContainer = {
   args: {
-    url: 'https://assets-global.website-files.com/629d4351d174c60f32a4141a/647bfa926280c5b1cbccd03b_dragonscale_full_colour_rgb_icon_logo-p-500.png',
+    alt: 'A curved facade covered in white latticework',
+    url: '/images/image-component-example.png',
   },
   decorators: [
     (Story: StoryFn) => {
@@ -41,15 +51,16 @@ export const InsideSmallerParentContainer = {
 
 export const CustomizedWidthAndHeight = {
   args: {
-    url: 'https://assets-global.website-files.com/629d4351d174c60f32a4141a/647bfa926280c5b1cbccd03b_dragonscale_full_colour_rgb_icon_logo-p-500.png',
+    alt: 'A curved facade covered in white latticework',
+    url: '/images/image-component-example.png',
     width: '100px',
     height: '100px',
-    alt: 'Dragonscale logo',
   },
 }
 
 export const WrongUrl = {
   args: {
+    alt: 'An image example',
     url: 'wrongUrl.jpg',
   },
 }
