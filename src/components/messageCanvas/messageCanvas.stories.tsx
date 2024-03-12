@@ -35,33 +35,7 @@ const message = {
 
 export const Default = {
   args: {
-    children: (
-      <ElementRenderer message={message} supportedElements={{ text: Text }} />
-    ),
+    children: <Text text={message.data.text} />,
     message,
-  },
-}
-
-export const WithCopyFunction = {
-  args: {
-    children: (
-      <ElementRenderer message={message} supportedElements={{ text: Text }} />
-    ),
-    message,
-    messageInteractions: (message: ThreadableMessage) => {
-      return (
-        <IconButton
-          color="inherit"
-          aria-label="copy to clipboard"
-          onClick={() => {
-            if (message.data.text) {
-              navigator.clipboard.writeText(message.data.text)
-            }
-          }}
-        >
-          <FileCopyIcon />
-        </IconButton>
-      )
-    },
   },
 }
