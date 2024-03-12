@@ -1,10 +1,10 @@
+import FileCopyIcon from '@mui/icons-material/FileCopy'
+import IconButton from '@mui/material/IconButton'
 import React from 'react'
 
+import { ElementRenderer, type ThreadableMessage } from '..'
 import Text from '../text/text'
 import MessageCanvas from './messageCanvas'
-import { ElementRenderer, MessageSpace, type ThreadableMessage } from '..'
-import IconButton from '@mui/material/IconButton'
-import FileCopyIcon from '@mui/icons-material/FileCopy'
 
 export default {
   title: 'Rustic UI/Message Canvas/Message Canvas',

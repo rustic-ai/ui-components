@@ -12,8 +12,8 @@ import {
   Text,
   YoutubeVideo,
 } from '..'
-import MessageSpace from './messageSpace'
 import CodeSnippet from '../codeSnippet/codeSnippet'
+import MessageSpace from './messageSpace'
 
 export default {
   title: 'Rustic UI/Message Space/Message Space',

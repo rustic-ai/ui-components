@@ -9,7 +9,6 @@ describe('YoutubeVideo', () => {
     cy.mount(<YoutubeVideo youtubeVideoId={youtubeVideoId} />)
     cy.get(youtubeVideoIframe)
       .should('be.visible')
-      .should('exist')
       .then(($iframe) => {
         // Wait for the iframe to load completely
         return new Cypress.Promise((resolve) => {
@@ -29,11 +28,7 @@ describe('YoutubeVideo', () => {
         cy.wrap($iframe)
           .its('0.contentDocument')
           .then(($iframeDoc) => {
-            cy.wrap($iframeDoc)
-              .find(playButton)
-              .should('be.visible')
-              .should('exist')
-              .click()
+            cy.wrap($iframeDoc).find(playButton).should('be.visible').click()
 
             // Check if the button with data-title-no-tooltip="Pause" exists
             cy.wrap($iframeDoc)
@@ -47,7 +42,6 @@ describe('YoutubeVideo', () => {
     cy.mount(<YoutubeVideo youtubeVideoId="invalidId" />)
     cy.get(youtubeVideoIframe)
       .should('be.visible')
-      .should('exist')
       .then(($iframe) => {
         // Wait for the iframe to load completely
         return new Cypress.Promise((resolve) => {
@@ -65,11 +59,7 @@ describe('YoutubeVideo', () => {
         cy.wrap($iframe)
           .its('0.contentDocument')
           .then(($iframeDoc) => {
-            cy.wrap($iframeDoc)
-              .find(playButton)
-              .should('be.visible')
-              .should('exist')
-              .click()
+            cy.wrap($iframeDoc).find(playButton).should('be.visible').click()
 
             cy.wrap($iframeDoc)
               .find('span')
@@ -100,11 +90,7 @@ describe('YoutubeVideo', () => {
         cy.wrap($iframe)
           .its('0.contentDocument')
           .then(($iframeDoc) => {
-            cy.wrap($iframeDoc)
-              .find(playButton)
-              .should('not.be.visible')
-              .should('exist')
-              .click()
+            cy.wrap($iframeDoc).find(playButton).should('be.visible').click()
 
             cy.wrap($iframeDoc)
               .find('span')

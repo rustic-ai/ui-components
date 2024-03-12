@@ -1,6 +1,7 @@
 import type { StoryFn } from '@storybook/react'
-import CodeSnippet from './codeSnippet'
 import React from 'react'
+
+import CodeSnippet from './codeSnippet'
 export default {
   title: 'Rustic UI/CodeSnippet/CodeSnippet',
   component: CodeSnippet,
