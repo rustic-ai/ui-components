@@ -1,3 +1,4 @@
+import './image.css'
 import '../../index.css'
 
 import CircularProgress from '@mui/material/CircularProgress'
@@ -16,6 +17,8 @@ export interface ImageProps {
   height?: number
   /** Alternative text for the image used for assistive technology. */
   alt?: string
+  /** Description of the image. */
+  description?: string
 }
 
 export default function Image(props: ImageProps) {
@@ -32,7 +35,7 @@ export default function Image(props: ImageProps) {
   }
 
   return (
-    <>
+    <figure>
       {isLoading && <CircularProgress data-cy="spinner" />}
       <img
         {...getSizeStyles(props.width, props.height)}
@@ -43,7 +46,12 @@ export default function Image(props: ImageProps) {
           setIsLoading(false)
         }}
       />
-    </>
+      {props.description && (
+        <figcaption>
+          <Typography variant="body2">{props.description}</Typography>
+        </figcaption>
+      )}
+    </figure>
   )
 }
 

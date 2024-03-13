@@ -1,0 +1,9 @@
+figcaption {
+  word-wrap: break-word;
+  margin-top: 16px;
+}
+
+figure {
+  margin-inline: 0;
+  margin-block: 0;
+}
