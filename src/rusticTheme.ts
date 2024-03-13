@@ -105,6 +105,7 @@ let rusticLightTheme = createTheme({
     mode: 'light',
     divider: dividerColor,
     text: {
+      primary: '#1E0C04',
       secondary: '#4E443F',
       disabled: disabledColor,
     },
