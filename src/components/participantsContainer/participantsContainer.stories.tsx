@@ -24,7 +24,7 @@ export default {
     docs: {
       description: {
         component:
-          'The `ParticipantsContainer` component is responsible for displaying a list of participants within a dialog window. It organizes participants into separate lists based on their type (human or agent) and provides options to toggle between showing a subset of participants and displaying the full list. This component enhances the user experience by presenting participant information in a structured format and allowing users to view additional details as needed. \n - Note: The component does not include the button displayed to toggle between the two views. This button is typically implemented in the parent component that uses the `ParticipantsContainer` component.',
+          'The `ParticipantsContainer` component is responsible for displaying a list of participants within a dialog window. It organizes participants into separate lists based on their type (human or agent) and provides options to toggle between showing a subset of participants and displaying the full list. This component enhances the user experience by presenting participant information in a structured format and allowing users to view additional details as needed. \n\nNote: The component does not include the button displayed to toggle between the two views. This button is typically implemented in the parent component that uses the `ParticipantsContainer` component.',
       },
     },
   },
