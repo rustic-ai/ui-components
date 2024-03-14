@@ -1,5 +1,5 @@
-import FileCopyIcon from '@mui/icons-material/FileCopy'
-import IconButton from '@mui/material/IconButton'
+import AccountCircleIcon from '@mui/icons-material/AccountCircle'
+import SmartToyIcon from '@mui/icons-material/SmartToy'
 import React from 'react'
 
 import { ElementRenderer, type ThreadableMessage } from '..'
@@ -21,10 +21,10 @@ export default {
   },
 }
 
-const message = {
+const baseMessage = {
   id: '1',
   timestamp: '2020-01-02T00:00:00.000Z',
-  sender: 'Some Sender',
+
   conversationId: 'lkd9vc',
   topicId: 'default',
   format: 'text',
@@ -33,9 +33,115 @@ const message = {
   },
 }
 
-export const Default = {
+const messageFromAgent = {
+  ...baseMessage,
+  sender: 'Scheduling agent',
+}
+
+const messageFromHuman = {
+  ...baseMessage,
+  sender: 'Some sender',
+}
+
+export const WithProfileIcon = {
   args: {
-    children: <Text text={message.data.text} />,
-    message,
+    children: (
+      <ElementRenderer
+        message={messageFromHuman}
+        supportedElements={{ text: Text }}
+      />
+    ),
+    message: messageFromHuman,
+    getProfileComponent: (message: ThreadableMessage) => {
+      if (message.sender.includes('agent')) {
+        return <SmartToyIcon />
+      } else {
+        return <AccountCircleIcon />
+      }
+    },
+  },
+  parameters: {
+    docs: {
+      source: {
+        code: `<MessageCanvas
+        getProfileComponent={(message: ThreadableMessage) => {
+          if (message.sender.includes('agent')) return <SmartToyIcon />
+          else return <AccountCircleIcon />
+        }
+        message={{
+          conversationId: 'lkd9vc',
+          data: {
+            text: 'Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing industries for previewing layouts and visual mockups.'
+          },
+          format: 'text',
+          id: '1',
+          sender: 'Scheduling agent',
+          timestamp: '2020-01-02T00:00:00.000Z',
+          topicId: 'default'
+        }}
+      >
+        <ElementRenderer
+          message={{
+            conversationId: 'lkd9vc',
+            data: {
+              text: 'Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing industries for previewing layouts and visual mockups.'
+            },
+            format: 'text',
+            id: '1',
+            sender: 'Scheduling agent',
+            timestamp: '2020-01-02T00:00:00.000Z',
+            topicId: 'default'
+          }}
+          supportedElements={{ text: Text }}
+        />
+      </MessageCanvas>`,
+      },
+    },
+  },
+}
+
+export const NoIcon = {
+  args: {
+    children: (
+      <ElementRenderer
+        message={messageFromAgent}
+        supportedElements={{ text: Text }}
+      />
+    ),
+    message: messageFromAgent,
+  },
+  parameters: {
+    docs: {
+      source: {
+        code: `<MessageCanvas
+        message={{
+          conversationId: 'lkd9vc',
+          data: {
+            text: 'Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing industries for previewing layouts and visual mockups.'
+          },
+          format: 'text',
+          id: '1',
+          sender: 'Scheduling agent',
+          timestamp: '2020-01-02T00:00:00.000Z',
+          topicId: 'default'
+        }}
+      >
+        <ElementRenderer
+          message={{
+            conversationId: 'lkd9vc',
+            data: {
+              text: 'Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing industries for previewing layouts and visual mockups.'
+            },
+            format: 'text',
+            id: '1',
+            sender: 'Scheduling agent',
+            timestamp: '2020-01-02T00:00:00.000Z',
+            topicId: 'default'
+          }}
+          supportedElements={{ text: Text }}
+        />
+      </MessageCanvas>`,
+      },
+    },
   },
 }

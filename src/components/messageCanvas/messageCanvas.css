@@ -1,3 +1,28 @@
-.rustic-message-canvas-card {
+.rustic-message-canvas {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.rustic-message-canvas .rustic-message-actions-container {
   padding: 16px;
+}
+
+.rustic-message-canvas .rustic-sender-info {
+  display: flex;
+  gap: 8px;
+}
+
+.rustic-message-canvas .rustic-message-footer {
+  opacity: 0;
+  display: flex;
+  align-items: center;
+}
+
+.rustic-message-canvas:hover .rustic-message-footer {
+  opacity: 1;
+}
+
+.rustic-message-canvas .rustic-timestamp {
+  margin-left: auto;
 }

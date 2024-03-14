@@ -11,7 +11,7 @@ import type { ComponentMap, ThreadableMessage } from '../types'
 export interface MessageSpaceProps {
   supportedElements: ComponentMap
   messages?: ThreadableMessage[]
-  messageInteractions?: (message: ThreadableMessage) => ReactNode
+  getActionsComponent?: (message: ThreadableMessage) => ReactNode
 }
 
 const MessageSpace = (props: MessageSpaceProps) => {
@@ -24,7 +24,7 @@ const MessageSpace = (props: MessageSpaceProps) => {
             <MessageCanvas
               key={message.id}
               message={message}
-              messageInteractions={props.messageInteractions}
+              getActionsComponent={props.getActionsComponent}
             >
               <ElementRenderer
                 message={message}
