@@ -1,0 +1,20 @@
+.rustic-popover-menu ul {
+  padding: 0;
+  min-width: 240px;
+}
+
+.rustic-popover-menu li {
+  padding-block: 8px;
+}
+
+.rustic-popover-menu-button {
+  text-transform: none;
+}
+
+.rustic-popover-menu-item-icon {
+  display: flex;
+}
+
+.rustic-popover-menu-item-start-icon {
+  margin-right: 8px;
+}
