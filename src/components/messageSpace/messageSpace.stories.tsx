@@ -28,9 +28,9 @@ export default {
       description:
         'Messages to be displayed. Could have thread messages for the streaming components. `Interface MessageData { [key: string]: any }`\n\n<pre>```{\nInterface MessageProps {\n  id: string\n  timestamp: string\n  sender: string\n  conversationId: string\n  format: string\n  data: MessageData\n  inReplyTo?: string\n  threadId?: string\n  priority?: string;\n  taggedParticipants?: string[]\n  topicId?: string\n}\n\n```</pre><pre>```{\nInterface ThreadableMessage extends MessageProps {\n  lastThreadMessage?: MessageProps\n  threadMessagesData?: MessageData[]}```</pre>',
     },
-    messageInteractions: {
+    getActionsComponent: {
       description:
-        'Interactions with the message. For example, this could be a list of buttons for different actions (e.g. copy, delete, save, etc.)',
+        'Message actions. For example, this could be a list of buttons for different actions (e.g. copy, delete, save, etc.)',
     },
   },
   parameters: {

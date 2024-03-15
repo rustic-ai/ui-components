@@ -20,7 +20,8 @@
     "isolatedModules": true,
     "noEmit": false,
     "jsx": "react-jsx",
-    "verbatimModuleSyntax": true
+    "verbatimModuleSyntax": true,
+    "types": ["cypress-real-events"]
   },
   "include": [
     "src",
