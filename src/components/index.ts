@@ -8,6 +8,7 @@ import Image from './image/image'
 import OpenLayersMap from './map/openLayersMap'
 import MarkedMarkdown from './markdown/markedMarkdown'
 import MarkedStreamingMarkdown from './markdown/markedStreamingMarkdown'
+import PopoverMenu from './menu/popoverMenu'
 import MessageCanvas from './messageCanvas/messageCanvas'
 import MessageSpace from './messageSpace/messageSpace'
 import NavBar from './navBar/navBar'
@@ -31,6 +32,7 @@ export {
   NavBar,
   OpenLayersMap,
   ParticipantsContainer,
+  PopoverMenu,
   RechartsTimeSeries,
   rusticDarkTheme,
   rusticLightTheme,
