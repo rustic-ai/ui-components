@@ -65,7 +65,7 @@ describe('MessageCanvas', () => {
     cy.get('[data-testid="AccountCircleIcon"]').should('be.visible')
   })
 
-  it('shows timestamp on hover on mobile', () => {
+  it('shows timestamp on touch on mobile', () => {
     cy.mount(
       <MessageCanvas message={testMessage}>
         <p>Hello World</p>
