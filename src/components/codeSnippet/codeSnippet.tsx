@@ -1,13 +1,12 @@
 import './codeSnippet.css'
 
+import { defaultHighlightStyle, syntaxHighlighting } from '@codemirror/language'
 import { languages } from '@codemirror/language-data'
-import { EditorState } from '@codemirror/state'
-import { EditorView } from '@codemirror/view'
+import { Compartment, EditorState } from '@codemirror/state'
+import { EditorView, highlightSpecialChars } from '@codemirror/view'
 import Typography from '@mui/material/Typography'
 import { Box } from '@mui/system'
-import { minimalSetup } from 'codemirror'
-import React, { useEffect } from 'react'
-import { v4 as getUUID } from 'uuid'
+import React, { useEffect, useRef } from 'react'
 
 export interface CodeSnippetProps {
   /** Code that will be displayed. */
@@ -17,27 +16,41 @@ export interface CodeSnippetProps {
 }
 
 export default function CodeSnippet(props: CodeSnippetProps) {
-  //codeSnippetId is used to identify individual code snippet.
-  const codeSnippetId = getUUID()
+  const codeSnippetContainer = useRef<HTMLDivElement>(null)
+  const editorView = useRef<EditorView>()
+  const langCompartment = new Compartment()
+
+  const minimalExtensions = [
+    EditorState.readOnly.of(true),
+    highlightSpecialChars(),
+    syntaxHighlighting(defaultHighlightStyle, { fallback: true }),
+    langCompartment.of([]),
+  ]
+
+  const languageObject = languages.find(
+    (language) => language.name.toLowerCase() === props.language.toLowerCase()
+  )
 
   useEffect(() => {
-    const languageObject = languages.find(
-      (language) => language.name.toLowerCase() === props.language.toLowerCase()
-    )
+    if (codeSnippetContainer.current && !editorView.current) {
+      const editorContainer = codeSnippetContainer.current as HTMLElement
 
-    const editorOptions = {
-      doc: props.code,
-      extensions: [minimalSetup, EditorState.readOnly.of(true)],
-      parent: document.getElementById(codeSnippetId) as HTMLElement,
-    }
-
-    if (languageObject) {
-      languageObject.load().then((module) => {
-        editorOptions.extensions.push(module.extension)
-        new EditorView(editorOptions)
+      const editorState = EditorState.create({
+        doc: props.code,
+        extensions: minimalExtensions,
       })
-    } else {
-      new EditorView(editorOptions)
+      editorView.current = new EditorView({
+        state: editorState,
+        parent: editorContainer,
+      })
+
+      if (languageObject && editorView.current) {
+        languageObject.load().then((module) => {
+          editorView.current?.dispatch({
+            effects: langCompartment.reconfigure(module.extension),
+          })
+        })
+      }
     }
   }, [])
 
@@ -46,7 +59,11 @@ export default function CodeSnippet(props: CodeSnippetProps) {
       sx={{ backgroundColor: 'background.default' }}
       className="rustic-code-snippet"
     >
-      <div aria-label="code snippet" id={codeSnippetId} data-cy="code-block">
+      <div
+        aria-label="code snippet"
+        ref={codeSnippetContainer}
+        data-cy="code-block"
+      >
         <Typography
           variant="body2"
           aria-label="language type"
