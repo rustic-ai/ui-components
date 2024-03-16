@@ -1,6 +1,6 @@
 {
   "name": "@rustic-ai/ui-components",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "keywords": [
     "rustic-ai",
     "conversational-ui"
@@ -13,7 +13,10 @@
     "dist"
   ],
   "dependencies": {
+    "@codemirror/language": "6.10.1",
     "@codemirror/language-data": "6.4.1",
+    "@codemirror/state": "6.4.1",
+    "@codemirror/view": "6.26.0",
     "@codemirror/theme-one-dark": "6.1.2",
     "@emotion/react": "11.11.1",
     "@emotion/styled": "11.11.0",
@@ -24,7 +27,6 @@
     "@mui/material": "5.15.7",
     "@mui/styled-engine-sc": "5.14.11",
     "@mui/system": "5.15.8",
-    "codemirror": "6.0.1",
     "dompurify": "3.0.6",
     "marked": "10.0.0",
     "ol": "9.0.0",
@@ -83,6 +85,11 @@
     "webpack-node-externals": "3.0.0"
   },
   "peerDependencies": {
+    "@codemirror/language": "6.10.1",
+    "@codemirror/language-data": "6.4.1",
+    "@codemirror/state": "6.4.1",
+    "@codemirror/view": "6.26.0",
+    "@codemirror/theme-one-dark": "6.1.2",
     "@mui/material": "^5.15.7",
     "@mui/styled-engine-sc": "^5.14.11",
     "@mui/system": "^5.15.8",

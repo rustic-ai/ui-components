@@ -10,7 +10,9 @@ export default {
     layout: 'centered',
     docs: {
       description: {
-        component: `The CodeSnippet component, powered by [CodeMirror](https://codemirror.net/), enables the display of code blocks with built-in syntax highlighting for various programming languages. For further customization of the component's theme, refer to the [styling guide](https://codemirror.net/examples/styling/) provided by the CodeMirror library.`,
+        component: `The CodeSnippet component, powered by [CodeMirror](https://codemirror.net/), enables the display of code blocks with syntax highlighting for various programming languages. 
+        For further customization of the component's theme, refer to the [styling guide](https://codemirror.net/examples/styling/) provided by the CodeMirror library.
+        \nNote: CodeMirror libraries are not bundled, so they must be included in the application's build process.`,
       },
     },
   },
