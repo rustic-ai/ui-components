@@ -272,9 +272,10 @@ export const Default = {
         timestamp: '2024-01-02T00:11:00.000Z',
         format: 'image',
         data: {
-          width: '400px',
-          height: '400px',
-          url: 'https://assets-global.website-files.com/629d4351d174c60f32a4141a/647bfa926280c5b1cbccd03b_dragonscale_full_colour_rgb_icon_logo-p-500.png',
+          url: '/images/image-component-example.png',
+          alt: 'A curved facade covered in white latticework',
+          description:
+            'Lorem ipsum dolor sit amet consectetur. Aliquam vulputate sit non non tincidunt pellentesque varius euismod est. Lobortis feugiat euismod lorem viverra. Ipsum justo pellentesque.',
         },
       },
       {
