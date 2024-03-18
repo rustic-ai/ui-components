@@ -7,20 +7,9 @@ import { useTheme } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import React from 'react'
 
-export interface Event {
-  id: string
-  allDay?: boolean
-  start: string
-  end?: string
-  title: string
-}
+import type { CalendarData } from '../types'
 
-export interface FCCalendarProps {
-  events: Event[]
-  initialView?: 'dayGridMonth' | 'dayGridWeek' | 'dayGridDay'
-}
-
-export default function FCCalendar(props: FCCalendarProps) {
+export default function FCCalendar(props: CalendarData) {
   const theme = useTheme()
   const isDesktop = useMediaQuery(theme.breakpoints.up('md'))
 
@@ -36,7 +25,7 @@ export default function FCCalendar(props: FCCalendarProps) {
     <Box className="rustic-fc-calendar">
       <FullCalendar
         plugins={[dayGridPlugin]}
-        initialView={props.initialView || getDefaultInitialView()}
+        initialView={getDefaultInitialView()}
         headerToolbar={{
           left: 'prev,next',
           center: 'title',

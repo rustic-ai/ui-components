@@ -4,9 +4,9 @@ import DOMPurify from 'dompurify'
 import { useEffect, useState } from 'react'
 import React from 'react'
 
-import type { UpdateableText } from '../types'
+import type { TextData } from '../types'
 
-const StreamingText = (props: UpdateableText) => {
+const StreamingText = (props: TextData) => {
   const [text, setText] = useState(DOMPurify.sanitize(props.text))
   const [errorMessage, setErrorMessage] = useState('')
 

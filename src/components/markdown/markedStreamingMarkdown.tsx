@@ -3,10 +3,10 @@ import Typography from '@mui/material/Typography'
 import React from 'react'
 import { useEffect, useState } from 'react'
 
-import type { UpdateableText } from '../types'
+import type { TextData } from '../types'
 import { convertMarkdownToHtml } from './markedMarkdown'
 
-const MarkedStreamingMarkdown = (props: UpdateableText) => {
+const MarkedStreamingMarkdown = (props: TextData) => {
   const [html, setHtml] = useState(convertMarkdownToHtml(props.text))
   const [errorMessage, setErrorMessage] = useState('')
 

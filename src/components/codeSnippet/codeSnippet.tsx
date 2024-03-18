@@ -8,14 +8,9 @@ import Typography from '@mui/material/Typography'
 import { Box } from '@mui/system'
 import React, { useEffect, useRef } from 'react'
 
-export interface CodeSnippetProps {
-  /** Code that will be displayed. */
-  code: string
-  /** Language type needs to be provided so that the right language extension can be used to format code. Please refer to the [supported languages list](https://codemirror.net/5/mode/). */
-  language: string
-}
+import type { CodeData } from '../types'
 
-export default function CodeSnippet(props: CodeSnippetProps) {
+export default function CodeSnippet(props: CodeData) {
   const codeSnippetContainer = useRef<HTMLDivElement>(null)
   const editorView = useRef<EditorView>()
   const langCompartment = new Compartment()
