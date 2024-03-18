@@ -13,6 +13,14 @@ import { rusticLightTheme, rusticDarkTheme } from '../src/rusticTheme'
 
 import React from 'react'
 
+import ReactGA from 'react-ga4'
+
+ReactGA.initialize(process.env.GA_ID, {
+  gtagOptions: {
+    content_group: 'storybook',
+  },
+})
+
 export const globalTypes = {
   theme: {
     name: 'Theme',
