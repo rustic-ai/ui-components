@@ -4,7 +4,7 @@ import { marked } from 'marked'
 import React from 'react'
 import { useEffect, useState } from 'react'
 
-import type { UpdateableText } from '../types'
+import type { TextData } from '../types'
 
 export function convertMarkdownToHtml(text: string): string {
   const textWithoutZeroWidthSpaces = text.replace(/^[\u200B-\u200F\uFEFF]/, '')
@@ -14,7 +14,7 @@ export function convertMarkdownToHtml(text: string): string {
   return sanitizedText
 }
 
-const MarkedMarkdown = (props: UpdateableText) => {
+const MarkedMarkdown = (props: TextData) => {
   const [html, setHtml] = useState(convertMarkdownToHtml(props.text))
 
   useEffect(() => {

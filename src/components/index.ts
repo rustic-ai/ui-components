@@ -1,5 +1,3 @@
-import { rusticDarkTheme, rusticLightTheme } from '../rusticTheme'
-import rusticTheme from '../rusticTheme'
 import FCCalendar from './calendar/fCCalendar'
 import RechartsTimeSeries from './chart/rechartsTimeSeries'
 import CodeSnippet from './codeSnippet/codeSnippet'
@@ -34,9 +32,6 @@ export {
   ParticipantsContainer,
   PopoverMenu,
   RechartsTimeSeries,
-  rusticDarkTheme,
-  rusticLightTheme,
-  rusticTheme,
   StreamingText,
   Table,
   Text,
@@ -45,4 +40,5 @@ export {
   YoutubeVideo,
 }
 
+export * from '../rusticTheme'
 export * from './types'

@@ -1,7 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type MessageData = { [key: string]: any }
 
-export interface MessageProps {
+export interface Message {
   id: string
   timestamp: string
   sender: string
@@ -15,8 +15,8 @@ export interface MessageProps {
   topicId?: string
 }
 
-export interface ThreadableMessage extends MessageProps {
-  lastThreadMessage?: MessageProps
+export interface ThreadableMessage extends Message {
+  lastThreadMessage?: Message
   threadMessagesData?: MessageData[]
 }
 
@@ -26,7 +26,7 @@ export interface ComponentMap {
 }
 
 export interface WebSocketClient {
-  send: (message: MessageProps) => void
+  send: (message: Message) => void
   close: () => void
   reconnect: () => void
 }
@@ -48,10 +48,36 @@ export interface Participant {
   participantType: ParticipantType
 }
 
-export interface TextProps {
+export interface DataFormat {}
+
+export interface Updates<T extends DataFormat> {
+  updatedData?: T[]
+}
+
+export interface TextFormat extends DataFormat {
   text: string
 }
 
-export interface UpdateableText extends TextProps {
-  updatedData?: { text: string }[]
+export type TextData = TextFormat & Updates<TextFormat>
+
+export interface CodeFormat extends DataFormat {
+  code: string
+  language: string
 }
+
+export type CodeData = CodeFormat & Updates<CodeFormat>
+
+export interface CalendarEvent {
+  id: string
+  title: string
+  start: string
+  end: string
+  location?: string
+  description?: string
+  isAllDay?: boolean
+}
+export interface CalendarFormat extends DataFormat {
+  events: CalendarEvent[]
+}
+
+export type CalendarData = CalendarFormat & Updates<CalendarFormat>

@@ -4,9 +4,9 @@ import Typography from '@mui/material/Typography'
 import DOMPurify from 'dompurify'
 import React from 'react'
 
-import type { TextProps } from '../types'
+import type { TextData } from '../types'
 
-const Text = (props: TextProps) => {
+const Text = (props: TextData) => {
   return (
     <Typography variant="body2" className="rustic-text">
       {DOMPurify.sanitize(props.text)}
