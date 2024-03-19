@@ -1,0 +1,30 @@
+import { Source, Meta } from '@storybook/addon-docs'
+
+<Meta title="Documentation/Troubleshooting" />
+
+# Troubleshooting
+
+Welcome to our Troubleshooting Documentation! Here, you'll find solutions to common issues encountered while using Rustic UI Components. This guide offers clear instructions to help you address errors, configuration problems, and compatibility issues swiftly. Our goal is to ensure a smooth experience with our components. If you encounter challenges beyond this guide, reach out to our support team for assistance. Let's troubleshoot together!
+
+**Q: Using the `CodeSnippet` component in my project gives me the error below. What should I do?**
+
+```
+Uncaught (in promise) Error: Unrecognized extension value in extension set ([object Object]).
+This sometimes happens because multiple instances of @codemirror/state are loaded, breaking instanceof checks.
+```
+
+A: If you are using webpack, follow these steps to resolve it:
+
+1.  Update `webpack.config.js` with the code below
+
+```
+resolve: {
+    alias: {
+      '@codemirror': path.resolve(__dirname, 'node_modules/@codemirror/'),
+    }
+  },
+```
+
+Make sure to add `const path = require('path')` at the top of the file if it's not already there.
+
+2.  You might need to remove the node_modules directory and package-lock.json file from your project directory and reinstall the dependencies.
