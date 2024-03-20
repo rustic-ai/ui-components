@@ -1,4 +1,5 @@
 /* eslint-disable no-magic-numbers */
+import { supportedViewports } from '../../../cypress/support/variables'
 import { ParticipantsContainer } from '..'
 import { ParticipantRole, ParticipantType } from '../types'
 
@@ -35,57 +36,64 @@ describe('ParticipantsContainer', () => {
     )
   })
 
-  it('should display the users with role "Owner" first', () => {
-    cy.get(`${participantListItem} ${participantRole}`)
-      .first()
-      .should('have.text', 'Owner')
-  })
+  supportedViewports.forEach((viewport) => {
+    it(`should display the users with role "Owner" first on ${viewport} screen`, () => {
+      cy.viewport(viewport)
+      cy.get(`${participantListItem} ${participantRole}`)
+        .first()
+        .should('have.text', 'Owner')
+    })
 
-  it('renders the correct number of participants', () => {
-    cy.get('[data-cy="participants-dialog-title"]').should(
-      'have.text',
-      'Participants (5)'
-    )
+    it(`renders the correct number of participants on ${viewport} screen`, () => {
+      cy.viewport(viewport)
+      cy.get('[data-cy="participants-dialog-title"]').should(
+        'have.text',
+        'Participants (5)'
+      )
 
-    cy.get(participantList)
-      .eq(0)
-      .find(participantListItem)
-      .should('have.length', 2)
+      cy.get(participantList)
+        .eq(0)
+        .find(participantListItem)
+        .should('have.length', 2)
 
-    cy.get(participantList)
-      .eq(1)
-      .find(participantListItem)
-      .should('have.length', 3)
-  })
+      cy.get(participantList)
+        .eq(1)
+        .find(participantListItem)
+        .should('have.length', 3)
+    })
 
-  it('should initially show 3 participants in each list and expand to all after clicking "Show All"', () => {
-    cy.mount(
-      <ParticipantsContainer
-        participants={createRandomParticipants(9)} // creates 4 humans and 5 agents
-        isParticipantListOpen={true}
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
-        onClose={() => {}}
-      />
-    )
+    it(`should initially show 3 participants in each list and expand to all after clicking "Show All" on ${viewport} screen`, () => {
+      cy.viewport(viewport)
+      cy.mount(
+        <ParticipantsContainer
+          participants={createRandomParticipants(9)} // creates 4 humans and 5 agents
+          isParticipantListOpen={true}
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
+          onClose={() => {}}
+        />
+      )
 
-    const initialParticipantsVisible = 3
-    const participantsVisbileAfterShowAll = 4
+      const initialParticipantsVisible = 3
+      const participantsVisbileAfterShowAll = 4
 
-    cy.get(participantList)
-      .eq(0)
-      .find(participantListItem)
-      .should('have.length', initialParticipantsVisible)
+      cy.get(participantList)
+        .eq(0)
+        .find(participantListItem)
+        .should('have.length', initialParticipantsVisible)
 
-    cy.get(toggleParticipantListButton)
-      .first()
-      .should('have.text', `Show All ${participantsVisbileAfterShowAll}`)
+      cy.get(toggleParticipantListButton)
+        .first()
+        .should('have.text', `Show All ${participantsVisbileAfterShowAll}`)
 
-    cy.get(toggleParticipantListButton).first().click()
-    cy.get(participantList)
-      .eq(0)
-      .find(participantListItem)
-      .should('have.length', participantsVisbileAfterShowAll)
+      cy.get(toggleParticipantListButton).first().click()
+      cy.get(participantList)
+        .eq(0)
+        .find(participantListItem)
+        .should('have.length', participantsVisbileAfterShowAll)
 
-    cy.get(toggleParticipantListButton).first().should('have.text', 'Show Less')
+      cy.get(toggleParticipantListButton)
+        .first()
+        .should('have.text', 'Show Less')
+    })
   })
 })
