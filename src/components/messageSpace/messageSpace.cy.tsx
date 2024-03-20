@@ -1,5 +1,6 @@
 import { v4 as getUUID } from 'uuid'
 
+import { supportedViewports } from '../../../cypress/support/variables'
 import {
   FCCalendar,
   Image,
@@ -68,18 +69,25 @@ describe('MessageSpace Component', () => {
       },
     },
   ]
-  it('renders correctly with provided messages', () => {
-    cy.mount(
-      <MessageSpace messages={messages} supportedElements={supportedElements} />
-    )
-    const messageSpace = '[data-cy=message-space]'
 
-    cy.get(messageSpace).should('exist')
+  supportedViewports.forEach((viewport) => {
+    it(`renders correctly with provided messages on ${viewport} screen`, () => {
+      cy.viewport
+      cy.mount(
+        <MessageSpace
+          messages={messages}
+          supportedElements={supportedElements}
+        />
+      )
+      const messageSpace = '[data-cy=message-space]'
 
-    messages.forEach((message) => {
-      cy.get(messageSpace)
-        .should('contain', message.sender)
-        .and('contain', message.data.text)
+      cy.get(messageSpace).should('exist')
+
+      messages.forEach((message) => {
+        cy.get(messageSpace)
+          .should('contain', message.sender)
+          .and('contain', message.data.text)
+      })
     })
   })
 })

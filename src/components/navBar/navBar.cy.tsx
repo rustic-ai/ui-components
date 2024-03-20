@@ -1,7 +1,9 @@
 import BookmarkIcon from '@mui/icons-material/Bookmark'
 import MessageIcon from '@mui/icons-material/Message'
 
+import { supportedViewports } from '../../../cypress/support/variables'
 import NavBar from './navBar'
+
 describe('NavBar', () => {
   const Logo = () => {
     return <span>Example Logo</span>
@@ -30,29 +32,39 @@ describe('NavBar', () => {
     )
   })
 
-  it('renders the nav bar', () => {
-    cy.get(navBar).should('be.visible')
+  supportedViewports.forEach((viewport) => {
+    it(`renders the nav bar correctly on ${viewport} screen`, () => {
+      cy.viewport(viewport)
+      cy.get(navBar).should('be.visible')
+    })
   })
 
-  it('does not render the left and right drawer buttons on screens larger than 900px', () => {
-    const viewportWidth = 901
-    const viewportHeight = 600
+  context('desktop', () => {
+    it('does not render the left and right drawer buttons on screens larger than 900px', () => {
+      const viewportWidth = 901
+      const viewportHeight = 600
 
-    cy.viewport(viewportWidth, viewportHeight)
-    cy.get(leftDrawerButton).should('not.be.visible')
-    cy.get(rightDrawerButton).should('not.be.visible')
+      cy.viewport(viewportWidth, viewportHeight)
+      cy.get(leftDrawerButton).should('not.be.visible')
+      cy.get(rightDrawerButton).should('not.be.visible')
+    })
   })
 
-  it('calls the toggle functions when clicked', () => {
-    cy.viewport('iphone-6')
-    cy.window().then((win) => {
-      cy.spy(win.console, 'log').as('consoleLogSpy')
+  context('mobile', () => {
+    beforeEach(() => {
+      cy.viewport('iphone-6')
     })
 
-    cy.get(leftDrawerButton).click()
-    cy.get('@consoleLogSpy').should('be.calledWith', 'left drawer opened')
+    it('calls the toggle functions when clicked', () => {
+      cy.window().then((win) => {
+        cy.spy(win.console, 'log').as('consoleLogSpy')
+      })
 
-    cy.get(rightDrawerButton).click()
-    cy.get('@consoleLogSpy').should('be.calledWith', 'right drawer opened')
+      cy.get(leftDrawerButton).click()
+      cy.get('@consoleLogSpy').should('be.calledWith', 'left drawer opened')
+
+      cy.get(rightDrawerButton).click()
+      cy.get('@consoleLogSpy').should('be.calledWith', 'right drawer opened')
+    })
   })
 })

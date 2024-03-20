@@ -1,3 +1,4 @@
+import { supportedViewports } from '../../../cypress/support/variables'
 import FCCalendar from './fCCalendar'
 
 describe('ScheduleCalendar Component', () => {
@@ -33,13 +34,6 @@ describe('ScheduleCalendar Component', () => {
       title: 'Royal Ontario Museum',
     },
   ]
-  beforeEach(() => {
-    const viewportWidth = 1800
-    const viewportHeight = 1400
-
-    cy.viewport(viewportWidth, viewportHeight)
-    cy.mount(<FCCalendar events={mockEvents} />)
-  })
 
   const eventTitle = '*[class^="fc-event-title"]'
   const eventTime = '*[class^="fc-event-time"]'
@@ -48,41 +42,92 @@ describe('ScheduleCalendar Component', () => {
   const initialDate = 'Feb 7, 2024'
   const initialWeek = 'Feb 4 – 10, 2024'
   const initialMonth = 'Feb 2024'
-  it('can show the title and events properly', () => {
-    cy.contains(initialMonth).should('be.visible')
-    cy.get(eventTitle).first().contains('Aquarium').should('be.visible')
-    cy.get(eventTime).first().contains('10:00 AM').should('be.visible')
-    cy.get(eventTitle).last().contains('Casa Loma').should('be.visible')
-    cy.get(eventTime).last().contains('02:00 PM').should('be.visible')
+
+  beforeEach(() => {
+    cy.mount(<FCCalendar events={mockEvents} />)
   })
 
-  it('can toggle to show week view and day view', () => {
-    cy.get('button').contains('week').click()
-    cy.contains(initialWeek).should('be.visible')
-    cy.get('button').contains('day').click()
-    cy.contains(initialDate).should('be.visible')
+  supportedViewports.forEach((viewport) => {
+    it(`can toggle to show week view and day view on ${viewport} screen`, () => {
+      cy.viewport(viewport)
+      cy.get('button').contains('week').click()
+      cy.contains(initialWeek).should('be.visible')
+      cy.get('button').contains('day').click()
+      cy.contains(initialDate).should('be.visible')
+    })
+
+    it(`can toggle to show week view and day view on ${viewport} screen`, () => {
+      cy.viewport(viewport)
+      cy.get('button').contains('week').click()
+      cy.contains(initialWeek).should('be.visible')
+      cy.get('button').contains('day').click()
+      cy.contains(initialDate).should('be.visible')
+    })
+
+    it(`allows the user to navigate to the next and previous week on ${viewport} screen`, () => {
+      cy.viewport(viewport)
+      cy.get('button').contains('week').click()
+      cy.get(prevButton).click()
+      cy.contains('Jan 28 – Feb 3, 2024').should('be.visible')
+      cy.get(nextButton).click()
+      cy.contains(initialWeek).should('be.visible')
+    })
+
+    it(`allows the user to navigate to the next and previous day on ${viewport} screen`, () => {
+      cy.viewport(viewport)
+      cy.get('button').contains('day').click()
+      cy.get(prevButton).click()
+      cy.contains('Feb 6, 2024').should('be.visible')
+      cy.get(nextButton).click()
+      cy.contains(initialDate).should('be.visible')
+    })
   })
 
-  it('allows the user to navigate to the next and previous month', () => {
-    cy.get(prevButton).click()
-    cy.contains('Jan 2024').should('be.visible')
-    cy.get(nextButton).click()
-    cy.contains(initialMonth).should('be.visible')
+  context('Desktop', () => {
+    beforeEach(() => {
+      cy.viewport('macbook-13')
+      cy.mount(<FCCalendar events={mockEvents} />)
+    })
+
+    it('can show the title and events properly', () => {
+      cy.contains(initialMonth).should('be.visible')
+      cy.get(eventTitle).first().contains('Aquarium').should('be.visible')
+      cy.get(eventTime).first().contains('10:00 AM').should('be.visible')
+      cy.get(eventTitle).last().contains('Casa Loma').should('be.visible')
+      cy.get(eventTime).last().contains('02:00 PM').should('be.visible')
+    })
+
+    it('allows the user to navigate to the next and previous month', () => {
+      cy.get(prevButton).click()
+      cy.contains('Jan 2024').should('be.visible')
+      cy.get(nextButton).click()
+      cy.contains(initialMonth).should('be.visible')
+    })
   })
 
-  it('allows the user to navigate to the next and previous week', () => {
-    cy.get('button').contains('week').click()
-    cy.get(prevButton).click()
-    cy.contains('Jan 28 – Feb 3, 2024').should('be.visible')
-    cy.get(nextButton).click()
-    cy.contains(initialWeek).should('be.visible')
-  })
+  context('Mobile', () => {
+    beforeEach(() => {
+      cy.viewport('iphone-6')
+      cy.mount(<FCCalendar events={mockEvents} />)
+    })
 
-  it('allows the user to navigate to the next and previous day', () => {
-    cy.get('button').contains('day').click()
-    cy.get(prevButton).click()
-    cy.contains('Feb 6, 2024').should('be.visible')
-    cy.get(nextButton).click()
-    cy.contains(initialDate).should('be.visible')
+    it('can show the title and events properly', () => {
+      cy.contains(initialDate).should('be.visible')
+      cy.get(eventTitle).first().contains('Aquarium').should('be.visible')
+      cy.get(eventTime).first().contains('10:00 AM').should('be.visible')
+      cy.get(eventTitle).last().contains('Lunch').should('be.visible')
+      cy.get(eventTime)
+        .last()
+        .should('contain', '12:00 PM')
+        .and('contain', '02:00 PM')
+    })
+
+    it('allows the user to navigate to the next and previous month', () => {
+      cy.get('button').contains('month').click()
+      cy.get(prevButton).click()
+      cy.contains('Jan 2024').should('be.visible')
+      cy.get(nextButton).click()
+      cy.contains(initialMonth).should('be.visible')
+    })
   })
 })

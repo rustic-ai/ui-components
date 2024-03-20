@@ -1,3 +1,4 @@
+import { supportedViewports } from '../../../cypress/support/variables'
 import CodeSnippet from './codeSnippet'
 
 describe('Code Snippet', () => {
@@ -10,11 +11,15 @@ describe('Code Snippet', () => {
     cy.mount(<CodeSnippet code={code} language={language} />)
   })
 
-  it('renders the code snippet correctly', () => {
-    cy.get(codeBlock).contains(code)
-  })
+  supportedViewports.forEach((viewport) => {
+    it(`renders the code snippet correctly on ${viewport} screen`, () => {
+      cy.viewport(viewport)
+      cy.get(codeBlock).contains(code)
+    })
 
-  it('displays the language in the header', () => {
-    cy.get(languageType).contains(language)
+    it(`displays the language in the header on ${viewport} screen`, () => {
+      cy.viewport(viewport)
+      cy.get(languageType).contains(language)
+    })
   })
 })
