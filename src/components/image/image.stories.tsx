@@ -1,5 +1,6 @@
 import type { StoryFn } from '@storybook/react'
 import React from 'react'
+
 import Image from './image'
 
 export default {
@@ -20,13 +21,13 @@ export default {
 export const Default = {
   args: {
     alt: 'A curved facade covered in white latticework',
-    url: '/images/image-component-example.png',
+    url: 'images/image-component-example.png',
   },
 }
 
 export const ImageWithDescription = {
   args: {
-    url: '/images/image-component-example.png',
+    url: 'images/image-component-example.png',
     alt: 'A curved facade covered in white latticework',
     description:
       'Lorem ipsum dolor sit amet consectetur. Aliquam vulputate sit non non tincidunt pellentesque varius euismod est. Lobortis feugiat euismod lorem viverra. Ipsum justo pellentesque.',
@@ -36,7 +37,7 @@ export const ImageWithDescription = {
 export const InsideSmallerParentContainer = {
   args: {
     alt: 'A curved facade covered in white latticework',
-    url: '/images/image-component-example.png',
+    url: 'images/image-component-example.png',
   },
   decorators: [
     (Story: StoryFn) => {
@@ -52,7 +53,7 @@ export const InsideSmallerParentContainer = {
 export const CustomizedWidthAndHeight = {
   args: {
     alt: 'A curved facade covered in white latticework',
-    url: '/images/image-component-example.png',
+    url: 'images/image-component-example.png',
     width: '100px',
     height: '100px',
   },

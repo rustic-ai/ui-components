@@ -272,7 +272,7 @@ export const Default = {
         timestamp: '2024-01-02T00:11:00.000Z',
         format: 'image',
         data: {
-          url: '/images/image-component-example.png',
+          url: 'images/image-component-example.png',
           alt: 'A curved facade covered in white latticework',
           description:
             'Lorem ipsum dolor sit amet consectetur. Aliquam vulputate sit non non tincidunt pellentesque varius euismod est. Lobortis feugiat euismod lorem viverra. Ipsum justo pellentesque.',
