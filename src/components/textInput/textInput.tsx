@@ -63,7 +63,7 @@ export default function TextInput(props: TextInputProps) {
   return (
     <TextField
       data-cy="text-input"
-      className="rustic-textfield"
+      className="rustic-text-input"
       variant="outlined"
       value={messageText}
       label={props.label}
