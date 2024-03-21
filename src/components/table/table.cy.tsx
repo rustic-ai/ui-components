@@ -49,5 +49,12 @@ describe('Table', () => {
         cy.get('th').contains(header, { matchCase: false })
       })
     })
+
+    it(`shows 'No data available' if empty array is provided on ${viewport} screen`, () => {
+      cy.viewport(viewport)
+
+      cy.mount(<Table data={[]} />)
+      cy.get('p').contains('No data available')
+    })
   })
 })

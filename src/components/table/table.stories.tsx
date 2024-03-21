@@ -83,3 +83,9 @@ export const HasHeadersProps = {
     data: sampleData,
   },
 }
+
+export const NoData = {
+  args: {
+    data: [],
+  },
+}
