@@ -146,6 +146,16 @@ let rusticLightTheme = createTheme({
       disabled: disabledColor,
     },
   },
+  components: {
+    MuiTooltip: {
+      styleOverrides: {
+        tooltip: {
+          backgroundColor: '#3D3834',
+          color: '#FFFFFF',
+        },
+      },
+    },
+  },
 })
 
 let rusticDarkTheme = createTheme({
@@ -191,6 +201,16 @@ let rusticDarkTheme = createTheme({
       focus: '#FDFDFD',
       disabledBackground: '#E5E5E5',
       disabled: '#C7C2C0',
+    },
+  },
+  components: {
+    MuiTooltip: {
+      styleOverrides: {
+        tooltip: {
+          backgroundColor: '#FFFCFB',
+          color: '#2F2F2F',
+        },
+      },
     },
   },
 })
