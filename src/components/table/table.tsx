@@ -69,10 +69,10 @@ export default function Table(props: TableProps) {
             {props.data.map((rowData, index) => {
               return (
                 <TableRow key={`row-${index}`}>
-                  {dataKeys.map((dataKey, dataIndex) => {
+                  {headers.map((header, dataIndex) => {
                     return (
                       <TableCell key={`cell-${index}x${dataIndex}`}>
-                        {rowData[dataKey]}
+                        {rowData[header]}
                       </TableCell>
                     )
                   })}

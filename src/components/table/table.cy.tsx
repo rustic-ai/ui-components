@@ -56,5 +56,32 @@ describe('Table', () => {
       cy.mount(<Table data={[]} />)
       cy.get('p').contains('No data available')
     })
+
+    it(`does not show data if its header is not in the headers props on ${viewport} screen`, () => {
+      cy.viewport(viewport)
+      const headers = ['col1', 'col2']
+      const testDataWithExtra = [...testData, { col1: 'ghl', col3: 'extra' }]
+      cy.mount(<Table headers={headers} data={testDataWithExtra} />)
+      cy.contains('extra').should('not.exist')
+    })
+
+    it(`can render rows based on headers on ${viewport} screen`, () => {
+      cy.viewport(viewport)
+      const headers = ['col2', 'col1']
+      cy.mount(<Table headers={headers} data={testData} />)
+      cy.get('th').each((th, index) => {
+        expect(th.text().trim().toLowerCase()).contains(headers[index])
+      })
+
+      cy.get('.rustic-table tbody tr').each((row) => {
+        cy.wrap(row)
+          .find('td')
+          .each((cell, index) => {
+            const header = headers[index]
+            const value = (testData as Record<string, any>)[row.index()][header]
+            expect(cell.text().trim()).to.equal(value.toString())
+          })
+      })
+    })
   })
 })
