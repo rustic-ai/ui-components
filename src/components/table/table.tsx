@@ -24,6 +24,10 @@ export type TableProps = {
 }
 
 export default function Table(props: TableProps) {
+  if (props.data.length === 0) {
+    return <Typography variant="body2">No data available</Typography>
+  }
+
   const dataKeys = Array.from(
     new Set(props.data.flatMap((rowData) => Object.keys(rowData)))
   )
