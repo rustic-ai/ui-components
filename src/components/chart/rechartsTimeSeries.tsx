@@ -74,7 +74,7 @@ export interface RechartsTimeSeriesProps {
   width?: number
   /** Chart type toggle will be hidden if the value is true. */
   disableChartTypeToggle?: boolean
-  /** Define the default chart type: 'line', 'bar', or 'area'. */
+  /** Define the default chart type: `line`, `bar`, or `area`. */
   defaultChartType?: TimeSeriesType
   /** Pass a function to format y-axis label. Make sure to use tooltipFormatter and yAxisTickFormatter together so that the numbers are uniform. */
   yAxisTickFormatter?: (value: number) => string

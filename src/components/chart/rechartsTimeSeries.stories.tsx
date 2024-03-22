@@ -9,7 +9,11 @@ export default {
     timeSeries: {
       control: 'array',
       description:
-        'Data to be displayed in the time series chart. The first field is used as the x-axis field. We currently support formatting timestamps in seconds and milliseconds. Other data types will be displayed as given. \n<pre>```interface TimeSeriesData:{\n  timestamp: number\n  [key: string]: number\n}```</pre>',
+        'Data to be displayed in the time series chart. The first field is used as the x-axis field. We currently support formatting timestamps in seconds and milliseconds. Other data types will be displayed as given. \n<pre>```interface TimeSeriesData {\n  timestamp: number\n  [key: string]: number\n}```</pre>',
+    },
+    chartContainerMargin: {
+      description:
+        'Margin of chart container in pixel. For example, adding left margin could show larger numbers properly.\n<pre>```interface Margin {\n  top?: number\n  right?: number\n  bottom?: number\n  left?: number\n}```</pre>',
     },
   },
   parameters: {
