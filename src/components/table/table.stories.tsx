@@ -13,6 +13,13 @@ export default {
       },
     },
   },
+  argTypes: {
+    headers: {
+      control: 'array',
+      description:
+        'Use this prop to set the order of columns and assign headers. If none is provided, headers will be taken from the keys of the data objects from the `data` prop array and the first letter will be capitalized. \n<pre>```interface TableHeader:{\n  dataKey: string\n  label?: string\n}```</pre>',
+    },
+  },
 }
 
 const sampleData = [
@@ -62,7 +69,13 @@ export const Default = {
 export const ChangeOrderUsingHeader = {
   args: {
     data: sampleData,
-    headers: ['food', 'carbs', 'protein', 'fat', 'calories'],
+    headers: [
+      { dataKey: 'food' },
+      { dataKey: 'carbs' },
+      { dataKey: 'protein' },
+      { dataKey: 'fat' },
+      { dataKey: 'calories' },
+    ],
   },
 }
 
@@ -75,15 +88,15 @@ export const HasTitleAndDescription = {
   },
 }
 
-export const HasHeadersProps = {
+export const CustomizeHeaders = {
   args: {
     title: 'Nutrient Data Comparison Across Various Types of Milk',
     headers: [
-      'type (per 250ml)',
-      'calories (kCal)',
-      'carbs (g)',
-      'protein (g)',
-      'fat (g)',
+      { dataKey: 'food', label: 'type (per 250ml)' },
+      { dataKey: 'calories', label: 'calories (kCal)' },
+      { dataKey: 'carbs', label: 'carbs (g)' },
+      { dataKey: 'protein', label: 'protein (g)' },
+      { dataKey: 'fat', label: 'fat (g)' },
     ],
     description:
       'This table illustrates the variations in calories and nutrients for different types of milk, with measurements based on a serving size of 250 ml. Caloric values are expressed in kCal, and nutrient quantities are measured in grams. The data is sourced from the Canadian Nutrient File.',

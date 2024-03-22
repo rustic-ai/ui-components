@@ -33,7 +33,7 @@ describe('Table', () => {
       )
     })
 
-    it(`renders headers based on data keys even though headers are not provided on ${viewport} screen`, () => {
+    it(`renders headers based on data keys if headers props are not provided on ${viewport} screen`, () => {
       cy.viewport(viewport)
       cy.mount(<Table data={testData} />)
       Object.keys(testData[firstRowIndex]).forEach((item) => {
@@ -43,10 +43,25 @@ describe('Table', () => {
 
     it(`renders headers if provided on ${viewport} screen`, () => {
       cy.viewport(viewport)
-      const headers = ['column 1', 'column 2']
+      const headers = [
+        { dataKey: 'col2', label: 'column 2' },
+        { dataKey: 'col1', label: 'column 1' },
+      ]
       cy.mount(<Table headers={headers} data={testData} />)
       headers.forEach((header) => {
-        cy.get('th').contains(header, { matchCase: false })
+        cy.get('th').contains(header.label, { matchCase: false })
+      })
+
+      cy.get('.rustic-table tbody tr').each((row) => {
+        cy.wrap(row)
+          .find('td')
+          .each((cell, index) => {
+            const header = headers[index]
+            const value = (testData as Record<string, any>)[row.index()][
+              header.dataKey
+            ]
+            expect(cell.text().trim()).to.equal(value.toString())
+          })
       })
     })
 
@@ -59,7 +74,7 @@ describe('Table', () => {
 
     it(`does not show data if its header is not in the headers props on ${viewport} screen`, () => {
       cy.viewport(viewport)
-      const headers = ['col1', 'col2']
+      const headers = [{ dataKey: 'col1' }, { dataKey: 'col2' }]
       const testDataWithExtra = [...testData, { col1: 'ghl', col3: 'extra' }]
       cy.mount(<Table headers={headers} data={testDataWithExtra} />)
       cy.contains('extra').should('not.exist')
@@ -67,10 +82,10 @@ describe('Table', () => {
 
     it(`can render rows based on headers on ${viewport} screen`, () => {
       cy.viewport(viewport)
-      const headers = ['col2', 'col1']
+      const headers = [{ dataKey: 'col2' }, { dataKey: 'col1' }]
       cy.mount(<Table headers={headers} data={testData} />)
       cy.get('th').each((th, index) => {
-        expect(th.text().trim().toLowerCase()).contains(headers[index])
+        expect(th.text().trim().toLowerCase()).contains(headers[index].dataKey)
       })
 
       cy.get('.rustic-table tbody tr').each((row) => {
@@ -78,7 +93,9 @@ describe('Table', () => {
           .find('td')
           .each((cell, index) => {
             const header = headers[index]
-            const value = (testData as Record<string, any>)[row.index()][header]
+            const value = (testData as Record<string, any>)[row.index()][
+              header.dataKey
+            ]
             expect(cell.text().trim()).to.equal(value.toString())
           })
       })

@@ -12,6 +12,11 @@ import React from 'react'
 
 import { capitalizeFirstLetter } from '../helper'
 
+export interface TableHeader {
+  dataKey: string
+  label?: string
+}
+
 export type TableProps = {
   /** Data to be displayed in the table. */
   data: Array<Record<string, string | number>>
@@ -19,8 +24,7 @@ export type TableProps = {
   title?: string
   /** Description of the table. */
   description?: string
-  /** Use this prop to set customized headers. If none is provided, headers will be taken from the keys of the data objects from the `data` prop array. */
-  headers?: string[]
+  headers?: TableHeader[]
 }
 
 export default function Table(props: TableProps) {
@@ -31,7 +35,8 @@ export default function Table(props: TableProps) {
   const dataKeys = Array.from(
     new Set(props.data.flatMap((rowData) => Object.keys(rowData)))
   )
-  const headers = props.headers || dataKeys
+  const headers: TableHeader[] =
+    props.headers || dataKeys.map((key) => ({ dataKey: key }))
 
   return (
     <Box className="rustic-table">
@@ -54,31 +59,25 @@ export default function Table(props: TableProps) {
           {headers.length > 0 && (
             <TableHead>
               <TableRow>
-                {headers.map((header, index) => {
-                  return (
-                    <TableCell key={`header-${index}`}>
-                      {capitalizeFirstLetter(header)}
-                    </TableCell>
-                  )
-                })}
+                {headers.map((header, index) => (
+                  <TableCell key={`header-${index}`}>
+                    {header.label || capitalizeFirstLetter(header.dataKey)}
+                  </TableCell>
+                ))}
               </TableRow>
             </TableHead>
           )}
 
           <TableBody>
-            {props.data.map((rowData, index) => {
-              return (
-                <TableRow key={`row-${index}`}>
-                  {headers.map((header, dataIndex) => {
-                    return (
-                      <TableCell key={`cell-${index}x${dataIndex}`}>
-                        {rowData[header]}
-                      </TableCell>
-                    )
-                  })}
-                </TableRow>
-              )
-            })}
+            {props.data.map((rowData, rowIndex) => (
+              <TableRow key={`row-${rowIndex}`}>
+                {headers.map((header, colIndex) => (
+                  <TableCell key={`cell-${rowIndex}-${colIndex}`}>
+                    {rowData[header.dataKey]}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
           </TableBody>
         </MuiTable>
       </TableContainer>
