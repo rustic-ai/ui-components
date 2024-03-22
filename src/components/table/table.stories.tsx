@@ -59,6 +59,13 @@ export const Default = {
   },
 }
 
+export const ChangeOrderUsingHeader = {
+  args: {
+    data: sampleData,
+    headers: ['food', 'carbs', 'protein', 'fat', 'calories'],
+  },
+}
+
 export const HasTitleAndDescription = {
   args: {
     title: 'Nutrient Data Comparison Across Various Types of Milk',
