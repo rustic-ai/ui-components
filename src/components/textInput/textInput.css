@@ -1,3 +1,8 @@
+.rustic-text-input-container {
+  display: flex;
+  gap: 8px;
+}
+
 .rustic-text-input {
   border-radius: 16px;
 }

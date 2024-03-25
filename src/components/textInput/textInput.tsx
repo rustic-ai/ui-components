@@ -1,8 +1,8 @@
 import './textInput.css'
 
 import SendIcon from '@mui/icons-material/Send'
+import Box from '@mui/material/Box'
 import IconButton from '@mui/material/IconButton'
-import InputAdornment from '@mui/material/InputAdornment'
 import TextField from '@mui/material/TextField'
 import { useState } from 'react'
 import React from 'react'
@@ -61,36 +61,32 @@ export default function TextInput(props: TextInputProps) {
   }
 
   return (
-    <TextField
-      data-cy="text-input"
-      className="rustic-text-input"
-      variant="outlined"
-      value={messageText}
-      label={props.label}
-      maxRows={props.maxRows}
-      multiline={props.multiline}
-      fullWidth={props.fullWidth}
-      onKeyDown={handleKeyDown}
-      onChange={handleOnChange}
-      sx={{
-        backgroundColor: 'background.paper',
-      }}
-      InputProps={{
-        endAdornment: (
-          <InputAdornment position="end">
-            <IconButton
-              data-cy="send-button"
-              aria-label="send message"
-              onClick={handleSendMessage}
-              disabled={isEmptyMessage}
-              color="primary"
-            >
-              <SendIcon />
-            </IconButton>
-          </InputAdornment>
-        ),
-      }}
-    />
+    <Box className="rustic-text-input-container">
+      <TextField
+        data-cy="text-input"
+        className="rustic-text-input"
+        variant="outlined"
+        value={messageText}
+        label={props.label}
+        maxRows={props.maxRows}
+        multiline={props.multiline}
+        fullWidth={props.fullWidth}
+        onKeyDown={handleKeyDown}
+        onChange={handleOnChange}
+        sx={{
+          backgroundColor: 'background.paper',
+        }}
+      />
+      <IconButton
+        data-cy="send-button"
+        aria-label="send message"
+        onClick={handleSendMessage}
+        disabled={isEmptyMessage}
+        color="primary"
+      >
+        <SendIcon />
+      </IconButton>
+    </Box>
   )
 }
 
