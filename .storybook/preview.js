@@ -70,7 +70,7 @@ export const withMuiTheme = (Story, context) => {
         {/* add a div wrapper to show dark mode properly. Otherwise the background color would be white. */}
         <div
           style={{
-            backgroundColor: theme.palette.background.default,
+            backgroundColor: theme.palette.background.paper,
             padding: '24px',
             borderRadius: '8px',
           }}
