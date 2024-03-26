@@ -28,7 +28,7 @@ export default {
   argTypes: {
     menuItems: {
       description:
-        'An array of menu items to be displayed in the menu. \n<pre>```interface PopoverMenuItem: {\n  label: string\n  onClick: (event?: React.MouseEvent<HTMLElement>) => void\n  startDecorator?: ReactNode\n  endDecorator: ReactNode\n}```</pre>',
+        'An array of menu items to be displayed in the menu. \n<pre>```interface PopoverMenuItem {\n  label: string\n  onClick: (event?: React.MouseEvent<HTMLElement>) => void\n  startDecorator?: ReactNode\n  endDecorator: ReactNode\n}```</pre>',
     },
   },
 }

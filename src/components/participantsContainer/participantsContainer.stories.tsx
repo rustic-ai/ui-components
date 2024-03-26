@@ -16,7 +16,7 @@ export default {
   argTypes: {
     participants: {
       description:
-        'A list of participants to be displayed. \n<pre>```interface Participant:{\n  id: string\n  displayName: string\n  participantRole: ParticipantRole\n  participantType: ParticipantType\n}```</pre>',
+        'A list of participants to be displayed. \n<pre>```interface Participant {\n  id: string\n  displayName: string\n  participantRole: ParticipantRole\n  participantType: ParticipantType\n}```</pre>',
     },
   },
   parameters: {

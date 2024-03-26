@@ -17,7 +17,7 @@ export default {
     headers: {
       control: 'array',
       description:
-        'Use this prop to set the order of columns and assign headers. If none is provided, headers will be taken from the keys of the data objects from the `data` prop array and the first letter will be capitalized. \n<pre>```interface TableHeader:{\n  dataKey: string\n  label?: string\n}```</pre>',
+        'Use this prop to set the order of columns and assign headers. If none is provided, headers will be taken from the keys of the data objects from the `data` prop array and the first letter will be capitalized. \n<pre>```interface TableHeader {\n  dataKey: string\n  label?: string\n}```</pre>',
     },
   },
 }
