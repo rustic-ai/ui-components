@@ -1,0 +1,121 @@
+.rustic-volume-container {
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+
+.rustic-volume-slider {
+  width: 64px;
+  height: 5px;
+}
+
+/* circle that you drag on slider to change the volume */
+.rustic-volume-slider .MuiSlider-thumb {
+  width: 10px;
+  height: 10px;
+}
+
+.rustic-progress {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  position: relative;
+}
+
+.rustic-progress-slider {
+  height: 8px;
+}
+
+/* circle that you drag on slider to change the time */
+.rustic-progress-slider .MuiSlider-thumb {
+  z-index: 2;
+  width: 15px;
+  height: 15px;
+}
+/* bar to the left of the thumb (circle), tracking the time */
+.rustic-progress-slider .MuiSlider-track {
+  z-index: 1;
+}
+
+.rustic-progress-buffered {
+  height: 8px;
+  position: absolute;
+  border-radius: 12px;
+  pointer-events: none;
+}
+
+.rustic-sound-player-bottom-controls {
+  display: flex;
+  justify-content: space-between;
+}
+
+.rustic-sound-player-bottom-controls-left {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  justify-content: center;
+}
+
+.rustic-sound-player-bottom-controls-right {
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+}
+
+/* playback options */
+.rustic-popover-menu div ul {
+  min-width: unset;
+}
+
+.rustic-time-controls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.rustic-time-controls button {
+  padding: 0;
+}
+
+.rustic-transcript-toggle span {
+  text-transform: none;
+}
+
+.rustic-transcript-header {
+  margin-block: 16px;
+  padding-left: 16px;
+  text-transform: none;
+}
+
+@media (max-width: 900px) {
+  .rustic-time-container {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .rustic-progress {
+    padding-inline: 0;
+  }
+
+  .rustic-progress-buffered {
+    left: 0;
+  }
+
+  .rustic-sound-player-title {
+    padding: 0;
+    text-align: center;
+  }
+
+  .rustic-sound-player-bottom-controls {
+    flex-direction: column;
+    padding-inline: 0;
+  }
+
+  .rustic-pause-play-icon {
+    font-size: 52px;
+  }
+
+  .rustic-volume-slider {
+    width: 100%;
+  }
+}

@@ -1,5 +1,6 @@
 import { rusticDarkTheme, rusticLightTheme } from '../rusticTheme'
 import rusticTheme from '../rusticTheme'
+import SoundPlayer from './audio/soundPlayer'
 import FCCalendar from './calendar/fCCalendar'
 import RechartsTimeSeries from './chart/rechartsTimeSeries'
 import CodeSnippet from './codeSnippet/codeSnippet'
@@ -37,6 +38,7 @@ export {
   rusticDarkTheme,
   rusticLightTheme,
   rusticTheme,
+  SoundPlayer,
   StreamingText,
   Table,
   Text,

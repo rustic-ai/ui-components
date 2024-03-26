@@ -1,4 +1,5 @@
 /* eslint-disable no-magic-numbers */
+import { useMediaQuery, useTheme } from '@mui/material'
 import pluralize from 'pluralize'
 
 export function calculateTimeDiffInSeconds(isoDate: string): number {
@@ -137,4 +138,9 @@ export function getSizeStyles(
   }
 
   return stylingAttributes
+}
+
+export function useIsMobile(): boolean {
+  const theme = useTheme()
+  return useMediaQuery(theme.breakpoints.down('md'))
 }
