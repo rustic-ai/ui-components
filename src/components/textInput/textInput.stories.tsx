@@ -7,7 +7,7 @@ export default {
   argTypes: {
     ws: {
       description:
-        'WebSocket connection to send and receive messages to and from a backend. \n<pre>```interface WebSocketClients:{\n  send: (message: MessageProps) => void\n  close: () => void\n  reconnect: () => void\n}```</pre>',
+        'WebSocket connection to send and receive messages to and from a backend. \n<pre>```interface WebSocketClient {\n  send: (message: MessageProps) => void\n  close: () => void\n  reconnect: () => void\n}```</pre>',
     },
   },
   parameters: {
