@@ -8,7 +8,7 @@ export default {
     events: {
       control: 'object',
       description:
-        'An array of objects. Each object has details for an event. \n<pre>```interface Event:{\n  id: string\n  allDay?: boolean\n  start: string\n  end?: string\n  title: string\n}```</pre>',
+        'An array of objects. Each object has details for an event. \n<pre>```interface Event {\n  id: string\n  allDay?: boolean\n  start: string\n  end?: string\n  title: string\n}```</pre>',
     },
     initialView: {
       description:
