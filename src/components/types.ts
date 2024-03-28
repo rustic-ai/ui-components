@@ -51,6 +51,7 @@ export interface Participant {
 export interface DataFormat {}
 
 export interface Updates<T extends DataFormat> {
+  /** @ignore */
   updatedData?: T[]
 }
 
@@ -61,7 +62,10 @@ export interface TextFormat extends DataFormat {
 export type TextData = TextFormat & Updates<TextFormat>
 
 export interface CodeFormat extends DataFormat {
+  /** Code that will be displayed. */
   code: string
+  /** Language type needs to be provided so that the right language extension can be used to format and highlight code.
+   * If an unsupported language is used, the code snippet is still viewable. */
   language: string
 }
 
@@ -81,3 +85,14 @@ export interface CalendarFormat extends DataFormat {
 }
 
 export type CalendarData = CalendarFormat & Updates<CalendarFormat>
+
+export interface LocationFormat extends DataFormat {
+  /** Longitude in decimal degrees. */
+  longitude: number
+  /** Latitude in decimal degrees. */
+  latitude: number
+  /** Optional title for the location. */
+  title?: string
+  /** Optional description for the location. */
+  description?: string
+}
