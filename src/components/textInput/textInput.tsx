@@ -16,8 +16,10 @@ export interface TextInputProps {
   sender: string
   /** Id of the current conversation. */
   conversationId: string
-  /** Placeholder text to be displayed in the text input box. */
-  label: string
+  /** Label text to be displayed in the input, which will then move to the top when the input is focused on. If both label and placeholder are provided, the placeholder will only be visible once the input is focused on. */
+  label?: string
+  /** Placeholder text to be displayed in the input before user starts typing. */
+  placeholder?: string
   /** Boolean that dictates whether `TextInput` can expand to be multiline. */
   multiline?: boolean
   /** Maximum number of rows to be displayed. */
@@ -68,14 +70,14 @@ export default function TextInput(props: TextInputProps) {
         variant="outlined"
         value={messageText}
         label={props.label}
+        placeholder={props.placeholder}
         maxRows={props.maxRows}
         multiline={props.multiline}
         fullWidth={props.fullWidth}
         onKeyDown={handleKeyDown}
         onChange={handleOnChange}
-        sx={{
-          backgroundColor: 'background.paper',
-        }}
+        color="secondary"
+        size="small"
       />
       <IconButton
         data-cy="send-button"
