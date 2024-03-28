@@ -10,9 +10,9 @@ export default {
     layout: 'centered',
     docs: {
       description: {
-        component: `The \`CodeSnippet\` component, powered by [CodeMirror](https://codemirror.net/), enables the display of code blocks with syntax highlighting for various programming languages. 
+        component: `The \`CodeSnippet\` component, powered by [CodeMirror](https://codemirror.net/), enables displaying code blocks with syntax highlighting for [various programming languages](https://codemirror.net/5/mode/). 
         For further customization of the component's theme, refer to the [styling guide](https://codemirror.net/examples/styling/) provided by the CodeMirror library.
-        \nNote: CodeMirror libraries are not bundled, so they must be included in the application's build process. Please install the following codemirror dependencies if you want to use CodeSnippet component in your project:
+        \nNote: CodeMirror libraries are not bundled, so they must be included in the application's build process. You can install them using npm:
         \n<pre><code>npm i @codemirror/language @codemirror/language-data @codemirror/state @codemirror/theme-one-dark @codemirror/view </code></pre>`,
       },
     },
