@@ -2,6 +2,21 @@
 import type { Shadows } from '@mui/material/styles'
 import { createTheme, responsiveFontSizes } from '@mui/material/styles'
 
+const muiTextFieldRootCommonStyles = {
+  borderRadius: '16px',
+  '& .MuiOutlinedInput-root': {
+    '&.Mui-focused fieldset': {
+      borderWidth: '1px',
+    },
+  },
+  '& .MuiInputBase-input': {
+    fontWeight: '400',
+    '&::placeholder': {
+      opacity: 1,
+    },
+  },
+}
+
 const dividerColor = '#DDD0CA'
 const disabledColor = '#C7C2C0'
 const muiGeneralSetting = {
@@ -155,6 +170,14 @@ let rusticLightTheme = createTheme({
         },
       },
     },
+    MuiTextField: {
+      styleOverrides: {
+        root: {
+          ...muiTextFieldRootCommonStyles,
+          backgroundColor: '#FFFFFF',
+        },
+      },
+    },
   },
 })
 
@@ -209,6 +232,14 @@ let rusticDarkTheme = createTheme({
         tooltip: {
           backgroundColor: '#FFFCFB',
           color: '#2F2F2F',
+        },
+      },
+    },
+    MuiTextField: {
+      styleOverrides: {
+        root: {
+          ...muiTextFieldRootCommonStyles,
+          backgroundColor: '#2F2F2F',
         },
       },
     },

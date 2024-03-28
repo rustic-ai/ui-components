@@ -25,7 +25,7 @@ export const Default = {
   args: {
     sender: 'You',
     conversationId: '1',
-    label: 'Type your message',
+    placeholder: 'Type your message',
   },
 }
 
@@ -40,5 +40,12 @@ export const CustomizedMaxRows = {
   args: {
     ...Default.args,
     maxRows: 2,
+  },
+}
+
+export const WithLabel = {
+  args: {
+    ...Default.args,
+    label: 'Custom Label',
   },
 }
