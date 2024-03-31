@@ -27,18 +27,6 @@ export default {
   },
 }
 
-export interface TimeSeriesData {
-  timestamp: number
-  [key: string]: number
-}
-
-export interface Margin {
-  top?: number
-  right?: number
-  bottom?: number
-  left?: number
-}
-
 const chartColors = ['#648FFF', '#785EF0', '#DC267F', '#FE6100', '#FFB000']
 
 const oneDayData = [
