@@ -2,9 +2,10 @@
 import type { Shadows } from '@mui/material/styles'
 import { createTheme, responsiveFontSizes } from '@mui/material/styles'
 
-const dividerColor = '#DDD0CA'
-const disabledColor = '#C7C2C0'
-const muiGeneralSetting = {
+const whiteColor = '#FFFFFF'
+const SecondaryMainColor = '#FF6928'
+const SecondaryDarkColor = '#E54500'
+const baseTheme = createTheme({
   shape: {
     borderRadius: 16,
   },
@@ -84,6 +85,24 @@ const muiGeneralSetting = {
       letterSpacing: '0.04px',
     },
   },
+  palette: {
+    common: {
+      black: '#000000',
+      white: whiteColor,
+    },
+    error: {
+      main: '#F82A43',
+    },
+    warning: {
+      main: '#FFB800',
+    },
+    info: {
+      main: '#0094FF',
+    },
+    success: {
+      main: '#35A700',
+    },
+  },
   shadows: [
     ...createTheme({}).shadows.map((shadow, i) => {
       if (i === 1) {
@@ -97,100 +116,81 @@ const muiGeneralSetting = {
       }
     }),
   ] as Shadows,
-}
+})
 
+const lightModeDividerColor = '#DDD0CA'
+const lightModeDisabledColor = '#C7C2C0'
+const lightModePrimaryMainColor = '#3D3834'
+const lightModeBackgroundDefaultColor = '#F4F0EF'
 let rusticLightTheme = createTheme({
-  ...muiGeneralSetting,
+  ...baseTheme,
   palette: {
     mode: 'light',
-    divider: dividerColor,
+    divider: lightModeDividerColor,
     text: {
       primary: '#1E0C04',
       secondary: '#4E443F',
-      disabled: disabledColor,
+      disabled: lightModeDisabledColor,
     },
     primary: {
-      main: '#3D3834',
-      contrastText: '#FFFFFF',
+      main: lightModePrimaryMainColor,
+      contrastText: whiteColor,
       dark: '#2D2825',
-      light: dividerColor,
+      light: lightModeDividerColor,
     },
     secondary: {
-      main: '#FF6928',
+      main: SecondaryMainColor,
       light: '#FFDBCC',
-      dark: '#E54500',
-    },
-    error: {
-      main: '#F82A43',
-      dark: '#B51616',
-    },
-    warning: {
-      main: '#FFB800',
-    },
-    info: {
-      main: '#0094FF',
-    },
-    success: {
-      main: '#35A700',
+      dark: SecondaryDarkColor,
     },
     background: {
-      default: '#F4F0EF',
-      paper: '#FFFFFF',
+      default: lightModeBackgroundDefaultColor,
+      paper: whiteColor,
     },
     action: {
       active: '#5F5C5A',
       hover: '#F1ECEA',
-      selected: disabledColor,
+      selected: lightModeDisabledColor,
       disabledBackground: '#E5E5E5',
-      focus: '#F4F0EF',
-      disabled: disabledColor,
+      focus: lightModeBackgroundDefaultColor,
+      disabled: lightModeDisabledColor,
     },
   },
   components: {
     MuiTooltip: {
       styleOverrides: {
         tooltip: {
-          backgroundColor: '#3D3834',
-          color: '#FFFFFF',
+          backgroundColor: lightModePrimaryMainColor,
+          color: whiteColor,
         },
       },
     },
   },
 })
 
+const darkModePaperColor = '#2F2F2F'
+const darkModePrimraryMainColor = '#FFFCFB'
 let rusticDarkTheme = createTheme({
-  ...muiGeneralSetting,
+  ...baseTheme,
   palette: {
     mode: 'dark',
     primary: {
-      main: '#FFFCFB',
-      dark: '#E54500',
+      main: darkModePrimraryMainColor,
+      dark: SecondaryDarkColor,
       light: '#FFDBCC',
     },
     secondary: {
-      main: '#FF6928',
+      main: SecondaryMainColor,
       light: '#FFA983',
-      dark: '#E54500',
-    },
-    error: {
-      main: '#F82A43',
-    },
-    warning: {
-      main: '#FFB800',
-    },
-    info: {
-      main: '#0094FF',
-    },
-    success: {
-      main: '#35A700',
+      dark: SecondaryDarkColor,
     },
     background: {
       default: '#040404',
-      paper: '#2F2F2F',
+      paper: darkModePaperColor,
     },
     divider: '#D0C4BE',
     text: {
-      primary: '#FFFFFF',
+      primary: whiteColor,
       secondary: '#EBEBEB',
       disabled: '#C1C1C1',
     },
@@ -207,8 +207,8 @@ let rusticDarkTheme = createTheme({
     MuiTooltip: {
       styleOverrides: {
         tooltip: {
-          backgroundColor: '#FFFCFB',
-          color: '#2F2F2F',
+          backgroundColor: darkModePrimraryMainColor,
+          color: darkModePaperColor,
         },
       },
     },
