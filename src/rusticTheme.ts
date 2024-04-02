@@ -5,6 +5,13 @@ import { createTheme, responsiveFontSizes } from '@mui/material/styles'
 const whiteColor = '#FFFFFF'
 const SecondaryMainColor = '#FF6928'
 const SecondaryDarkColor = '#E54500'
+const actionActiveColor = '#5F5C5A'
+const actionFocusColor = '#FDFDFD'
+const actionDisabledBackgroundColor = '#E5E5E5'
+const actionDisabledColor = '#C7C2C0'
+const actionSelectedColor = '#D6D0D0'
+const dividerColor = '#D0C4BE'
+
 const baseTheme = createTheme({
   shape: {
     borderRadius: 16,
@@ -118,25 +125,22 @@ const baseTheme = createTheme({
   ] as Shadows,
 })
 
-const lightModeDividerColor = '#DDD0CA'
-const lightModeDisabledColor = '#C7C2C0'
 const lightModePrimaryMainColor = '#3D3834'
 const lightModeBackgroundDefaultColor = '#F4F0EF'
 let rusticLightTheme = createTheme({
   ...baseTheme,
   palette: {
     mode: 'light',
-    divider: lightModeDividerColor,
+    divider: dividerColor,
     text: {
       primary: '#1E0C04',
       secondary: '#4E443F',
-      disabled: lightModeDisabledColor,
+      disabled: '#B0ACAB',
     },
     primary: {
       main: lightModePrimaryMainColor,
-      contrastText: whiteColor,
       dark: '#2D2825',
-      light: lightModeDividerColor,
+      light: '#BAACA5',
     },
     secondary: {
       main: SecondaryMainColor,
@@ -148,12 +152,12 @@ let rusticLightTheme = createTheme({
       paper: whiteColor,
     },
     action: {
-      active: '#5F5C5A',
-      hover: '#F1ECEA',
-      selected: lightModeDisabledColor,
-      disabledBackground: '#E5E5E5',
-      focus: lightModeBackgroundDefaultColor,
-      disabled: lightModeDisabledColor,
+      active: actionActiveColor,
+      hover: '#EFEAEA',
+      selected: actionSelectedColor,
+      disabledBackground: actionDisabledBackgroundColor,
+      focus: actionFocusColor,
+      disabled: actionDisabledColor,
     },
   },
   components: {
@@ -169,13 +173,14 @@ let rusticLightTheme = createTheme({
 })
 
 const darkModePaperColor = '#2F2F2F'
-const darkModePrimraryMainColor = '#FFFCFB'
+const darkModePrimaryMainColor = '#FFFCFB'
 let rusticDarkTheme = createTheme({
   ...baseTheme,
   palette: {
     mode: 'dark',
+    divider: dividerColor,
     primary: {
-      main: darkModePrimraryMainColor,
+      main: darkModePrimaryMainColor,
       dark: SecondaryDarkColor,
       light: '#FFDBCC',
     },
@@ -188,26 +193,25 @@ let rusticDarkTheme = createTheme({
       default: '#040404',
       paper: darkModePaperColor,
     },
-    divider: '#D0C4BE',
     text: {
       primary: whiteColor,
       secondary: '#EBEBEB',
       disabled: '#C1C1C1',
     },
     action: {
-      active: '#5F5C5A',
+      active: actionActiveColor,
       hover: '#9A9A9A',
-      selected: '#D6D0D0',
-      focus: '#FDFDFD',
-      disabledBackground: '#E5E5E5',
-      disabled: '#C7C2C0',
+      selected: actionSelectedColor,
+      focus: actionFocusColor,
+      disabledBackground: actionDisabledBackgroundColor,
+      disabled: actionDisabledColor,
     },
   },
   components: {
     MuiTooltip: {
       styleOverrides: {
         tooltip: {
-          backgroundColor: darkModePrimraryMainColor,
+          backgroundColor: darkModePrimaryMainColor,
           color: darkModePaperColor,
         },
       },

@@ -130,6 +130,7 @@ export default function PopoverMenu(props: PopoverMenuProps) {
         sx={{
           '& .MuiPaper-root': {
             ...menuBorderStyles,
+            backgroundImage: 'none',
             // eslint-disable-next-line no-magic-numbers
             boxShadow: theme.shadows[2],
           },
