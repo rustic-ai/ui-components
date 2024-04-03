@@ -118,3 +118,20 @@ export interface ImageFormat extends DataFormat {
   /** Alternative text for the image used for assistive technology. */
   alt?: string
 }
+
+export interface TableHeader {
+  /** Field in table data for this header. */
+  dataKey: string
+  /** Optional label for this header. */
+  label?: string
+}
+
+export interface TableFormat extends DataFormat {
+  /** Data to be displayed in the table. */
+  data: Array<Record<string, string | number>>
+  /** Optional array to set the order of columns and assign labels.
+   * This can also be used to limit which columns are shown. */
+  headers?: TableHeader[]
+}
+
+export type TableData = TableFormat & Updates<TableFormat>

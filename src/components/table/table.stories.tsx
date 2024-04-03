@@ -1,6 +1,8 @@
+import type { Meta } from '@storybook/react'
+
 import Table from './table'
 
-export default {
+const meta: Meta<React.ComponentProps<typeof Table>> = {
   title: 'Rustic UI/Table/Table',
   component: Table,
   tags: ['autodocs'],
@@ -13,14 +15,29 @@ export default {
       },
     },
   },
-  argTypes: {
-    headers: {
-      control: 'array',
-      description:
-        'Use this prop to set the order of columns and assign headers. If none is provided, headers will be taken from the keys of the data objects from the `data` prop array and the first letter will be capitalized. \n<pre>```interface TableHeader {\n  dataKey: string\n  label?: string\n}```</pre>',
+}
+
+meta.argTypes = {
+  ...meta.argTypes,
+  headers: {
+    table: {
+      type: {
+        summary: 'Array of TableHeader.',
+        detail:
+          'Each TableHeader has the following fields:\n' +
+          '  dataKey: Field in table data for this header. \n' +
+          '  label: Optional label for this header.\n',
+      },
+      defaultValue: {
+        summary:
+          'If no headers are provided, the keys from data are used to generate this.\n' +
+          'In such cases, the header label defaults to the capitalized key.',
+      },
     },
   },
 }
+
+export default meta
 
 const sampleData = [
   {
