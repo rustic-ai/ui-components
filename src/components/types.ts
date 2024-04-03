@@ -49,9 +49,9 @@ export interface Participant {
 }
 
 export interface DataFormat {
-  /** Optional title */
+  /** Optional title. */
   title?: string
-  /** Optional description */
+  /** Optional description. */
   description?: string
 }
 
@@ -81,7 +81,7 @@ export interface CalendarEvent {
   start: string
   /** End date and time of the event. */
   end: string
-  /** Physical address or online link where event is happening. */
+  /** Physical address or online link where the event is happening. */
   location?: string
   /** Title or Name of the event. */
   title?: string

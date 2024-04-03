@@ -27,7 +27,7 @@ meta.argTypes = {
           '  start: ISO8601 string representation of start date and time of the event.\n' +
           '  end: ISO8601 string representation of end date and time of the event.\n' +
           '  title: Optional string representing title or name of the event.\n' +
-          '  location: Optional string of address or link where event is happening.\n' +
+          '  location: Optional string of address or link where the event is happening.\n' +
           '  description: Optional string with information about the event.\n' +
           '  isAllDay: Optional boolean value indicating whether the event lasts the entire day.',
       },
