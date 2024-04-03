@@ -7,7 +7,18 @@ import { useTheme } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import React from 'react'
 
-import type { CalendarData } from '../types'
+import type { CalendarData, CalendarEvent } from '../types'
+
+/** Convert CalendarEvent type to FullCalendar's Event type
+ * https://fullcalendar.io/docs/event-object */
+function transformEvent(event: CalendarEvent) {
+  return {
+    title: event.title ? event.title : '',
+    start: event.start,
+    end: event.end,
+    allDay: event.isAllDay,
+  }
+}
 
 export default function FCCalendar(props: CalendarData) {
   const theme = useTheme()
@@ -36,7 +47,7 @@ export default function FCCalendar(props: CalendarData) {
           minute: '2-digit',
         }}
         initialDate={props.events[0].start}
-        events={props.events}
+        events={props.events.map(transformEvent)}
         views={{
           dayGridMonth: {
             titleFormat: { year: 'numeric', month: 'short' },
