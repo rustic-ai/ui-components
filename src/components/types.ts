@@ -48,7 +48,12 @@ export interface Participant {
   participantType: ParticipantType
 }
 
-export interface DataFormat {}
+export interface DataFormat {
+  /** Optional title */
+  title?: string
+  /** Optional description */
+  description?: string
+}
 
 export interface Updates<T extends DataFormat> {
   /** @ignore */
@@ -72,14 +77,20 @@ export interface CodeFormat extends DataFormat {
 export type CodeData = CodeFormat & Updates<CodeFormat>
 
 export interface CalendarEvent {
-  id: string
-  title: string
+  /** Start date and time of the event. */
   start: string
+  /** End date and time of the event. */
   end: string
+  /** Physical location or online link where event is happening. */
   location?: string
+  /** Title or Name of the event. */
+  title?: string
+  /** Detailed information about the event. */
   description?: string
+  /** boolean value indicating whether the event lasts the entire day. */
   isAllDay?: boolean
 }
+
 export interface CalendarFormat extends DataFormat {
   events: CalendarEvent[]
 }
