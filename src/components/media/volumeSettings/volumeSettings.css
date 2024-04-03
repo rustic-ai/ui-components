@@ -1,0 +1,47 @@
+.rustic-volume-settings {
+  display: flex;
+  align-items: center;
+}
+
+.rustic-volume-slider {
+  transition: 0.2s ease-in-out;
+  width: 0px;
+  height: 5px;
+}
+
+/* circle that you drag on slider to change the volume */
+.rustic-volume-slider .MuiSlider-thumb {
+  width: 10px;
+  height: 10px;
+  display: none;
+}
+
+/* slider thumb appears on hover or focus */
+.rustic-volume-settings:hover .MuiSlider-thumb,
+.rustic-volume-settings:focus-within .MuiSlider-thumb {
+  display: unset;
+}
+
+@media (min-width: 900px) {
+  /* slider appears on hover or focus */
+  .rustic-volume-settings:hover .rustic-volume-slider,
+  .rustic-volume-settings:focus-within .rustic-volume-slider {
+    width: 64px;
+    margin-inline: 8px;
+  }
+}
+
+@media (max-width: 900px) {
+  .rustic-volume-settings {
+    gap: 8px;
+  }
+
+  .rustic-volume-slider {
+    width: 100%;
+    margin-right: 24px;
+  }
+
+  .rustic-volume-settings .MuiSlider-thumb {
+    display: unset;
+  }
+}
