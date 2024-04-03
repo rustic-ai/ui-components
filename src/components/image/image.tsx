@@ -7,21 +7,9 @@ import { useState } from 'react'
 import React from 'react'
 
 import { getSizeStyles } from '../helper'
+import type { ImageFormat } from '../types'
 
-export interface ImageProps {
-  /** Path to the image source. */
-  url: string
-  /** Width rendered in pixels. If neither width nor height are provided, the image will be set to be contained in the parent container. */
-  width?: number
-  /** Height rendered in pixels. */
-  height?: number
-  /** Alternative text for the image used for assistive technology. */
-  alt?: string
-  /** Description of the image. */
-  description?: string
-}
-
-export default function Image(props: ImageProps) {
+export default function Image(props: ImageFormat) {
   const [isLoading, setIsLoading] = useState(true)
   const [errorMessage, setErrorMessage] = useState<string>('')
 
@@ -39,7 +27,7 @@ export default function Image(props: ImageProps) {
       {isLoading && <CircularProgress data-cy="spinner" />}
       <img
         {...getSizeStyles(props.width, props.height)}
-        src={props.url}
+        src={props.src}
         alt={props.alt}
         onError={handleImageError}
         onLoad={() => {

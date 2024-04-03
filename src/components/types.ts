@@ -107,3 +107,14 @@ export interface LocationFormat extends DataFormat {
   /** Optional description for the location. */
   description?: string
 }
+
+export interface ImageFormat extends DataFormat {
+  /** Base64 encoded image or path to an image file. */
+  src: string
+  /** Width rendered in pixels. If neither width nor height are provided, the image will be set to be contained in the parent container. */
+  width?: number
+  /** Height rendered in pixels. */
+  height?: number
+  /** Alternative text for the image used for assistive technology. */
+  alt?: string
+}
