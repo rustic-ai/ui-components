@@ -1,3 +1,6 @@
+import AccountCircleIcon from '@mui/icons-material/AccountCircle'
+import SmartToyIcon from '@mui/icons-material/SmartToy'
+import React from 'react'
 import { v4 as getUUID } from 'uuid'
 
 import {
@@ -5,6 +8,7 @@ import {
   Image,
   MarkedMarkdown,
   MarkedStreamingMarkdown,
+  type MessageProps,
   OpenLayersMap,
   RechartsTimeSeries,
   StreamingText,
@@ -22,7 +26,7 @@ export default {
   argTypes: {
     supportedElements: {
       description:
-        'An ComponentMap contains message formats as keys and their corresponding React components as values.`interface ComponentMap {[key: string]: React.ComponentType<any>}`',
+        'A component map contains message formats as keys and their corresponding React components as values.`interface ComponentMap {[key: string]: React.ComponentType<any>}`',
     },
     messages: {
       description:
@@ -32,13 +36,16 @@ export default {
       description:
         'Message actions. For example, this could be a list of buttons for different actions (e.g. copy, delete, save, etc.)',
     },
+    getProfileComponent: {
+      description: "Profile icon to be shown before the sender's name.",
+    },
   },
   parameters: {
     layout: 'centered',
     docs: {
       description: {
         component:
-          'The `MessageSpace` component uses `MessageCanvas` and `ElementRenderer` to render a list of messages. It serves as a container for individual message items, each encapsulated within a MessageCanvas for consistent styling and layout.',
+          'The `MessageSpace` component uses `MessageCanvas` and `ElementRenderer` to render a list of messages. It serves as a container for individual message items, each encapsulated within a `MessageCanvas` for consistent styling and layout.',
       },
     },
   },
@@ -325,6 +332,13 @@ export const Default = {
       table: Table,
       calendar: FCCalendar,
       codeSnippet: CodeSnippet,
+    },
+    getProfileComponent: (message: MessageProps) => {
+      if (message.sender.includes('Agent')) {
+        return <SmartToyIcon />
+      } else {
+        return <AccountCircleIcon />
+      }
     },
   },
 }

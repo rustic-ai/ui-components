@@ -1,3 +1,5 @@
+import AccountCircleIcon from '@mui/icons-material/AccountCircle'
+import SmartToyIcon from '@mui/icons-material/SmartToy'
 import { v4 as getUUID } from 'uuid'
 
 import { supportedViewports } from '../../../cypress/support/variables'
@@ -6,6 +8,7 @@ import {
   Image,
   MarkedMarkdown,
   MarkedStreamingMarkdown,
+  type MessageProps,
   OpenLayersMap,
   RechartsTimeSeries,
   StreamingText,
@@ -77,16 +80,28 @@ describe('MessageSpace Component', () => {
         <MessageSpace
           messages={messages}
           supportedElements={supportedElements}
+          getProfileComponent={(message: MessageProps) => {
+            if (message.sender.includes('Agent')) {
+              return <SmartToyIcon data-cy="agent-icon" />
+            } else {
+              return <AccountCircleIcon data-cy="human-icon" />
+            }
+          }}
         />
       )
       const messageSpace = '[data-cy=message-space]'
 
       cy.get(messageSpace).should('exist')
 
-      messages.forEach((message) => {
+      messages.forEach((message, index) => {
         cy.get(messageSpace)
           .should('contain', message.sender)
           .and('contain', message.data.text)
+        if (message.sender === 'Agent') {
+          cy.get('svg').eq(index).should('have.attr', 'data-cy', 'agent-icon')
+        } else {
+          cy.get('svg').eq(index).should('have.attr', 'data-cy', 'human-icon')
+        }
       })
     })
   })
