@@ -81,13 +81,13 @@ export interface CalendarEvent {
   start: string
   /** End date and time of the event. */
   end: string
-  /** Physical location or online link where event is happening. */
+  /** Physical address or online link where event is happening. */
   location?: string
   /** Title or Name of the event. */
   title?: string
   /** Detailed information about the event. */
   description?: string
-  /** boolean value indicating whether the event lasts the entire day. */
+  /** Indicator if the event lasts the entire day. */
   isAllDay?: boolean
 }
 

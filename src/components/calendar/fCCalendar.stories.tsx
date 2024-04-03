@@ -24,11 +24,11 @@ meta.argTypes = {
         summary: 'Array of CalendarEvent.\n',
         detail:
           'Each CalendarEvent has the following fields:\n' +
-          '  start: ISO8601 string representation of start date and time of the event\n' +
-          '  end: ISO8601 string representation of end date and time of the event\n' +
-          '  title: Title or Name of the event.\n' +
-          '  location: Optional physical location or online link where event is happening\n' +
-          '  description: Optional information about the event.\n' +
+          '  start: ISO8601 string representation of start date and time of the event.\n' +
+          '  end: ISO8601 string representation of end date and time of the event.\n' +
+          '  title: Optional string representing title or name of the event.\n' +
+          '  location: Optional string of address or link where event is happening.\n' +
+          '  description: Optional string with information about the event.\n' +
           '  isAllDay: Optional boolean value indicating whether the event lasts the entire day.',
       },
     },
