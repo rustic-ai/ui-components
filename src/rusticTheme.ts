@@ -56,7 +56,7 @@ const baseTheme = createTheme({
     },
     body1: {
       fontStyle: 'normal',
-      fontWeight: 700,
+      fontWeight: 400,
       fontSize: '16px',
       letterSpacing: '0.15px',
     },

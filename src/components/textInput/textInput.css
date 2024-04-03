@@ -1,8 +1,9 @@
 .rustic-text-input-container {
   display: flex;
+  align-items: center;
   gap: 8px;
 }
 
-.rustic-text-input {
-  border-radius: 16px;
+.rustic-text-input-container .rustic-text-input fieldset[aria-hidden='true'] {
+  border-width: 1px;
 }
