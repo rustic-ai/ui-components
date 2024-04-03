@@ -7,20 +7,20 @@ import { useTheme } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import React from 'react'
 
-export interface Event {
-  id: string
-  allDay?: boolean
-  start: string
-  end?: string
-  title: string
+import type { CalendarData, CalendarEvent } from '../types'
+
+/** Convert CalendarEvent type to FullCalendar's Event type
+ * https://fullcalendar.io/docs/event-object */
+function transformEvent(event: CalendarEvent) {
+  return {
+    title: event.title ? event.title : '',
+    start: event.start,
+    end: event.end,
+    allDay: event.isAllDay,
+  }
 }
 
-export interface FCCalendarProps {
-  events: Event[]
-  initialView?: 'dayGridMonth' | 'dayGridWeek' | 'dayGridDay'
-}
-
-export default function FCCalendar(props: FCCalendarProps) {
+export default function FCCalendar(props: CalendarData) {
   const theme = useTheme()
   const isDesktop = useMediaQuery(theme.breakpoints.up('md'))
 
@@ -36,7 +36,7 @@ export default function FCCalendar(props: FCCalendarProps) {
     <Box className="rustic-fc-calendar">
       <FullCalendar
         plugins={[dayGridPlugin]}
-        initialView={props.initialView || getDefaultInitialView()}
+        initialView={getDefaultInitialView()}
         headerToolbar={{
           left: 'prev,next',
           center: 'title',
@@ -47,7 +47,7 @@ export default function FCCalendar(props: FCCalendarProps) {
           minute: '2-digit',
         }}
         initialDate={props.events[0].start}
-        events={props.events}
+        events={props.events.map(transformEvent)}
         views={{
           dayGridMonth: {
             titleFormat: { year: 'numeric', month: 'short' },

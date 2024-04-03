@@ -3,7 +3,7 @@ import Image from './image'
 
 describe('Image', () => {
   const defaultProps = {
-    url: 'https://assets-global.website-files.com/629d4351d174c60f32a4141a/647bfa926280c5b1cbccd03b_dragonscale_full_colour_rgb_icon_logo-p-500.png',
+    src: 'public/images/image-component-example.png',
   }
 
   supportedViewports.forEach((viewport) => {
@@ -11,7 +11,7 @@ describe('Image', () => {
       cy.viewport(viewport)
       cy.mount(<Image {...defaultProps} />)
 
-      cy.get('img').should('have.attr', 'src', defaultProps.url)
+      cy.get('img').should('have.attr', 'src', defaultProps.src)
     })
 
     it(`should set the alt attribute to "An image is displayed" if no alt prop is provided on ${viewport} screen`, () => {
@@ -39,8 +39,8 @@ describe('Image', () => {
     it(`renders image with provided props on ${viewport} screen`, () => {
       cy.viewport(viewport)
       const props = {
-        url: 'https://assets-global.website-files.com/629d4351d174c60f32a4141a/647bfa926280c5b1cbccd03b_dragonscale_full_colour_rgb_icon_logo-p-500.png',
-        alt: 'Dragonscale logo',
+        src: 'public/images/image-component-example.png',
+        alt: 'A curved facade covered in white latticework',
         width: 400,
         height: 400,
       }
@@ -48,15 +48,15 @@ describe('Image', () => {
       cy.mount(<Image {...props} />)
 
       cy.get('img')
-        .should('have.attr', 'src', defaultProps.url)
-        .and('have.attr', 'alt', 'Dragonscale logo')
+        .should('have.attr', 'src', defaultProps.src)
+        .and('have.attr', 'alt', 'A curved facade covered in white latticework')
         .and('have.attr', 'width', props.width)
         .and('have.attr', 'height', props.height)
     })
 
     it(`displays error when image fails to load on ${viewport} screen`, () => {
       cy.viewport(viewport)
-      cy.mount(<Image url="/invalid.jpg" />)
+      cy.mount(<Image src="/invalid.jpg" />)
 
       cy.contains('Image failed to load').should('be.visible')
     })

@@ -8,7 +8,7 @@ import {
   Image,
   MarkedMarkdown,
   MarkedStreamingMarkdown,
-  type MessageProps,
+  type Message,
   OpenLayersMap,
   RechartsTimeSeries,
   StreamingText,
@@ -30,7 +30,7 @@ export default {
     },
     messages: {
       description:
-        'Messages to be displayed. Could have thread messages for the streaming components. `Interface MessageData { [key: string]: any }`\n\n<pre>```{\nInterface MessageProps {\n  id: string\n  timestamp: string\n  sender: string\n  conversationId: string\n  format: string\n  data: MessageData\n  inReplyTo?: string\n  threadId?: string\n  priority?: string;\n  taggedParticipants?: string[]\n  topicId?: string\n}\n\n```</pre><pre>```{\nInterface ThreadableMessage extends MessageProps {\n  lastThreadMessage?: MessageProps\n  threadMessagesData?: MessageData[]}```</pre>',
+        'Messages to be displayed. Could have thread messages for the streaming components. `Interface MessageData { [key: string]: any }`\n\n<pre>```{\nInterface Message {\n  id: string\n  timestamp: string\n  sender: string\n  conversationId: string\n  format: string\n  data: MessageData\n  inReplyTo?: string\n  threadId?: string\n  priority?: string;\n  taggedParticipants?: string[]\n  topicId?: string\n}\n\n```</pre><pre>```{\nInterface ThreadableMessage extends Message {\n  lastThreadMessage?: Message\n  threadMessagesData?: MessageData[]}```</pre>',
     },
     getActionsComponent: {
       description:
@@ -333,7 +333,7 @@ export const Default = {
       calendar: FCCalendar,
       codeSnippet: CodeSnippet,
     },
-    getProfileComponent: (message: MessageProps) => {
+    getProfileComponent: (message: Message) => {
       if (message.sender.includes('Agent')) {
         return <SmartToyIcon />
       } else {

@@ -13,22 +13,16 @@ import View from 'ol/View.js'
 import React from 'react'
 import { useEffect, useRef, useState } from 'react'
 
-export interface OpenLayersMapProps {
-  /** Longitude in decimal degrees. */
-  longitude: number
-  /** Latitude in decimal degrees. */
-  latitude: number
-  /** Zoom level. It is recommended that this unit stays below 20 for useful results. */
-  zoom?: number
-}
+import type { LocationFormat } from '../types'
 
-export default function OpenLayersMap(props: OpenLayersMapProps) {
+export default function OpenLayersMap(props: LocationFormat) {
   const [errorMessage, setErrorMessage] = useState('')
   const mapTargetElement = useRef<HTMLDivElement>(null)
   const markerElement = useRef<HTMLDivElement>(null)
 
   const maxAbsoluteLatitude = 90
   const maxAbsoluteLongitude = 180
+  const initialZoomLevel = 12
 
   useEffect(() => {
     setErrorMessage('')
@@ -48,7 +42,7 @@ export default function OpenLayersMap(props: OpenLayersMapProps) {
         ],
         view: new View({
           center: fromLonLat([props.longitude, props.latitude]),
-          zoom: props.zoom,
+          zoom: initialZoomLevel,
         }),
         target: mapTargetElement.current,
       })
@@ -94,8 +88,4 @@ export default function OpenLayersMap(props: OpenLayersMapProps) {
       )}
     </>
   )
-}
-
-OpenLayersMap.defaultProps = {
-  zoom: 12,
 }

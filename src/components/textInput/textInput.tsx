@@ -8,7 +8,7 @@ import { useState } from 'react'
 import React from 'react'
 import { v4 as getUUID } from 'uuid'
 
-import type { MessageProps, WebSocketClient } from '../types'
+import type { Message, WebSocketClient } from '../types'
 
 export interface TextInputProps {
   ws: WebSocketClient
@@ -37,7 +37,7 @@ export default function TextInput(props: TextInputProps) {
     if (!isEmptyMessage) {
       const currentTime = new Date().toISOString()
 
-      const formattedMessage: MessageProps = {
+      const formattedMessage: Message = {
         id: getUUID(),
         timestamp: currentTime,
         sender: props.sender,

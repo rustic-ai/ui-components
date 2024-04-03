@@ -8,7 +8,7 @@ import {
   Image,
   MarkedMarkdown,
   MarkedStreamingMarkdown,
-  type MessageProps,
+  type Message,
   OpenLayersMap,
   RechartsTimeSeries,
   StreamingText,
@@ -80,7 +80,7 @@ describe('MessageSpace Component', () => {
         <MessageSpace
           messages={messages}
           supportedElements={supportedElements}
-          getProfileComponent={(message: MessageProps) => {
+          getProfileComponent={(message: Message) => {
             if (message.sender.includes('Agent')) {
               return <SmartToyIcon data-cy="agent-icon" />
             } else {

@@ -11,23 +11,9 @@ import Typography from '@mui/material/Typography'
 import React from 'react'
 
 import { capitalizeFirstLetter } from '../helper'
+import type { TableData, TableHeader } from '../types'
 
-export interface TableHeader {
-  dataKey: string
-  label?: string
-}
-
-export type TableProps = {
-  /** Data to be displayed in the table. */
-  data: Array<Record<string, string | number>>
-  /** Title of the table. If no title is provided, `aria-label` is defaults to "a table of data". */
-  title?: string
-  /** Description of the table. */
-  description?: string
-  headers?: TableHeader[]
-}
-
-export default function Table(props: TableProps) {
+export default function Table(props: TableData) {
   if (props.data.length === 0) {
     return <Typography variant="body2">No data available</Typography>
   }
