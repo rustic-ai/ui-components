@@ -6,17 +6,18 @@ import React from 'react'
 
 import ElementRenderer from '../elementRenderer/elementRenderer'
 import MessageCanvas from '../messageCanvas/messageCanvas'
-import type { ComponentMap, ThreadableMessage } from '../types'
+import type { ComponentMap, MessageProps, ThreadableMessage } from '../types'
 
 export interface MessageSpaceProps {
   supportedElements: ComponentMap
   messages?: ThreadableMessage[]
-  getActionsComponent?: (message: ThreadableMessage) => ReactNode
+  getActionsComponent?: (message: MessageProps) => ReactNode
+  getProfileComponent?: (message: MessageProps) => ReactNode
 }
 
 const MessageSpace = (props: MessageSpaceProps) => {
   return (
-    <Box data-cy="message-space" className="rustic-messages-space">
+    <Box data-cy="message-space" className="rustic-message-space">
       {props.messages &&
         props.messages.length > 0 &&
         props.messages.map((message) => {
@@ -25,6 +26,7 @@ const MessageSpace = (props: MessageSpaceProps) => {
               key={message.id}
               message={message}
               getActionsComponent={props.getActionsComponent}
+              getProfileComponent={props.getProfileComponent}
             >
               <ElementRenderer
                 message={message}
