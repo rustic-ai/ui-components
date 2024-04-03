@@ -1,9 +1,9 @@
-import '../../index.css'
+import '../../../index.css'
 
 import DOMPurify from 'dompurify'
 import React from 'react'
 
-import { getSizeStyles } from '../helper'
+import { getSizeStyles } from '../../helper'
 
 export interface YoutubeVideoProps {
   /** The string after "?v=" parameter of YouTube URLs. */
