@@ -1,0 +1,10 @@
+.rustic-time-display {
+  margin-left: 8px;
+}
+
+@media (max-width: 900px) {
+  .rustic-time-container {
+    display: flex;
+    justify-content: space-between;
+  }
+}
