@@ -113,6 +113,21 @@ export function formatTimestampLabel(
   }
 }
 
+export function formatDurationTime(durationInSeconds: number): string {
+  const hours = Math.floor(durationInSeconds / 3600)
+  const minutes = Math.floor((durationInSeconds % 3600) / 60)
+  const seconds = Math.floor(durationInSeconds % 60)
+
+  const formattedHours = hours > 0 ? `${hours}:` : ''
+  // Prefix with 0 when less than 10 minutes and there's an hour part, or no hour but need to format as MM:SS
+  const formattedMinutes =
+    hours > 0 ? `${minutes.toString().padStart(2, '0')}` : `${minutes}`
+  const formattedSeconds = seconds.toString().padStart(2, '0')
+
+  // Conditionally include the hours in the final string
+  return `${formattedHours}${formattedMinutes}:${formattedSeconds}`
+}
+
 export function getSizeStyles(
   maybeWidth: number | undefined,
   maybeHeight: number | undefined
