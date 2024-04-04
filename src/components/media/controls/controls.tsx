@@ -18,6 +18,27 @@ import React from 'react'
 
 import { formatDurationTime } from '../../helper'
 
+interface MediaIconButtonProps {
+  onClick: () => void
+  ariaLabel: string
+  icon: React.ReactNode
+  className?: string
+  dataCy?: string
+}
+
+export function MediaIconButton(props: MediaIconButtonProps) {
+  return (
+    <IconButton
+      onClick={props.onClick}
+      aria-label={props.ariaLabel}
+      className={props.className}
+      data-cy={props.dataCy}
+    >
+      {props.icon}
+    </IconButton>
+  )
+}
+
 interface MediaControls {
   mediaElement: HTMLMediaElement
 }
@@ -83,6 +104,10 @@ interface VolumeSettingsProps extends MediaControls {
 }
 
 export function VolumeSettings(props: VolumeSettingsProps) {
+  const label = props.mediaElement.muted ? 'unmute' : 'mute'
+  const Icon =
+    props.volumeFraction === 0 ? VolumeOffRoundedIcon : VolumeUpRoundedIcon
+
   function handleMuteToggle() {
     if (props.mediaElement.muted && props.mediaElement.volume === 0) {
       // If audio was muted and volume was 0, unmute and restore to full volume
@@ -112,18 +137,13 @@ export function VolumeSettings(props: VolumeSettingsProps) {
 
   return (
     <Box className="rustic-volume-settings">
-      <IconButton
+      <MediaIconButton
         onClick={handleMuteToggle}
         className="rustic-mute-button"
-        data-cy="mute-button"
-        aria-label={props.mediaElement.muted ? 'Unmute' : 'Mute'}
-      >
-        {props.volumeFraction === 0 ? (
-          <VolumeOffRoundedIcon color="primary" />
-        ) : (
-          <VolumeUpRoundedIcon color="primary" />
-        )}
-      </IconButton>
+        dataCy="mute-button"
+        ariaLabel={label}
+        icon={<Icon color="primary" />}
+      />
       <Slider
         className="rustic-volume-slider"
         data-cy="volume-slider"
@@ -155,23 +175,21 @@ interface TranscriptToggleProps {
 }
 
 export function TranscriptToggle(props: TranscriptToggleProps) {
+  const Icon = props.isTranscriptShown
+    ? KeyboardArrowUpIcon
+    : KeyboardArrowDownIcon
+
+  const buttonText = `${props.isTranscriptShown ? 'Hide' : 'Show'} Transcript`
+
   return (
     <Button
       className="rustic-transcript-toggle"
       data-cy="transcript-toggle"
       size="small"
       onClick={props.setIsTranscriptShown}
-      endIcon={
-        props.isTranscriptShown ? (
-          <KeyboardArrowUpIcon />
-        ) : (
-          <KeyboardArrowDownIcon />
-        )
-      }
+      endIcon={<Icon />}
     >
-      <Typography variant="overline">
-        {props.isTranscriptShown ? 'Hide' : 'Show'} Transcript
-      </Typography>
+      <Typography variant="overline">{buttonText}</Typography>
     </Button>
   )
 }
@@ -181,6 +199,9 @@ interface PausePlayToggleProps extends MediaControls {
 }
 
 export function PausePlayToggle(props: PausePlayToggleProps) {
+  const label = props.isPlaying ? 'pause' : 'play'
+  const Icon = props.isPlaying ? PauseCircleFilledIcon : PlayCircleFilledIcon
+
   function handlePausePlayToggle() {
     if (props.mediaElement.paused || props.mediaElement.ended) {
       props.mediaElement.play()
@@ -190,26 +211,13 @@ export function PausePlayToggle(props: PausePlayToggleProps) {
   }
 
   return (
-    <IconButton
+    <MediaIconButton
       onClick={handlePausePlayToggle}
-      aria-label={props.isPlaying ? 'pause' : 'play'}
-    >
-      {props.isPlaying ? (
-        <PauseCircleFilledIcon
-          className="rustic-pause-play-icon"
-          data-cy="pause-button"
-          fontSize="medium"
-          color="primary"
-        />
-      ) : (
-        <PlayCircleFilledIcon
-          className="rustic-pause-play-icon"
-          data-cy="play-button"
-          fontSize="medium"
-          color="primary"
-        />
-      )}
-    </IconButton>
+      ariaLabel={label}
+      dataCy={`${label}-button`}
+      icon={<Icon fontSize="medium" color="primary" />}
+      className="rustic-pause-play-icon"
+    />
   )
 }
 
@@ -252,6 +260,14 @@ interface MoveTenSecondsButtonProps extends MediaControls {
 export function MoveTenSecondsButton(props: MoveTenSecondsButtonProps) {
   const isReplayMovement = props.movement === 'replay'
 
+  const onClick = isReplayMovement
+    ? handleReplayTenSeconds
+    : handleForwardTenSeconds
+
+  const label = isReplayMovement ? 'replay' : 'forward'
+  const Icon = isReplayMovement ? Replay10RoundedIcon : Forward10RoundedIcon
+  const fontSize = props.isMobile ? 'large' : 'medium'
+
   function handleForwardTenSeconds() {
     props.mediaElement.currentTime += 10
   }
@@ -261,25 +277,11 @@ export function MoveTenSecondsButton(props: MoveTenSecondsButtonProps) {
   }
 
   return (
-    <IconButton
-      onClick={
-        isReplayMovement ? handleReplayTenSeconds : handleForwardTenSeconds
-      }
-      aria-label={`${isReplayMovement ? 'replay' : 'forward'} ten seconds`}
-    >
-      {isReplayMovement ? (
-        <Replay10RoundedIcon
-          data-cy="replay-button"
-          color="primary"
-          fontSize={props.isMobile ? 'large' : 'medium'}
-        />
-      ) : (
-        <Forward10RoundedIcon
-          data-cy="forward-button"
-          color="primary"
-          fontSize={props.isMobile ? 'large' : 'medium'}
-        />
-      )}
-    </IconButton>
+    <MediaIconButton
+      onClick={onClick}
+      ariaLabel={`${label} ten seconds`}
+      dataCy={`${label}-button`}
+      icon={<Icon color="primary" fontSize={fontSize} />}
+    />
   )
 }

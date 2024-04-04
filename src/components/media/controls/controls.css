@@ -90,7 +90,7 @@
     display: unset;
   }
 
-  .rustic-pause-play-icon {
+  .rustic-pause-play-icon svg {
     font-size: 52px;
   }
 }
