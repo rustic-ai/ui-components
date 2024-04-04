@@ -230,11 +230,6 @@ export default function Sound(props: SoundProps) {
               bufferedRanges={bufferedRanges}
               elapsedTimeInSeconds={elapsedTime}
               durationTimeInSeconds={durationTime}
-              styles={{
-                '& .MuiSlider-rail': {
-                  backgroundColor: 'action.disabled',
-                },
-              }}
             />
 
             {isMobile && renderTitle()}

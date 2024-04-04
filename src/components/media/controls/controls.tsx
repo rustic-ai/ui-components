@@ -18,17 +18,19 @@ import React from 'react'
 
 import { formatDurationTime } from '../../helper'
 
+interface MediaControls {
+  mediaElement: HTMLMediaElement
+}
+
 export type BufferRange = {
   start: number
   end: number
 }
 
-interface ProgressSliderProps {
-  mediaElement: HTMLMediaElement
+interface ProgressSliderProps extends MediaControls {
   bufferedRanges: BufferRange[]
   elapsedTimeInSeconds: number
   durationTimeInSeconds: number
-  styles?: object
 }
 
 export function ProgressSlider(props: ProgressSliderProps) {
@@ -65,15 +67,18 @@ export function ProgressSlider(props: ProgressSliderProps) {
         onChange={handleTimeChange}
         valueLabelDisplay="auto"
         valueLabelFormat={(value) => formatDurationTime(value)}
-        sx={props.styles}
+        sx={{
+          '& .MuiSlider-rail': {
+            backgroundColor: 'action.disabled',
+          },
+        }}
       />
       {renderBufferedProgressBar()}
     </Box>
   )
 }
 
-interface VolumeSettingsProps {
-  mediaElement: HTMLMediaElement
+interface VolumeSettingsProps extends MediaControls {
   volumeFraction: number
 }
 
@@ -171,12 +176,11 @@ export function TranscriptToggle(props: TranscriptToggleProps) {
   )
 }
 
-interface PausePlayButtonProps {
-  mediaElement: HTMLMediaElement
+interface PausePlayToggleProps extends MediaControls {
   isPlaying: boolean
 }
 
-export function PausePlayToggle(props: PausePlayButtonProps) {
+export function PausePlayToggle(props: PausePlayToggleProps) {
   function handlePausePlayToggle() {
     if (props.mediaElement.paused || props.mediaElement.ended) {
       props.mediaElement.play()
@@ -209,8 +213,7 @@ export function PausePlayToggle(props: PausePlayButtonProps) {
   )
 }
 
-interface PlaybackRateButtonProps {
-  mediaElement: HTMLMediaElement
+interface PlaybackRateButtonProps extends MediaControls {
   playbackRate: number
 }
 
@@ -241,8 +244,7 @@ export function PlaybackRateButton(props: PlaybackRateButtonProps) {
   )
 }
 
-interface MoveTenSecondsButtonProps {
-  mediaElement: HTMLMediaElement
+interface MoveTenSecondsButtonProps extends MediaControls {
   movement: 'replay' | 'forward'
   isMobile: boolean
 }
