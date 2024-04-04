@@ -1,4 +1,4 @@
-import { supportedViewports } from '../../../../cypress/support/variables'
+import { supportedViewports } from '../../../cypress/support/variables'
 import YoutubeVideo from './youtubeVideo'
 
 describe('YoutubeVideo', () => {

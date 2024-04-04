@@ -7,7 +7,6 @@ import OpenLayersMap from './map/openLayersMap'
 import MarkedMarkdown from './markdown/markedMarkdown'
 import MarkedStreamingMarkdown from './markdown/markedStreamingMarkdown'
 import Sound from './media/audio/sound'
-import YoutubeVideo from './media/video/youtubeVideo'
 import PopoverMenu from './menu/popoverMenu'
 import MessageCanvas from './messageCanvas/messageCanvas'
 import MessageSpace from './messageSpace/messageSpace'
@@ -18,6 +17,7 @@ import StreamingText from './text/streamingText'
 import Text from './text/text'
 import TextInput from './textInput/textInput'
 import Timestamp from './timestamp/timestamp'
+import YoutubeVideo from './video/youtubeVideo'
 
 export {
   CodeSnippet,
