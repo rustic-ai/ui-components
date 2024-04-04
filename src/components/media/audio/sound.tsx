@@ -11,16 +11,17 @@ import Typography from '@mui/material/Typography'
 import { Box } from '@mui/system'
 import React, { useEffect, useRef, useState } from 'react'
 
-import MoveTenSecondsButton from '../moveTenSecondsButton/moveTenSecondsButton'
-import PausePlayToggle from '../pausePlayToggle/pausePlayToggle'
-import PlaybackRateButton from '../playbackRateButton/playbackRateButton'
-import ProgressSlider, {
+import {
   type BufferRange,
-} from '../progressSlider/progressSlider'
+  MoveTenSecondsButton,
+  PausePlayToggle,
+  PlaybackRateButton,
+  ProgressSlider,
+  TranscriptToggle,
+  VolumeSettings,
+} from '../controls/controls'
 import TimeIndicator from '../timeIndicator/timeIndicator'
 import Transcript from '../transcript/transcript'
-import TranscriptToggle from '../transcriptToggle/transcriptToggle'
-import VolumeSettings from '../volumeSettings/volumeSettings'
 
 export interface SoundProps {
   /** Array of URLs pointing to the sound files to be played. */
