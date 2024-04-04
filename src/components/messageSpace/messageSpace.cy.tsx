@@ -72,9 +72,11 @@ describe('MessageSpace Component', () => {
     },
   ]
 
+  const messageSpace = '[data-cy=message-space]'
+
   supportedViewports.forEach((viewport) => {
     it(`renders correctly with provided messages on ${viewport} screen`, () => {
-      cy.viewport
+      cy.viewport(viewport)
       cy.mount(
         <MessageSpace
           messages={messages}
@@ -110,6 +112,23 @@ describe('MessageSpace Component', () => {
             })
         }
       })
+    })
+
+    it(`scrolls to bottom when "Go to bottom" button is clicked on ${viewport} screen`, () => {
+      cy.mount(
+        <div style={{ height: '200px' }}>
+          <MessageSpace
+            messages={messages}
+            supportedElements={supportedElements}
+          />
+        </div>
+      )
+      cy.get('[data-cy=go-to-bottom-button]').should('not.exist')
+      cy.get(messageSpace).contains('message 1').should('not.be.visible')
+      cy.get(messageSpace).scrollTo('top')
+      cy.get(messageSpace).contains('message 3').should('not.be.visible')
+      cy.get('[data-cy=go-to-bottom-button]').click()
+      cy.get(messageSpace).contains('message 3').should('be.visible')
     })
   })
 })

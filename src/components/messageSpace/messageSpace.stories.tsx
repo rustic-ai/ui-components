@@ -1,4 +1,5 @@
 import type { Meta } from '@storybook/react'
+import type { StoryFn } from '@storybook/react'
 import React from 'react'
 import { v4 as getUUID } from 'uuid'
 
@@ -28,6 +29,15 @@ const meta: Meta<React.ComponentProps<typeof MessageSpace>> = {
   title: 'Rustic UI/Message Space/Message Space',
   component: MessageSpace,
   tags: ['autodocs'],
+  decorators: [
+    (Story: StoryFn) => {
+      return (
+        <div style={{ height: '500px' }}>
+          <Story />
+        </div>
+      )
+    },
+  ],
   parameters: {
     layout: 'centered',
   },

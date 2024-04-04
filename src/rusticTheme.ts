@@ -181,6 +181,27 @@ let rusticLightTheme = createTheme({
         },
       },
     },
+    MuiButton: {
+      styleOverrides: {
+        contained: {
+          color: '#1E0C04',
+          backgroundColor: whiteColor,
+          border: '1px solid',
+          borderColor: dividerColor,
+          textTransform: 'none',
+          '&:hover': {
+            backgroundColor: '#EFEAEA',
+          },
+          '&:active': {
+            backgroundColor: SecondaryMainColor,
+            color: whiteColor,
+            '& .rustic-end-icon': {
+              color: whiteColor,
+            },
+          },
+        },
+      },
+    },
   },
 })
 
@@ -225,6 +246,25 @@ let rusticDarkTheme = createTheme({
         tooltip: {
           backgroundColor: darkModePrimaryMainColor,
           color: darkModePaperColor,
+        },
+      },
+    },
+    MuiButton: {
+      styleOverrides: {
+        contained: {
+          color: whiteColor,
+          backgroundColor: darkModePaperColor,
+          border: '1px solid',
+          borderColor: dividerColor,
+          '&:hover': {
+            backgroundColor: '#9A9A9A',
+          },
+          '&:active': {
+            backgroundColor: SecondaryMainColor,
+            '& .rustic-end-icon': {
+              color: whiteColor,
+            },
+          },
         },
       },
     },
