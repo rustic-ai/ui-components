@@ -11,6 +11,7 @@ import Typography from '@mui/material/Typography'
 import { Box } from '@mui/system'
 import React, { useEffect, useRef, useState } from 'react'
 
+import type { AudioFormat } from '../../types'
 import {
   type BufferRange,
   MoveTenSecondsButton,
@@ -23,18 +24,7 @@ import {
 import TimeIndicator from '../timeIndicator/timeIndicator'
 import Transcript from '../transcript/transcript'
 
-export interface SoundProps {
-  /** Array of URLs pointing to the sound files to be played. */
-  src: string[]
-  /** Title of the sound to be played. */
-  title?: string
-  /** Array of URLs pointing to WebVTT captions files (.vtt). */
-  captions?: string[]
-  /** Transcript of the sound content. */
-  transcript?: string
-}
-
-export default function Sound(props: SoundProps) {
+export default function Sound(props: AudioFormat) {
   const [isTranscriptShown, setIsTranscriptShown] = useState(false)
   const [areCaptionsShown, setAreCaptionsShown] = useState(false)
   const [isPlaying, setIsPlaying] = useState(false)
