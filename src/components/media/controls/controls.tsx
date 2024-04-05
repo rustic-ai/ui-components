@@ -14,7 +14,7 @@ import Button from '@mui/material/Button'
 import IconButton from '@mui/material/IconButton'
 import Slider from '@mui/material/Slider'
 import Typography from '@mui/material/Typography'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 
 import { formatDurationTime } from '../../helper'
 
@@ -54,25 +54,24 @@ export function ProgressSlider(props: MediaControls) {
 
   function renderBufferedProgressBar() {
     const buffered = props.mediaElement.buffered
-    const ranges = []
+    let totalBufferedDuration = 0
+
     for (let i = 0; i < buffered.length; i++) {
-      ranges.push({
-        start: buffered.start(i),
-        end: buffered.end(i),
-      })
+      totalBufferedDuration += buffered.end(i) - buffered.start(i)
     }
 
-    return ranges.map((range, index) => (
+    const bufferedWidth =
+      (totalBufferedDuration / props.mediaElement.duration) * 100
+
+    return (
       <Box
-        key={index}
         className="rustic-progress-buffered"
         sx={{
           backgroundColor: 'primary.light',
-          // eslint-disable-next-line no-magic-numbers
-          width: `${((range.end - range.start) / props.mediaElement.duration) * 100}%`,
+          width: `${bufferedWidth}%`,
         }}
       />
-    ))
+    )
   }
 
   return (
@@ -106,23 +105,13 @@ export function VolumeSettings(props: MediaControls) {
   const label = isMuted ? 'unmute' : 'mute'
   const Icon = isMuted ? VolumeOffRoundedIcon : VolumeUpRoundedIcon
 
-  useEffect(() => {
-    function updateVolume() {
-      if (props.mediaElement) {
-        if (props.mediaElement.muted) {
-          setVolumeFraction(0)
-        } else {
-          setVolumeFraction(props.mediaElement.volume)
-        }
-      }
+  props.mediaElement.onvolumechange = function () {
+    if (props.mediaElement.muted) {
+      setVolumeFraction(0)
+    } else {
+      setVolumeFraction(props.mediaElement.volume)
     }
-
-    props.mediaElement?.addEventListener('volumechange', updateVolume)
-
-    return () => {
-      props.mediaElement?.removeEventListener('volumechange', updateVolume)
-    }
-  }, [])
+  }
 
   function handleMuteToggle() {
     if (isMuted && props.mediaElement.volume === 0) {
@@ -224,6 +213,10 @@ export function PausePlayToggle(props: MediaControls) {
       props.mediaElement.pause()
       setIsPlaying(false)
     }
+  }
+
+  props.mediaElement.onended = function () {
+    setIsPlaying(false)
   }
 
   return (
