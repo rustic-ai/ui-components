@@ -31,8 +31,6 @@ describe('TimeSeries', () => {
   const areaChart = '[data-cy="area-chart"]'
   const referenceLineLabel = 'reference-line-label'
 
-  const chartColors = ['#648FFF', '#785EF0', '#DC267F', '#FE6100', '#FFB000']
-
   beforeEach(() => {
     cy.mount(
       <RechartsTimeSeries
@@ -41,7 +39,6 @@ describe('TimeSeries', () => {
         description="This is a description"
         referenceLineYAxis={[exampleReferenceLineYAxis]}
         referenceLineLabel={[referenceLineLabel]}
-        chartColors={chartColors}
       />
     )
   })
@@ -113,7 +110,6 @@ describe('TimeSeries', () => {
           title="title"
           description="This is a description"
           referenceLineYAxis={[exampleReferenceLineYAxis]}
-          chartColors={chartColors}
         />
       )
 
@@ -129,7 +125,6 @@ describe('TimeSeries', () => {
           description="This is a description"
           disableChartTypeToggle={true}
           defaultChartType="area"
-          chartColors={chartColors}
         />
       )
       cy.get(menuIcon).should('not.exist')

@@ -138,3 +138,10 @@ export function getSizeStyles(
 
   return stylingAttributes
 }
+
+export const defaultTimeSeriesProps = {
+  minChartWidth: 200,
+  maxHeight: 600,
+  aspectRatio: 16 / 9,
+  disableChartTypeToggle: false,
+}
