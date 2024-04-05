@@ -2,6 +2,17 @@
 import type { Shadows } from '@mui/material/styles'
 import { createTheme, responsiveFontSizes } from '@mui/material/styles'
 
+export const defaultChartStrokeColors = [
+  '#CC79A7',
+  '#E69F00',
+  '#56B4E9',
+  '#009E73',
+  '#F0E442',
+  '#0072B2',
+  '#D55E00',
+  '#000000',
+]
+
 const whiteColor = '#FFFFFF'
 const SecondaryMainColor = '#FF6928'
 const SecondaryDarkColor = '#E54500'
