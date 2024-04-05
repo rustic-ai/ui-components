@@ -14,7 +14,7 @@ import Button from '@mui/material/Button'
 import IconButton from '@mui/material/IconButton'
 import Slider from '@mui/material/Slider'
 import Typography from '@mui/material/Typography'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { formatDurationTime } from '../../helper'
 
@@ -43,33 +43,33 @@ interface MediaControls {
   mediaElement: HTMLMediaElement
 }
 
-export type BufferRange = {
-  start: number
-  end: number
-}
-
-interface ProgressSliderProps extends MediaControls {
-  bufferedRanges: BufferRange[]
-  elapsedTimeInSeconds: number
-  durationTimeInSeconds: number
-}
-
-export function ProgressSlider(props: ProgressSliderProps) {
-  const formattedElapsedTime = formatDurationTime(props.elapsedTimeInSeconds)
+export function ProgressSlider(props: MediaControls) {
+  const formattedElapsedTime = formatDurationTime(
+    props.mediaElement.currentTime
+  )
 
   function handleTimeChange(event: Event, newValue: number | number[]) {
     props.mediaElement.currentTime = newValue as number
   }
 
   function renderBufferedProgressBar() {
-    return props.bufferedRanges.map((range, index) => (
+    const buffered = props.mediaElement.buffered
+    const ranges = []
+    for (let i = 0; i < buffered.length; i++) {
+      ranges.push({
+        start: buffered.start(i),
+        end: buffered.end(i),
+      })
+    }
+
+    return ranges.map((range, index) => (
       <Box
         key={index}
         className="rustic-progress-buffered"
         sx={{
           backgroundColor: 'primary.light',
           // eslint-disable-next-line no-magic-numbers
-          width: `${((range.end - range.start) / props.durationTimeInSeconds) * 100}%`,
+          width: `${((range.end - range.start) / props.mediaElement.duration) * 100}%`,
         }}
       />
     ))
@@ -83,8 +83,8 @@ export function ProgressSlider(props: ProgressSliderProps) {
         size="small"
         aria-label="Time"
         aria-valuetext={`Current time: ${formattedElapsedTime}`}
-        max={props.durationTimeInSeconds}
-        value={props.elapsedTimeInSeconds}
+        max={props.mediaElement.duration}
+        value={props.mediaElement.currentTime}
         onChange={handleTimeChange}
         valueLabelDisplay="auto"
         valueLabelFormat={(value) => formatDurationTime(value)}
@@ -99,22 +99,38 @@ export function ProgressSlider(props: ProgressSliderProps) {
   )
 }
 
-interface VolumeSettingsProps extends MediaControls {
-  volumeFraction: number
-}
+export function VolumeSettings(props: MediaControls) {
+  const [volumeFraction, setVolumeFraction] = useState(1)
 
-export function VolumeSettings(props: VolumeSettingsProps) {
-  const label = props.mediaElement.muted ? 'unmute' : 'mute'
-  const Icon =
-    props.volumeFraction === 0 ? VolumeOffRoundedIcon : VolumeUpRoundedIcon
+  const isMuted = props.mediaElement.muted
+  const label = isMuted ? 'unmute' : 'mute'
+  const Icon = isMuted ? VolumeOffRoundedIcon : VolumeUpRoundedIcon
+
+  useEffect(() => {
+    function updateVolume() {
+      if (props.mediaElement) {
+        if (props.mediaElement.muted) {
+          setVolumeFraction(0)
+        } else {
+          setVolumeFraction(props.mediaElement.volume)
+        }
+      }
+    }
+
+    props.mediaElement?.addEventListener('volumechange', updateVolume)
+
+    return () => {
+      props.mediaElement?.removeEventListener('volumechange', updateVolume)
+    }
+  }, [])
 
   function handleMuteToggle() {
-    if (props.mediaElement.muted && props.mediaElement.volume === 0) {
+    if (isMuted && props.mediaElement.volume === 0) {
       // If audio was muted and volume was 0, unmute and restore to full volume
       props.mediaElement.muted = false
       props.mediaElement.volume = 1
-    } else if (props.mediaElement.muted) {
-      // If audio was muted, unmute and restore previous volume
+    } else if (isMuted) {
+      // If audio was muted, unmute, restoring previous volume
       props.mediaElement.muted = false
     } else {
       // If audio was unmuted, mute
@@ -152,8 +168,8 @@ export function VolumeSettings(props: VolumeSettingsProps) {
         step={0.1}
         aria-label="Volume"
         // eslint-disable-next-line no-magic-numbers
-        aria-valuetext={`Volume: ${props.volumeFraction * 100}%`}
-        value={props.volumeFraction}
+        aria-valuetext={`Volume: ${volumeFraction * 100}%`}
+        value={volumeFraction}
         onChange={handleVolumeChange}
         sx={{
           '& .MuiSlider-rail': {
@@ -194,19 +210,19 @@ export function TranscriptToggle(props: TranscriptToggleProps) {
   )
 }
 
-interface PausePlayToggleProps extends MediaControls {
-  isPlaying: boolean
-}
+export function PausePlayToggle(props: MediaControls) {
+  const [isPlaying, setIsPlaying] = useState(false)
 
-export function PausePlayToggle(props: PausePlayToggleProps) {
-  const label = props.isPlaying ? 'pause' : 'play'
-  const Icon = props.isPlaying ? PauseCircleFilledIcon : PlayCircleFilledIcon
+  const label = isPlaying ? 'pause' : 'play'
+  const Icon = isPlaying ? PauseCircleFilledIcon : PlayCircleFilledIcon
 
   function handlePausePlayToggle() {
-    if (props.mediaElement.paused || props.mediaElement.ended) {
+    if (!isPlaying) {
       props.mediaElement.play()
+      setIsPlaying(true)
     } else {
       props.mediaElement.pause()
+      setIsPlaying(false)
     }
   }
 
@@ -221,11 +237,7 @@ export function PausePlayToggle(props: PausePlayToggleProps) {
   )
 }
 
-interface PlaybackRateButtonProps extends MediaControls {
-  playbackRate: number
-}
-
-export function PlaybackRateButton(props: PlaybackRateButtonProps) {
+export function PlaybackRateButton(props: MediaControls) {
   function handlePlaybackRateChange() {
     let newPlaybackRate
     // Increase playback speed by 0.5 until until 2 is reached, then reset to 1
@@ -242,11 +254,11 @@ export function PlaybackRateButton(props: PlaybackRateButtonProps) {
     <Button
       onClick={handlePlaybackRateChange}
       className="rustic-playback-rate-button"
-      aria-label={`Playback rate: ${props.playbackRate}x, click to change`}
+      aria-label={`Playback rate: ${props.mediaElement.playbackRate}x, click to change`}
       data-cy="playback-rate-button"
     >
       <Typography variant="body1" color="primary.main">
-        {props.playbackRate}X
+        {props.mediaElement.playbackRate}X
       </Typography>
     </Button>
   )

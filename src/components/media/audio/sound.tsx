@@ -13,7 +13,6 @@ import React, { useEffect, useRef, useState } from 'react'
 
 import type { AudioFormat } from '../../types'
 import {
-  type BufferRange,
   MoveTenSecondsButton,
   PausePlayToggle,
   PlaybackRateButton,
@@ -27,13 +26,8 @@ import Transcript from '../transcript/transcript'
 export default function Sound(props: AudioFormat) {
   const [isTranscriptShown, setIsTranscriptShown] = useState(false)
   const [areCaptionsShown, setAreCaptionsShown] = useState(false)
-  const [isPlaying, setIsPlaying] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
-  const [bufferedRanges, setBufferedRanges] = useState<BufferRange[]>([])
-  const [durationTime, setDurationTime] = useState(0)
   const [elapsedTime, setElapsedTime] = useState(0)
-  const [volumeFraction, setVolumeFraction] = useState<number>(1)
-  const [playbackRate, setPlaybackRate] = useState<number>(1)
   const [errorMessage, setErrorMessage] = useState('')
 
   const theme = useTheme()
@@ -48,44 +42,10 @@ export default function Sound(props: AudioFormat) {
     const loadingErrorMessage = 'The audio resource has failed to load'
     const stalledErrorMessage = 'Failed to fetch data, but trying'
 
-    // wait for loadedmetadata to get content time duration
-    function getDuration() {
-      if (audioElement) {
-        setDurationTime(audioElement.duration)
-      }
-    }
     // update time stamp as video plays
     function updateTime() {
       if (audioElement) {
         setElapsedTime(audioElement.currentTime)
-      }
-    }
-    // update progress buffer bar
-    function updateBufferedRanges() {
-      if (audioElement) {
-        const buffered = audioElement.buffered
-        const ranges = []
-        for (let i = 0; i < buffered.length; i++) {
-          ranges.push({
-            start: buffered.start(i),
-            end: buffered.end(i),
-          })
-        }
-        setBufferedRanges(ranges)
-      }
-    }
-    function updatePlaybackRate() {
-      if (audioElement) {
-        setPlaybackRate(audioElement.playbackRate)
-      }
-    }
-    function updateVolume() {
-      if (audioElement) {
-        if (audioElement.muted) {
-          setVolumeFraction(0)
-        } else {
-          setVolumeFraction(audioElement.volume)
-        }
       }
     }
     function handleCanPlay() {
@@ -96,15 +56,8 @@ export default function Sound(props: AudioFormat) {
       setErrorMessage(errorMessage)
     }
 
-    audioElement?.addEventListener('loadedmetadata', getDuration)
     audioElement?.addEventListener('timeupdate', updateTime)
-    audioElement?.addEventListener('progress', updateBufferedRanges)
-    audioElement?.addEventListener('ratechange', updatePlaybackRate)
-    audioElement?.addEventListener('volumechange', updateVolume)
     audioElement?.addEventListener('canplay', handleCanPlay)
-    audioElement?.addEventListener('ended', () => setIsPlaying(false))
-    audioElement?.addEventListener('pause', () => setIsPlaying(false))
-    audioElement?.addEventListener('playing', () => setIsPlaying(true))
     audioElement?.addEventListener('error', () =>
       handleError(loadingErrorMessage)
     )
@@ -113,15 +66,8 @@ export default function Sound(props: AudioFormat) {
     )
 
     return () => {
-      audioElement?.removeEventListener('loadedmetadata', getDuration)
       audioElement?.removeEventListener('timeupdate', updateTime)
-      audioElement?.removeEventListener('progress', updateBufferedRanges)
-      audioElement?.removeEventListener('ratechange', updatePlaybackRate)
-      audioElement?.removeEventListener('volumechange', updateVolume)
       audioElement?.removeEventListener('canplay', handleCanPlay)
-      audioElement?.removeEventListener('ended', () => setIsPlaying(false))
-      audioElement?.removeEventListener('pause', () => setIsPlaying(false))
-      audioElement?.removeEventListener('playing', () => setIsPlaying(true))
       audioElement?.removeEventListener('error', () =>
         handleError(loadingErrorMessage)
       )
@@ -210,17 +156,12 @@ export default function Sound(props: AudioFormat) {
             {isMobile && (
               <TimeIndicator
                 elapsedTimeInSeconds={elapsedTime}
-                durationTimeInSeconds={durationTime}
+                durationTimeInSeconds={audioElement.duration}
                 style="wide"
               />
             )}
 
-            <ProgressSlider
-              mediaElement={audioElement}
-              bufferedRanges={bufferedRanges}
-              elapsedTimeInSeconds={elapsedTime}
-              durationTimeInSeconds={durationTime}
-            />
+            <ProgressSlider mediaElement={audioElement} />
 
             {isMobile && renderTitle()}
 
@@ -232,10 +173,7 @@ export default function Sound(props: AudioFormat) {
                     movement="replay"
                     isMobile={isMobile}
                   />
-                  <PausePlayToggle
-                    mediaElement={audioElement}
-                    isPlaying={isPlaying}
-                  />
+                  <PausePlayToggle mediaElement={audioElement} />
                   <MoveTenSecondsButton
                     mediaElement={audioElement}
                     movement="forward"
@@ -246,34 +184,21 @@ export default function Sound(props: AudioFormat) {
                 {!isMobile && renderCaptionsToggle()}
 
                 {!isMobile && (
-                  <PlaybackRateButton
-                    mediaElement={audioElement}
-                    playbackRate={playbackRate}
-                  />
+                  <PlaybackRateButton mediaElement={audioElement} />
                 )}
 
-                {!isMobile && (
-                  <VolumeSettings
-                    mediaElement={audioElement}
-                    volumeFraction={volumeFraction}
-                  />
-                )}
+                {!isMobile && <VolumeSettings mediaElement={audioElement} />}
 
                 {!isMobile && (
                   <TimeIndicator
                     elapsedTimeInSeconds={elapsedTime}
-                    durationTimeInSeconds={durationTime}
+                    durationTimeInSeconds={audioElement.duration}
                     style="condensed"
                   />
                 )}
               </Box>
 
-              {isMobile && (
-                <VolumeSettings
-                  mediaElement={audioElement}
-                  volumeFraction={volumeFraction}
-                />
-              )}
+              {isMobile && <VolumeSettings mediaElement={audioElement} />}
 
               <Box className="rustic-sound-bottom-controls-right">
                 {props.transcript && (
@@ -288,10 +213,7 @@ export default function Sound(props: AudioFormat) {
                 <Box>
                   {isMobile && renderCaptionsToggle()}
                   {isMobile && (
-                    <PlaybackRateButton
-                      mediaElement={audioElement}
-                      playbackRate={playbackRate}
-                    />
+                    <PlaybackRateButton mediaElement={audioElement} />
                   )}
                 </Box>
               </Box>
