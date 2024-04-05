@@ -190,7 +190,6 @@ export function TranscriptToggle(props: TranscriptToggleProps) {
     <Button
       className="rustic-transcript-toggle"
       data-cy="transcript-toggle"
-      size="small"
       onClick={props.setIsTranscriptShown}
       endIcon={<Icon />}
     >

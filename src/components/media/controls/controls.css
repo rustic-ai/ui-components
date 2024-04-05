@@ -53,6 +53,7 @@
 
 .rustic-transcript-toggle span {
   text-transform: none;
+  line-height: 1.5;
 }
 
 .rustic-playback-rate-button {

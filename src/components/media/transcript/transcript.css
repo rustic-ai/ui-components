@@ -1,5 +1,19 @@
+.rustic-transcript-container {
+  padding-top: 16px;
+}
+
 .rustic-transcript-header {
-  margin-block: 16px;
-  padding-left: 16px;
+  display: flex;
+  padding-bottom: 10px;
+}
+
+.rustic-transcript-header hr {
+  border-right-width: medium;
+  height: 21px;
+}
+
+.rustic-transcript-header span {
   text-transform: none;
+  padding-left: 14px;
+  line-height: 1.5;
 }
