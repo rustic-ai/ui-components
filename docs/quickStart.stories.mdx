@@ -24,10 +24,21 @@ Follow these steps to quickly integrate Rustic UI Components into your applicati
    @import '@rustic-ai/ui-components/dist/index.css';
    ```
 
-3. Start integrating Rustic UI Components into your application by importing the necessary components. Below is a sample code snippet demonstrating how to use the MessageSpace component to render messages:
+3. Rustic UI Components use [Material Symbols](https://fonts.google.com/icons) icons. To ensure the icons are displayed correctly, add the following to the `<head>` of your `index.html` file:
+
+   ```
+    <link
+     rel="stylesheet"
+     href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0"
+    />
+
+   ```
+
+4. Start integrating Rustic UI Components into your application by importing the necessary components. Below is a sample code snippet demonstrating how to use the MessageSpace component to render messages:
 
    ```
    import {
+     CodeSnippet
      FCCalendar,
      Image,
      MarkedMarkdown,
@@ -35,6 +46,7 @@ Follow these steps to quickly integrate Rustic UI Components into your applicati
      MessageSpace,
      OpenLayersMap,
      RechartsTimeSeries,
+     Sound,
      StreamingText,
      Table,
      Text,
@@ -60,6 +72,8 @@ Follow these steps to quickly integrate Rustic UI Components into your applicati
                    youtubeVideo: YoutubeVideo,
                    table: Table,
                    calendar: FCCalendar,
+                   codeSnippet: CodeSnippet,
+                   audio: Sound
                }}
                // Include other components as needed
                />
