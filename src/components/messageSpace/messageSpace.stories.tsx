@@ -54,13 +54,11 @@ export default {
 const conversationId = '1'
 
 const agentMessageData = {
-  id: getUUID(),
   sender: 'Agent',
   conversationId,
 }
 
 const humanMessageData = {
-  id: getUUID(),
   sender: 'You',
   conversationId,
 }
@@ -148,6 +146,7 @@ export const Default = {
     messages: [
       {
         ...humanMessageData,
+        id: getUUID(),
         timestamp: '2024-01-02T00:00:00.000Z',
         format: 'text',
         data: {
@@ -156,6 +155,7 @@ export const Default = {
       },
       {
         ...agentMessageData,
+        id: getUUID(),
         timestamp: '2024-01-02T00:01:00.000Z',
         format: 'markdown',
         data: {
@@ -164,6 +164,7 @@ export const Default = {
       },
       {
         ...humanMessageData,
+        id: getUUID(),
         timestamp: '2024-01-02T00:02:00.000Z',
         format: 'text',
         data: {
@@ -172,6 +173,7 @@ export const Default = {
       },
       {
         ...agentMessageData,
+        id: getUUID(),
         timestamp: '2024-01-02T00:03:00.000Z',
         format: 'timeSeries',
         data: {
@@ -185,6 +187,7 @@ export const Default = {
       },
       {
         ...humanMessageData,
+        id: getUUID(),
         timestamp: '2024-01-02T00:04:00.000Z',
         format: 'text',
         data: {
@@ -193,6 +196,7 @@ export const Default = {
       },
       {
         ...agentMessageData,
+        id: getUUID(),
         timestamp: '2024-01-02T00:05:00.000Z',
         format: 'calendar',
         data: {
@@ -231,6 +235,7 @@ export const Default = {
       },
       {
         ...humanMessageData,
+        id: getUUID(),
         timestamp: '2024-01-02T00:06:00.000Z',
         format: 'text',
         data: {
@@ -239,6 +244,7 @@ export const Default = {
       },
       {
         ...agentMessageData,
+        id: getUUID(),
         timestamp: '2024-01-02T00:07:00.000Z',
         format: 'table',
         data: {
@@ -250,6 +256,7 @@ export const Default = {
       },
       {
         ...humanMessageData,
+        id: getUUID(),
         timestamp: '2024-01-02T00:08:00.000Z',
         format: 'text',
         data: {
@@ -258,6 +265,7 @@ export const Default = {
       },
       {
         ...agentMessageData,
+        id: getUUID(),
         timestamp: '2024-01-02T00:09:00.000Z',
         format: 'youtubeVideo',
         data: {
@@ -268,6 +276,7 @@ export const Default = {
       },
       {
         ...humanMessageData,
+        id: getUUID(),
         timestamp: '2024-01-02T00:10:00.000Z',
         format: 'text',
         data: {
@@ -276,6 +285,7 @@ export const Default = {
       },
       {
         ...agentMessageData,
+        id: getUUID(),
         timestamp: '2024-01-02T00:11:00.000Z',
         format: 'image',
         data: {
@@ -287,6 +297,7 @@ export const Default = {
       },
       {
         ...humanMessageData,
+        id: getUUID(),
         timestamp: '2024-01-02T00:12:00.000Z',
         format: 'text',
         data: {
@@ -295,6 +306,7 @@ export const Default = {
       },
       {
         ...agentMessageData,
+        id: getUUID(),
         timestamp: '2024-01-02T00:13:00.000Z',
         format: 'map',
         data: {
@@ -304,6 +316,7 @@ export const Default = {
       },
       {
         ...humanMessageData,
+        id: getUUID(),
         timestamp: '2024-01-02T00:14:00.000Z',
         format: 'text',
         data: {
@@ -312,6 +325,7 @@ export const Default = {
       },
       {
         ...agentMessageData,
+        id: getUUID(),
         timestamp: '2024-01-02T00:15:00.000Z',
         format: 'codeSnippet',
         data: {
