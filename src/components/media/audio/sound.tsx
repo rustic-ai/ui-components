@@ -1,4 +1,3 @@
-/* eslint-disable no-magic-numbers */
 import './sound.css'
 
 import ClosedCaptionDisabledRoundedIcon from '@mui/icons-material/ClosedCaptionDisabledRounded'
@@ -32,20 +31,16 @@ export default function Sound(props: AudioFormat) {
 
   const theme = useTheme()
   const audioRef = useRef<HTMLVideoElement>(null)
-  let audioElement = audioRef.current
 
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
 
   useEffect(() => {
-    audioElement = audioRef.current
-
     const loadingErrorMessage = 'The audio resource has failed to load'
     const stalledErrorMessage = 'Failed to fetch data, but trying'
 
-    // update time stamp as video plays
-    function updateTime() {
-      if (audioElement) {
-        setElapsedTime(audioElement.currentTime)
+    function updateElapsedTime() {
+      if (audioRef.current) {
+        setElapsedTime(audioRef.current.currentTime)
       }
     }
     function handleCanPlay() {
@@ -56,54 +51,15 @@ export default function Sound(props: AudioFormat) {
       setErrorMessage(errorMessage)
     }
 
-    audioElement?.addEventListener('timeupdate', updateTime)
-    audioElement?.addEventListener('canplay', handleCanPlay)
-    audioElement?.addEventListener('error', () =>
+    audioRef.current?.addEventListener('timeupdate', updateElapsedTime)
+    audioRef.current?.addEventListener('canplay', handleCanPlay)
+    audioRef.current?.addEventListener('error', () =>
       handleError(loadingErrorMessage)
     )
-    audioElement?.addEventListener('stalled', () =>
+    audioRef.current?.addEventListener('stalled', () =>
       handleError(stalledErrorMessage)
     )
-
-    return () => {
-      audioElement?.removeEventListener('timeupdate', updateTime)
-      audioElement?.removeEventListener('canplay', handleCanPlay)
-      audioElement?.removeEventListener('error', () =>
-        handleError(loadingErrorMessage)
-      )
-      audioElement?.removeEventListener('stalled', () =>
-        handleError(stalledErrorMessage)
-      )
-    }
   }, [])
-
-  function renderSources() {
-    const invalidSrcErrorMessage = 'No valid audio sources were found'
-    const validSrcList = props.src.filter((src) => src.length > 0)
-
-    // Check if there are no valid sources
-    if (validSrcList.length === 0) {
-      setErrorMessage(invalidSrcErrorMessage)
-    } else {
-      return validSrcList.map((src, index) => <source key={index} src={src} />)
-    }
-  }
-
-  function renderTracks() {
-    if (props.captions && props.captions.length > 0) {
-      return props.captions.map((captionSrc, index) => (
-        <track key={index} src={captionSrc} kind="captions" default />
-      ))
-    }
-  }
-
-  if (errorMessage.length > 0) {
-    return (
-      <Alert severity="error" data-cy="error">
-        {errorMessage}
-      </Alert>
-    )
-  }
 
   function renderTitle() {
     return (
@@ -135,96 +91,149 @@ export default function Sound(props: AudioFormat) {
     }
   }
 
-  return (
-    <Box className="rustic-sound" data-cy="audio">
+  function renderTimeControls() {
+    if (audioRef.current) {
+      return (
+        <Box className="rustic-time-controls">
+          <MoveTenSecondsButton
+            mediaElement={audioRef.current}
+            movement="replay"
+          />
+          <PausePlayToggle mediaElement={audioRef.current} />
+          <MoveTenSecondsButton
+            mediaElement={audioRef.current}
+            movement="forward"
+          />
+        </Box>
+      )
+    }
+  }
+
+  function renderTranscript() {
+    if (props.transcript && isTranscriptShown) {
+      return <Transcript transcript={props.transcript} />
+    }
+  }
+
+  function renderTranscriptToggle() {
+    if (props.transcript) {
+      return (
+        <TranscriptToggle
+          isTranscriptShown={isTranscriptShown}
+          setIsTranscriptShown={() => setIsTranscriptShown(!isTranscriptShown)}
+        />
+      )
+    }
+  }
+
+  function renderMobileView() {
+    if (audioRef.current) {
+      return (
+        <Box className="rustic-sound-controls">
+          <TimeIndicator
+            elapsedTimeInSeconds={elapsedTime}
+            durationTimeInSeconds={audioRef.current.duration}
+            style="wide"
+          />
+          <ProgressSlider mediaElement={audioRef.current} />
+          {renderTitle()}
+
+          <Box className="rustic-sound-bottom-controls">
+            <Box className="rustic-sound-bottom-controls-left">
+              {renderTimeControls()}
+            </Box>
+
+            <VolumeSettings mediaElement={audioRef.current} />
+
+            <Box className="rustic-sound-bottom-controls-right">
+              {renderTranscriptToggle()}
+
+              <Box>
+                {renderCaptionsToggle()}
+                <PlaybackRateButton mediaElement={audioRef.current} />
+              </Box>
+            </Box>
+          </Box>
+
+          {renderTranscript()}
+        </Box>
+      )
+    }
+  }
+
+  function renderDesktopView() {
+    if (audioRef.current) {
+      return (
+        <>
+          {renderTitle()}
+
+          <Box className="rustic-sound-controls">
+            <ProgressSlider mediaElement={audioRef.current} />
+
+            <Box className="rustic-sound-bottom-controls">
+              <Box className="rustic-sound-bottom-controls-left">
+                {renderTimeControls()}
+                {renderCaptionsToggle()}
+
+                <PlaybackRateButton mediaElement={audioRef.current} />
+                <VolumeSettings mediaElement={audioRef.current} />
+                <TimeIndicator
+                  elapsedTimeInSeconds={elapsedTime}
+                  durationTimeInSeconds={audioRef.current.duration}
+                  style="condensed"
+                />
+              </Box>
+
+              <Box className="rustic-sound-bottom-controls-right">
+                {renderTranscriptToggle()}
+              </Box>
+            </Box>
+
+            {renderTranscript()}
+          </Box>
+        </>
+      )
+    }
+  }
+
+  function renderVideoElement() {
+    return (
       <video
+        src={props.src}
         data-cy="audio-element"
         ref={audioRef}
         className={areCaptionsShown ? 'rustic-has-captions' : ''}
       >
-        {renderSources()}
-        {areCaptionsShown && renderTracks()}
+        {areCaptionsShown && (
+          <track src={props.captions} kind="captions" default />
+        )}
       </video>
+    )
+  }
 
-      {isLoading || !audioElement ? (
+  const renderControls = isMobile ? renderMobileView : renderDesktopView
+
+  if (errorMessage.length > 0) {
+    return (
+      <Alert severity="error" data-cy="error">
+        {errorMessage}
+      </Alert>
+    )
+  }
+
+  if (isLoading) {
+    return (
+      <Box className="rustic-sound" data-cy="audio">
+        {renderVideoElement()}
         <CircularProgress data-cy="spinner" />
-      ) : (
-        <>
-          {!isMobile && renderTitle()}
+      </Box>
+    )
+  }
 
-          <Box className="rustic-sound-controls">
-            {isMobile && (
-              <TimeIndicator
-                elapsedTimeInSeconds={elapsedTime}
-                durationTimeInSeconds={audioElement.duration}
-                style="wide"
-              />
-            )}
-
-            <ProgressSlider mediaElement={audioElement} />
-
-            {isMobile && renderTitle()}
-
-            <Box className="rustic-sound-bottom-controls">
-              <Box className="rustic-sound-bottom-controls-left">
-                <Box className="rustic-time-controls">
-                  <MoveTenSecondsButton
-                    mediaElement={audioElement}
-                    movement="replay"
-                    isMobile={isMobile}
-                  />
-                  <PausePlayToggle mediaElement={audioElement} />
-                  <MoveTenSecondsButton
-                    mediaElement={audioElement}
-                    movement="forward"
-                    isMobile={isMobile}
-                  />
-                </Box>
-
-                {!isMobile && renderCaptionsToggle()}
-
-                {!isMobile && (
-                  <PlaybackRateButton mediaElement={audioElement} />
-                )}
-
-                {!isMobile && <VolumeSettings mediaElement={audioElement} />}
-
-                {!isMobile && (
-                  <TimeIndicator
-                    elapsedTimeInSeconds={elapsedTime}
-                    durationTimeInSeconds={audioElement.duration}
-                    style="condensed"
-                  />
-                )}
-              </Box>
-
-              {isMobile && <VolumeSettings mediaElement={audioElement} />}
-
-              <Box className="rustic-sound-bottom-controls-right">
-                {props.transcript && (
-                  <TranscriptToggle
-                    isTranscriptShown={isTranscriptShown}
-                    setIsTranscriptShown={() =>
-                      setIsTranscriptShown(!isTranscriptShown)
-                    }
-                  />
-                )}
-
-                <Box>
-                  {isMobile && renderCaptionsToggle()}
-                  {isMobile && (
-                    <PlaybackRateButton mediaElement={audioElement} />
-                  )}
-                </Box>
-              </Box>
-            </Box>
-
-            {props.transcript && isTranscriptShown && (
-              <Transcript transcript={props.transcript} />
-            )}
-          </Box>
-        </>
-      )}
+  return (
+    <Box className="rustic-sound" data-cy="audio">
+      {renderVideoElement()}
+      {renderControls()}
     </Box>
   )
 }

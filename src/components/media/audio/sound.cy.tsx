@@ -6,7 +6,7 @@ import Sound from './sound'
 
 describe('Sound', () => {
   const audioElement = '[data-cy=audio-element]'
-  const muteButton = '[data-cy=mute-button]'
+  const muteButton = '[data-cy=volumeUp-button]'
   const playbackRateButton = '[data-cy=playback-rate-button]'
   const volumeSlider = '[data-cy=volume-slider]'
   const pauseButton = '[data-cy=pause-button]'
@@ -15,12 +15,12 @@ describe('Sound', () => {
   const transcriptToggle = '[data-cy=transcript-toggle]'
   const error = '[data-cy=error]'
 
+  const src = '/audioExamples/audioStorybook.mp3'
+
   beforeEach(() => {
     cy.mount(
       <Sound
-        src={[
-          'https://cdn.uppbeat.io/audio-files/9522211dcb40a5f6f421199a416268d2/489ebd7efd2c5d966ef63c0c0a1f89f2/8abb2d49069f14e2d1609e244bbd9709/STREAMING-waves-alexander-plam-main-version-16612-02-14.mp3',
-        ]}
+        src={src}
         title="Sound Player Component"
         transcript="This is a transcript."
       />
@@ -53,12 +53,16 @@ describe('Sound', () => {
     it(`should increase the playback speed when clicking the playback rate button then go back to 1x after 2x on ${viewport} screen`, () => {
       cy.viewport(viewport)
       cy.get(audioElement).its('0.playbackRate').should('equal', 1)
+      cy.get(playbackRateButton).should('contain', 1)
       cy.get(playbackRateButton).click()
       cy.get(audioElement).its('0.playbackRate').should('equal', 1.5)
+      cy.get(playbackRateButton).should('contain', 1.5)
       cy.get(playbackRateButton).click()
       cy.get(audioElement).its('0.playbackRate').should('equal', 2)
+      cy.get(playbackRateButton).should('contain', 2)
       cy.get(playbackRateButton).click()
       cy.get(audioElement).its('0.playbackRate').should('equal', 1)
+      cy.get(playbackRateButton).should('contain', 1)
     })
     it(`should change the time when the video progress slider is adjusted on ${viewport} screen`, () => {
       cy.viewport(viewport)
@@ -83,38 +87,33 @@ describe('Sound', () => {
     })
     it(`should display captions if provided on ${viewport} screen`, () => {
       cy.viewport(viewport)
-      const captionsPath = ['/audioExamples/captions.vtt']
+      const captionsPath = '/audioExamples/captions.vtt'
       cy.mount(
         <Sound
-          src={['/audioExamples/audio.mp3']}
+          src={'/audioExamples/audioCaptions.mp3'}
           title="Audio with Captions"
           captions={captionsPath}
         />
       )
       cy.get('[data-cy=captions-toggle]').click()
-      cy.get('track')
-        .should('exist')
-        .should('have.attr', 'src', captionsPath[0])
+      cy.get('track').should('exist').should('have.attr', 'src', captionsPath)
     })
     it(`should display an error message when no valid sources are found on ${viewport} screen`, () => {
       cy.viewport(viewport)
-      cy.mount(<Sound src={[]} />)
+      cy.mount(<Sound src="" />)
       cy.get(audioElement).should('not.exist')
       cy.get(error).should('be.visible')
-      cy.get(error).should('contain', 'No valid audio sources were found')
+      cy.get(error).should('contain', 'The audio resource has failed to load')
     })
     it(`should display an error message when the resource loading has been stalled on ${viewport} screen`, () => {
       cy.viewport(viewport)
       // Delay server response to simulate stalled media loading
-      cy.intercept(
-        'https://filmsupply-files.s3.amazonaws.com/fs/files/production/clip_mov/2264767/mp4.wat.h.484.IcbLxWaNAr0F1s8UzyCOZRWa3BJtiovHoZnYctBbHMtL7.mp4',
-        (req) => {
-          req.on('response', (res) => {
-            // Wait for delay in milliseconds before sending the response to the client.
-            res.setDelay(2000)
-          })
-        }
-      ).as('mediaRequest')
+      cy.intercept(src, (req) => {
+        req.on('response', (res) => {
+          // Wait for delay in milliseconds before sending the response to the client.
+          res.setDelay(2000)
+        })
+      }).as('mediaRequest')
       // Listen for the stalled event on the audio element
       cy.get(audioElement).then((audio) => {
         audio.on('stalled', () => {

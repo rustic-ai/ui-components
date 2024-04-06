@@ -1,17 +1,12 @@
-/* eslint-disable no-magic-numbers */
 import './controls.css'
 
-import Forward10RoundedIcon from '@mui/icons-material/Forward10Rounded'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
-import PauseCircleFilledIcon from '@mui/icons-material/PauseCircleFilled'
-import PlayCircleFilledIcon from '@mui/icons-material/PlayCircleFilled'
-import Replay10RoundedIcon from '@mui/icons-material/Replay10Rounded'
-import VolumeOffRoundedIcon from '@mui/icons-material/VolumeOffRounded'
-import VolumeUpRoundedIcon from '@mui/icons-material/VolumeUpRounded'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
+import Icon from '@mui/material/Icon'
 import IconButton from '@mui/material/IconButton'
+import LinearProgress from '@mui/material/LinearProgress'
 import Slider from '@mui/material/Slider'
 import Typography from '@mui/material/Typography'
 import React, { useState } from 'react'
@@ -20,27 +15,48 @@ import { formatDurationTime } from '../../helper'
 
 interface MediaIconButtonProps {
   onClick: () => void
-  ariaLabel: string
-  icon: React.ReactNode
+  action: 'play' | 'pause' | 'forward' | 'replay' | 'volumeUp' | 'volumeOff'
   className?: string
-  dataCy?: string
-}
-
-export function MediaIconButton(props: MediaIconButtonProps) {
-  return (
-    <IconButton
-      onClick={props.onClick}
-      aria-label={props.ariaLabel}
-      className={props.className}
-      data-cy={props.dataCy}
-    >
-      {props.icon}
-    </IconButton>
-  )
 }
 
 interface MediaControls {
   mediaElement: HTMLMediaElement
+}
+
+interface TranscriptToggleProps {
+  isTranscriptShown: boolean
+  setIsTranscriptShown: () => void
+}
+
+interface MoveTenSecondsButtonProps extends MediaControls {
+  movement: 'replay' | 'forward'
+}
+
+const percentMultiple = 100
+
+export function MediaIconButton(props: MediaIconButtonProps) {
+  const controls = {
+    play: { symbol: 'play_circle', label: 'play' },
+    pause: { symbol: 'pause_circle', label: 'pause' },
+    forward: { symbol: 'forward_10', label: 'forward ten seconds' },
+    replay: { symbol: 'replay_10', label: 'replay ten seconds' },
+    volumeUp: { symbol: 'volume_up', label: 'mute' },
+    volumeOff: { symbol: 'volume_off', label: 'unmute' },
+  }
+  return (
+    <IconButton
+      onClick={props.onClick}
+      aria-label={`click to ${controls[props.action].label}`}
+      className={props.className}
+      data-cy={`${props.action}-button`}
+    >
+      <Icon color="primary">
+        <span className="material-symbols-rounded">
+          {controls[props.action].symbol}
+        </span>
+      </Icon>
+    </IconButton>
+  )
 }
 
 export function ProgressSlider(props: MediaControls) {
@@ -54,28 +70,34 @@ export function ProgressSlider(props: MediaControls) {
 
   function renderBufferedProgressBar() {
     const buffered = props.mediaElement.buffered
-    let totalBufferedDuration = 0
+    let secondsBuffered = 0
 
-    for (let i = 0; i < buffered.length; i++) {
-      totalBufferedDuration += buffered.end(i) - buffered.start(i)
+    // // This loop calculates the total seconds buffered up to the current playback time by iterating through the buffered time ranges in reverse order. It finds the most recent buffered range that comes before or includes the current time and uses its end point to calculate the total buffered percentage. This ensures we capture the relevant buffered duration relative to the current playback position, even in scenarios where buffering is discontinuous or occurs in segments.
+    for (let i = buffered.length - 1; i >= 0; --i) {
+      const rangeStart = buffered.start(i)
+      const rangeEnd = buffered.end(i)
+
+      if (rangeStart < props.mediaElement.currentTime) {
+        secondsBuffered = rangeEnd
+        break
+      }
     }
 
-    const bufferedWidth =
-      (totalBufferedDuration / props.mediaElement.duration) * 100
+    const bufferedPercent =
+      (secondsBuffered / props.mediaElement.duration) * percentMultiple
 
     return (
-      <Box
+      <LinearProgress
         className="rustic-progress-buffered"
-        sx={{
-          backgroundColor: 'primary.light',
-          width: `${bufferedWidth}%`,
-        }}
+        variant="determinate"
+        value={bufferedPercent}
       />
     )
   }
 
   return (
     <Box className="rustic-progress">
+      {renderBufferedProgressBar()}
       <Slider
         className="rustic-progress-slider"
         data-cy="progress-slider"
@@ -87,13 +109,8 @@ export function ProgressSlider(props: MediaControls) {
         onChange={handleTimeChange}
         valueLabelDisplay="auto"
         valueLabelFormat={(value) => formatDurationTime(value)}
-        sx={{
-          '& .MuiSlider-rail': {
-            backgroundColor: 'action.disabled',
-          },
-        }}
+        color="secondary"
       />
-      {renderBufferedProgressBar()}
     </Box>
   )
 }
@@ -102,8 +119,7 @@ export function VolumeSettings(props: MediaControls) {
   const [volumeFraction, setVolumeFraction] = useState(1)
 
   const isMuted = props.mediaElement.muted
-  const label = isMuted ? 'unmute' : 'mute'
-  const Icon = isMuted ? VolumeOffRoundedIcon : VolumeUpRoundedIcon
+  const action = isMuted ? 'volumeOff' : 'volumeUp'
 
   props.mediaElement.onvolumechange = function () {
     if (props.mediaElement.muted) {
@@ -131,13 +147,10 @@ export function VolumeSettings(props: MediaControls) {
     event: Event | React.MouseEvent,
     newValue: number | number[]
   ) {
-    if (newValue === 0) {
-      props.mediaElement.muted = true
-    } else {
-      props.mediaElement.muted = false
-    }
+    const updatedVolume = newValue as number
 
-    props.mediaElement.volume = newValue as number
+    props.mediaElement.muted = updatedVolume === 0
+    props.mediaElement.volume = updatedVolume as number
   }
 
   return (
@@ -145,9 +158,7 @@ export function VolumeSettings(props: MediaControls) {
       <MediaIconButton
         onClick={handleMuteToggle}
         className="rustic-mute-button"
-        dataCy="mute-button"
-        ariaLabel={label}
-        icon={<Icon color="primary" />}
+        action={action}
       />
       <Slider
         className="rustic-volume-slider"
@@ -156,27 +167,12 @@ export function VolumeSettings(props: MediaControls) {
         max={1}
         step={0.1}
         aria-label="Volume"
-        // eslint-disable-next-line no-magic-numbers
-        aria-valuetext={`Volume: ${volumeFraction * 100}%`}
+        aria-valuetext={`Volume: ${volumeFraction * percentMultiple}%`}
         value={volumeFraction}
         onChange={handleVolumeChange}
-        sx={{
-          '& .MuiSlider-rail': {
-            backgroundColor: 'action.disabled',
-          },
-          '& .MuiSlider-track': {
-            backgroundColor: 'primary.light',
-            borderColor: 'primary.light',
-          },
-        }}
       />
     </Box>
   )
-}
-
-interface TranscriptToggleProps {
-  isTranscriptShown: boolean
-  setIsTranscriptShown: () => void
 }
 
 export function TranscriptToggle(props: TranscriptToggleProps) {
@@ -201,16 +197,15 @@ export function TranscriptToggle(props: TranscriptToggleProps) {
 export function PausePlayToggle(props: MediaControls) {
   const [isPlaying, setIsPlaying] = useState(false)
 
-  const label = isPlaying ? 'pause' : 'play'
-  const Icon = isPlaying ? PauseCircleFilledIcon : PlayCircleFilledIcon
+  const action = isPlaying ? 'pause' : 'play'
 
   function handlePausePlayToggle() {
-    if (!isPlaying) {
-      props.mediaElement.play()
-      setIsPlaying(true)
-    } else {
+    if (isPlaying) {
       props.mediaElement.pause()
       setIsPlaying(false)
+    } else {
+      props.mediaElement.play()
+      setIsPlaying(true)
     }
   }
 
@@ -221,57 +216,43 @@ export function PausePlayToggle(props: MediaControls) {
   return (
     <MediaIconButton
       onClick={handlePausePlayToggle}
-      ariaLabel={label}
-      dataCy={`${label}-button`}
-      icon={<Icon fontSize="medium" color="primary" />}
+      action={action}
       className="rustic-pause-play-icon"
     />
   )
 }
 
 export function PlaybackRateButton(props: MediaControls) {
+  const [playbackRate, setPlaybackRate] = useState(1)
+
   function handlePlaybackRateChange() {
-    let newPlaybackRate
+    let newPlaybackRate = 1
+    const rateChange = 0.5
+    const maxRate = 2
     // Increase playback speed by 0.5 until until 2 is reached, then reset to 1
-    if (props.mediaElement.playbackRate === 2) {
-      newPlaybackRate = 1
-    } else {
-      newPlaybackRate = props.mediaElement.playbackRate + 0.5
+    if (props.mediaElement.playbackRate < maxRate) {
+      newPlaybackRate = props.mediaElement.playbackRate + rateChange
     }
 
     props.mediaElement.playbackRate = newPlaybackRate
+    setPlaybackRate(newPlaybackRate)
   }
 
   return (
     <Button
       onClick={handlePlaybackRateChange}
       className="rustic-playback-rate-button"
-      aria-label={`Playback rate: ${props.mediaElement.playbackRate}x, click to change`}
+      aria-label={`Playback rate: ${playbackRate}x, click to change`}
       data-cy="playback-rate-button"
     >
       <Typography variant="body1" color="primary.main">
-        {props.mediaElement.playbackRate}X
+        {playbackRate}X
       </Typography>
     </Button>
   )
 }
 
-interface MoveTenSecondsButtonProps extends MediaControls {
-  movement: 'replay' | 'forward'
-  isMobile: boolean
-}
-
 export function MoveTenSecondsButton(props: MoveTenSecondsButtonProps) {
-  const isReplayMovement = props.movement === 'replay'
-
-  const onClick = isReplayMovement
-    ? handleReplayTenSeconds
-    : handleForwardTenSeconds
-
-  const label = isReplayMovement ? 'replay' : 'forward'
-  const Icon = isReplayMovement ? Replay10RoundedIcon : Forward10RoundedIcon
-  const fontSize = props.isMobile ? 'large' : 'medium'
-
   function handleForwardTenSeconds() {
     props.mediaElement.currentTime += 10
   }
@@ -280,12 +261,13 @@ export function MoveTenSecondsButton(props: MoveTenSecondsButtonProps) {
     props.mediaElement.currentTime -= 10
   }
 
-  return (
-    <MediaIconButton
-      onClick={onClick}
-      ariaLabel={`${label} ten seconds`}
-      dataCy={`${label}-button`}
-      icon={<Icon color="primary" fontSize={fontSize} />}
-    />
-  )
+  const isReplayMovement = props.movement === 'replay'
+
+  const onClick = isReplayMovement
+    ? handleReplayTenSeconds
+    : handleForwardTenSeconds
+
+  const action = isReplayMovement ? 'replay' : 'forward'
+
+  return <MediaIconButton onClick={onClick} action={action} />
 }

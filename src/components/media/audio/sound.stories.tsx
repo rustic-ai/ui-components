@@ -1,6 +1,6 @@
 import Sound from './sound'
 
-export default {
+const meta = {
   title: 'Rustic UI/Audio/Sound',
   component: Sound,
   tags: ['autodocs'],
@@ -8,15 +8,15 @@ export default {
     docs: {
       description: {
         component:
-          'The `Sound` component is an audio player designed for playing sound files in web applications. It provides controls for playback, volume adjustment, and playback rate modification. The component is suitable for embedding audio content with accompanying transcripts, making it accessible and user-friendly.',
+          'The `Sound` component is an audio player designed for playing audio files in web applications. It provides controls for playback, volume adjustment, and playback rate modification. The component is suitable for embedding audio content with accompanying transcripts, making it accessible and user-friendly.',
       },
     },
   },
 }
 
-const soundSrc = [
-  'https://cdn.uppbeat.io/audio-files/9522211dcb40a5f6f421199a416268d2/489ebd7efd2c5d966ef63c0c0a1f89f2/8abb2d49069f14e2d1609e244bbd9709/STREAMING-waves-alexander-plam-main-version-16612-02-14.mp3',
-]
+export default meta
+
+const soundSrc = 'audioExamples/audioStorybook.mp3'
 
 export const Default = {
   args: {
@@ -34,14 +34,14 @@ export const WithoutTitleAndTranscript = {
 
 export const WithCaptions = {
   args: {
-    src: ['audioExamples/audio.mp3'],
+    src: 'audioExamples/audioCaptions.mp3',
     title: 'Sound with Captions',
-    captions: ['audioExamples/captions.vtt'],
+    captions: 'audioExamples/captions.vtt',
   },
 }
 
 export const Error = {
   args: {
-    src: [''],
+    src: '',
   },
 }

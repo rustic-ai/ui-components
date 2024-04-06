@@ -24,7 +24,7 @@
   height: 8px;
   position: absolute;
   border-radius: 12px;
-  pointer-events: none;
+  width: 100%;
 }
 
 .rustic-volume-settings {
@@ -89,9 +89,5 @@
 
   .rustic-volume-settings .MuiSlider-thumb {
     display: unset;
-  }
-
-  .rustic-pause-play-icon svg {
-    font-size: 52px;
   }
 }
