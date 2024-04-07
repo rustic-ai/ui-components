@@ -135,3 +135,12 @@ export interface TableFormat extends DataFormat {
 }
 
 export type TableData = TableFormat & Updates<TableFormat>
+
+export interface AudioFormat extends DataFormat {
+  /** URL of the audio file to be played. */
+  src: string
+  /** URL of the WebVTT captions file (.vtt). */
+  captions?: string
+  /** Transcript of the audio content. */
+  transcript?: string
+}

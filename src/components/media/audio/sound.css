@@ -1,0 +1,48 @@
+.rustic-sound video {
+  display: none;
+}
+
+/* captions */
+.rustic-sound video::cue {
+  font-size: 16px;
+}
+
+/* style video element if has captions */
+.rustic-sound .rustic-has-captions {
+  display: unset;
+  height: 10vh;
+  width: 100%;
+}
+
+.rustic-sound-bottom-controls {
+  display: flex;
+  justify-content: space-between;
+}
+
+.rustic-sound-bottom-controls-left {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rustic-sound-bottom-controls-right {
+  display: flex;
+  justify-content: space-between;
+}
+
+.rustic-time-controls {
+  display: flex;
+  align-items: center;
+}
+
+@media (max-width: 900px) {
+  .rustic-sound-title {
+    padding: 0;
+    text-align: center;
+  }
+
+  .rustic-sound-bottom-controls {
+    flex-direction: column;
+    padding-inline: 0;
+  }
+}

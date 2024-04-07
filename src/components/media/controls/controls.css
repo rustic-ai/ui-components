@@ -1,0 +1,93 @@
+.rustic-progress {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  position: relative;
+}
+
+.rustic-progress-slider {
+  height: 8px;
+}
+
+/* circle that you drag on slider to change the time */
+.rustic-progress-slider .MuiSlider-thumb {
+  z-index: 2;
+  width: 15px;
+  height: 15px;
+}
+/* bar to the left of the thumb (circle), tracking the time */
+.rustic-progress-slider .MuiSlider-track {
+  z-index: 1;
+}
+
+.rustic-progress-buffered {
+  height: 8px;
+  position: absolute;
+  border-radius: 12px;
+  width: 100%;
+}
+
+.rustic-volume-settings {
+  display: flex;
+  align-items: center;
+}
+
+.rustic-volume-slider {
+  transition: 0.2s ease-in-out;
+  width: 0px;
+  height: 5px;
+}
+
+/* circle that you drag on slider to change the volume */
+.rustic-volume-slider .MuiSlider-thumb {
+  width: 10px;
+  height: 10px;
+  display: none;
+}
+
+/* slider thumb appears on hover or focus */
+.rustic-volume-settings:hover .MuiSlider-thumb,
+.rustic-volume-settings:focus-within .MuiSlider-thumb {
+  display: unset;
+}
+
+.rustic-transcript-toggle span {
+  text-transform: none;
+  line-height: 1.5;
+}
+
+.rustic-playback-rate-button {
+  min-width: 0;
+}
+
+@media (min-width: 900px) {
+  /* slider appears on hover or focus */
+  .rustic-volume-settings:hover .rustic-volume-slider,
+  .rustic-volume-settings:focus-within .rustic-volume-slider {
+    width: 64px;
+    margin-inline: 8px;
+  }
+}
+
+@media (max-width: 900px) {
+  .rustic-progress {
+    padding-inline: 0;
+  }
+
+  .rustic-progress-buffered {
+    left: 0;
+  }
+
+  .rustic-volume-settings {
+    gap: 8px;
+  }
+
+  .rustic-volume-slider {
+    width: 100%;
+    margin-right: 24px;
+  }
+
+  .rustic-volume-settings .MuiSlider-thumb {
+    display: unset;
+  }
+}
