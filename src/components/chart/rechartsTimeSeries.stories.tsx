@@ -1,21 +1,12 @@
 /* eslint-disable no-magic-numbers */
+import type { Meta } from '@storybook/react'
+
 import RechartsTimeSeries from './rechartsTimeSeries'
 
-export default {
+const meta: Meta<React.ComponentProps<typeof RechartsTimeSeries>> = {
   title: 'Rustic UI/Chart/Recharts Time Series',
   component: RechartsTimeSeries,
   tags: ['autodocs'],
-  argTypes: {
-    timeSeries: {
-      control: 'array',
-      description:
-        'Data to be displayed in the time series chart. The first field is used as the x-axis field. We currently support formatting timestamps in seconds and milliseconds. Other data types will be displayed as given. \n<pre>```interface TimeSeriesData {\n  timestamp: number\n  [key: string]: number\n}```</pre>',
-    },
-    chartContainerMargin: {
-      description:
-        'Margin of chart container in pixel. For example, adding left margin could show larger numbers properly.\n<pre>```interface Margin {\n  top?: number\n  right?: number\n  bottom?: number\n  left?: number\n}```</pre>',
-    },
-  },
   parameters: {
     layout: 'centered',
     docs: {
@@ -27,7 +18,57 @@ export default {
   },
 }
 
-const chartColors = ['#648FFF', '#785EF0', '#DC267F', '#FE6100', '#FFB000']
+meta.argTypes = {
+  ...meta.argTypes,
+  timeSeries: {
+    table: {
+      type: {
+        summary: 'Array of TimeSeriesDataset.\n',
+        detail:
+          'Each TimeSeriesDataset has the following fields:\n' +
+          '  timestamp: timestamp in milliseconds  \n' +
+          '  [key: string]: data for other data fields',
+      },
+    },
+  },
+  chartColors: {
+    table: {
+      type: {
+        summary: 'ChartColors object.\n',
+        detail:
+          "ChartColors can have multiple fields and each field should be the name of a dataKey, e.g. 'uv'\n" +
+          'Each field could have the following properties\n' +
+          '  stroke: Optional stroke color for a specific dataKey \n' +
+          '  fill: Optional fill color for a specific dataKey',
+      },
+    },
+  },
+  chartSpacing: {
+    table: {
+      type: {
+        summary: 'ChartSpacing object.\n',
+        detail:
+          'ChartSpacing has the following fields:\n' +
+          '  top: the number value of top padding/margin in pixels \n' +
+          '  right: the number value of right padding/margin in pixels  \n' +
+          '  bottom: the number value of bottom padding/margin in pixels  \n' +
+          '  left: the number value of left padding/margin in pixels',
+      },
+    },
+  },
+  updatedData: {
+    table: {
+      type: {
+        summary: 'An array of TimeSeriesFormat.\n',
+        detail:
+          'All of the fields listed above could be used.\n' +
+          'Normally only timeSeries is used to update the chart.',
+      },
+    },
+  },
+}
+
+export default meta
 
 const oneDayData = [
   {
@@ -114,8 +155,6 @@ export const Default = {
     timeSeries: manyDaysData,
     description:
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-    yAxisLabelWidth: 60,
-    chartColors,
   },
 }
 
@@ -157,7 +196,6 @@ export const MultipleReferenceLines = {
 export const NoTitleAndDescription = {
   args: {
     timeSeries: oneDayData,
-    chartColors,
   },
 }
 
@@ -166,7 +204,6 @@ export const CustomizedWidthAndAspect = {
     timeSeries: oneDayData,
     width: 400,
     aspectRatio: 1,
-    chartColors,
   },
 }
 
@@ -176,7 +213,6 @@ export const NoTimeSeriesData = {
     description:
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
     timeSeries: [],
-    chartColors,
   },
 }
 
@@ -188,7 +224,6 @@ export const BarChartWithoutChartTypeToggle = {
     timeSeries: oneDayData,
     disableChartTypeToggle: true,
     defaultChartType: 'bar',
-    chartColors,
   },
 }
 
@@ -203,7 +238,17 @@ export const FormatData = {
       `${value / 1000000}M`,
       name,
     ],
-    chartContainerMargin: { top: 20, left: 25, right: 25, bottom: 20 },
-    chartColors,
+    chartSpacing: { top: 20, left: 25, right: 25, bottom: 20 },
+  },
+}
+
+export const CustomizeColors = {
+  args: {
+    ...Default.args,
+    chartColors: {
+      uv: { fill: '#A6EFA7', stroke: '#6BAB6C' },
+      pv: { fill: '#F2FB8B', stroke: '#FFB000' },
+      amt: { fill: '#C5B9F9', stroke: '#4C3B9A' },
+    },
   },
 }

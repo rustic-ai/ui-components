@@ -135,3 +135,57 @@ export interface TableFormat extends DataFormat {
 }
 
 export type TableData = TableFormat & Updates<TableFormat>
+
+export interface TimeSeriesDataset {
+  timestamp: number
+  [key: string]: number
+}
+
+export interface ChartSpacing {
+  top?: number
+  right?: number
+  bottom?: number
+  left?: number
+}
+
+export type TimeSeriesType = 'line' | 'bar' | 'area'
+
+export type ChartColors = {
+  [key: string]: {
+    stroke: string
+    fill: string
+  }
+}
+
+export interface TimeSeriesFormat extends DataFormat {
+  /** Data to be displayed in the time series chart. The first field is used as the x-axis field. We currently support formatting epoch timestamps and ISO date strings. Other data types will be displayed as given. */
+  timeSeries: TimeSeriesDataset[]
+  /** Used to customize chart colors. An object containing a predefined set of CSS Colors. Hex, RGB, cross-browser color names as well as other color methods (See https://developer.mozilla.org/en-US/docs/Web/CSS/color_value) are supported. If not provided, default colors will be applied. */
+  chartColors?: ChartColors
+  /** Array of y-axis reference lines. */
+  referenceLineYAxis?: number[]
+  /** Array of y-axis reference line colors. Hex color codes and string colors are both supported for defining colors. If not provided, all lines default to grey. Skip providing a custom color for a certain y-axis by providing an empty string. */
+  referenceLineColor?: string[]
+  /** Array of y-axis reference line labels. Skip providing a custom label for a certain y-axis by providing an empty string. */
+  referenceLineLabel?: string[]
+  /** Array of y-axis reference line stroke widths. If not provided, all lines default to 1. Skip providing a custom stroke width for a certain y-axis by providing an empty string. */
+  referenceLineStrokeWidth?: number[]
+  /** Aspect ratio of the chart. */
+  aspectRatio?: number
+  /** Width of the chart in pixels. */
+  width?: number
+  /** Chart type toggle will be hidden if the value is true. */
+  disableChartTypeToggle?: boolean
+  /** Define the default chart type: `line`, `bar`, or `area`. */
+  defaultChartType?: TimeSeriesType
+  /** Minimum width of the chart in pixels. */
+  minChartWidth?: number
+  /** Maximum width of the chart in pixels. */
+  maxHeight?: number
+  /** Pass a function to format y-axis label. Make sure to use tooltipFormatter and yAxisTickFormatter together so that the numbers are uniform. */
+  yAxisTickFormatter?: (value: number) => string
+  /** Spacing around the chart container in pixels. Depending on the charting library, this field is used to add either padding or margin.*/
+  chartSpacing?: ChartSpacing
+}
+
+export type TimeSeriesData = TimeSeriesFormat & Updates<TimeSeriesFormat>
