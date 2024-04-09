@@ -8,6 +8,7 @@ import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/system/Box'
+import useTheme from '@mui/system/useTheme'
 import { Fragment, useEffect, useState } from 'react'
 import React from 'react'
 import {
@@ -113,7 +114,7 @@ function RechartsTimeSeries(props: RechartsTimeSeriesProps) {
   )
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [timeSeries, setTimeSeries] = useState<object[]>(props.timeSeries)
-
+  const theme = useTheme()
   const dataFields = timeSeries.length > 0 ? Object.keys(timeSeries[0]) : []
   const xAxisField = dataFields[0]
   const yAxisFields = dataFields.slice(1)
@@ -370,17 +371,22 @@ function RechartsTimeSeries(props: RechartsTimeSeriesProps) {
                 tickFormatter={(value) =>
                   formatTimestampLabel(value, timeSeriesDuration)
                 }
+                stroke={theme.palette.text.primary}
               />
               <YAxis
                 domain={['auto', 'auto']}
                 width={props.yAxisLabelWidth}
                 tickFormatter={props.yAxisTickFormatter}
+                stroke={theme.palette.text.primary}
               />
               <Tooltip
                 labelFormatter={(label: number) => [
                   formatTimestampLabel(label, timeSeriesDuration),
                 ]}
                 formatter={props.tooltipFormatter}
+                contentStyle={{
+                  color: theme.palette.common.black,
+                }}
               />
               <Legend content={renderLegend} />
 
