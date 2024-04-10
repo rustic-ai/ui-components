@@ -48,7 +48,7 @@ export function FullscreenToggle(props: FullscreenToggleProps) {
 
   useEffect(() => {
     document.addEventListener('fullscreenchange', () => {
-      setIsFullscreen(!isFullscreen)
+      setIsFullscreen(!!document.fullscreenElement)
     })
   }, [isFullscreen])
 
