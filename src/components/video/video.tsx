@@ -10,14 +10,16 @@ import React, { useEffect, useRef, useState } from 'react'
 
 import { formatDurationTime } from '../helper'
 import {
-  FullscreenToggle,
   MoveTenSecondsButton,
   PausePlayToggle,
-  PictureInPictureToggle,
   ProgressSlider,
   TranscriptToggle,
   VolumeSettings,
-} from '../media/controls/controls'
+} from '../media/controls/commonControls'
+import {
+  FullscreenToggle,
+  PictureInPictureToggle,
+} from '../media/controls/videoControls'
 import TimeIndicator from '../media/timeIndicator/timeIndicator'
 import Transcript from '../media/transcript/transcript'
 import type { VideoFormat } from '../types'

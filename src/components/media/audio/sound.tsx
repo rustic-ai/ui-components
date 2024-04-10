@@ -16,7 +16,7 @@ import {
   ProgressSlider,
   TranscriptToggle,
   VolumeSettings,
-} from '../controls/controls'
+} from '../controls/commonControls'
 import TimeIndicator from '../timeIndicator/timeIndicator'
 import Transcript from '../transcript/transcript'
 

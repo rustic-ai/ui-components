@@ -1,38 +1,18 @@
-import './controls.css'
+import './commonControls.css'
 
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
-import Icon from '@mui/material/Icon'
-import IconButton from '@mui/material/IconButton'
 import LinearProgress from '@mui/material/LinearProgress'
 import Slider from '@mui/material/Slider'
 import Typography from '@mui/material/Typography'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 
 import { formatDurationTime } from '../../helper'
+import { MediaIconButton } from './mediaIconButton'
 
-interface MediaIconButtonProps {
-  onClick: () => void
-  action:
-    | 'play'
-    | 'pause'
-    | 'forward'
-    | 'replay'
-    | 'volumeUp'
-    | 'volumeOff'
-    | 'pictureInPicture'
-    | 'pictureInPictureExit'
-    | 'fullscreen'
-    | 'fullscreenExit'
-    | 'captionsOn'
-    | 'captionsOff'
-  className?: string
-  color?: string
-}
-
-interface MediaControls {
+export interface MediaControls {
   mediaElement: HTMLMediaElement
   color?: string
 }
@@ -43,53 +23,11 @@ interface Toggle {
   color?: string
 }
 
-interface FullscreenToggleProps {
-  element: HTMLElement
-  color?: string
-}
-
 interface MoveTenSecondsButtonProps extends MediaControls {
   movement: 'replay' | 'forward'
 }
 
 const percentMultiple = 100
-
-export function MediaIconButton(props: MediaIconButtonProps) {
-  const controls = {
-    play: { symbol: 'play_circle', label: 'play' },
-    pause: { symbol: 'pause_circle', label: 'pause' },
-    forward: { symbol: 'forward_10', label: 'forward ten seconds' },
-    replay: { symbol: 'replay_10', label: 'replay ten seconds' },
-    volumeUp: { symbol: 'volume_up', label: 'mute' },
-    volumeOff: { symbol: 'volume_off', label: 'unmute' },
-    pictureInPicture: {
-      symbol: 'picture_in_picture',
-      label: 'picture in picture',
-    },
-    pictureInPictureExit: {
-      symbol: 'picture_in_picture_off',
-      label: 'exit picture in picture',
-    },
-    fullscreen: { symbol: 'fullscreen', label: 'fullscreen' },
-    fullscreenExit: { symbol: 'fullscreen_exit', label: 'exit fullscreen' },
-    captionsOn: { symbol: 'closed_caption', label: 'show captions' },
-    captionsOff: { symbol: 'closed_caption_disabled', label: 'hide captions' },
-  }
-  return (
-    <IconButton
-      onClick={props.onClick}
-      aria-label={`click to ${controls[props.action].label}`}
-      className={props.className}
-      data-cy={`${props.action}-button`}
-    >
-      <Icon sx={{ color: props.color }}>
-        <span className="material-symbols-rounded">
-          {controls[props.action].symbol}
-        </span>
-      </Icon>
-    </IconButton>
-  )
-}
 
 export function ProgressSlider(props: MediaControls) {
   const formattedElapsedTime = formatDurationTime(
@@ -265,69 +203,6 @@ export function PausePlayToggle(props: MediaControls) {
       onClick={handlePausePlayToggle}
       action={action}
       className="rustic-pause-play-icon"
-      color={props.color}
-    />
-  )
-}
-
-export function PictureInPictureToggle(props: MediaControls) {
-  const [isPictureInPicture, setIsPictureInPicture] = useState(
-    !!document.pictureInPictureElement
-  )
-
-  const videoElement = props.mediaElement as HTMLVideoElement
-
-  const action = isPictureInPicture
-    ? 'pictureInPictureExit'
-    : 'pictureInPicture'
-
-  function handlePictureInPicture() {
-    if (isPictureInPicture) {
-      document.exitPictureInPicture()
-    } else {
-      videoElement.requestPictureInPicture()
-    }
-  }
-
-  videoElement.onenterpictureinpicture = function () {
-    setIsPictureInPicture(true)
-  }
-  videoElement.onleavepictureinpicture = function () {
-    setIsPictureInPicture(false)
-  }
-
-  return (
-    <MediaIconButton
-      onClick={handlePictureInPicture}
-      action={action}
-      color={props.color}
-    />
-  )
-}
-
-export function FullscreenToggle(props: FullscreenToggleProps) {
-  const [isFullscreen, setIsFullscreen] = useState(!!document.fullscreenElement)
-
-  useEffect(() => {
-    document.addEventListener('fullscreenchange', () => {
-      setIsFullscreen(!isFullscreen)
-    })
-  }, [isFullscreen])
-
-  const action = isFullscreen ? 'fullscreenExit' : 'fullscreen'
-
-  function handleFullscreen() {
-    if (isFullscreen) {
-      document.exitFullscreen()
-    } else {
-      props.element.requestFullscreen()
-    }
-  }
-
-  return (
-    <MediaIconButton
-      onClick={handleFullscreen}
-      action={action}
       color={props.color}
     />
   )
