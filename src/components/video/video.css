@@ -1,0 +1,120 @@
+::-webkit-media-controls {
+  display: none !important;
+}
+
+.rustic-video {
+  position: relative;
+}
+
+.rustic-video-loading-spinner {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  width: 40px;
+  height: 40px;
+}
+
+.rustic-video-screen {
+  position: relative;
+  /* helps center video when in fullscreen mode */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.rustic-video-element {
+  cursor: pointer;
+  object-fit: cover;
+  width: 100%;
+}
+
+.rustic-video-title,
+.rustic-video-controls {
+  transition: 0.2s ease-in-out;
+  width: 100%;
+  opacity: 0;
+}
+
+.rustic-video-screen:hover .rustic-video-title,
+.rustic-video-screen:hover .rustic-video-controls,
+.rustic-video-screen:focus-within .rustic-video-controls,
+.rustic-video-screen:focus-within .rustic-video-title,
+.rustic-video-screen:focus-within .rustic-video-title {
+  opacity: 1;
+}
+
+.rustic-video-title {
+  position: absolute;
+  top: 0;
+  padding: 16px 16px 48px 16px;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.4) 21%,
+    rgba(10, 10, 10, 0.14) 71%,
+    rgba(69, 69, 69, 0) 100%
+  );
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.rustic-video-controls {
+  position: absolute;
+  bottom: 0;
+  padding: 16px;
+  background: linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.4) 21%,
+    rgba(10, 10, 10, 0.14) 71%,
+    rgba(69, 69, 69, 0) 100%
+  );
+}
+
+.rustic-video-top-controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.rustic-video-bottom-controls {
+  display: flex;
+  justify-content: space-between;
+}
+
+.rustic-video-bottom-controls-left {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rustic-video-bottom-controls-right {
+  display: flex;
+  gap: 8px;
+  justify-content: space-between;
+}
+
+.rustic-time-controls {
+  display: flex;
+}
+
+@media (max-width: 900px) {
+  .rustic-video-screen {
+    flex-direction: column;
+  }
+
+  .rustic-video-controls-mobile {
+    position: static;
+    opacity: 1;
+    background: none;
+    padding-inline: 0;
+    padding-top: 8px;
+    padding-bottom: 0;
+  }
+
+  .rustic-video-bottom-controls-left {
+    gap: 8px;
+  }
+}
