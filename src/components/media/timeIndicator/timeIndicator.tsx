@@ -23,10 +23,10 @@ export default function TimeIndicator(props: TimeIndicatorProps) {
   if (props.style === 'wide') {
     return (
       <Box className="rustic-time-container">
-        <Typography variant="body2" color={props.color}>
+        <Typography variant="overline" color={props.color}>
           {formattedElapsedTime}
         </Typography>
-        <Typography variant="body2" color={props.color}>
+        <Typography variant="overline" color={props.color}>
           {formattedDuration}
         </Typography>
       </Box>
@@ -34,7 +34,7 @@ export default function TimeIndicator(props: TimeIndicatorProps) {
   } else {
     return (
       <Typography
-        variant="body2"
+        variant="overline"
         color={props.color}
         className="rustic-time-display"
       >
