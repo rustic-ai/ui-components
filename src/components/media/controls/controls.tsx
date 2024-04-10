@@ -9,23 +9,41 @@ import IconButton from '@mui/material/IconButton'
 import LinearProgress from '@mui/material/LinearProgress'
 import Slider from '@mui/material/Slider'
 import Typography from '@mui/material/Typography'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { formatDurationTime } from '../../helper'
 
 interface MediaIconButtonProps {
   onClick: () => void
-  action: 'play' | 'pause' | 'forward' | 'replay' | 'volumeUp' | 'volumeOff'
+  action:
+    | 'play'
+    | 'pause'
+    | 'forward'
+    | 'replay'
+    | 'volumeUp'
+    | 'volumeOff'
+    | 'pictureInPicture'
+    | 'pictureInPictureExit'
+    | 'fullscreen'
+    | 'fullscreenExit'
   className?: string
+  color?: string
 }
 
 interface MediaControls {
   mediaElement: HTMLMediaElement
+  color?: string
 }
 
 interface TranscriptToggleProps {
   isTranscriptShown: boolean
   setIsTranscriptShown: () => void
+  color?: string
+}
+
+interface FullscreenToggleProps {
+  element: HTMLElement
+  color?: string
 }
 
 interface MoveTenSecondsButtonProps extends MediaControls {
@@ -42,6 +60,16 @@ export function MediaIconButton(props: MediaIconButtonProps) {
     replay: { symbol: 'replay_10', label: 'replay ten seconds' },
     volumeUp: { symbol: 'volume_up', label: 'mute' },
     volumeOff: { symbol: 'volume_off', label: 'unmute' },
+    pictureInPicture: {
+      symbol: 'picture_in_picture',
+      label: 'picture in picture',
+    },
+    pictureInPictureExit: {
+      symbol: 'picture_in_picture_off',
+      label: 'exit picture in picture',
+    },
+    fullscreen: { symbol: 'fullscreen', label: 'fullscreen' },
+    fullscreenExit: { symbol: 'fullscreen_exit', label: 'exit fullscreen' },
   }
   return (
     <IconButton
@@ -50,7 +78,7 @@ export function MediaIconButton(props: MediaIconButtonProps) {
       className={props.className}
       data-cy={`${props.action}-button`}
     >
-      <Icon color="primary">
+      <Icon sx={{ color: props.color }}>
         <span className="material-symbols-rounded">
           {controls[props.action].symbol}
         </span>
@@ -116,7 +144,9 @@ export function ProgressSlider(props: MediaControls) {
 }
 
 export function VolumeSettings(props: MediaControls) {
-  const [volumeFraction, setVolumeFraction] = useState(1)
+  const [volumeFraction, setVolumeFraction] = useState(
+    props.mediaElement.volume
+  )
 
   const isMuted = props.mediaElement.muted
   const action = isMuted ? 'volumeOff' : 'volumeUp'
@@ -159,6 +189,7 @@ export function VolumeSettings(props: MediaControls) {
         onClick={handleMuteToggle}
         className="rustic-mute-button"
         action={action}
+        color={props.color}
       />
       <Slider
         className="rustic-volume-slider"
@@ -170,6 +201,7 @@ export function VolumeSettings(props: MediaControls) {
         aria-valuetext={`Volume: ${volumeFraction * percentMultiple}%`}
         value={volumeFraction}
         onChange={handleVolumeChange}
+        sx={{ color: props.color }}
       />
     </Box>
   )
@@ -187,30 +219,37 @@ export function TranscriptToggle(props: TranscriptToggleProps) {
       className="rustic-transcript-toggle"
       data-cy="transcript-toggle"
       onClick={props.setIsTranscriptShown}
-      endIcon={<Icon />}
+      endIcon={<Icon sx={{ color: props.color }} />}
     >
-      <Typography variant="overline">{buttonText}</Typography>
+      <Typography variant="overline" sx={{ color: props.color }}>
+        {buttonText}
+      </Typography>
     </Button>
   )
 }
 
 export function PausePlayToggle(props: MediaControls) {
-  const [isPlaying, setIsPlaying] = useState(false)
+  const [isPlaying, setIsPlaying] = useState(!props.mediaElement.paused)
 
   const action = isPlaying ? 'pause' : 'play'
 
   function handlePausePlayToggle() {
     if (isPlaying) {
       props.mediaElement.pause()
-      setIsPlaying(false)
     } else {
       props.mediaElement.play()
-      setIsPlaying(true)
     }
   }
 
+  // State is updated by event listeners so that the icon is displayed correctly, even when play/pause is not initiated by the user (e.g. pause and play can be toggled in the picture-in-picture window).
   props.mediaElement.onended = function () {
     setIsPlaying(false)
+  }
+  props.mediaElement.onpause = function () {
+    setIsPlaying(false)
+  }
+  props.mediaElement.onplay = function () {
+    setIsPlaying(true)
   }
 
   return (
@@ -218,12 +257,78 @@ export function PausePlayToggle(props: MediaControls) {
       onClick={handlePausePlayToggle}
       action={action}
       className="rustic-pause-play-icon"
+      color={props.color}
+    />
+  )
+}
+
+export function PictureInPictureToggle(props: MediaControls) {
+  const [isPictureInPicture, setIsPictureInPicture] = useState(
+    !!document.pictureInPictureElement
+  )
+
+  const videoElement = props.mediaElement as HTMLVideoElement
+
+  const action = isPictureInPicture
+    ? 'pictureInPictureExit'
+    : 'pictureInPicture'
+
+  function handlePictureInPicture() {
+    if (isPictureInPicture) {
+      document.exitPictureInPicture()
+    } else {
+      videoElement.requestPictureInPicture()
+    }
+  }
+
+  videoElement.onenterpictureinpicture = function () {
+    setIsPictureInPicture(true)
+  }
+  videoElement.onleavepictureinpicture = function () {
+    setIsPictureInPicture(false)
+  }
+
+  return (
+    <MediaIconButton
+      onClick={handlePictureInPicture}
+      action={action}
+      color={props.color}
+    />
+  )
+}
+
+export function FullscreenToggle(props: FullscreenToggleProps) {
+  const [isFullscreen, setIsFullscreen] = useState(!!document.fullscreenElement)
+
+  useEffect(() => {
+    document.addEventListener('fullscreenchange', () => {
+      setIsFullscreen(!isFullscreen)
+    })
+  }, [isFullscreen])
+
+  const action = isFullscreen ? 'fullscreenExit' : 'fullscreen'
+
+  function handleFullscreen() {
+    if (isFullscreen) {
+      document.exitFullscreen()
+    } else {
+      props.element.requestFullscreen()
+    }
+  }
+
+  return (
+    <MediaIconButton
+      onClick={handleFullscreen}
+      action={action}
+      color={props.color}
     />
   )
 }
 
 export function PlaybackRateButton(props: MediaControls) {
-  const [playbackRate, setPlaybackRate] = useState(1)
+  const [playbackRate, setPlaybackRate] = useState(
+    props.mediaElement.playbackRate
+  )
 
   function handlePlaybackRateChange() {
     let newPlaybackRate = 1
@@ -245,7 +350,7 @@ export function PlaybackRateButton(props: MediaControls) {
       aria-label={`Playback rate: ${playbackRate}x, click to change`}
       data-cy="playback-rate-button"
     >
-      <Typography variant="body1" color="primary.main">
+      <Typography variant="body1" sx={{ color: props.color }}>
         {playbackRate}X
       </Typography>
     </Button>
@@ -269,5 +374,7 @@ export function MoveTenSecondsButton(props: MoveTenSecondsButtonProps) {
 
   const action = isReplayMovement ? 'replay' : 'forward'
 
-  return <MediaIconButton onClick={onClick} action={action} />
+  return (
+    <MediaIconButton onClick={onClick} action={action} color={props.color} />
+  )
 }

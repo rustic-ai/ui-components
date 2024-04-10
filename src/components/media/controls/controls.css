@@ -3,6 +3,7 @@
   gap: 24px;
   align-items: center;
   position: relative;
+  width: 100%;
 }
 
 .rustic-progress-slider {
