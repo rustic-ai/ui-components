@@ -3,7 +3,6 @@ import './video.css'
 import { useMediaQuery, useTheme } from '@mui/material'
 import Alert from '@mui/material/Alert'
 import CircularProgress from '@mui/material/CircularProgress'
-import Drawer from '@mui/material/Drawer'
 import Typography from '@mui/material/Typography'
 import { Box } from '@mui/system'
 import React, { useEffect, useRef, useState } from 'react'
@@ -122,9 +121,9 @@ export default function Video(props: VideoFormat) {
     }
   }
 
-  function renderTranscript() {
+  function renderTranscript(color?: string) {
     if (props.transcript && isTranscriptShown) {
-      return <Transcript transcript={props.transcript} />
+      return <Transcript transcript={props.transcript} color={color} />
     }
   }
 
@@ -161,13 +160,7 @@ export default function Video(props: VideoFormat) {
       return (
         <>
           {videoRef.current && videoContainerRef.current && (
-            <Box
-              sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                width: '100%',
-              }}
-            >
+            <Box className="rustic-video-controls-mobile-preview">
               <MediaIconButton action="play" onClick={handlePlayFromMobile} />
               {renderTranscriptToggle('primary.main')}
             </Box>
@@ -179,14 +172,12 @@ export default function Video(props: VideoFormat) {
       <>
         {videoRef.current && videoContainerRef.current && (
           <Box className="rustic-video-controls">
-            <Drawer
-              anchor="bottom"
-              open={isTranscriptShown}
-              onClose={() => setIsTranscriptShown(false)}
-            >
-              {renderTranscript()}
-            </Drawer>
-
+            {isTranscriptShown && (
+              <Box className="rustic-fullscreen-transcript">
+                {renderTranscriptToggle('common.white')}
+                {renderTranscript('common.white')}
+              </Box>
+            )}
             <Box className="rustic-video-top-controls">
               <PausePlayToggle
                 mediaElement={videoRef.current}
@@ -225,7 +216,9 @@ export default function Video(props: VideoFormat) {
                 />
               </Box>
 
-              <Box>{renderTranscriptToggle('common.white')}</Box>
+              <Box>
+                {!isTranscriptShown && renderTranscriptToggle('common.white')}
+              </Box>
             </Box>
           </Box>
         )}
@@ -238,6 +231,13 @@ export default function Video(props: VideoFormat) {
       <>
         {videoRef.current && videoContainerRef.current && (
           <Box className="rustic-video-controls">
+            {isTranscriptShown && isFullscreen && (
+              <Box className="rustic-fullscreen-transcript">
+                {renderTranscriptToggle('common.white')}
+                {renderTranscript('common.white')}
+              </Box>
+            )}
+
             <ProgressSlider mediaElement={videoRef.current} />
 
             <Box className="rustic-video-bottom-controls">
@@ -282,7 +282,9 @@ export default function Video(props: VideoFormat) {
               </Box>
 
               <Box className="rustic-video-bottom-controls-right">
-                {renderTranscriptToggle()}
+                {/* always render when not in fullscreen mode, render only in fullscreen when transcript is not shown */}
+                {(!isFullscreen || (isFullscreen && !isTranscriptShown)) &&
+                  renderTranscriptToggle('common.white')}
                 <PictureInPictureToggle
                   mediaElement={videoRef.current}
                   color="common.white"

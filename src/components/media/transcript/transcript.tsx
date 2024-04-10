@@ -7,18 +7,27 @@ import React from 'react'
 
 interface TranscriptProps {
   transcript: string
+  color?: string
 }
 
 export default function Transcript(props: TranscriptProps) {
+  const isFullscreen = !!document.fullscreenElement
+
   return (
     <Box className="rustic-transcript-container">
-      <Box className="rustic-transcript-header">
-        <Divider orientation="vertical" flexItem />
-        <Typography variant="overline" color="text.secondary">
-          Transcript
-        </Typography>
-      </Box>
-      <Typography data-cy="transcript" variant="body2">
+      {!isFullscreen && (
+        <Box className="rustic-transcript-header">
+          <Divider orientation="vertical" flexItem />
+          <Typography variant="overline" color="text.secondary">
+            Transcript
+          </Typography>
+        </Box>
+      )}
+      <Typography
+        data-cy="transcript"
+        variant="body2"
+        sx={{ color: props.color }}
+      >
         {props.transcript}
       </Typography>
     </Box>
