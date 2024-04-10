@@ -152,7 +152,13 @@ export function VolumeSettings(props: MediaControls) {
 export function CaptionsToggle(props: Toggle) {
   const action = props.active ? 'captionsOff' : 'captionsOn'
 
-  return <MediaIconButton onClick={props.setActive} action={action} />
+  return (
+    <MediaIconButton
+      onClick={props.setActive}
+      action={action}
+      color={props.color}
+    />
+  )
 }
 
 export function TranscriptToggle(props: Toggle) {

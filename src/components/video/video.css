@@ -26,7 +26,6 @@
 }
 
 .rustic-video-element {
-  cursor: pointer;
   object-fit: cover;
   width: 100%;
 }

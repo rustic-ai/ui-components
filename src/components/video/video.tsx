@@ -8,14 +8,16 @@ import Typography from '@mui/material/Typography'
 import { Box } from '@mui/system'
 import React, { useEffect, useRef, useState } from 'react'
 
-import { formatDurationTime } from '../helper'
 import {
+  CaptionsToggle,
   MoveTenSecondsButton,
   PausePlayToggle,
+  PlaybackRateButton,
   ProgressSlider,
   TranscriptToggle,
   VolumeSettings,
 } from '../media/controls/commonControls'
+import { MediaIconButton } from '../media/controls/mediaIconButton'
 import {
   FullscreenToggle,
   PictureInPictureToggle,
@@ -26,7 +28,6 @@ import type { VideoFormat } from '../types'
 
 export default function Video(props: VideoFormat) {
   const [isTranscriptShown, setIsTranscriptShown] = useState(false)
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [areCaptionsShown, setAreCaptionsShown] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [isFullscreen, setIsFullscreen] = useState(!!document.fullscreenElement)
@@ -71,23 +72,12 @@ export default function Video(props: VideoFormat) {
   }, [isFullscreen])
 
   function renderVideoElement() {
-    function handlePausePlayToggle() {
-      if (videoRef.current) {
-        if (videoRef.current.paused || videoRef.current.ended) {
-          videoRef.current.play()
-        } else {
-          videoRef.current.pause()
-        }
-      }
-    }
-
     return (
       <video
         className="rustic-video-element"
         data-cy="video-element"
         ref={videoRef}
         src={props.src}
-        onClick={handlePausePlayToggle}
       >
         {areCaptionsShown && (
           <track src={props.captions} kind="captions" default />
@@ -97,6 +87,13 @@ export default function Video(props: VideoFormat) {
   }
 
   function renderTitle() {
+    function exitFullscreen() {
+      if (videoRef.current) {
+        videoRef.current.pause()
+        document.exitFullscreen()
+      }
+    }
+
     if (videoRef.current && videoContainerRef.current) {
       return (
         <Box className="rustic-video-title">
@@ -113,8 +110,9 @@ export default function Video(props: VideoFormat) {
                 mediaElement={videoRef.current}
                 color="common.white"
               />
-              <FullscreenToggle
-                element={videoContainerRef.current}
+              <MediaIconButton
+                action="fullscreenExit"
+                onClick={exitFullscreen}
                 color="common.white"
               />
             </Box>
@@ -131,7 +129,7 @@ export default function Video(props: VideoFormat) {
   }
 
   function renderTranscriptToggle(color: string = 'common.white') {
-    if (props.transcript && !isFullscreen) {
+    if (props.transcript) {
       return (
         <TranscriptToggle
           active={isTranscriptShown}
@@ -142,7 +140,41 @@ export default function Video(props: VideoFormat) {
     }
   }
 
-  function renderFullscreenMobile() {
+  function renderMobileView() {
+    function handlePlayFromMobile() {
+      if (
+        videoRef.current &&
+        videoContainerRef.current &&
+        isMobile &&
+        !isFullscreen
+      ) {
+        if (videoRef.current.paused || videoRef.current.ended) {
+          videoContainerRef.current.requestFullscreen()
+          videoRef.current.play()
+        } else {
+          videoRef.current.pause()
+        }
+      }
+    }
+
+    if (!isFullscreen) {
+      return (
+        <>
+          {videoRef.current && videoContainerRef.current && (
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                width: '100%',
+              }}
+            >
+              <MediaIconButton action="play" onClick={handlePlayFromMobile} />
+              {renderTranscriptToggle('primary.main')}
+            </Box>
+          )}
+        </>
+      )
+    }
     return (
       <>
         {videoRef.current && videoContainerRef.current && (
@@ -180,47 +212,20 @@ export default function Video(props: VideoFormat) {
                   movement="forward"
                   color="common.white"
                 />
-              </Box>
-
-              {renderTranscriptToggle('common.white')}
-            </Box>
-          </Box>
-        )}
-      </>
-    )
-  }
-
-  function renderMobileView() {
-    if (isFullscreen) {
-      return renderFullscreenMobile()
-    }
-
-    return (
-      <>
-        {videoRef.current && videoContainerRef.current && (
-          <Box className="rustic-video-controls rustic-video-controls-mobile">
-            <Box className="rustic-video-bottom-controls">
-              <Box className="rustic-video-bottom-controls-left">
-                <Box className="rustic-time-controls">
-                  <PausePlayToggle
-                    mediaElement={videoRef.current}
-                    color="primary.main"
+                {props.captions && (
+                  <CaptionsToggle
+                    active={areCaptionsShown}
+                    setActive={() => setAreCaptionsShown(!areCaptionsShown)}
+                    color="common.white"
                   />
-                </Box>
-
-                <Typography variant="overline" color="primary.main">
-                  {formatDurationTime(elapsedTime)}
-                </Typography>
-              </Box>
-
-              <Box className="rustic-video-bottom-controls-right">
-                {renderTranscriptToggle('primary.main')}
-
-                <FullscreenToggle
-                  element={videoContainerRef.current}
-                  color="primary.main"
+                )}
+                <PlaybackRateButton
+                  mediaElement={videoRef.current}
+                  color="common.white"
                 />
               </Box>
+
+              <Box>{renderTranscriptToggle('common.white')}</Box>
             </Box>
           </Box>
         )}
@@ -237,22 +242,31 @@ export default function Video(props: VideoFormat) {
 
             <Box className="rustic-video-bottom-controls">
               <Box className="rustic-video-bottom-controls-left">
-                <Box className="rustic-time-controls">
-                  <PausePlayToggle
-                    mediaElement={videoRef.current}
+                <PausePlayToggle
+                  mediaElement={videoRef.current}
+                  color="common.white"
+                />
+                <MoveTenSecondsButton
+                  mediaElement={videoRef.current}
+                  movement="replay"
+                  color="common.white"
+                />
+                <MoveTenSecondsButton
+                  mediaElement={videoRef.current}
+                  movement="forward"
+                  color="common.white"
+                />
+                {props.captions && (
+                  <CaptionsToggle
+                    active={areCaptionsShown}
+                    setActive={() => setAreCaptionsShown(!areCaptionsShown)}
                     color="common.white"
                   />
-                  <MoveTenSecondsButton
-                    mediaElement={videoRef.current}
-                    movement="replay"
-                    color="common.white"
-                  />
-                  <MoveTenSecondsButton
-                    mediaElement={videoRef.current}
-                    movement="forward"
-                    color="common.white"
-                  />
-                </Box>
+                )}
+                <PlaybackRateButton
+                  mediaElement={videoRef.current}
+                  color="common.white"
+                />
 
                 <VolumeSettings
                   mediaElement={videoRef.current}
