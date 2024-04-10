@@ -95,7 +95,7 @@ describe('Sound', () => {
           captions={captionsPath}
         />
       )
-      cy.get('[data-cy=captions-toggle]').click()
+      cy.get('[data-cy=captionsOn-button]').click()
       cy.get('track').should('exist').should('have.attr', 'src', captionsPath)
     })
     it(`should display an error message when no valid sources are found on ${viewport} screen`, () => {

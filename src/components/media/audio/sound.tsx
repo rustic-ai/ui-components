@@ -1,17 +1,15 @@
 import './sound.css'
 
-import ClosedCaptionDisabledRoundedIcon from '@mui/icons-material/ClosedCaptionDisabledRounded'
-import ClosedCaptionRoundedIcon from '@mui/icons-material/ClosedCaptionRounded'
 import { useMediaQuery, useTheme } from '@mui/material'
 import Alert from '@mui/material/Alert'
 import CircularProgress from '@mui/material/CircularProgress'
-import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
 import { Box } from '@mui/system'
 import React, { useEffect, useRef, useState } from 'react'
 
 import type { AudioFormat } from '../../types'
 import {
+  CaptionsToggle,
   MoveTenSecondsButton,
   PausePlayToggle,
   PlaybackRateButton,
@@ -76,17 +74,10 @@ export default function Sound(props: AudioFormat) {
   function renderCaptionsToggle() {
     if (props.captions && props.captions.length > 0) {
       return (
-        <IconButton
-          onClick={() => setAreCaptionsShown(!areCaptionsShown)}
-          aria-label={areCaptionsShown ? 'Hide captions' : 'Show captions'}
-          data-cy="captions-toggle"
-        >
-          {areCaptionsShown ? (
-            <ClosedCaptionRoundedIcon color="primary" />
-          ) : (
-            <ClosedCaptionDisabledRoundedIcon color="primary" />
-          )}
-        </IconButton>
+        <CaptionsToggle
+          active={areCaptionsShown}
+          setActive={() => setAreCaptionsShown(!areCaptionsShown)}
+        />
       )
     }
   }
@@ -119,8 +110,8 @@ export default function Sound(props: AudioFormat) {
     if (props.transcript) {
       return (
         <TranscriptToggle
-          isTranscriptShown={isTranscriptShown}
-          setIsTranscriptShown={() => setIsTranscriptShown(!isTranscriptShown)}
+          active={isTranscriptShown}
+          setActive={() => setIsTranscriptShown(!isTranscriptShown)}
         />
       )
     }

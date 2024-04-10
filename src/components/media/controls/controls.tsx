@@ -26,6 +26,8 @@ interface MediaIconButtonProps {
     | 'pictureInPictureExit'
     | 'fullscreen'
     | 'fullscreenExit'
+    | 'captionsOn'
+    | 'captionsOff'
   className?: string
   color?: string
 }
@@ -35,9 +37,9 @@ interface MediaControls {
   color?: string
 }
 
-interface TranscriptToggleProps {
-  isTranscriptShown: boolean
-  setIsTranscriptShown: () => void
+interface Toggle {
+  active: boolean
+  setActive: () => void
   color?: string
 }
 
@@ -70,6 +72,8 @@ export function MediaIconButton(props: MediaIconButtonProps) {
     },
     fullscreen: { symbol: 'fullscreen', label: 'fullscreen' },
     fullscreenExit: { symbol: 'fullscreen_exit', label: 'exit fullscreen' },
+    captionsOn: { symbol: 'closed_caption', label: 'show captions' },
+    captionsOff: { symbol: 'closed_caption_disabled', label: 'hide captions' },
   }
   return (
     <IconButton
@@ -207,18 +211,22 @@ export function VolumeSettings(props: MediaControls) {
   )
 }
 
-export function TranscriptToggle(props: TranscriptToggleProps) {
-  const Icon = props.isTranscriptShown
-    ? KeyboardArrowUpIcon
-    : KeyboardArrowDownIcon
+export function CaptionsToggle(props: Toggle) {
+  const action = props.active ? 'captionsOff' : 'captionsOn'
 
-  const buttonText = `${props.isTranscriptShown ? 'Hide' : 'Show'} Transcript`
+  return <MediaIconButton onClick={props.setActive} action={action} />
+}
+
+export function TranscriptToggle(props: Toggle) {
+  const Icon = props.active ? KeyboardArrowUpIcon : KeyboardArrowDownIcon
+
+  const buttonText = `${props.active ? 'Hide' : 'Show'} Transcript`
 
   return (
     <Button
       className="rustic-transcript-toggle"
       data-cy="transcript-toggle"
-      onClick={props.setIsTranscriptShown}
+      onClick={props.setActive}
       endIcon={<Icon sx={{ color: props.color }} />}
     >
       <Typography variant="overline" sx={{ color: props.color }}>

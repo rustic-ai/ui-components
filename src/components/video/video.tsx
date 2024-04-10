@@ -132,8 +132,8 @@ export default function Video(props: VideoFormat) {
     if (props.transcript && !isFullscreen) {
       return (
         <TranscriptToggle
-          isTranscriptShown={isTranscriptShown}
-          setIsTranscriptShown={() => setIsTranscriptShown(!isTranscriptShown)}
+          active={isTranscriptShown}
+          setActive={() => setIsTranscriptShown(!isTranscriptShown)}
           color={color}
         />
       )
