@@ -16,9 +16,9 @@ export interface MediaControls {
   mediaElement: HTMLMediaElement
 }
 
-interface Toggle {
-  active: boolean
-  setActive: () => void
+interface ToggleButton {
+  isActive: boolean
+  setIsActive: () => void
 }
 
 interface MoveTenSecondsButtonProps extends MediaControls {
@@ -145,22 +145,22 @@ export function VolumeSettings(props: MediaControls) {
   )
 }
 
-export function CaptionsToggle(props: Toggle) {
-  const action = props.active ? 'captionsOff' : 'captionsOn'
+export function ToggleCaptionsButton(props: ToggleButton) {
+  const action = props.isActive ? 'captionsOff' : 'captionsOn'
 
-  return <MediaIconButton onClick={props.setActive} action={action} />
+  return <MediaIconButton onClick={props.setIsActive} action={action} />
 }
 
-export function TranscriptToggle(props: Toggle) {
-  const Icon = props.active ? KeyboardArrowUpIcon : KeyboardArrowDownIcon
+export function ToggleTranscriptButton(props: ToggleButton) {
+  const Icon = props.isActive ? KeyboardArrowUpIcon : KeyboardArrowDownIcon
 
-  const buttonText = `${props.active ? 'Hide' : 'Show'} Transcript`
+  const buttonText = `${props.isActive ? 'Hide' : 'Show'} Transcript`
 
   return (
     <Button
       className="rustic-transcript-toggle"
       data-cy="transcript-toggle"
-      onClick={props.setActive}
+      onClick={props.setIsActive}
       endIcon={<Icon />}
     >
       <Typography variant="overline">{buttonText}</Typography>
@@ -168,7 +168,7 @@ export function TranscriptToggle(props: Toggle) {
   )
 }
 
-export function PausePlayToggle(props: MediaControls) {
+export function PlayOrPauseToggle(props: MediaControls) {
   const [isPlaying, setIsPlaying] = useState(!props.mediaElement.paused)
 
   const action = isPlaying ? 'pause' : 'play'

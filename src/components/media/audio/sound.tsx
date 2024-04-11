@@ -9,12 +9,12 @@ import React, { useEffect, useRef, useState } from 'react'
 
 import type { AudioFormat } from '../../types'
 import {
-  CaptionsToggle,
   MoveTenSecondsButton,
-  PausePlayToggle,
   PlaybackRateButton,
+  PlayOrPauseToggle,
   ProgressSlider,
-  TranscriptToggle,
+  ToggleCaptionsButton,
+  ToggleTranscriptButton,
   VolumeSettings,
 } from '../controls/commonControls'
 import TimeIndicator from '../timeIndicator/timeIndicator'
@@ -74,9 +74,9 @@ export default function Sound(props: AudioFormat) {
   function renderCaptionsToggle() {
     if (props.captions && props.captions.length > 0) {
       return (
-        <CaptionsToggle
-          active={areCaptionsShown}
-          setActive={() => setAreCaptionsShown(!areCaptionsShown)}
+        <ToggleCaptionsButton
+          isActive={areCaptionsShown}
+          setIsActive={() => setAreCaptionsShown(!areCaptionsShown)}
         />
       )
     }
@@ -90,7 +90,7 @@ export default function Sound(props: AudioFormat) {
             mediaElement={audioRef.current}
             movement="replay"
           />
-          <PausePlayToggle mediaElement={audioRef.current} />
+          <PlayOrPauseToggle mediaElement={audioRef.current} />
           <MoveTenSecondsButton
             mediaElement={audioRef.current}
             movement="forward"
@@ -109,9 +109,9 @@ export default function Sound(props: AudioFormat) {
   function renderTranscriptToggle() {
     if (props.transcript) {
       return (
-        <TranscriptToggle
-          active={isTranscriptShown}
-          setActive={() => setIsTranscriptShown(!isTranscriptShown)}
+        <ToggleTranscriptButton
+          isActive={isTranscriptShown}
+          setIsActive={() => setIsTranscriptShown(!isTranscriptShown)}
         />
       )
     }

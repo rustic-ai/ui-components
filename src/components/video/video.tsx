@@ -8,12 +8,12 @@ import { Box } from '@mui/system'
 import React, { useEffect, useRef, useState } from 'react'
 
 import {
-  CaptionsToggle,
   MoveTenSecondsButton,
-  PausePlayToggle,
   PlaybackRateButton,
+  PlayOrPauseToggle,
   ProgressSlider,
-  TranscriptToggle,
+  ToggleCaptionsButton,
+  ToggleTranscriptButton,
   VolumeSettings,
 } from '../media/controls/commonControls'
 import { MediaIconButton } from '../media/controls/mediaIconButton'
@@ -96,7 +96,11 @@ export default function Video(props: VideoFormat) {
     if (videoRef.current && videoContainerRef.current) {
       return (
         <Box className="rustic-video-title">
-          <Typography variant="body2" data-cy="video-title">
+          <Typography
+            variant="body2"
+            data-cy="video-title"
+            color="common.white"
+          >
             {props.title}
           </Typography>
           {isFullscreen && isMobile && (
@@ -122,9 +126,9 @@ export default function Video(props: VideoFormat) {
   function renderTranscriptToggle() {
     if (props.transcript) {
       return (
-        <TranscriptToggle
-          active={isTranscriptShown}
-          setActive={() => setIsTranscriptShown(!isTranscriptShown)}
+        <ToggleTranscriptButton
+          isActive={isTranscriptShown}
+          setIsActive={() => setIsTranscriptShown(!isTranscriptShown)}
         />
       )
     }
@@ -170,7 +174,7 @@ export default function Video(props: VideoFormat) {
               </Box>
             )}
             <Box className="rustic-video-top-controls">
-              <PausePlayToggle mediaElement={videoRef.current} />
+              <PlayOrPauseToggle mediaElement={videoRef.current} />
               <ProgressSlider mediaElement={videoRef.current} />
               <TimeIndicator
                 elapsedTimeInSeconds={elapsedTime}
@@ -189,9 +193,9 @@ export default function Video(props: VideoFormat) {
                   movement="forward"
                 />
                 {props.captions && (
-                  <CaptionsToggle
-                    active={areCaptionsShown}
-                    setActive={() => setAreCaptionsShown(!areCaptionsShown)}
+                  <ToggleCaptionsButton
+                    isActive={areCaptionsShown}
+                    setIsActive={() => setAreCaptionsShown(!areCaptionsShown)}
                   />
                 )}
                 <PlaybackRateButton mediaElement={videoRef.current} />
@@ -221,7 +225,7 @@ export default function Video(props: VideoFormat) {
 
             <Box className="rustic-video-bottom-controls">
               <Box className="rustic-video-bottom-controls-left">
-                <PausePlayToggle mediaElement={videoRef.current} />
+                <PlayOrPauseToggle mediaElement={videoRef.current} />
                 <MoveTenSecondsButton
                   mediaElement={videoRef.current}
                   movement="replay"
@@ -231,9 +235,9 @@ export default function Video(props: VideoFormat) {
                   movement="forward"
                 />
                 {props.captions && (
-                  <CaptionsToggle
-                    active={areCaptionsShown}
-                    setActive={() => setAreCaptionsShown(!areCaptionsShown)}
+                  <ToggleCaptionsButton
+                    isActive={areCaptionsShown}
+                    setIsActive={() => setAreCaptionsShown(!areCaptionsShown)}
                   />
                 )}
                 <PlaybackRateButton mediaElement={videoRef.current} />
