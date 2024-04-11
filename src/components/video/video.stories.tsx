@@ -39,6 +39,13 @@ export const WithCaptions = {
   },
 }
 
+export const WithPoster = {
+  args: {
+    src: videoSrc,
+    poster: 'images/image-component-example.png',
+  },
+}
+
 export const Error = {
   args: {
     src: '',
