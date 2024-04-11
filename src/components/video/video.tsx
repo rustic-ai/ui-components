@@ -77,6 +77,7 @@ export default function Video(props: VideoFormat) {
         data-cy="video-element"
         ref={videoRef}
         src={props.src}
+        poster={props.poster}
       >
         {areCaptionsShown && (
           <track src={props.captions} kind="captions" default />
