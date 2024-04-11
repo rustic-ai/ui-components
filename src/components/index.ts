@@ -17,6 +17,7 @@ import StreamingText from './text/streamingText'
 import Text from './text/text'
 import TextInput from './textInput/textInput'
 import Timestamp from './timestamp/timestamp'
+import Video from './video/video'
 import YoutubeVideo from './video/youtubeVideo'
 
 export {
@@ -39,6 +40,7 @@ export {
   Text,
   TextInput,
   Timestamp,
+  Video,
   YoutubeVideo,
 }
 
