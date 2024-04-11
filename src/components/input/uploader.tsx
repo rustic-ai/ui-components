@@ -4,19 +4,41 @@ import IconButton from '@mui/material/IconButton'
 import React from 'react'
 import { v4 as getUUID } from 'uuid'
 
+import type { FileInfo } from './input'
+
 export type UploaderProps = {
-  setSelectedFiles: React.Dispatch<React.SetStateAction<File[]>>
+  addedFiles: FileInfo[]
+  setAddedFiles: React.Dispatch<React.SetStateAction<FileInfo[]>>
   acceptedFileTypes?: string
+  onFileAdd: (file: File, fileId: string) => Promise<{ url: string }>
 }
 
 function Uploader(props: UploaderProps) {
   const inputId = getUUID()
-
   function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
     const files = event.target.files && Array.from(event.target.files)
 
-    props.setSelectedFiles((prevFiles) => {
-      return files ? [...prevFiles, ...files] : prevFiles
+    files?.forEach((file) => {
+      const fileId = getUUID()
+      props.setAddedFiles((prev) => [
+        ...prev,
+        { name: file.name, loadingProgress: 0, id: fileId },
+      ])
+
+      props.onFileAdd(file, fileId).then((res) => {
+        props.setAddedFiles((prevFiles) => {
+          const fileIndex = prevFiles.findIndex((item) => item.id === fileId)
+          if (fileIndex !== -1) {
+            const updatedFiles = [...prevFiles]
+            updatedFiles[fileIndex] = {
+              ...updatedFiles[fileIndex],
+              url: res.url,
+            }
+            return updatedFiles
+          }
+          return prevFiles
+        })
+      })
     })
   }
 

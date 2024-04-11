@@ -6,23 +6,27 @@ import Typography from '@mui/material/Typography'
 import React from 'react'
 
 import { getShortenString } from '../helper'
+import type { FileInfo } from '../input/input'
 
 type FilePreview = {
-  file: File
-  setSelectedFiles: React.Dispatch<React.SetStateAction<File[]>>
+  name: string
+  id: string
+  setAddedFiles: React.Dispatch<React.SetStateAction<FileInfo[]>>
+  onFileDelete: (fileId: string) => Promise<{ isDeleted: boolean }>
 }
 
 function FilePreview(props: FilePreview) {
   const maximumFileNameLength = 15
 
   function handleDelete() {
-    props.setSelectedFiles((prev) => prev.filter((file) => file !== props.file))
+    props.setAddedFiles((prev) => prev.filter((file) => file.id !== props.id))
+    props.onFileDelete(props.id)
   }
 
   return (
     <Card className="rustic-file-preview">
       <Typography variant="subtitle2">
-        {getShortenString(props.file.name, maximumFileNameLength)}
+        {getShortenString(props.name, maximumFileNameLength)}
       </Typography>
       <IconButton
         color="primary"

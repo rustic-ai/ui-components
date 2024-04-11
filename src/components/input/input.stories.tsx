@@ -7,12 +7,6 @@ export default {
   title: 'Rustic UI/Input/Input',
   component: Input,
   tags: ['autodocs'],
-  argTypes: {
-    ws: {
-      description:
-        'WebSocket connection to send and receive messages to and from a backend. \n<pre>```interface WebSocketClient {\n  send: (message: Message) => void\n  close: () => void\n  reconnect: () => void\n}```</pre>',
-    },
-  },
   parameters: {
     layout: 'centered',
     docs: {
@@ -24,6 +18,25 @@ export default {
   },
 }
 
+const responseDelayTime = 1000
+function onFileAdd(_file: File, fileId: string): Promise<{ url: string }> {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve({ url: `https://example.com/${fileId}` })
+    }, responseDelayTime)
+  })
+}
+
+function onFileDelete(fileId: string): Promise<{ isDeleted: boolean }> {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve({ isDeleted: true })
+      // eslint-disable-next-line no-console
+      console.log('File deleted:', fileId)
+    }, responseDelayTime)
+  })
+}
+
 export const Default = {
   args: {
     sender: 'You',
@@ -33,6 +46,8 @@ export const Default = {
       // eslint-disable-next-line no-console
       send: (message: any) => console.log('Message sent:', message),
     },
+    onFileAdd,
+    onFileDelete,
   },
   decorators: [
     (Story: StoryFn) => {

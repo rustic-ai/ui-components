@@ -15,16 +15,24 @@ import Uploader from './uploader'
 
 export interface Input extends TextInput {
   acceptedFileTypes?: string
+  onFileAdd: (file: File) => Promise<{ url: string }>
+  onFileDelete: (fileId: string) => Promise<{ isDeleted: boolean }>
+}
+
+export interface FileInfo {
+  id: string
+  url?: string
+  name: string
+  loadingProgress: number
 }
 
 export default function Input(props: Input) {
   const [messageText, setMessageText] = useState<string>('')
-  const [selectedFiles, setSelectedFiles] = useState<File[]>([])
-
+  const [addedFiles, setAddedFiles] = useState<FileInfo[]>([])
   const isEmptyMessage = !messageText.trim().length
 
   function handleSendMessage(): void {
-    if (!isEmptyMessage || selectedFiles.length > 0) {
+    if (!isEmptyMessage || addedFiles.length > 0) {
       const currentTime = new Date().toISOString()
 
       const formattedMessage: Message = {
@@ -36,11 +44,14 @@ export default function Input(props: Input) {
         data: {},
       }
 
-      if (selectedFiles.length > 0) {
+      if (addedFiles.length > 0) {
+        const files = addedFiles.map((file) => {
+          return { name: file.name, url: file.url }
+        })
         formattedMessage.format = 'files'
         formattedMessage.data = {
           description: messageText,
-          files: selectedFiles,
+          files: files,
         }
       } else {
         formattedMessage.data = {
@@ -49,7 +60,7 @@ export default function Input(props: Input) {
       }
       props.ws.send(formattedMessage)
       setMessageText('')
-      setSelectedFiles([])
+      setAddedFiles([])
     }
   }
 
@@ -83,12 +94,14 @@ export default function Input(props: Input) {
         InputProps={{
           endAdornment: (
             <Box className="rustic-files">
-              {selectedFiles.length > 0 &&
-                selectedFiles.map((file, index) => (
+              {addedFiles.length > 0 &&
+                addedFiles.map((file, index) => (
                   <FilePreview
                     key={index}
-                    file={file}
-                    setSelectedFiles={setSelectedFiles}
+                    id={file.id}
+                    name={file.name}
+                    onFileDelete={props.onFileDelete}
+                    setAddedFiles={setAddedFiles}
                   />
                 ))}
             </Box>
@@ -96,12 +109,16 @@ export default function Input(props: Input) {
         }}
       />
       <Box className="rustic-bottom-buttons">
-        <Uploader setSelectedFiles={setSelectedFiles} />
+        <Uploader
+          setAddedFiles={setAddedFiles}
+          onFileAdd={props.onFileAdd}
+          addedFiles={addedFiles}
+        />
         <IconButton
           data-cy="send-button"
           aria-label="send message"
           onClick={handleSendMessage}
-          disabled={isEmptyMessage && selectedFiles.length === 0}
+          disabled={isEmptyMessage && addedFiles.length === 0}
           color="primary"
         >
           <SendIcon />
