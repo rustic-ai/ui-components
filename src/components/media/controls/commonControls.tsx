@@ -16,9 +16,9 @@ export interface MediaControls {
   mediaElement: HTMLMediaElement
 }
 
-interface ToggleButton {
-  isActive: boolean
-  setIsActive: () => void
+interface ToggleTranscriptProps {
+  isTranscriptShown: boolean
+  setIsTranscriptShown: () => void
 }
 
 interface MoveTenSecondsButtonProps extends MediaControls {
@@ -145,22 +145,18 @@ export function VolumeSettings(props: MediaControls) {
   )
 }
 
-export function ToggleCaptionsButton(props: ToggleButton) {
-  const action = props.isActive ? 'captionsOff' : 'captionsOn'
+export function ToggleTranscriptButton(props: ToggleTranscriptProps) {
+  const Icon = props.isTranscriptShown
+    ? KeyboardArrowUpIcon
+    : KeyboardArrowDownIcon
 
-  return <MediaIconButton onClick={props.setIsActive} action={action} />
-}
-
-export function ToggleTranscriptButton(props: ToggleButton) {
-  const Icon = props.isActive ? KeyboardArrowUpIcon : KeyboardArrowDownIcon
-
-  const buttonText = `${props.isActive ? 'Hide' : 'Show'} Transcript`
+  const buttonText = `${props.isTranscriptShown ? 'Hide' : 'Show'} Transcript`
 
   return (
     <Button
       className="rustic-transcript-toggle"
       data-cy="transcript-toggle"
-      onClick={props.setIsActive}
+      onClick={props.setIsTranscriptShown}
       endIcon={<Icon />}
     >
       <Typography variant="overline">{buttonText}</Typography>

@@ -12,7 +12,6 @@ import {
   PlaybackRateButton,
   PlayOrPauseToggle,
   ProgressSlider,
-  ToggleCaptionsButton,
   ToggleTranscriptButton,
   VolumeSettings,
 } from '../media/controls/commonControls'
@@ -124,12 +123,25 @@ export default function Video(props: VideoFormat) {
     }
   }
 
+  function renderCaptionsToggle() {
+    if (props.captions && props.captions.length > 0) {
+      const action = areCaptionsShown ? 'captionsOff' : 'captionsOn'
+
+      return (
+        <MediaIconButton
+          action={action}
+          onClick={() => setAreCaptionsShown(!areCaptionsShown)}
+        />
+      )
+    }
+  }
+
   function renderTranscriptToggle() {
     if (props.transcript) {
       return (
         <ToggleTranscriptButton
-          isActive={isTranscriptShown}
-          setIsActive={() => setIsTranscriptShown(!isTranscriptShown)}
+          isTranscriptShown={isTranscriptShown}
+          setIsTranscriptShown={() => setIsTranscriptShown(!isTranscriptShown)}
         />
       )
     }
@@ -193,12 +205,7 @@ export default function Video(props: VideoFormat) {
                   mediaElement={videoRef.current}
                   movement="forward"
                 />
-                {props.captions && (
-                  <ToggleCaptionsButton
-                    isActive={areCaptionsShown}
-                    setIsActive={() => setAreCaptionsShown(!areCaptionsShown)}
-                  />
-                )}
+                {renderCaptionsToggle()}
                 <PlaybackRateButton mediaElement={videoRef.current} />
               </Box>
 
@@ -235,12 +242,7 @@ export default function Video(props: VideoFormat) {
                   mediaElement={videoRef.current}
                   movement="forward"
                 />
-                {props.captions && (
-                  <ToggleCaptionsButton
-                    isActive={areCaptionsShown}
-                    setIsActive={() => setAreCaptionsShown(!areCaptionsShown)}
-                  />
-                )}
+                {renderCaptionsToggle()}
                 <PlaybackRateButton mediaElement={videoRef.current} />
 
                 <VolumeSettings mediaElement={videoRef.current} />

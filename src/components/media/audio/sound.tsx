@@ -13,10 +13,10 @@ import {
   PlaybackRateButton,
   PlayOrPauseToggle,
   ProgressSlider,
-  ToggleCaptionsButton,
   ToggleTranscriptButton,
   VolumeSettings,
 } from '../controls/commonControls'
+import { MediaIconButton } from '../controls/mediaIconButton'
 import TimeIndicator from '../timeIndicator/timeIndicator'
 import Transcript from '../transcript/transcript'
 
@@ -73,10 +73,12 @@ export default function Sound(props: AudioFormat) {
 
   function renderCaptionsToggle() {
     if (props.captions && props.captions.length > 0) {
+      const action = areCaptionsShown ? 'captionsOff' : 'captionsOn'
+
       return (
-        <ToggleCaptionsButton
-          isActive={areCaptionsShown}
-          setIsActive={() => setAreCaptionsShown(!areCaptionsShown)}
+        <MediaIconButton
+          action={action}
+          onClick={() => setAreCaptionsShown(!areCaptionsShown)}
         />
       )
     }
@@ -110,8 +112,8 @@ export default function Sound(props: AudioFormat) {
     if (props.transcript) {
       return (
         <ToggleTranscriptButton
-          isActive={isTranscriptShown}
-          setIsActive={() => setIsTranscriptShown(!isTranscriptShown)}
+          isTranscriptShown={isTranscriptShown}
+          setIsTranscriptShown={() => setIsTranscriptShown(!isTranscriptShown)}
         />
       )
     }
