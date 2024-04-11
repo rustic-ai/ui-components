@@ -44,13 +44,7 @@
 .rustic-video-title {
   position: absolute;
   top: 0;
-  padding: 16px 16px 48px 16px;
-  background: linear-gradient(
-    180deg,
-    rgba(0, 0, 0, 0.4) 21%,
-    rgba(10, 10, 10, 0.14) 71%,
-    rgba(69, 69, 69, 0) 100%
-  );
+  padding: 16px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -60,12 +54,6 @@
   position: absolute;
   bottom: 0;
   padding: 16px;
-  background: linear-gradient(
-    0deg,
-    rgba(0, 0, 0, 0.4) 21%,
-    rgba(10, 10, 10, 0.14) 71%,
-    rgba(69, 69, 69, 0) 100%
-  );
 }
 
 .rustic-video-top-controls {
@@ -98,7 +86,6 @@
 .rustic-fullscreen-transcript {
   display: flex;
   flex-direction: column;
-  background-color: rgba(10, 10, 10, 0.5);
   position: absolute;
   bottom: 0;
   left: 0;
@@ -122,15 +109,6 @@
 @media (max-width: 900px) {
   .rustic-video-screen {
     flex-direction: column;
-  }
-
-  .rustic-video-controls-mobile {
-    position: static;
-    opacity: 1;
-    background: none;
-    padding-inline: 0;
-    padding-top: 8px;
-    padding-bottom: 0;
   }
 
   .rustic-video-controls-mobile-preview {

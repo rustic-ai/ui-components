@@ -1,3 +1,4 @@
+/* eslint-disable no-magic-numbers */
 import './video.css'
 
 import { useMediaQuery, useTheme } from '@mui/material'
@@ -69,6 +70,19 @@ export default function Video(props: VideoFormat) {
     })
   }, [isFullscreen])
 
+  function adjustHexColorOpacity(color: string, opacity: number) {
+    const r = parseInt(color.slice(1, 3), 16)
+    const g = parseInt(color.slice(3, 5), 16)
+    const b = parseInt(color.slice(5, 7), 16)
+
+    return `rgba(${r}, ${g}, ${b}, ${opacity})`
+  }
+
+  const backgroundColor = adjustHexColorOpacity(
+    theme.palette.background.paper,
+    0.6
+  )
+
   function renderVideoElement() {
     return (
       <video
@@ -95,12 +109,16 @@ export default function Video(props: VideoFormat) {
 
     if (videoRef.current && videoContainerRef.current) {
       return (
-        <Box className="rustic-video-title">
-          <Typography
-            variant="body2"
-            data-cy="video-title"
-            color="common.white"
-          >
+        <Box
+          className="rustic-video-title"
+          sx={{
+            backgroundColor: adjustHexColorOpacity(
+              theme.palette.background.paper,
+              0.6
+            ),
+          }}
+        >
+          <Typography variant="body2" data-cy="video-title">
             {props.title}
           </Typography>
           {isFullscreen && isMobile && (
@@ -179,9 +197,20 @@ export default function Video(props: VideoFormat) {
     return (
       <>
         {videoRef.current && videoContainerRef.current && (
-          <Box className="rustic-video-controls" data-cy="controls">
+          <Box
+            className="rustic-video-controls"
+            data-cy="controls"
+            sx={{
+              backgroundColor: backgroundColor,
+            }}
+          >
             {isTranscriptShown && (
-              <Box className="rustic-fullscreen-transcript">
+              <Box
+                className="rustic-fullscreen-transcript"
+                sx={{
+                  backgroundColor: backgroundColor,
+                }}
+              >
                 {renderTranscriptToggle()}
                 {renderTranscript()}
               </Box>
@@ -221,9 +250,20 @@ export default function Video(props: VideoFormat) {
     return (
       <>
         {videoRef.current && videoContainerRef.current && (
-          <Box className="rustic-video-controls" data-cy="controls">
+          <Box
+            className="rustic-video-controls"
+            data-cy="controls"
+            sx={{
+              backgroundColor: backgroundColor,
+            }}
+          >
             {isTranscriptShown && isFullscreen && (
-              <Box className="rustic-fullscreen-transcript">
+              <Box
+                className="rustic-fullscreen-transcript"
+                sx={{
+                  backgroundColor: backgroundColor,
+                }}
+              >
                 {renderTranscriptToggle()}
                 {renderTranscript()}
               </Box>
