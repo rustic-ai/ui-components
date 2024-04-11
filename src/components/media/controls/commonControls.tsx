@@ -14,13 +14,11 @@ import { MediaIconButton } from './mediaIconButton'
 
 export interface MediaControls {
   mediaElement: HTMLMediaElement
-  color?: string
 }
 
 interface Toggle {
   active: boolean
   setActive: () => void
-  color?: string
 }
 
 interface MoveTenSecondsButtonProps extends MediaControls {
@@ -131,7 +129,6 @@ export function VolumeSettings(props: MediaControls) {
         onClick={handleMuteToggle}
         className="rustic-mute-button"
         action={action}
-        color={props.color}
       />
       <Slider
         className="rustic-volume-slider"
@@ -143,7 +140,6 @@ export function VolumeSettings(props: MediaControls) {
         aria-valuetext={`Volume: ${volumeFraction * percentMultiple}%`}
         value={volumeFraction}
         onChange={handleVolumeChange}
-        sx={{ color: props.color }}
       />
     </Box>
   )
@@ -152,13 +148,7 @@ export function VolumeSettings(props: MediaControls) {
 export function CaptionsToggle(props: Toggle) {
   const action = props.active ? 'captionsOff' : 'captionsOn'
 
-  return (
-    <MediaIconButton
-      onClick={props.setActive}
-      action={action}
-      color={props.color}
-    />
-  )
+  return <MediaIconButton onClick={props.setActive} action={action} />
 }
 
 export function TranscriptToggle(props: Toggle) {
@@ -171,11 +161,9 @@ export function TranscriptToggle(props: Toggle) {
       className="rustic-transcript-toggle"
       data-cy="transcript-toggle"
       onClick={props.setActive}
-      endIcon={<Icon sx={{ color: props.color }} />}
+      endIcon={<Icon />}
     >
-      <Typography variant="overline" sx={{ color: props.color }}>
-        {buttonText}
-      </Typography>
+      <Typography variant="overline">{buttonText}</Typography>
     </Button>
   )
 }
@@ -209,7 +197,6 @@ export function PausePlayToggle(props: MediaControls) {
       onClick={handlePausePlayToggle}
       action={action}
       className="rustic-pause-play-icon"
-      color={props.color}
     />
   )
 }
@@ -239,9 +226,7 @@ export function PlaybackRateButton(props: MediaControls) {
       aria-label={`Playback rate: ${playbackRate}x, click to change`}
       data-cy="playback-rate-button"
     >
-      <Typography variant="body1" sx={{ color: props.color }}>
-        {playbackRate}X
-      </Typography>
+      <Typography variant="body1">{playbackRate}X</Typography>
     </Button>
   )
 }
@@ -263,7 +248,5 @@ export function MoveTenSecondsButton(props: MoveTenSecondsButtonProps) {
 
   const action = isReplayMovement ? 'replay' : 'forward'
 
-  return (
-    <MediaIconButton onClick={onClick} action={action} color={props.color} />
-  )
+  return <MediaIconButton onClick={onClick} action={action} />
 }

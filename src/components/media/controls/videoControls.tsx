@@ -5,7 +5,6 @@ import { MediaIconButton } from './mediaIconButton'
 
 interface FullscreenToggleProps {
   element: HTMLElement
-  color?: string
 }
 
 export function PictureInPictureToggle(props: MediaControls) {
@@ -34,13 +33,7 @@ export function PictureInPictureToggle(props: MediaControls) {
     setIsPictureInPicture(false)
   }
 
-  return (
-    <MediaIconButton
-      onClick={handlePictureInPicture}
-      action={action}
-      color={props.color}
-    />
-  )
+  return <MediaIconButton onClick={handlePictureInPicture} action={action} />
 }
 
 export function FullscreenToggle(props: FullscreenToggleProps) {
@@ -62,11 +55,5 @@ export function FullscreenToggle(props: FullscreenToggleProps) {
     }
   }
 
-  return (
-    <MediaIconButton
-      onClick={handleFullscreen}
-      action={action}
-      color={props.color}
-    />
-  )
+  return <MediaIconButton onClick={handleFullscreen} action={action} />
 }

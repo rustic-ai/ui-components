@@ -18,7 +18,6 @@ interface MediaIconButtonProps {
     | 'captionsOn'
     | 'captionsOff'
   className?: string
-  color?: string
 }
 
 export function MediaIconButton(props: MediaIconButtonProps) {
@@ -49,7 +48,7 @@ export function MediaIconButton(props: MediaIconButtonProps) {
       className={props.className}
       data-cy={`${props.action}-button`}
     >
-      <Icon sx={{ color: props.color }}>
+      <Icon color="primary">
         <span className="material-symbols-rounded">
           {controls[props.action].symbol}
         </span>

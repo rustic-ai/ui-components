@@ -7,7 +7,6 @@ import React from 'react'
 
 interface TranscriptProps {
   transcript: string
-  color?: string
 }
 
 export default function Transcript(props: TranscriptProps) {
@@ -23,11 +22,7 @@ export default function Transcript(props: TranscriptProps) {
           </Typography>
         </Box>
       )}
-      <Typography
-        data-cy="transcript"
-        variant="body2"
-        sx={{ color: props.color }}
-      >
+      <Typography data-cy="transcript" variant="body2">
         {props.transcript}
       </Typography>
     </Box>
