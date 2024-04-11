@@ -1,0 +1,8 @@
+.rustic-file-preview {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  justify-content: space-between;
+  width: 220px;
+}
