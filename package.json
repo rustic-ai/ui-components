@@ -103,7 +103,7 @@
   "scripts": {
     "build": "webpack --config webpack.prod.config.js",
     "setup-dev-env": "husky install",
-    "test": "LANG='en-US' TZ='America/Vancouver' cypress run --component",
+    "test": "LANG='en-US' TZ='America/Vancouver' cypress run --browser chrome --component",
     "test:interactive": "LANG='en-US' TZ='America/Vancouver' cypress open",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"

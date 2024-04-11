@@ -179,7 +179,7 @@ export default function Video(props: VideoFormat) {
     return (
       <>
         {videoRef.current && videoContainerRef.current && (
-          <Box className="rustic-video-controls">
+          <Box className="rustic-video-controls" data-cy="controls">
             {isTranscriptShown && (
               <Box className="rustic-fullscreen-transcript">
                 {renderTranscriptToggle()}
@@ -221,7 +221,7 @@ export default function Video(props: VideoFormat) {
     return (
       <>
         {videoRef.current && videoContainerRef.current && (
-          <Box className="rustic-video-controls">
+          <Box className="rustic-video-controls" data-cy="controls">
             {isTranscriptShown && isFullscreen && (
               <Box className="rustic-fullscreen-transcript">
                 {renderTranscriptToggle()}

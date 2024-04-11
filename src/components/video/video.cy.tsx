@@ -13,8 +13,8 @@ describe('Video', () => {
   const playButton = '[data-cy=play-button]'
   const pictureInPictureButton = '[data-cy=pictureInPicture-button]'
   const pictureInPictureExitButton = '[data-cy=pictureInPictureExit-button]'
-  // const fullScreenEnterButton = '[data-cy=fullscreen-button]'
-  // const fullScreenExitButton = '[data-cy=fullscreenExit-button]'
+  const fullScreenEnterButton = '[data-cy=fullscreen-button]'
+  const fullScreenExitButton = '[data-cy=fullscreenExit-button]'
   const transcript = '[data-cy=transcript]'
   const transcriptToggle = '[data-cy=transcript-toggle]'
   const error = '[data-cy=error]'
@@ -59,7 +59,7 @@ describe('Video', () => {
       })
       it(`should display an error message when no valid sources are found on ${viewport} screen`, () => {
         cy.viewport(viewport)
-        cy.mount(<Video src="/jjh" />)
+        cy.mount(<Video src="" />)
         cy.get(videoElement).should('not.exist')
         cy.get(error).should('be.visible')
         cy.get(error).should('contain', 'The video resource has failed to load')
@@ -98,16 +98,16 @@ describe('Video', () => {
       cy.get('[data-cy="spinner"]').should('not.exist')
     })
 
-    // // working with `npm run test:interactive` but not in headless mode issue with fullscreen
-    // it('should go to fullscreen mode and show all the controls when pressing play', () => {
-    //   cy.get(playButton).should('be.visible')
-    //   cy.get(playButton).realClick()
-    //   cy.get(pauseButton).should('be.visible')
-    //   cy.get(transcriptToggle).should('be.visible')
-    //   cy.get(fullScreenExitButton).should('be.visible')
-    //   cy.get(pictureInPictureButton).should('be.visible')
-    //   cy.get(progressSlider).should('be.visible')
-    // })
+    it('should go to fullscreen mode and show all the controls when pressing play', () => {
+      cy.get(playButton).should('be.visible')
+      cy.get(playButton).realClick()
+      cy.get('[data-cy=controls]').click()
+      cy.get(pauseButton).should('be.visible')
+      cy.get(transcriptToggle).should('be.visible')
+      cy.get(fullScreenExitButton).should('be.visible')
+      cy.get(pictureInPictureButton).should('be.visible')
+      cy.get(progressSlider).should('be.visible')
+    })
   })
 
   context('Desktop', () => {
@@ -149,18 +149,27 @@ describe('Video', () => {
       cy.get(progressSlider).type('{rightArrow}')
       cy.get(videoElement).its('0.currentTime').should('be.greaterThan', 0)
     })
-    // // working with `npm run test:interactive` but not in headless mode issue with fullscreen
-    // it('should toggle between fullscreen and normal mode when clicking the fullscreen button', () => {
-    //   cy.get(fullScreenEnterButton).realClick()
-    //   cy.document().its('fullscreenElement').should('exist')
-    //   cy.get(fullScreenExitButton).click()
-    //   cy.document().its('fullscreenElement').should('not.exist')
-    // })
+    it('should toggle between fullscreen and normal mode when clicking the fullscreen button', () => {
+      cy.get(fullScreenEnterButton).realClick()
+      cy.document().then((doc) => {
+        expect(doc.fullscreenElement).to.not.be.null
+      })
+      cy.get(fullScreenExitButton).should('exist')
+      cy.get(fullScreenExitButton).click()
+      cy.document().then((doc) => {
+        expect(doc.fullscreenElement).to.be.null
+      })
+    })
     it('should toggle between picture-in-picture and normal mode when clicking the picture-in-picture button', () => {
       cy.get(pictureInPictureButton).realClick()
-      cy.document().its('pictureInPictureElement').should('exist')
+      cy.document().then((doc) => {
+        expect(doc.pictureInPictureElement).to.not.be.null
+      })
+      cy.get(pictureInPictureExitButton).should('exist')
       cy.get(pictureInPictureExitButton).click()
-      cy.document().its('pictureInPictureElement').should('not.exist')
+      cy.document().then((doc) => {
+        expect(doc.pictureInPictureElement).to.be.null
+      })
     })
   })
 })
