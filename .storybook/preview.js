@@ -1,4 +1,4 @@
-import { DEFAULT_VIEWPORT, INITIAL_VIEWPORTS } from '@storybook/addon-viewport'
+import { INITIAL_VIEWPORTS } from '@storybook/addon-viewport'
 import { CssBaseline, ThemeProvider } from '@mui/material'
 import { StyledEngineProvider } from '@mui/material/styles'
 import {
@@ -38,7 +38,6 @@ const preview = {
     actions: { argTypesRegex: '^on[A-Z].*' },
     viewport: {
       viewports: INITIAL_VIEWPORTS,
-      defaultViewport: DEFAULT_VIEWPORT,
     },
     controls: { expanded: true },
     docs: {
