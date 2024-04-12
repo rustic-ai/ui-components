@@ -105,10 +105,7 @@ export default function Video(props: VideoFormat) {
         <Box
           className="rustic-video-title"
           sx={{
-            backgroundColor: adjustHexColorOpacity(
-              theme.palette.background.paper,
-              0.6
-            ),
+            backgroundColor: backgroundColor,
           }}
         >
           <Typography variant="body2" data-cy="video-title">
