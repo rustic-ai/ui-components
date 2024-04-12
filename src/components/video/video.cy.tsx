@@ -98,11 +98,11 @@ describe('Video', () => {
       cy.get('[data-cy="spinner"]').should('not.exist')
     })
 
-    it('should go to fullscreen mode and show all the controls when pressing play', () => {
-      cy.get(playButton).should('be.visible')
-      cy.get(playButton).realClick()
+    it('should show all the controls on fullscreen mode', () => {
+      cy.get(fullScreenEnterButton).should('be.visible')
+      cy.get(fullScreenEnterButton).realClick()
       cy.get('[data-cy=controls]').click()
-      cy.get(pauseButton).should('be.visible')
+      cy.get(playButton).should('be.visible')
       cy.get(transcriptToggle).should('be.visible')
       cy.get(fullScreenExitButton).should('be.visible')
       cy.get(pictureInPictureButton).should('be.visible')

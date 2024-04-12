@@ -66,9 +66,9 @@ export default function Video(props: VideoFormat) {
       handleError(stalledErrorMessage)
     )
     document.addEventListener('fullscreenchange', () => {
-      setIsFullscreen(!isFullscreen)
+      setIsFullscreen(!!document.fullscreenElement)
     })
-  }, [isFullscreen])
+  }, [])
 
   function adjustHexColorOpacity(color: string, opacity: number) {
     const r = parseInt(color.slice(1, 3), 16)
@@ -100,13 +100,6 @@ export default function Video(props: VideoFormat) {
   }
 
   function renderTitle() {
-    function exitFullscreen() {
-      if (videoRef.current) {
-        videoRef.current.pause()
-        document.exitFullscreen()
-      }
-    }
-
     if (videoRef.current && videoContainerRef.current) {
       return (
         <Box
@@ -124,10 +117,7 @@ export default function Video(props: VideoFormat) {
           {isFullscreen && isMobile && (
             <Box>
               <PictureInPictureToggle mediaElement={videoRef.current} />
-              <MediaIconButton
-                action="fullscreenExit"
-                onClick={exitFullscreen}
-              />
+              <FullscreenToggle element={videoContainerRef.current} />
             </Box>
           )}
         </Box>
@@ -166,29 +156,53 @@ export default function Video(props: VideoFormat) {
   }
 
   function renderMobileView() {
-    function handlePlayFromMobile() {
-      if (
-        videoRef.current &&
-        videoContainerRef.current &&
-        isMobile &&
-        !isFullscreen
-      ) {
-        if (videoRef.current.paused || videoRef.current.ended) {
-          videoContainerRef.current.requestFullscreen()
-          videoRef.current.play()
-        } else {
-          videoRef.current.pause()
-        }
-      }
-    }
-
-    if (!isFullscreen) {
+    if (isFullscreen) {
       return (
         <>
           {videoRef.current && videoContainerRef.current && (
-            <Box className="rustic-video-controls-mobile-preview">
-              <MediaIconButton action="play" onClick={handlePlayFromMobile} />
-              {renderTranscriptToggle()}
+            <Box
+              className="rustic-video-controls"
+              data-cy="controls"
+              sx={{
+                backgroundColor: backgroundColor,
+              }}
+            >
+              {isTranscriptShown && (
+                <Box
+                  className="rustic-fullscreen-transcript"
+                  sx={{
+                    backgroundColor: backgroundColor,
+                  }}
+                >
+                  {renderTranscriptToggle()}
+                  {renderTranscript()}
+                </Box>
+              )}
+              <Box className="rustic-video-top-controls">
+                <PlayOrPauseToggle mediaElement={videoRef.current} />
+                <ProgressSlider mediaElement={videoRef.current} />
+                <TimeIndicator
+                  elapsedTimeInSeconds={elapsedTime}
+                  durationTimeInSeconds={videoRef.current.duration}
+                />
+              </Box>
+
+              <Box className="rustic-video-bottom-controls">
+                <Box className="rustic-time-controls">
+                  <MoveTenSecondsButton
+                    mediaElement={videoRef.current}
+                    movement="replay"
+                  />
+                  <MoveTenSecondsButton
+                    mediaElement={videoRef.current}
+                    movement="forward"
+                  />
+                  {renderCaptionsToggle()}
+                  <PlaybackRateButton mediaElement={videoRef.current} />
+                </Box>
+
+                <Box>{!isTranscriptShown && renderTranscriptToggle()}</Box>
+              </Box>
             </Box>
           )}
         </>
@@ -197,48 +211,11 @@ export default function Video(props: VideoFormat) {
     return (
       <>
         {videoRef.current && videoContainerRef.current && (
-          <Box
-            className="rustic-video-controls"
-            data-cy="controls"
-            sx={{
-              backgroundColor: backgroundColor,
-            }}
-          >
-            {isTranscriptShown && (
-              <Box
-                className="rustic-fullscreen-transcript"
-                sx={{
-                  backgroundColor: backgroundColor,
-                }}
-              >
-                {renderTranscriptToggle()}
-                {renderTranscript()}
-              </Box>
-            )}
-            <Box className="rustic-video-top-controls">
-              <PlayOrPauseToggle mediaElement={videoRef.current} />
-              <ProgressSlider mediaElement={videoRef.current} />
-              <TimeIndicator
-                elapsedTimeInSeconds={elapsedTime}
-                durationTimeInSeconds={videoRef.current.duration}
-              />
-            </Box>
-
-            <Box className="rustic-video-bottom-controls">
-              <Box className="rustic-time-controls">
-                <MoveTenSecondsButton
-                  mediaElement={videoRef.current}
-                  movement="replay"
-                />
-                <MoveTenSecondsButton
-                  mediaElement={videoRef.current}
-                  movement="forward"
-                />
-                {renderCaptionsToggle()}
-                <PlaybackRateButton mediaElement={videoRef.current} />
-              </Box>
-
-              <Box>{!isTranscriptShown && renderTranscriptToggle()}</Box>
+          <Box className="rustic-video-controls-mobile-preview">
+            <PlayOrPauseToggle mediaElement={videoRef.current} />
+            <Box className="rustic-video-controls-right">
+              {renderTranscriptToggle()}
+              <FullscreenToggle element={videoContainerRef.current} />
             </Box>
           </Box>
         )}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 
 import type { MediaControls } from './commonControls'
 import { MediaIconButton } from './mediaIconButton'
@@ -39,11 +39,9 @@ export function PictureInPictureToggle(props: MediaControls) {
 export function FullscreenToggle(props: FullscreenToggleProps) {
   const [isFullscreen, setIsFullscreen] = useState(!!document.fullscreenElement)
 
-  useEffect(() => {
-    document.addEventListener('fullscreenchange', () => {
-      setIsFullscreen(!!document.fullscreenElement)
-    })
-  }, [isFullscreen])
+  document.onfullscreenchange = function () {
+    setIsFullscreen(!!document.fullscreenElement)
+  }
 
   const action = isFullscreen ? 'fullscreenExit' : 'fullscreen'
 
