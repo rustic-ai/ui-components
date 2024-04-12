@@ -26,11 +26,11 @@ export default {
   argTypes: {
     supportedElements: {
       description:
-        'A component map contains message formats as keys and their corresponding React components as values.`interface ComponentMap {[key: string]: React.ComponentType<any>}`',
+        'A component map contains message formats as keys and their corresponding React components as values.`interface ComponentMap { [key: string]: React.ComponentType<any> }`',
     },
     messages: {
       description:
-        'Messages to be displayed. Could have thread messages for the streaming components. `Interface MessageData { [key: string]: any }`\n\n<pre>```{\nInterface Message {\n  id: string\n  timestamp: string\n  sender: string\n  conversationId: string\n  format: string\n  data: MessageData\n  inReplyTo?: string\n  threadId?: string\n  priority?: string;\n  taggedParticipants?: string[]\n  topicId?: string\n}\n\n```</pre><pre>```{\nInterface ThreadableMessage extends Message {\n  lastThreadMessage?: Message\n  threadMessagesData?: MessageData[]}```</pre>',
+        'Messages to be displayed. Could have thread messages for the streaming components. `interface MessageData { [key: string]: any }`\n\n<pre>```{\ninterface Message {\n  id: string\n  timestamp: string\n  sender: string\n  conversationId: string\n  format: string\n  data: MessageData\n  inReplyTo?: string\n  threadId?: string\n  priority?: string;\n  taggedParticipants?: string[]\n  topicId?: string\n}\n\n```</pre><pre>```{\ninterface ThreadableMessage extends Message {\n  lastThreadMessage?: Message\n  threadMessagesData?: MessageData[]\n}```</pre>',
     },
     getActionsComponent: {
       description:
