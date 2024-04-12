@@ -16,6 +16,15 @@ export default {
       },
     },
   },
+  decorators: [
+    (Story: StoryFn) => {
+      return (
+        <div style={{ width: '600px' }}>
+          <Story />
+        </div>
+      )
+    },
+  ],
 }
 
 const responseDelayTime = 1000
@@ -49,13 +58,11 @@ export const Default = {
     onFileAdd,
     onFileDelete,
   },
-  decorators: [
-    (Story: StoryFn) => {
-      return (
-        <div style={{ width: '600px' }}>
-          <Story />
-        </div>
-      )
-    },
-  ],
+}
+
+export const PDFAndImageOnly = {
+  args: {
+    ...Default.args,
+    acceptedFileTypes: 'image/*,.pdf',
+  },
 }

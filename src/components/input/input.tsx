@@ -113,6 +113,7 @@ export default function Input(props: Input) {
           setAddedFiles={setAddedFiles}
           onFileAdd={props.onFileAdd}
           addedFiles={addedFiles}
+          acceptedFileTypes={props.acceptedFileTypes}
         />
         <IconButton
           data-cy="send-button"
