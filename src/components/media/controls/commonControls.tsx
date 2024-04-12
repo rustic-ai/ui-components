@@ -169,7 +169,7 @@ export function PlayOrPauseToggle(props: MediaControls) {
     }
   }
 
-  // State is updated by event listeners so that the icon is displayed correctly, even when play/pause is not initiated by the user (e.g. pause and play can be toggled in the picture-in-picture window).
+  // State is updated by event listeners so that the icon is displayed correctly, even when play/pause is not initiated by the user or user initiates without direct use of this toggle (e.g. automatically pauses when picture-in-picture is exited, or pause and play can be toggled in the picture-in-picture window).
   props.mediaElement.onended = function () {
     setIsPlaying(false)
   }

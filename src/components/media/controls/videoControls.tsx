@@ -26,6 +26,7 @@ export function PictureInPictureToggle(props: MediaControls) {
     }
   }
 
+  // State is updated by event listeners so that the icon is displayed correctly, even when users enter/exit picture-in-picture without direct use of this toggle (e.g. exiting from the picture-in-picture window).
   videoElement.onenterpictureinpicture = function () {
     setIsPictureInPicture(true)
   }
