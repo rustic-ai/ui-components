@@ -8,6 +8,7 @@ import Typography from '@mui/material/Typography'
 import { Box } from '@mui/system'
 import React, { useEffect, useRef, useState } from 'react'
 
+import type { VideoFormat } from '../../types'
 import {
   MoveTenSecondsButton,
   PlaybackRateButton,
@@ -15,15 +16,14 @@ import {
   ProgressSlider,
   ToggleTranscriptButton,
   VolumeSettings,
-} from '../media/controls/commonControls'
-import { MediaIconButton } from '../media/controls/mediaIconButton'
+} from '../controls/commonControls'
+import { MediaIconButton } from '../controls/mediaIconButton'
 import {
   FullscreenToggle,
   PictureInPictureToggle,
-} from '../media/controls/videoControls'
-import TimeIndicator from '../media/timeIndicator/timeIndicator'
-import Transcript from '../media/transcript/transcript'
-import type { VideoFormat } from '../types'
+} from '../controls/videoControls'
+import TimeIndicator from '../timeIndicator/timeIndicator'
+import Transcript from '../transcript/transcript'
 
 export default function Video(props: VideoFormat) {
   const [isTranscriptShown, setIsTranscriptShown] = useState(false)

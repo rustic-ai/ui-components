@@ -1,7 +1,7 @@
 /* eslint-disable no-magic-numbers */
 import 'cypress-real-events'
 
-import { supportedViewports } from '../../../cypress/support/variables'
+import { supportedViewports } from '../../../../cypress/support/variables'
 import Video from './video'
 
 describe('Video', () => {
