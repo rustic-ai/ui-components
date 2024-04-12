@@ -12,13 +12,17 @@ export type UploaderProps = {
   acceptedFileTypes?: string
   onFileAdd: (file: File, fileId: string) => Promise<{ url: string }>
   setErrorMessages: React.Dispatch<React.SetStateAction<string[]>>
+  setPendingUploadCount: React.Dispatch<React.SetStateAction<number>>
 }
 
 function Uploader(props: UploaderProps) {
   const inputId = getUUID()
   function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
-    const files = event.target.files && Array.from(event.target.files)
     props.setErrorMessages([])
+
+    const files = event.target.files && Array.from(event.target.files)
+
+    files && props.setPendingUploadCount((prev) => prev + files.length)
     files?.forEach((file) => {
       const fileId = getUUID()
       props.setAddedFiles((prev) => [
@@ -51,8 +55,12 @@ function Uploader(props: UploaderProps) {
             return prevFiles.filter((item) => item.id !== fileId)
           })
         })
+        .finally(() => {
+          props.setPendingUploadCount((prev) => prev - 1)
+        })
     })
   }
+
   return (
     <div className="rustic-uploader">
       <label htmlFor={inputId}>

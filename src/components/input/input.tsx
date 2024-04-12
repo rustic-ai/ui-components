@@ -31,7 +31,7 @@ export default function Input(props: Input) {
   const [messageText, setMessageText] = useState<string>('')
   const [addedFiles, setAddedFiles] = useState<FileInfo[]>([])
   const [errorMessages, setErrorMessages] = useState<string[]>([])
-
+  const [pendingUploadCount, setPendingUploadCount] = useState(0)
   const isEmptyMessage = !messageText.trim().length
 
   function handleSendMessage(): void {
@@ -79,13 +79,17 @@ export default function Input(props: Input) {
     setMessageText(e.target.value)
   }
 
+  const isSendButtonDisabled =
+    (isEmptyMessage && addedFiles.length === 0) || pendingUploadCount !== 0
+
   return (
     <Box className="rustic-input-container">
-      {errorMessages.map((errorMessage) => (
+      {errorMessages.map((errorMessage, index) => (
         <Typography
           variant="caption"
           color="error"
           className="rustic-error-message"
+          key={index}
         >
           {errorMessage}
         </Typography>
@@ -128,12 +132,13 @@ export default function Input(props: Input) {
           addedFiles={addedFiles}
           acceptedFileTypes={props.acceptedFileTypes}
           setErrorMessages={setErrorMessages}
+          setPendingUploadCount={setPendingUploadCount}
         />
         <IconButton
           data-cy="send-button"
           aria-label="send message"
           onClick={handleSendMessage}
-          disabled={isEmptyMessage && addedFiles.length === 0}
+          disabled={isSendButtonDisabled}
           color="primary"
         >
           <SendIcon />
