@@ -8,14 +8,14 @@ describe('Video', () => {
   const videoElement = '[data-cy=video-element]'
   const controls = '[data-cy=controls]'
   const volumeSlider = '[data-cy=volume-slider]'
-  const muteButton = '[data-cy=volumeUp-button]'
+  const muteButton = '[data-cy=mute-button]'
   const progressSlider = '[data-cy=progress-slider]'
   const pauseButton = '[data-cy=pause-button]'
   const playButton = '[data-cy=play-button]'
-  const pictureInPictureButton = '[data-cy=pictureInPicture-button]'
-  const pictureInPictureExitButton = '[data-cy=pictureInPictureExit-button]'
+  const pictureInPictureButton = '[data-cy=picture-in-picture-button]'
+  const pictureInPictureExitButton = '[data-cy=exit-picture-in-picture-button]'
   const fullScreenEnterButton = '[data-cy=fullscreen-button]'
-  const fullScreenExitButton = '[data-cy=fullscreenExit-button]'
+  const fullScreenExitButton = '[data-cy=exit-fullscreen-button]'
   const transcript = '[data-cy=transcript]'
   const transcriptToggle = '[data-cy=transcript-toggle]'
   const error = '[data-cy=error]'
@@ -144,9 +144,9 @@ describe('Video', () => {
     })
     it(`should go forwards and backwards 10 seconds when clicking the forward/back buttons`, () => {
       cy.get(controls).realHover()
-      cy.get('[data-cy=forward-button]').click()
+      cy.get('[data-cy=forward-ten-seconds-button]').click()
       cy.get(videoElement).its('0.currentTime').should('equal', 10)
-      cy.get('[data-cy=replay-button]').click()
+      cy.get('[data-cy=replay-ten-seconds-button]').click()
       cy.get(videoElement).its('0.currentTime').should('equal', 0)
     })
     it(`should mute and unmute the audio when clicking the mute button`, () => {

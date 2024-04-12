@@ -41,12 +41,15 @@ export function MediaIconButton(props: MediaIconButtonProps) {
     captionsOn: { symbol: 'closed_caption', label: 'show captions' },
     captionsOff: { symbol: 'closed_caption_disabled', label: 'hide captions' },
   }
+
+  const dataCyPrefix = controls[props.action].label.replaceAll(' ', '-')
+
   return (
     <IconButton
       onClick={props.onClick}
       aria-label={`click to ${controls[props.action].label}`}
       className={props.className}
-      data-cy={`${props.action}-button`}
+      data-cy={`${dataCyPrefix}-button`}
     >
       <Icon color="primary">
         <span className="material-symbols-rounded">
