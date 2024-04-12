@@ -37,11 +37,7 @@ export function PictureInPictureToggle(props: MediaControls) {
 }
 
 export function FullscreenToggle(props: FullscreenToggleProps) {
-  const [isFullscreen, setIsFullscreen] = useState(!!document.fullscreenElement)
-
-  document.onfullscreenchange = function () {
-    setIsFullscreen(!!document.fullscreenElement)
-  }
+  const isFullscreen = !!document.fullscreenElement
 
   const action = isFullscreen ? 'fullscreenExit' : 'fullscreen'
 

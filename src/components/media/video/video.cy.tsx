@@ -6,6 +6,7 @@ import Video from './video'
 
 describe('Video', () => {
   const videoElement = '[data-cy=video-element]'
+  const controls = '[data-cy=controls]'
   const volumeSlider = '[data-cy=volume-slider]'
   const muteButton = '[data-cy=volumeUp-button]'
   const progressSlider = '[data-cy=progress-slider]'
@@ -57,6 +58,17 @@ describe('Video', () => {
         cy.get(transcript).should('be.visible')
         cy.get(transcriptToggle).should('contain', 'Hide')
       })
+      it('should toggle between fullscreen and normal mode when clicking the fullscreen button', () => {
+        cy.get(fullScreenEnterButton).realClick()
+        cy.document().then((doc) => {
+          expect(doc.fullscreenElement).to.not.be.null
+        })
+        cy.get(fullScreenExitButton).should('exist')
+        cy.get(fullScreenExitButton).click()
+        cy.document().then((doc) => {
+          expect(doc.fullscreenElement).to.be.null
+        })
+      })
       it(`should display an error message when no valid sources are found on ${viewport} screen`, () => {
         cy.viewport(viewport)
         cy.mount(<Video src="" />)
@@ -101,7 +113,7 @@ describe('Video', () => {
     it('should show all the controls on fullscreen mode', () => {
       cy.get(fullScreenEnterButton).should('be.visible')
       cy.get(fullScreenEnterButton).realClick()
-      cy.get('[data-cy=controls]').click()
+      cy.get(controls).click()
       cy.get(playButton).should('be.visible')
       cy.get(transcriptToggle).should('be.visible')
       cy.get(fullScreenExitButton).should('be.visible')
@@ -138,7 +150,7 @@ describe('Video', () => {
     })
     it(`should change the volume when adjusting the volume slider on desktop`, () => {
       cy.get(videoElement).its('0.volume').should('equal', 1)
-      cy.get(muteButton).realHover().get(volumeSlider).should('be.visible')
+      cy.get(muteButton).focus().get(volumeSlider).should('be.visible')
       // wait for slider animation
       cy.wait(1000)
       cy.get(volumeSlider).type('{leftArrow}')
@@ -149,12 +161,16 @@ describe('Video', () => {
       cy.get(progressSlider).type('{rightArrow}')
       cy.get(videoElement).its('0.currentTime').should('be.greaterThan', 0)
     })
-    it('should toggle between fullscreen and normal mode when clicking the fullscreen button', () => {
+    it('should show the correct view when going to fullscreen mode then changing the viewport size', () => {
+      cy.get(controls).realHover()
+      cy.get(fullScreenEnterButton).should('be.visible')
       cy.get(fullScreenEnterButton).realClick()
       cy.document().then((doc) => {
         expect(doc.fullscreenElement).to.not.be.null
       })
-      cy.get(fullScreenExitButton).should('exist')
+      cy.viewport('iphone-6')
+      cy.get(controls).realHover()
+      cy.get(fullScreenExitButton).should('be.visible')
       cy.get(fullScreenExitButton).click()
       cy.document().then((doc) => {
         expect(doc.fullscreenElement).to.be.null
