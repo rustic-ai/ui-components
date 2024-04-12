@@ -26,70 +26,76 @@ describe('Video', () => {
   const transcriptContent =
     'This is a sample transcript for testing the video component.'
 
-  context('Shared', () => {
-    beforeEach(() => {
-      cy.mount(
-        <Video
-          src={src}
-          title={title}
-          captions={captions}
-          transcript={transcriptContent}
-        />
-      )
-      cy.get('[data-cy="spinner"]').should('be.visible')
-      cy.get('[data-cy="spinner"]').should('not.exist')
-    })
+  beforeEach(() => {
+    cy.mount(
+      <Video
+        src={src}
+        title={title}
+        captions={captions}
+        transcript={transcriptContent}
+      />
+    )
+    cy.get('[data-cy="spinner"]').should('be.visible')
+    cy.get('[data-cy="spinner"]').should('not.exist')
+  })
 
-    supportedViewports.forEach((viewport) => {
-      it(`should toggle between pause and play when clicking the play/pause button on ${viewport} screen`, () => {
-        cy.get(playButton).should('be.visible')
-        cy.get(videoElement).its('0.paused').should('equal', true)
-        cy.get(playButton).realClick()
-        cy.get(pauseButton).should('be.visible')
-        cy.get(videoElement).its('0.paused').should('equal', false)
-        cy.get(pauseButton).click()
-        cy.get(playButton).should('be.visible')
+  supportedViewports.forEach((viewport) => {
+    it(`should toggle between pause and play when clicking the play/pause button on ${viewport} screen`, () => {
+      cy.viewport(viewport)
+      if (viewport === 'macbook-13') {
+        cy.get(controls).realHover()
+      }
+      cy.get(playButton).should('be.visible')
+      cy.get(videoElement).its('0.paused').should('equal', true)
+      cy.get(playButton).realClick()
+      cy.get(pauseButton).should('be.visible')
+      cy.get(videoElement).its('0.paused').should('equal', false)
+      cy.get(pauseButton).click()
+      cy.get(playButton).should('be.visible')
+    })
+    it(`should show and hide the transcript when clicking the transcript toggle on ${viewport} screen`, () => {
+      cy.viewport(viewport)
+      cy.get(transcript).should('not.exist')
+      cy.get(transcriptToggle).should('contain', 'Show')
+      cy.get(transcriptToggle).click()
+      cy.get(transcript).should('be.visible')
+      cy.get(transcriptToggle).should('contain', 'Hide')
+    })
+    it('should toggle between fullscreen and normal mode when clicking the fullscreen button', () => {
+      cy.viewport(viewport)
+      if (viewport === 'macbook-13') {
+        cy.get(controls).realHover()
+      }
+      cy.get(fullScreenEnterButton).realClick()
+      cy.document().then((doc) => {
+        expect(doc.fullscreenElement).to.not.be.null
       })
-      it(`should show and hide the transcript when clicking the transcript toggle on ${viewport} screen`, () => {
-        cy.viewport(viewport)
-        cy.get(transcript).should('not.exist')
-        cy.get(transcriptToggle).should('contain', 'Show')
-        cy.get(transcriptToggle).click()
-        cy.get(transcript).should('be.visible')
-        cy.get(transcriptToggle).should('contain', 'Hide')
+      cy.get(fullScreenExitButton).should('exist')
+      cy.get(fullScreenExitButton).click()
+      cy.document().then((doc) => {
+        expect(doc.fullscreenElement).to.be.null
       })
-      it('should toggle between fullscreen and normal mode when clicking the fullscreen button', () => {
-        cy.get(fullScreenEnterButton).realClick()
-        cy.document().then((doc) => {
-          expect(doc.fullscreenElement).to.not.be.null
+    })
+    it(`should display an error message when no valid sources are found on ${viewport} screen`, () => {
+      cy.viewport(viewport)
+      cy.mount(<Video src="" />)
+      cy.get(videoElement).should('not.exist')
+      cy.get(error).should('be.visible')
+      cy.get(error).should('contain', 'The video resource has failed to load')
+    })
+    it(`should display an error message when the resource loading has been stalled on ${viewport} screen`, () => {
+      cy.viewport(viewport)
+      // Delay server response to simulate stalled media loading
+      cy.intercept(src, (req) => {
+        req.on('response', (res) => {
+          // Wait for delay in milliseconds before sending the response to the client.
+          res.setDelay(5000)
         })
-        cy.get(fullScreenExitButton).should('exist')
-        cy.get(fullScreenExitButton).click()
-        cy.document().then((doc) => {
-          expect(doc.fullscreenElement).to.be.null
-        })
       })
-      it(`should display an error message when no valid sources are found on ${viewport} screen`, () => {
-        cy.viewport(viewport)
-        cy.mount(<Video src="" />)
-        cy.get(videoElement).should('not.exist')
-        cy.get(error).should('be.visible')
-        cy.get(error).should('contain', 'The video resource has failed to load')
-      })
-      it(`should display an error message when the resource loading has been stalled on ${viewport} screen`, () => {
-        cy.viewport(viewport)
-        // Delay server response to simulate stalled media loading
-        cy.intercept(src, (req) => {
-          req.on('response', (res) => {
-            // Wait for delay in milliseconds before sending the response to the client.
-            res.setDelay(5000)
-          })
-        })
-        // Listen for the stalled event on the video element
-        cy.get(videoElement).then((video) => {
-          video.on('stalled', () => {
-            cy.get(error).should('contain', 'Failed to fetch data, but trying')
-          })
+      // Listen for the stalled event on the video element
+      cy.get(videoElement).then((video) => {
+        video.on('stalled', () => {
+          cy.get(error).should('contain', 'Failed to fetch data, but trying')
         })
       })
     })
@@ -137,12 +143,14 @@ describe('Video', () => {
       cy.get('[data-cy="spinner"]').should('not.exist')
     })
     it(`should go forwards and backwards 10 seconds when clicking the forward/back buttons`, () => {
+      cy.get(controls).realHover()
       cy.get('[data-cy=forward-button]').click()
       cy.get(videoElement).its('0.currentTime').should('equal', 10)
       cy.get('[data-cy=replay-button]').click()
       cy.get(videoElement).its('0.currentTime').should('equal', 0)
     })
     it(`should mute and unmute the audio when clicking the mute button`, () => {
+      cy.get(controls).realHover()
       cy.get(playButton).click()
       cy.get(videoElement).its('0.muted').should('equal', false)
       cy.get(muteButton).click({ force: true })
@@ -150,6 +158,7 @@ describe('Video', () => {
     })
     it(`should change the volume when adjusting the volume slider on desktop`, () => {
       cy.get(videoElement).its('0.volume').should('equal', 1)
+      cy.get(controls).realHover()
       cy.get(muteButton).focus().get(volumeSlider).should('be.visible')
       // wait for slider animation
       cy.wait(1000)
@@ -158,6 +167,7 @@ describe('Video', () => {
     })
     it(`should change the time when the video progress slider is adjusted`, () => {
       cy.get(videoElement).its('0.currentTime').should('equal', 0)
+      cy.get(controls).realHover()
       cy.get(progressSlider).type('{rightArrow}')
       cy.get(videoElement).its('0.currentTime').should('be.greaterThan', 0)
     })
