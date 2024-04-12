@@ -87,29 +87,20 @@ export function VolumeSettings(props: MediaControls) {
   const [volumeFraction, setVolumeFraction] = useState(
     props.mediaElement.volume
   )
+  const [previousVolume, setPreviousVolume] = useState(
+    props.mediaElement.volume
+  )
 
-  const isMuted = props.mediaElement.muted
-  const action = isMuted ? 'volumeOff' : 'volumeUp'
-
-  props.mediaElement.onvolumechange = function () {
-    if (props.mediaElement.muted) {
-      setVolumeFraction(0)
-    } else {
-      setVolumeFraction(props.mediaElement.volume)
-    }
-  }
+  const action = props.mediaElement.muted ? 'volumeOff' : 'volumeUp'
 
   function handleMuteToggle() {
-    if (isMuted && props.mediaElement.volume === 0) {
-      // If audio was muted and volume was 0, unmute and restore to full volume
-      props.mediaElement.muted = false
-      props.mediaElement.volume = 1
-    } else if (isMuted) {
-      // If audio was muted, unmute, restoring previous volume
-      props.mediaElement.muted = false
+    props.mediaElement.muted = !props.mediaElement.muted
+
+    if (props.mediaElement.muted) {
+      setPreviousVolume(props.mediaElement.volume)
+      setVolumeFraction(0)
     } else {
-      // If audio was unmuted, mute
-      props.mediaElement.muted = true
+      setVolumeFraction(previousVolume)
     }
   }
 
@@ -121,6 +112,7 @@ export function VolumeSettings(props: MediaControls) {
 
     props.mediaElement.muted = updatedVolume === 0
     props.mediaElement.volume = updatedVolume as number
+    setVolumeFraction(props.mediaElement.volume)
   }
 
   return (
