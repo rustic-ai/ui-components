@@ -11,13 +11,14 @@ export type UploaderProps = {
   setAddedFiles: React.Dispatch<React.SetStateAction<FileInfo[]>>
   acceptedFileTypes?: string
   onFileAdd: (file: File, fileId: string) => Promise<{ url: string }>
+  setErrorMessages: React.Dispatch<React.SetStateAction<string[]>>
 }
 
 function Uploader(props: UploaderProps) {
   const inputId = getUUID()
   function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
     const files = event.target.files && Array.from(event.target.files)
-
+    props.setErrorMessages([])
     files?.forEach((file) => {
       const fileId = getUUID()
       props.setAddedFiles((prev) => [
@@ -25,23 +26,33 @@ function Uploader(props: UploaderProps) {
         { name: file.name, loadingProgress: 0, id: fileId },
       ])
 
-      props.onFileAdd(file, fileId).then((res) => {
-        props.setAddedFiles((prevFiles) => {
-          const fileIndex = prevFiles.findIndex((item) => item.id === fileId)
-          if (fileIndex !== -1) {
-            const updatedFiles = [...prevFiles]
-            updatedFiles[fileIndex] = {
-              ...updatedFiles[fileIndex],
-              url: res.url,
+      props
+        .onFileAdd(file, fileId)
+        .then((res) => {
+          props.setAddedFiles((prevFiles) => {
+            const fileIndex = prevFiles.findIndex((item) => item.id === fileId)
+            if (fileIndex !== -1) {
+              const updatedFiles = [...prevFiles]
+              updatedFiles[fileIndex] = {
+                ...updatedFiles[fileIndex],
+                url: res.url,
+              }
+              return updatedFiles
             }
-            return updatedFiles
-          }
-          return prevFiles
+            return prevFiles
+          })
         })
-      })
+        .catch((error) => {
+          props.setErrorMessages((prevMessages) => [
+            ...prevMessages,
+            `Failed to upload ${file.name}. ${error?.message ? error.message : ''}`,
+          ])
+          props.setAddedFiles((prevFiles) => {
+            return prevFiles.filter((item) => item.id !== fileId)
+          })
+        })
     })
   }
-
   return (
     <div className="rustic-uploader">
       <label htmlFor={inputId}>

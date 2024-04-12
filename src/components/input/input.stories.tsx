@@ -19,7 +19,7 @@ export default {
   decorators: [
     (Story: StoryFn) => {
       return (
-        <div style={{ width: '600px' }}>
+        <div style={{ width: '80vw' }}>
           <Story />
         </div>
       )
@@ -32,6 +32,15 @@ function onFileAdd(_file: File, fileId: string): Promise<{ url: string }> {
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve({ url: `https://example.com/${fileId}` })
+    }, responseDelayTime)
+  })
+}
+
+function onFileAddFailed(): Promise<{ url: string }> {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      const error = { response: { status: 500 } }
+      reject(error)
     }, responseDelayTime)
   })
 }
@@ -64,5 +73,19 @@ export const PDFAndImageOnly = {
   args: {
     ...Default.args,
     acceptedFileTypes: 'image/*,.pdf',
+  },
+}
+
+export const FailToUpload = {
+  args: {
+    sender: 'You',
+    conversationId: '1',
+    placeholder: 'Type your message',
+    ws: {
+      // eslint-disable-next-line no-console
+      send: (message: any) => console.log('Message sent:', message),
+    },
+    onFileAdd: onFileAddFailed,
+    onFileDelete,
   },
 }

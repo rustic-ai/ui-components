@@ -21,3 +21,7 @@
   gap: 8px;
   flex-wrap: wrap;
 }
+
+.rustic-input-container .rustic-error-message {
+  display: block;
+}

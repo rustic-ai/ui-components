@@ -4,6 +4,7 @@ import SendIcon from '@mui/icons-material/Send'
 import Box from '@mui/material/Box'
 import IconButton from '@mui/material/IconButton'
 import TextField from '@mui/material/TextField'
+import Typography from '@mui/material/Typography'
 import { useState } from 'react'
 import React from 'react'
 import { v4 as getUUID } from 'uuid'
@@ -29,6 +30,8 @@ export interface FileInfo {
 export default function Input(props: Input) {
   const [messageText, setMessageText] = useState<string>('')
   const [addedFiles, setAddedFiles] = useState<FileInfo[]>([])
+  const [errorMessages, setErrorMessages] = useState<string[]>([])
+
   const isEmptyMessage = !messageText.trim().length
 
   function handleSendMessage(): void {
@@ -61,6 +64,7 @@ export default function Input(props: Input) {
       props.ws.send(formattedMessage)
       setMessageText('')
       setAddedFiles([])
+      setErrorMessages([])
     }
   }
 
@@ -77,6 +81,15 @@ export default function Input(props: Input) {
 
   return (
     <Box className="rustic-input-container">
+      {errorMessages.map((errorMessage) => (
+        <Typography
+          variant="caption"
+          color="error"
+          className="rustic-error-message"
+        >
+          {errorMessage}
+        </Typography>
+      ))}
       <TextField
         data-cy="text-input"
         className="rustic-text-input"
@@ -114,6 +127,7 @@ export default function Input(props: Input) {
           onFileAdd={props.onFileAdd}
           addedFiles={addedFiles}
           acceptedFileTypes={props.acceptedFileTypes}
+          setErrorMessages={setErrorMessages}
         />
         <IconButton
           data-cy="send-button"
