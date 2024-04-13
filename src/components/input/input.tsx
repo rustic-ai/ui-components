@@ -17,6 +17,7 @@ import Uploader from './uploader'
 export interface Input extends TextInput {
   acceptedFileTypes?: string
   maxFileSize?: number
+  maxFileCount?: number
   onFileAdd: (file: File) => Promise<{ url: string }>
   onFileDelete: (fileId: string) => Promise<{ isDeleted: boolean }>
 }
@@ -133,6 +134,7 @@ export default function Input(props: Input) {
           setErrorMessages={setErrorMessages}
           setPendingUploadCount={setPendingUploadCount}
           maxFileSize={props.maxFileSize}
+          maxFileCount={props.maxFileCount}
         />
         <IconButton
           data-cy="send-button"

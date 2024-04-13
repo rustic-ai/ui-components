@@ -14,6 +14,7 @@ export type UploaderProps = {
   setErrorMessages: React.Dispatch<React.SetStateAction<string[]>>
   setPendingUploadCount: React.Dispatch<React.SetStateAction<number>>
   maxFileSize?: number
+  maxFileCount?: number
 }
 
 function getFileSizeAbbrev(bytes: number): string {
@@ -37,8 +38,23 @@ function Uploader(props: UploaderProps) {
 
     const files = event.target.files && Array.from(event.target.files)
 
-    files && props.setPendingUploadCount((prev) => prev + files.length)
-    files?.forEach((file) => {
+    const totalFileCount = props.addedFiles.length + (files ? files.length : 0)
+
+    if (props.maxFileCount && totalFileCount > props.maxFileCount) {
+      props.setErrorMessages((prevMessages) => [
+        ...prevMessages,
+        `You can only upload up to ${props.maxFileCount} files.`,
+      ])
+    }
+
+    const filesToAdd = props.maxFileCount
+      ? files?.slice(0, props.maxFileCount - totalFileCount)
+      : files
+
+    filesToAdd &&
+      props.setPendingUploadCount((prev) => prev + filesToAdd.length)
+
+    filesToAdd?.forEach((file) => {
       if (props.maxFileSize && file.size > props.maxFileSize) {
         props.setPendingUploadCount((prev) => prev - 1)
 

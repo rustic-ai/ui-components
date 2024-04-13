@@ -135,3 +135,10 @@ export const SmallFilesOnly = {
     maxFileSize: 1048576,
   },
 }
+
+export const AllowUploadThreeFilesMax = {
+  args: {
+    ...Default.args,
+    maxFileCount: 3,
+  },
+}
