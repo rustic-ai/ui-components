@@ -313,6 +313,7 @@ export default function Video(props: VideoFormat) {
           <Alert
             severity="error"
             className="rustic-video-control-error-message"
+            data-cy="control-error-message"
           >
             {controlErrorMessage}
           </Alert>

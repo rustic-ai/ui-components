@@ -99,6 +99,20 @@ describe('Video', () => {
         })
       })
     })
+    it(`should display an error message if entering fullscreen fails on ${viewport} screen`, () => {
+      cy.viewport(viewport)
+      cy.window().then((window) => {
+        cy.stub(window.HTMLElement.prototype, 'requestFullscreen').rejects(
+          new Error()
+        )
+      })
+
+      if (viewport === 'macbook-13') {
+        cy.get(controls).realHover()
+      }
+      cy.get(fullScreenEnterButton).realClick()
+      cy.get('[data-cy=control-error-message]').should('be.visible')
+    })
   })
 
   context('Mobile', () => {
