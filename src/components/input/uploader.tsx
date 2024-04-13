@@ -13,6 +13,21 @@ export type UploaderProps = {
   onFileAdd: (file: File, fileId: string) => Promise<{ url: string }>
   setErrorMessages: React.Dispatch<React.SetStateAction<string[]>>
   setPendingUploadCount: React.Dispatch<React.SetStateAction<number>>
+  maxFileSize?: number
+}
+
+function getFileSizeAbbrev(bytes: number): string {
+  const units = ['Bytes', 'KB', 'MB', 'GB']
+  let unitIndex = 0
+
+  const byteConversionRate = 1024
+  while (bytes >= byteConversionRate && unitIndex < units.length - 1) {
+    bytes /= byteConversionRate
+    unitIndex++
+  }
+
+  const formattedString = bytes.toFixed(1).toString().replace(/\.0$/, '')
+  return `${formattedString} ${units[unitIndex]}`
 }
 
 function Uploader(props: UploaderProps) {
@@ -24,40 +39,51 @@ function Uploader(props: UploaderProps) {
 
     files && props.setPendingUploadCount((prev) => prev + files.length)
     files?.forEach((file) => {
-      const fileId = getUUID()
-      props.setAddedFiles((prev) => [
-        ...prev,
-        { name: file.name, loadingProgress: 0, id: fileId },
-      ])
+      if (props.maxFileSize && file.size > props.maxFileSize) {
+        props.setPendingUploadCount((prev) => prev - 1)
 
-      props
-        .onFileAdd(file, fileId)
-        .then((res) => {
-          props.setAddedFiles((prevFiles) => {
-            const fileIndex = prevFiles.findIndex((item) => item.id === fileId)
-            if (fileIndex !== -1) {
-              const updatedFiles = [...prevFiles]
-              updatedFiles[fileIndex] = {
-                ...updatedFiles[fileIndex],
-                url: res.url,
+        props.setErrorMessages((prevMessages) => [
+          ...prevMessages,
+          `Failed to upload ${file.name}. You cannot upload files larger than ${props.maxFileSize && getFileSizeAbbrev(props.maxFileSize)}.`,
+        ])
+      } else {
+        const fileId = getUUID()
+        props.setAddedFiles((prev) => [
+          ...prev,
+          { name: file.name, loadingProgress: 0, id: fileId },
+        ])
+
+        props
+          .onFileAdd(file, fileId)
+          .then((res) => {
+            props.setAddedFiles((prevFiles) => {
+              const fileIndex = prevFiles.findIndex(
+                (item) => item.id === fileId
+              )
+              if (fileIndex !== -1) {
+                const updatedFiles = [...prevFiles]
+                updatedFiles[fileIndex] = {
+                  ...updatedFiles[fileIndex],
+                  url: res.url,
+                }
+                return updatedFiles
               }
-              return updatedFiles
-            }
-            return prevFiles
+              return prevFiles
+            })
           })
-        })
-        .catch((error) => {
-          props.setErrorMessages((prevMessages) => [
-            ...prevMessages,
-            `Failed to upload ${file.name}. ${error?.message ? error.message : ''}`,
-          ])
-          props.setAddedFiles((prevFiles) => {
-            return prevFiles.filter((item) => item.id !== fileId)
+          .catch((error) => {
+            props.setErrorMessages((prevMessages) => [
+              ...prevMessages,
+              `Failed to upload ${file.name}. ${error?.message ? error.message : ''}`,
+            ])
+            props.setAddedFiles((prevFiles) => {
+              return prevFiles.filter((item) => item.id !== fileId)
+            })
           })
-        })
-        .finally(() => {
-          props.setPendingUploadCount((prev) => prev - 1)
-        })
+          .finally(() => {
+            props.setPendingUploadCount((prev) => prev - 1)
+          })
+      }
     })
   }
 

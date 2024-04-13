@@ -19,7 +19,7 @@ export default {
   decorators: [
     (Story: StoryFn) => {
       return (
-        <div style={{ width: '80vw' }}>
+        <div style={{ width: '600px' }}>
           <Story />
         </div>
       )
@@ -126,5 +126,12 @@ export const RandomUploadResult = {
     },
     onFileAdd: onFileAddRandomResult,
     onFileDelete,
+  },
+}
+
+export const SmallFilesOnly = {
+  args: {
+    ...Default.args,
+    maxFileSize: 1048576,
   },
 }

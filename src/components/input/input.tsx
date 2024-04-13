@@ -16,6 +16,7 @@ import Uploader from './uploader'
 
 export interface Input extends TextInput {
   acceptedFileTypes?: string
+  maxFileSize?: number
   onFileAdd: (file: File) => Promise<{ url: string }>
   onFileDelete: (fileId: string) => Promise<{ isDeleted: boolean }>
 }
@@ -35,37 +36,35 @@ export default function Input(props: Input) {
   const isEmptyMessage = !messageText.trim().length
 
   function handleSendMessage(): void {
-    if (!isEmptyMessage || addedFiles.length > 0) {
-      const currentTime = new Date().toISOString()
+    const currentTime = new Date().toISOString()
 
-      const formattedMessage: Message = {
-        id: getUUID(),
-        timestamp: currentTime,
-        sender: props.sender,
-        format: 'text',
-        conversationId: props.conversationId,
-        data: {},
-      }
-
-      if (addedFiles.length > 0) {
-        const files = addedFiles.map((file) => {
-          return { name: file.name, url: file.url }
-        })
-        formattedMessage.format = 'files'
-        formattedMessage.data = {
-          description: messageText,
-          files: files,
-        }
-      } else {
-        formattedMessage.data = {
-          text: messageText,
-        }
-      }
-      props.ws.send(formattedMessage)
-      setMessageText('')
-      setAddedFiles([])
-      setErrorMessages([])
+    const formattedMessage: Message = {
+      id: getUUID(),
+      timestamp: currentTime,
+      sender: props.sender,
+      format: 'text',
+      conversationId: props.conversationId,
+      data: {},
     }
+
+    if (addedFiles.length > 0) {
+      const files = addedFiles.map((file) => {
+        return { name: file.name, url: file.url }
+      })
+      formattedMessage.format = 'files'
+      formattedMessage.data = {
+        description: messageText,
+        files: files,
+      }
+    } else {
+      formattedMessage.data = {
+        text: messageText,
+      }
+    }
+    props.ws.send(formattedMessage)
+    setMessageText('')
+    setAddedFiles([])
+    setErrorMessages([])
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>): void {
@@ -133,6 +132,7 @@ export default function Input(props: Input) {
           acceptedFileTypes={props.acceptedFileTypes}
           setErrorMessages={setErrorMessages}
           setPendingUploadCount={setPendingUploadCount}
+          maxFileSize={props.maxFileSize}
         />
         <IconButton
           data-cy="send-button"
