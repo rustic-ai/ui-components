@@ -13,6 +13,14 @@
   height: 40px;
 }
 
+.rustic-video-control-error-message {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  margin: 16px;
+  z-index: 1000;
+}
+
 .rustic-video-screen {
   position: relative;
   /* helps center video when in fullscreen mode */
@@ -81,29 +89,6 @@
 
 .rustic-time-controls {
   display: flex;
-}
-
-.rustic-fullscreen-transcript {
-  display: flex;
-  flex-direction: column;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  z-index: 1200;
-  height: 30vh;
-}
-
-.rustic-fullscreen-transcript {
-  padding: 16px;
-  width: 100%;
-}
-
-.rustic-fullscreen-transcript .rustic-transcript-toggle {
-  align-self: flex-end;
-}
-
-.rustic-fullscreen-transcript .rustic-transcript-container {
-  overflow-y: scroll;
 }
 
 @media (max-width: 900px) {

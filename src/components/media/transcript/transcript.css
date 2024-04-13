@@ -1,5 +1,6 @@
 .rustic-transcript-container {
   padding-top: 16px;
+  overflow-y: scroll;
 }
 
 .rustic-transcript-header {
@@ -16,4 +17,8 @@
   text-transform: none;
   padding-left: 14px;
   line-height: 1.5;
+}
+
+.rustic-transcript-content {
+  max-height: 25vh;
 }

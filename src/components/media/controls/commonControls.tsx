@@ -16,9 +16,13 @@ export interface MediaControls {
   mediaElement: HTMLMediaElement
 }
 
-interface ToggleTranscriptProps {
+interface ToggleTranscriptButtonProps {
   isTranscriptShown: boolean
   setIsTranscriptShown: () => void
+}
+
+interface PlayOrPauseButtonProps extends MediaControls {
+  onError: (errorMessage: string) => void
 }
 
 interface MoveTenSecondsButtonProps extends MediaControls {
@@ -137,7 +141,7 @@ export function VolumeSettings(props: MediaControls) {
   )
 }
 
-export function ToggleTranscriptButton(props: ToggleTranscriptProps) {
+export function ToggleTranscriptButton(props: ToggleTranscriptButtonProps) {
   const Icon = props.isTranscriptShown
     ? KeyboardArrowUpIcon
     : KeyboardArrowDownIcon
@@ -156,16 +160,23 @@ export function ToggleTranscriptButton(props: ToggleTranscriptProps) {
   )
 }
 
-export function PlayOrPauseToggle(props: MediaControls) {
+export function PlayOrPauseButton(props: PlayOrPauseButtonProps) {
   const [isPlaying, setIsPlaying] = useState(!props.mediaElement.paused)
 
   const action = isPlaying ? 'pause' : 'play'
 
-  function handlePausePlayToggle() {
+  function handlePlayOrPauseToggle() {
     if (isPlaying) {
       props.mediaElement.pause()
     } else {
-      props.mediaElement.play()
+      props.mediaElement
+        .play()
+        .then(() => {
+          props.onError('')
+        })
+        .catch(() => {
+          props.onError('Failed to play the media. Please try again.')
+        })
     }
   }
 
@@ -182,7 +193,7 @@ export function PlayOrPauseToggle(props: MediaControls) {
 
   return (
     <MediaIconButton
-      onClick={handlePausePlayToggle}
+      onClick={handlePlayOrPauseToggle}
       action={action}
       className="rustic-pause-play-icon"
     />

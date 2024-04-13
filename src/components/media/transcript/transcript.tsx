@@ -22,7 +22,11 @@ export default function Transcript(props: TranscriptProps) {
           </Typography>
         </Box>
       )}
-      <Typography data-cy="transcript" variant="body2">
+      <Typography
+        className="rustic-transcript-content"
+        data-cy="transcript"
+        variant="body2"
+      >
         {props.transcript}
       </Typography>
     </Box>

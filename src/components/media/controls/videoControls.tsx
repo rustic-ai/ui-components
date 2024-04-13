@@ -3,11 +3,16 @@ import React, { useState } from 'react'
 import type { MediaControls } from './commonControls'
 import { MediaIconButton } from './mediaIconButton'
 
-interface FullscreenToggleProps {
+interface FullscreenButtonProps {
   element: HTMLElement
+  onError: (errorMessage: string) => void
 }
 
-export function PictureInPictureToggle(props: MediaControls) {
+interface PictureInPictureButtonProps extends MediaControls {
+  onError: (errorMessage: string) => void
+}
+
+export function PictureInPictureButton(props: PictureInPictureButtonProps) {
   const [isPictureInPicture, setIsPictureInPicture] = useState(
     !!document.pictureInPictureElement
   )
@@ -20,16 +25,33 @@ export function PictureInPictureToggle(props: MediaControls) {
 
   function handlePictureInPicture() {
     if (isPictureInPicture) {
-      document.exitPictureInPicture()
+      document
+        .exitPictureInPicture()
+        .then(() => {
+          props.onError('')
+          setIsPictureInPicture(false)
+        })
+        .catch(() => {
+          props.onError(
+            'Failed to exit picture-in-picture mode. Please try again.'
+          )
+        })
     } else {
-      videoElement.requestPictureInPicture()
+      videoElement
+        .requestPictureInPicture()
+        .then(() => {
+          props.onError('')
+          setIsPictureInPicture(true)
+        })
+        .catch(() => {
+          props.onError(
+            'Failed to enter picture-in-picture mode. Please try again.'
+          )
+        })
     }
   }
 
-  // State is updated by event listeners so that the icon is displayed correctly, even when users enter/exit picture-in-picture without direct use of this toggle (e.g. exiting from the picture-in-picture window).
-  videoElement.onenterpictureinpicture = function () {
-    setIsPictureInPicture(true)
-  }
+  // State is updated by event listeners so that the icon is displayed correctly, even when users exit picture-in-picture without direct use of this toggle (e.g. exiting from the picture-in-picture window).
   videoElement.onleavepictureinpicture = function () {
     setIsPictureInPicture(false)
   }
@@ -37,16 +59,32 @@ export function PictureInPictureToggle(props: MediaControls) {
   return <MediaIconButton onClick={handlePictureInPicture} action={action} />
 }
 
-export function FullscreenToggle(props: FullscreenToggleProps) {
-  const isFullscreen = !!document.fullscreenElement
+export function FullscreenButton(props: FullscreenButtonProps) {
+  const [isFullscreen, setIsFullscreen] = useState(!!document.fullscreenElement)
 
   const action = isFullscreen ? 'fullscreenExit' : 'fullscreen'
 
   function handleFullscreen() {
     if (isFullscreen) {
-      document.exitFullscreen()
+      document
+        .exitFullscreen()
+        .then(() => {
+          props.onError('')
+          setIsFullscreen(false)
+        })
+        .catch(() => {
+          props.onError('Failed to exit fullscreen mode. Please try again.')
+        })
     } else {
-      props.element.requestFullscreen()
+      props.element
+        .requestFullscreen()
+        .then(() => {
+          props.onError('')
+          setIsFullscreen(true)
+        })
+        .catch(() => {
+          props.onError('Failed to enter fullscreen mode. Please try again.')
+        })
     }
   }
 

@@ -3,6 +3,7 @@ import './sound.css'
 import { useMediaQuery, useTheme } from '@mui/material'
 import Alert from '@mui/material/Alert'
 import CircularProgress from '@mui/material/CircularProgress'
+import Fade from '@mui/material/Fade'
 import Typography from '@mui/material/Typography'
 import { Box } from '@mui/system'
 import React, { useEffect, useRef, useState } from 'react'
@@ -11,7 +12,7 @@ import type { AudioFormat } from '../../types'
 import {
   MoveTenSecondsButton,
   PlaybackRateButton,
-  PlayOrPauseToggle,
+  PlayOrPauseButton,
   ProgressSlider,
   ToggleTranscriptButton,
   VolumeSettings,
@@ -26,6 +27,7 @@ export default function Sound(props: AudioFormat) {
   const [isLoading, setIsLoading] = useState(true)
   const [elapsedTime, setElapsedTime] = useState(0)
   const [errorMessage, setErrorMessage] = useState('')
+  const [controlErrorMessage, setControlErrorMessage] = useState('')
 
   const theme = useTheme()
   const audioRef = useRef<HTMLVideoElement>(null)
@@ -92,7 +94,10 @@ export default function Sound(props: AudioFormat) {
             mediaElement={audioRef.current}
             movement="replay"
           />
-          <PlayOrPauseToggle mediaElement={audioRef.current} />
+          <PlayOrPauseButton
+            mediaElement={audioRef.current}
+            onError={setControlErrorMessage}
+          />
           <MoveTenSecondsButton
             mediaElement={audioRef.current}
             movement="forward"
@@ -227,6 +232,9 @@ export default function Sound(props: AudioFormat) {
     <Box className="rustic-sound" data-cy="audio">
       {renderVideoElement()}
       {renderControls()}
+      <Fade in={controlErrorMessage.length > 0}>
+        <Alert severity="error">{controlErrorMessage}</Alert>
+      </Fade>
     </Box>
   )
 }

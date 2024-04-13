@@ -4,6 +4,7 @@ import './video.css'
 import { useMediaQuery, useTheme } from '@mui/material'
 import Alert from '@mui/material/Alert'
 import CircularProgress from '@mui/material/CircularProgress'
+import Fade from '@mui/material/Fade'
 import Typography from '@mui/material/Typography'
 import { Box } from '@mui/system'
 import React, { useEffect, useRef, useState } from 'react'
@@ -12,15 +13,15 @@ import type { VideoFormat } from '../../types'
 import {
   MoveTenSecondsButton,
   PlaybackRateButton,
-  PlayOrPauseToggle,
+  PlayOrPauseButton,
   ProgressSlider,
   ToggleTranscriptButton,
   VolumeSettings,
 } from '../controls/commonControls'
 import { MediaIconButton } from '../controls/mediaIconButton'
 import {
-  FullscreenToggle,
-  PictureInPictureToggle,
+  FullscreenButton,
+  PictureInPictureButton,
 } from '../controls/videoControls'
 import TimeIndicator from '../timeIndicator/timeIndicator'
 import Transcript from '../transcript/transcript'
@@ -31,6 +32,7 @@ export default function Video(props: VideoFormat) {
   const [isLoading, setIsLoading] = useState(true)
   const [isFullscreen, setIsFullscreen] = useState(!!document.fullscreenElement)
 
+  const [controlErrorMessage, setControlErrorMessage] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
   const [elapsedTime, setElapsedTime] = useState(0)
 
@@ -113,8 +115,14 @@ export default function Video(props: VideoFormat) {
           </Typography>
           {isFullscreen && isMobile && (
             <Box>
-              <PictureInPictureToggle mediaElement={videoRef.current} />
-              <FullscreenToggle element={videoContainerRef.current} />
+              <PictureInPictureButton
+                mediaElement={videoRef.current}
+                onError={setControlErrorMessage}
+              />
+              <FullscreenButton
+                element={videoContainerRef.current}
+                onError={setControlErrorMessage}
+              />
             </Box>
           )}
         </Box>
@@ -128,7 +136,7 @@ export default function Video(props: VideoFormat) {
     }
   }
 
-  function renderCaptionsToggle() {
+  function renderCaptionsButton() {
     if (props.captions && props.captions.length > 0) {
       const action = areCaptionsShown ? 'captionsOff' : 'captionsOn'
 
@@ -164,19 +172,11 @@ export default function Video(props: VideoFormat) {
                 backgroundColor: backgroundColor,
               }}
             >
-              {isTranscriptShown && (
-                <Box
-                  className="rustic-fullscreen-transcript"
-                  sx={{
-                    backgroundColor: backgroundColor,
-                  }}
-                >
-                  {renderTranscriptToggle()}
-                  {renderTranscript()}
-                </Box>
-              )}
               <Box className="rustic-video-top-controls">
-                <PlayOrPauseToggle mediaElement={videoRef.current} />
+                <PlayOrPauseButton
+                  mediaElement={videoRef.current}
+                  onError={setControlErrorMessage}
+                />
                 <ProgressSlider mediaElement={videoRef.current} />
                 <TimeIndicator
                   elapsedTimeInSeconds={elapsedTime}
@@ -194,12 +194,13 @@ export default function Video(props: VideoFormat) {
                     mediaElement={videoRef.current}
                     movement="forward"
                   />
-                  {renderCaptionsToggle()}
+                  {renderCaptionsButton()}
                   <PlaybackRateButton mediaElement={videoRef.current} />
                 </Box>
 
-                <Box>{!isTranscriptShown && renderTranscriptToggle()}</Box>
+                {renderTranscriptToggle()}
               </Box>
+              {renderTranscript()}
             </Box>
           )}
         </>
@@ -209,10 +210,16 @@ export default function Video(props: VideoFormat) {
       <>
         {videoRef.current && videoContainerRef.current && (
           <Box className="rustic-video-controls-mobile-preview">
-            <PlayOrPauseToggle mediaElement={videoRef.current} />
+            <PlayOrPauseButton
+              mediaElement={videoRef.current}
+              onError={setControlErrorMessage}
+            />
             <Box className="rustic-video-controls-right">
               {renderTranscriptToggle()}
-              <FullscreenToggle element={videoContainerRef.current} />
+              <FullscreenButton
+                element={videoContainerRef.current}
+                onError={setControlErrorMessage}
+              />
             </Box>
           </Box>
         )}
@@ -231,23 +238,14 @@ export default function Video(props: VideoFormat) {
               backgroundColor: backgroundColor,
             }}
           >
-            {isTranscriptShown && isFullscreen && (
-              <Box
-                className="rustic-fullscreen-transcript"
-                sx={{
-                  backgroundColor: backgroundColor,
-                }}
-              >
-                {renderTranscriptToggle()}
-                {renderTranscript()}
-              </Box>
-            )}
-
             <ProgressSlider mediaElement={videoRef.current} />
 
             <Box className="rustic-video-bottom-controls">
               <Box className="rustic-video-bottom-controls-left">
-                <PlayOrPauseToggle mediaElement={videoRef.current} />
+                <PlayOrPauseButton
+                  mediaElement={videoRef.current}
+                  onError={setControlErrorMessage}
+                />
                 <MoveTenSecondsButton
                   mediaElement={videoRef.current}
                   movement="replay"
@@ -256,7 +254,7 @@ export default function Video(props: VideoFormat) {
                   mediaElement={videoRef.current}
                   movement="forward"
                 />
-                {renderCaptionsToggle()}
+                {renderCaptionsButton()}
                 <PlaybackRateButton mediaElement={videoRef.current} />
 
                 <VolumeSettings mediaElement={videoRef.current} />
@@ -269,14 +267,18 @@ export default function Video(props: VideoFormat) {
               </Box>
 
               <Box className="rustic-video-bottom-controls-right">
-                {/* always render when not in fullscreen mode, render only in fullscreen when transcript is not shown */}
-                {(!isFullscreen || (isFullscreen && !isTranscriptShown)) &&
-                  renderTranscriptToggle()}
-                <PictureInPictureToggle mediaElement={videoRef.current} />
-
-                <FullscreenToggle element={videoContainerRef.current} />
+                {renderTranscriptToggle()}
+                <PictureInPictureButton
+                  mediaElement={videoRef.current}
+                  onError={setControlErrorMessage}
+                />
+                <FullscreenButton
+                  element={videoContainerRef.current}
+                  onError={setControlErrorMessage}
+                />
               </Box>
             </Box>
+            {isFullscreen && renderTranscript()}
           </Box>
         )}
       </>
@@ -307,6 +309,15 @@ export default function Video(props: VideoFormat) {
         className="rustic-video-screen"
         sx={{ visibility: isLoading ? 'hidden' : 'visible' }}
       >
+        <Fade in={controlErrorMessage.length > 0}>
+          <Alert
+            severity="error"
+            className="rustic-video-control-error-message"
+          >
+            {controlErrorMessage}
+          </Alert>
+        </Fade>
+
         {(!isMobile || isFullscreen) && renderTitle()}
         {renderVideoElement()}
         {renderControls()}
