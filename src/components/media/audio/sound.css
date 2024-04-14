@@ -45,4 +45,8 @@
     flex-direction: column;
     padding-inline: 0;
   }
+
+  .rustic-sound .rustic-pause-play-icon span {
+    font-size: 52px;
+  }
 }
