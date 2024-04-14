@@ -10,7 +10,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'The `OpenLayersMap` component supports OpenStreetMap tiles and offers customization options for width, height, and marker size. Users can easily zoom in and zoom out to navigate the map effectively. The `OpenLayersMap` component uses the [OpenLayers](https://openlayers.org/en/latest/apidoc/module-ol_Map-Map.html) map library.\n\nHeight and width are configured through the class `rustic-open-layers-map-canvas`.\n\nNote: If you are not seeing the component or come across the error "An error occurred while loading the map", ensure that `@import \'@rustic-ai/ui-components/dist/index.css\';` is at the top of your `index.css` file.',
+          'The `OpenLayersMap` component supports OpenStreetMap tiles where users can easily zoom in and zoom out to navigate the map effectively. The `OpenLayersMap` component uses the [OpenLayers](https://openlayers.org/en/latest/apidoc/module-ol_Map-Map.html) map library.\n\nHeight and width are configured through the class `rustic-open-layers-map-canvas`.\n\nNote: If you are not seeing the component or come across the error "An error occurred while loading the map", ensure that `@import \'@rustic-ai/ui-components/dist/index.css\';` is at the top of your `index.css` file.',
       },
     },
   },
