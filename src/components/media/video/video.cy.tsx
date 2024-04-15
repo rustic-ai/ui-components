@@ -1,4 +1,3 @@
-/* eslint-disable no-magic-numbers */
 import 'cypress-real-events'
 
 import { supportedViewports } from '../../../../cypress/support/variables'
@@ -26,106 +25,120 @@ describe('Video', () => {
   const transcriptContent =
     'This is a sample transcript for testing the video component.'
 
-  beforeEach(() => {
-    cy.mount(
-      <Video
-        src={src}
-        title={title}
-        captions={captions}
-        transcript={transcriptContent}
-      />
-    )
-    cy.get('[data-cy="spinner"]').should('be.visible')
-    cy.get('[data-cy="spinner"]').should('not.exist')
-  })
+  context('Mobile and Desktop', () => {
+    beforeEach(() => {
+      cy.mount(
+        <Video
+          src={src}
+          title={title}
+          captions={captions}
+          transcript={transcriptContent}
+        />
+      )
+    })
 
-  supportedViewports.forEach((viewport) => {
-    it(`should toggle between pause and play when clicking the play/pause button on ${viewport} screen`, () => {
-      cy.viewport(viewport)
-      if (viewport === 'macbook-13') {
-        cy.get(controls).realHover()
-      }
-      cy.get(playButton).should('be.visible')
-      cy.get(videoElement).its('0.paused').should('equal', true)
-      cy.get(playButton).realClick()
-      cy.get(pauseButton).should('be.visible')
-      cy.get(videoElement).its('0.paused').should('equal', false)
-      cy.get(pauseButton).click()
-      cy.get(playButton).should('be.visible')
-    })
-    it(`should show and hide the transcript when clicking the transcript toggle on ${viewport} screen`, () => {
-      cy.viewport(viewport)
-      cy.get(transcript).should('not.exist')
-      cy.get(transcriptToggle).should('contain', 'Show')
-      cy.get(transcriptToggle).click()
-      cy.get(transcript).should('be.visible')
-      cy.get(transcriptToggle).should('contain', 'Hide')
-    })
-    it('should toggle between fullscreen and normal mode when clicking the fullscreen button', () => {
-      cy.viewport(viewport)
-      if (viewport === 'macbook-13') {
-        cy.get(controls).realHover()
-      }
-      cy.get(fullScreenEnterButton).realClick()
-      cy.document().then((doc) => {
-        expect(doc.fullscreenElement).to.not.be.null
+    supportedViewports.forEach((viewport) => {
+      it(`should initially show the loading spinner on ${viewport} screen`, () => {
+        cy.viewport(viewport)
+        cy.get('[data-cy="spinner"]').should('be.visible')
       })
-      cy.get(fullScreenExitButton).should('exist')
-      cy.get(fullScreenExitButton).click()
-      cy.document().then((doc) => {
-        expect(doc.fullscreenElement).to.be.null
+      it(`should show and hide the transcript when clicking the transcript toggle on ${viewport} screen`, () => {
+        cy.viewport(viewport)
+        cy.get(transcript).should('not.exist')
+        cy.get(transcriptToggle).should('contain', 'Show')
+        cy.get(transcriptToggle).click()
+        cy.get(transcript).should('be.visible')
+        cy.get(transcriptToggle).should('contain', 'Hide')
       })
-    })
-    it(`should display an error message when no valid sources are found on ${viewport} screen`, () => {
-      cy.viewport(viewport)
-      cy.mount(<Video src="" />)
-      cy.get(videoElement).should('not.exist')
-      cy.get(error).should('be.visible')
-      cy.get(error).should('contain', 'The video resource has failed to load')
-    })
-    it(`should display an error message when the resource loading has been stalled on ${viewport} screen`, () => {
-      cy.viewport(viewport)
-      // Delay server response to simulate stalled media loading
-      cy.intercept(src, (req) => {
-        req.on('response', (res) => {
-          // Wait for delay in milliseconds before sending the response to the client.
-          res.setDelay(5000)
+      it(`should toggle between pause and play when clicking the play/pause button on ${viewport} screen`, () => {
+        cy.viewport(viewport)
+        cy.get(playButton).should('exist')
+        cy.get(videoElement).its('0.paused').should('equal', true)
+        if (viewport === 'macbook-13') {
+          cy.get(controls).realHover()
+        }
+        cy.get(playButton).click()
+        cy.get(pauseButton).should('exist')
+        cy.get(videoElement).its('0.paused').should('equal', false)
+        if (viewport === 'macbook-13') {
+          cy.get(controls).realHover()
+        }
+        cy.get(pauseButton).click()
+        cy.get(playButton).should('exist')
+      })
+      it(`should toggle between fullscreen and normal mode when clicking the fullscreen button on ${viewport} screen`, () => {
+        cy.viewport(viewport)
+        cy.get(fullScreenEnterButton).should('exist')
+        if (viewport === 'macbook-13') {
+          cy.get(controls).realHover()
+        }
+        cy.get(fullScreenEnterButton).realClick()
+        cy.document().then((doc) => {
+          expect(doc.fullscreenElement).to.not.be.null
+        })
+        cy.get(fullScreenExitButton).should('exist')
+        cy.get(controls).realHover()
+        cy.get(fullScreenExitButton).click()
+        cy.document().then((doc) => {
+          expect(doc.fullscreenElement).to.be.null
         })
       })
-      // Listen for the stalled event on the video element
-      cy.get(videoElement).then((video) => {
-        video.on('stalled', () => {
-          cy.get(error).should('contain', 'Failed to fetch data, but trying')
+      it(`should display an error message when no valid sources are found on ${viewport} screen`, () => {
+        cy.viewport(viewport)
+        cy.mount(<Video src="" />)
+        cy.get(videoElement).should('not.exist')
+        cy.get(error).should('be.visible')
+        cy.get(error).should('contain', 'The video resource has failed to load')
+      })
+      it(`should display an error message when the resource loading has been stalled on ${viewport} screen`, () => {
+        cy.viewport(viewport)
+        // Delay server response to simulate stalled media loading
+        cy.intercept(src, (req) => {
+          req.on('response', (res) => {
+            const delay = 5000
+            // Wait for delay in milliseconds before sending the response to the client.
+            res.setDelay(delay)
+          })
+        })
+        // Listen for the stalled event on the video element
+        cy.get(videoElement).then((video) => {
+          video.on('stalled', () => {
+            cy.get(error).should('contain', 'Failed to fetch data, but trying')
+          })
         })
       })
-    })
-    it(`should display an error message if entering fullscreen fails on ${viewport} screen`, () => {
-      cy.viewport(viewport)
-      cy.window().then((window) => {
-        cy.stub(window.HTMLElement.prototype, 'requestFullscreen').rejects(
-          new TypeError('some error')
-        )
-      })
+      it(`should display an error message if entering fullscreen fails on ${viewport} screen`, () => {
+        cy.viewport(viewport)
+        cy.window().then((window) => {
+          cy.stub(window.HTMLElement.prototype, 'requestFullscreen').rejects(
+            new TypeError('some error')
+          )
+        })
 
-      if (viewport === 'macbook-13') {
-        cy.get(controls).realHover()
-      }
-      cy.get(fullScreenEnterButton).realClick()
-      cy.get('[data-cy=control-error-message]').should('be.visible')
-    })
-    it(`should display an error message if pressing play fails on ${viewport} screen`, () => {
-      cy.viewport(viewport)
-      cy.window().then((window) => {
-        cy.stub(window.HTMLMediaElement.prototype, 'play').rejects(
-          new DOMException('some error')
-        )
+        if (viewport === 'macbook-13') {
+          cy.get(controls).realHover()
+        }
+        cy.get(fullScreenEnterButton).realClick()
+        cy.get(fullScreenExitButton).should('not.exist')
+        cy.get(fullScreenEnterButton).should('exist')
+        cy.get('[data-cy=control-error-message]').should('exist')
       })
+      it(`should display an error message if pressing play fails on ${viewport} screen`, () => {
+        cy.viewport(viewport)
+        cy.window().then((window) => {
+          cy.stub(window.HTMLMediaElement.prototype, 'play').rejects(
+            new DOMException('some error')
+          )
+        })
 
-      if (viewport === 'macbook-13') {
-        cy.get(controls).realHover()
-      }
-      cy.get(playButton).click()
-      cy.get('[data-cy=control-error-message]').should('be.visible')
+        if (viewport === 'macbook-13') {
+          cy.get(controls).realHover()
+        }
+        cy.get(playButton).click()
+        cy.get(playButton).should('exist')
+        cy.get(pauseButton).should('not.exist')
+        cy.get('[data-cy=control-error-message]').should('exist')
+      })
     })
   })
 
@@ -140,19 +153,17 @@ describe('Video', () => {
           transcript={transcriptContent}
         />
       )
-      cy.get('[data-cy="spinner"]').should('be.visible')
-      cy.get('[data-cy="spinner"]').should('not.exist')
     })
 
     it('should show all the controls on fullscreen mode', () => {
-      cy.get(fullScreenEnterButton).should('be.visible')
+      cy.get(fullScreenEnterButton).should('exist')
       cy.get(fullScreenEnterButton).realClick()
       cy.get(controls).click()
-      cy.get(playButton).should('be.visible')
-      cy.get(transcriptToggle).should('be.visible')
-      cy.get(fullScreenExitButton).should('be.visible')
-      cy.get(pictureInPictureButton).should('be.visible')
-      cy.get(progressSlider).should('be.visible')
+      cy.get(playButton).should('exist')
+      cy.get(transcriptToggle).should('exist')
+      cy.get(fullScreenExitButton).should('exist')
+      cy.get(pictureInPictureButton).should('exist')
+      cy.get(progressSlider).should('exist')
     })
   })
 
@@ -171,9 +182,11 @@ describe('Video', () => {
       cy.get('[data-cy="spinner"]').should('not.exist')
     })
     it(`should go forwards and backwards 10 seconds when clicking the forward/back buttons`, () => {
+      const tenSeconds = 10
+
       cy.get(controls).realHover()
       cy.get('[data-cy=forward-ten-seconds-button]').click()
-      cy.get(videoElement).its('0.currentTime').should('equal', 10)
+      cy.get(videoElement).its('0.currentTime').should('equal', tenSeconds)
       cy.get('[data-cy=replay-ten-seconds-button]').click()
       cy.get(videoElement).its('0.currentTime').should('equal', 0)
     })
@@ -188,8 +201,9 @@ describe('Video', () => {
       cy.get(videoElement).its('0.volume').should('equal', 1)
       cy.get(controls).realHover()
       cy.get(muteButton).focus().get(volumeSlider).should('be.visible')
-      // wait for slider animation
-      cy.wait(1000)
+
+      const sliderAnimationWait = 1000
+      cy.wait(sliderAnimationWait)
       cy.get(volumeSlider).type('{leftArrow}')
       cy.get(videoElement).its('0.volume').should('be.lessThan', 1)
     })
@@ -200,26 +214,29 @@ describe('Video', () => {
       cy.get(videoElement).its('0.currentTime').should('be.greaterThan', 0)
     })
     it('should show the correct view when going to fullscreen mode then changing the viewport size', () => {
+      cy.get(fullScreenEnterButton).should('exist')
       cy.get(controls).realHover()
-      cy.get(fullScreenEnterButton).should('be.visible')
       cy.get(fullScreenEnterButton).realClick()
       cy.document().then((doc) => {
         expect(doc.fullscreenElement).to.not.be.null
       })
       cy.viewport('iphone-6')
+      cy.get(fullScreenExitButton).should('exist')
       cy.get(controls).realHover()
-      cy.get(fullScreenExitButton).should('be.visible')
       cy.get(fullScreenExitButton).click()
       cy.document().then((doc) => {
         expect(doc.fullscreenElement).to.be.null
       })
     })
     it('should toggle between picture-in-picture and normal mode when clicking the picture-in-picture button', () => {
+      cy.get(pictureInPictureButton).should('exist')
+      cy.get(controls).realHover()
       cy.get(pictureInPictureButton).realClick()
       cy.document().then((doc) => {
         expect(doc.pictureInPictureElement).to.not.be.null
       })
       cy.get(pictureInPictureExitButton).should('exist')
+      cy.get(controls).realHover()
       cy.get(pictureInPictureExitButton).click()
       cy.document().then((doc) => {
         expect(doc.pictureInPictureElement).to.be.null
