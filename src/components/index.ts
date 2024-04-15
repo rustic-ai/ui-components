@@ -7,6 +7,7 @@ import OpenLayersMap from './map/openLayersMap'
 import MarkedMarkdown from './markdown/markedMarkdown'
 import MarkedStreamingMarkdown from './markdown/markedStreamingMarkdown'
 import Sound from './media/audio/sound'
+import Video from './media/video/video'
 import PopoverMenu from './menu/popoverMenu'
 import MessageCanvas from './messageCanvas/messageCanvas'
 import MessageSpace from './messageSpace/messageSpace'
@@ -39,6 +40,7 @@ export {
   Text,
   TextInput,
   Timestamp,
+  Video,
   YoutubeVideo,
 }
 

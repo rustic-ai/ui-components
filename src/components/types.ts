@@ -136,11 +136,18 @@ export interface TableFormat extends DataFormat {
 
 export type TableData = TableFormat & Updates<TableFormat>
 
-export interface AudioFormat extends DataFormat {
-  /** URL of the audio file to be played. */
+export interface MediaFormat extends DataFormat {
+  /** URL of the media file to be played. */
   src: string
   /** URL of the WebVTT captions file (.vtt). */
   captions?: string
-  /** Transcript of the audio content. */
+  /** Transcript of the media content. */
   transcript?: string
+}
+
+export interface AudioFormat extends MediaFormat {}
+
+export interface VideoFormat extends MediaFormat {
+  /** URL of an image to be shown while the video is downloading. If not provided, nothing is displayed until the first frame is available. */
+  poster?: string
 }

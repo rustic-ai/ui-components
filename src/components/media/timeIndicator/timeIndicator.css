@@ -1,5 +1,6 @@
 .rustic-time-display {
   margin-left: 8px;
+  min-width: fit-content;
 }
 
 @media (max-width: 900px) {

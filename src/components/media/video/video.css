@@ -1,0 +1,99 @@
+.rustic-video {
+  position: relative;
+}
+
+.rustic-video-loading-spinner {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  width: 40px;
+  height: 40px;
+}
+
+.rustic-video-control-error-message {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 16px;
+  z-index: 1000;
+}
+
+.rustic-video-screen {
+  position: relative;
+  /* helps center video when in fullscreen mode */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.rustic-video-element {
+  object-fit: cover;
+  width: 100%;
+}
+
+.rustic-video-title,
+.rustic-video-controls {
+  transition: 0.2s ease-in-out;
+  width: 100%;
+}
+
+.rustic-video-title {
+  position: absolute;
+  top: 0;
+  padding: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.rustic-video-controls {
+  position: absolute;
+  bottom: 0;
+  padding: 16px;
+}
+
+.rustic-video-top-controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.rustic-video-bottom-controls {
+  display: flex;
+  justify-content: space-between;
+}
+
+.rustic-video-bottom-controls-left {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rustic-video-bottom-controls-right {
+  display: flex;
+  gap: 8px;
+  justify-content: space-between;
+}
+
+.rustic-time-controls {
+  display: flex;
+}
+
+@media (max-width: 900px) {
+  .rustic-video-screen {
+    flex-direction: column;
+  }
+
+  .rustic-video-controls-mobile-preview {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .rustic-video-bottom-controls-left {
+    gap: 8px;
+  }
+}

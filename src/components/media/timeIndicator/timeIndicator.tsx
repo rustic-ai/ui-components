@@ -10,7 +10,6 @@ import { formatDurationTime } from '../../helper'
 interface TimeIndicatorProps {
   elapsedTimeInSeconds: number
   durationTimeInSeconds: number
-  color?: 'text.secondary' | 'common.white'
   style?: 'wide' | 'condensed'
 }
 
@@ -23,21 +22,13 @@ export default function TimeIndicator(props: TimeIndicatorProps) {
   if (props.style === 'wide') {
     return (
       <Box className="rustic-time-container">
-        <Typography variant="body2" color={props.color}>
-          {formattedElapsedTime}
-        </Typography>
-        <Typography variant="body2" color={props.color}>
-          {formattedDuration}
-        </Typography>
+        <Typography variant="overline">{formattedElapsedTime}</Typography>
+        <Typography variant="overline">{formattedDuration}</Typography>
       </Box>
     )
   } else {
     return (
-      <Typography
-        variant="body2"
-        color={props.color}
-        className="rustic-time-display"
-      >
+      <Typography variant="overline" className="rustic-time-display">
         {formattedTimeDisplay}
       </Typography>
     )
@@ -45,6 +36,5 @@ export default function TimeIndicator(props: TimeIndicatorProps) {
 }
 
 TimeIndicator.defaultProps = {
-  color: 'text.secondary',
   style: 'condensed',
 }

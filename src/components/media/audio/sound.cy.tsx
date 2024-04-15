@@ -6,7 +6,7 @@ import Sound from './sound'
 
 describe('Sound', () => {
   const audioElement = '[data-cy=audio-element]'
-  const muteButton = '[data-cy=volumeUp-button]'
+  const muteButton = '[data-cy=mute-button]'
   const playbackRateButton = '[data-cy=playback-rate-button]'
   const volumeSlider = '[data-cy=volume-slider]'
   const pauseButton = '[data-cy=pause-button]'
@@ -45,9 +45,9 @@ describe('Sound', () => {
     })
     it(`should go forwards and backwards 10 seconds when clicking the forward/back buttons on ${viewport} screen`, () => {
       cy.viewport(viewport)
-      cy.get('[data-cy=forward-button]').click()
+      cy.get('[data-cy=forward-ten-seconds-button]').click()
       cy.get(audioElement).its('0.currentTime').should('equal', 10)
-      cy.get('[data-cy=replay-button]').click()
+      cy.get('[data-cy=replay-ten-seconds-button]').click()
       cy.get(audioElement).its('0.currentTime').should('equal', 0)
     })
     it(`should increase the playback speed when clicking the playback rate button then go back to 1x after 2x on ${viewport} screen`, () => {
@@ -95,7 +95,7 @@ describe('Sound', () => {
           captions={captionsPath}
         />
       )
-      cy.get('[data-cy=captions-toggle]').click()
+      cy.get('[data-cy=show-captions-button]').click()
       cy.get('track').should('exist').should('have.attr', 'src', captionsPath)
     })
     it(`should display an error message when no valid sources are found on ${viewport} screen`, () => {

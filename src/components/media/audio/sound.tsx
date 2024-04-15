@@ -1,11 +1,9 @@
 import './sound.css'
 
-import ClosedCaptionDisabledRoundedIcon from '@mui/icons-material/ClosedCaptionDisabledRounded'
-import ClosedCaptionRoundedIcon from '@mui/icons-material/ClosedCaptionRounded'
 import { useMediaQuery, useTheme } from '@mui/material'
 import Alert from '@mui/material/Alert'
 import CircularProgress from '@mui/material/CircularProgress'
-import IconButton from '@mui/material/IconButton'
+import Fade from '@mui/material/Fade'
 import Typography from '@mui/material/Typography'
 import { Box } from '@mui/system'
 import React, { useEffect, useRef, useState } from 'react'
@@ -13,12 +11,13 @@ import React, { useEffect, useRef, useState } from 'react'
 import type { AudioFormat } from '../../types'
 import {
   MoveTenSecondsButton,
-  PausePlayToggle,
   PlaybackRateButton,
+  PlayOrPauseButton,
   ProgressSlider,
-  TranscriptToggle,
+  ToggleTranscriptButton,
   VolumeSettings,
-} from '../controls/controls'
+} from '../controls/commonControls'
+import { MediaIconButton } from '../controls/mediaIconButton'
 import TimeIndicator from '../timeIndicator/timeIndicator'
 import Transcript from '../transcript/transcript'
 
@@ -28,6 +27,7 @@ export default function Sound(props: AudioFormat) {
   const [isLoading, setIsLoading] = useState(true)
   const [elapsedTime, setElapsedTime] = useState(0)
   const [errorMessage, setErrorMessage] = useState('')
+  const [controlErrorMessage, setControlErrorMessage] = useState('')
 
   const theme = useTheme()
   const audioRef = useRef<HTMLVideoElement>(null)
@@ -75,18 +75,13 @@ export default function Sound(props: AudioFormat) {
 
   function renderCaptionsToggle() {
     if (props.captions && props.captions.length > 0) {
+      const action = areCaptionsShown ? 'captionsOff' : 'captionsOn'
+
       return (
-        <IconButton
+        <MediaIconButton
+          action={action}
           onClick={() => setAreCaptionsShown(!areCaptionsShown)}
-          aria-label={areCaptionsShown ? 'Hide captions' : 'Show captions'}
-          data-cy="captions-toggle"
-        >
-          {areCaptionsShown ? (
-            <ClosedCaptionRoundedIcon color="primary" />
-          ) : (
-            <ClosedCaptionDisabledRoundedIcon color="primary" />
-          )}
-        </IconButton>
+        />
       )
     }
   }
@@ -99,7 +94,10 @@ export default function Sound(props: AudioFormat) {
             mediaElement={audioRef.current}
             movement="replay"
           />
-          <PausePlayToggle mediaElement={audioRef.current} />
+          <PlayOrPauseButton
+            mediaElement={audioRef.current}
+            onError={setControlErrorMessage}
+          />
           <MoveTenSecondsButton
             mediaElement={audioRef.current}
             movement="forward"
@@ -118,9 +116,11 @@ export default function Sound(props: AudioFormat) {
   function renderTranscriptToggle() {
     if (props.transcript) {
       return (
-        <TranscriptToggle
-          isTranscriptShown={isTranscriptShown}
-          setIsTranscriptShown={() => setIsTranscriptShown(!isTranscriptShown)}
+        <ToggleTranscriptButton
+          isTranscriptVisible={isTranscriptShown}
+          setIsTranscriptVisible={() =>
+            setIsTranscriptShown(!isTranscriptShown)
+          }
         />
       )
     }
@@ -234,6 +234,11 @@ export default function Sound(props: AudioFormat) {
     <Box className="rustic-sound" data-cy="audio">
       {renderVideoElement()}
       {renderControls()}
+      <Fade in={controlErrorMessage.length > 0}>
+        <Alert severity="error" onClose={() => setControlErrorMessage('')}>
+          {controlErrorMessage}
+        </Alert>
+      </Fade>
     </Box>
   )
 }
