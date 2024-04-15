@@ -85,6 +85,10 @@ export default function Video(props: VideoFormat) {
     videoContainerRef.current?.addEventListener('mouseleave', () => {
       setAreControlsVisible(false)
     })
+    videoContainerRef.current?.addEventListener('keydown', () => {
+      setAreControlsVisible(true)
+      startTimeout()
+    })
   }, [])
 
   const controlStyles = {

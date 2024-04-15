@@ -40,11 +40,6 @@
   width: 100%;
 }
 
-.rustic-video-screen:focus-within .rustic-video-controls,
-.rustic-video-screen:focus-within .rustic-video-title {
-  opacity: 1;
-}
-
 .rustic-video-title {
   position: absolute;
   top: 0;
