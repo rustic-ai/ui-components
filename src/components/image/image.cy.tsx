@@ -3,7 +3,7 @@ import Image from './image'
 
 describe('Image', () => {
   const defaultProps = {
-    src: 'public/images/image-component-example.png',
+    src: '/images/image-component-example.png',
   }
 
   supportedViewports.forEach((viewport) => {
@@ -39,7 +39,7 @@ describe('Image', () => {
     it(`renders image with provided props on ${viewport} screen`, () => {
       cy.viewport(viewport)
       const props = {
-        src: 'public/images/image-component-example.png',
+        src: '/images/image-component-example.png',
         alt: 'A curved facade covered in white latticework',
         width: 400,
         height: 400,
