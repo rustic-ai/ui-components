@@ -117,8 +117,10 @@ export default function Sound(props: AudioFormat) {
     if (props.transcript) {
       return (
         <ToggleTranscriptButton
-          isTranscriptShown={isTranscriptShown}
-          setIsTranscriptShown={() => setIsTranscriptShown(!isTranscriptShown)}
+          isTranscriptVisible={isTranscriptShown}
+          setIsTranscriptVisible={() =>
+            setIsTranscriptShown(!isTranscriptShown)
+          }
         />
       )
     }

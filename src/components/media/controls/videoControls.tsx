@@ -30,9 +30,9 @@ export function PictureInPictureButton(props: PictureInPictureButtonProps) {
         .then(() => {
           setIsPictureInPicture(false)
         })
-        .catch(() => {
+        .catch((error: DOMException) => {
           props.onError(
-            'Failed to exit picture-in-picture mode. Please try again.'
+            `Failed to exit picture-in-picture mode. Error: ${error.message}`
           )
         })
     } else {
@@ -41,9 +41,9 @@ export function PictureInPictureButton(props: PictureInPictureButtonProps) {
         .then(() => {
           setIsPictureInPicture(true)
         })
-        .catch(() => {
+        .catch((error: DOMException) => {
           props.onError(
-            'Failed to enter picture-in-picture mode. Please try again.'
+            `Failed to enter picture-in-picture mode. Error: ${error.message}`
           )
         })
     }
@@ -69,8 +69,10 @@ export function FullscreenButton(props: FullscreenButtonProps) {
         .then(() => {
           setIsFullscreen(false)
         })
-        .catch(() => {
-          props.onError('Failed to exit fullscreen mode. Please try again.')
+        .catch((error: TypeError) => {
+          props.onError(
+            `Failed to exit fullscreen mode. Error: ${error.message}`
+          )
         })
     } else {
       props.element
@@ -78,8 +80,10 @@ export function FullscreenButton(props: FullscreenButtonProps) {
         .then(() => {
           setIsFullscreen(true)
         })
-        .catch(() => {
-          props.onError('Failed to enter fullscreen mode. Please try again.')
+        .catch((error: TypeError) => {
+          props.onError(
+            `Failed to enter fullscreen mode. Error: ${error.message}`
+          )
         })
     }
   }

@@ -17,8 +17,8 @@ export interface MediaControls {
 }
 
 interface ToggleTranscriptButtonProps {
-  isTranscriptShown: boolean
-  setIsTranscriptShown: () => void
+  isTranscriptVisible: boolean
+  setIsTranscriptVisible: () => void
 }
 
 interface PlayOrPauseButtonProps extends MediaControls {
@@ -142,17 +142,17 @@ export function VolumeSettings(props: MediaControls) {
 }
 
 export function ToggleTranscriptButton(props: ToggleTranscriptButtonProps) {
-  const Icon = props.isTranscriptShown
+  const Icon = props.isTranscriptVisible
     ? KeyboardArrowUpIcon
     : KeyboardArrowDownIcon
 
-  const buttonText = `${props.isTranscriptShown ? 'Hide' : 'Show'} Transcript`
+  const buttonText = `${props.isTranscriptVisible ? 'Hide' : 'Show'} Transcript`
 
   return (
     <Button
       className="rustic-transcript-toggle"
       data-cy="transcript-toggle"
-      onClick={props.setIsTranscriptShown}
+      onClick={props.setIsTranscriptVisible}
       endIcon={<Icon />}
     >
       <Typography variant="overline">{buttonText}</Typography>
@@ -169,8 +169,8 @@ export function PlayOrPauseButton(props: PlayOrPauseButtonProps) {
     if (isPlaying) {
       props.mediaElement.pause()
     } else {
-      props.mediaElement.play().catch(() => {
-        props.onError('Failed to play the media. Please try again.')
+      props.mediaElement.play().catch((error: DOMException) => {
+        props.onError(`Failed to play the media. Error: ${error.message}`)
       })
     }
   }

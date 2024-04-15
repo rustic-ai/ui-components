@@ -103,7 +103,7 @@ describe('Video', () => {
       cy.viewport(viewport)
       cy.window().then((window) => {
         cy.stub(window.HTMLElement.prototype, 'requestFullscreen').rejects(
-          new Error()
+          new TypeError('some error')
         )
       })
 
@@ -111,6 +111,20 @@ describe('Video', () => {
         cy.get(controls).realHover()
       }
       cy.get(fullScreenEnterButton).realClick()
+      cy.get('[data-cy=control-error-message]').should('be.visible')
+    })
+    it(`should display an error message if pressing play fails on ${viewport} screen`, () => {
+      cy.viewport(viewport)
+      cy.window().then((window) => {
+        cy.stub(window.HTMLMediaElement.prototype, 'play').rejects(
+          new DOMException('some error')
+        )
+      })
+
+      if (viewport === 'macbook-13') {
+        cy.get(controls).realHover()
+      }
+      cy.get(playButton).click()
       cy.get('[data-cy=control-error-message]').should('be.visible')
     })
   })
