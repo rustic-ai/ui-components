@@ -1,3 +1,6 @@
+import type { StoryFn } from '@storybook/react'
+import React from 'react'
+
 import Video from './video'
 
 export default {
@@ -37,6 +40,18 @@ export const WithCaptions = {
     title: 'Sound with Captions',
     captions: 'audioExamples/captions.vtt',
   },
+  parameters: {
+    layout: 'centered',
+  },
+  decorators: [
+    (Story: StoryFn) => {
+      return (
+        <div style={{ width: '500px' }}>
+          <Story />
+        </div>
+      )
+    },
+  ],
 }
 
 export const WithPoster = {
