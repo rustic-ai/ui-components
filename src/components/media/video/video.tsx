@@ -27,10 +27,11 @@ import TimeIndicator from '../timeIndicator/timeIndicator'
 import Transcript from '../transcript/transcript'
 
 export default function Video(props: VideoFormat) {
-  const [isTranscriptShown, setIsTranscriptShown] = useState(false)
-  const [areCaptionsShown, setAreCaptionsShown] = useState(false)
+  const [isTranscriptVisible, setIsTranscriptVisible] = useState(false)
+  const [areCaptionsVisible, setAreCaptionsVisible] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [isFullscreen, setIsFullscreen] = useState(!!document.fullscreenElement)
+  const [areControlsVisible, setAreControlsVisible] = useState(false)
 
   const [controlErrorMessage, setControlErrorMessage] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
@@ -58,6 +59,12 @@ export default function Video(props: VideoFormat) {
       setErrorMessage(errorMessage)
       setIsLoading(false)
     }
+    let timeoutId: ReturnType<typeof setTimeout>
+
+    function startTimeout() {
+      clearTimeout(timeoutId)
+      timeoutId = setTimeout(() => setAreControlsVisible(false), 3000) // Hide controls after 3 seconds of inactivity
+    }
 
     videoRef.current?.addEventListener('timeupdate', updateElapsedTime)
     videoRef.current?.addEventListener('canplay', handleCanPlay)
@@ -70,9 +77,20 @@ export default function Video(props: VideoFormat) {
     document.addEventListener('fullscreenchange', () => {
       setIsFullscreen(!!document.fullscreenElement)
     })
+
+    videoContainerRef.current?.addEventListener('mousemove', () => {
+      setAreControlsVisible(true)
+      startTimeout()
+    })
+    videoContainerRef.current?.addEventListener('mouseleave', () => {
+      setAreControlsVisible(false)
+    })
   }, [])
 
-  const backgroundColor = theme.palette.background.paper
+  const controlStyles = {
+    backgroundColor: theme.palette.background.paper,
+    opacity: areControlsVisible ? 1 : 0,
+  }
 
   function renderVideoElement() {
     return (
@@ -83,7 +101,7 @@ export default function Video(props: VideoFormat) {
         src={props.src}
         poster={props.poster}
       >
-        {areCaptionsShown && (
+        {areCaptionsVisible && (
           <track src={props.captions} kind="captions" default />
         )}
       </video>
@@ -93,12 +111,7 @@ export default function Video(props: VideoFormat) {
   function renderTitle() {
     if (videoRef.current && videoContainerRef.current) {
       return (
-        <Box
-          className="rustic-video-title"
-          sx={{
-            backgroundColor: backgroundColor,
-          }}
-        >
+        <Box className="rustic-video-title" sx={controlStyles}>
           <Typography variant="body2" data-cy="video-title">
             {props.title}
           </Typography>
@@ -120,30 +133,32 @@ export default function Video(props: VideoFormat) {
   }
 
   function renderTranscript() {
-    if (props.transcript && isTranscriptShown) {
+    if (props.transcript && isTranscriptVisible) {
       return <Transcript transcript={props.transcript} />
     }
   }
 
   function renderCaptionsButton() {
     if (props.captions && props.captions.length > 0) {
-      const action = areCaptionsShown ? 'captionsOff' : 'captionsOn'
+      const action = areCaptionsVisible ? 'captionsOff' : 'captionsOn'
 
       return (
         <MediaIconButton
           action={action}
-          onClick={() => setAreCaptionsShown(!areCaptionsShown)}
+          onClick={() => setAreCaptionsVisible(!areCaptionsVisible)}
         />
       )
     }
   }
 
-  function renderTranscriptToggle() {
+  function renderToggleTranscriptButton() {
     if (props.transcript) {
       return (
         <ToggleTranscriptButton
-          isTranscriptShown={isTranscriptShown}
-          setIsTranscriptShown={() => setIsTranscriptShown(!isTranscriptShown)}
+          isTranscriptVisible={isTranscriptVisible}
+          setIsTranscriptVisible={() =>
+            setIsTranscriptVisible(!isTranscriptVisible)
+          }
         />
       )
     }
@@ -157,9 +172,7 @@ export default function Video(props: VideoFormat) {
             <Box
               className="rustic-video-controls"
               data-cy="controls"
-              sx={{
-                backgroundColor: backgroundColor,
-              }}
+              sx={controlStyles}
             >
               <Box className="rustic-video-top-controls">
                 <PlayOrPauseButton
@@ -187,7 +200,7 @@ export default function Video(props: VideoFormat) {
                   <PlaybackRateButton mediaElement={videoRef.current} />
                 </Box>
 
-                {renderTranscriptToggle()}
+                {renderToggleTranscriptButton()}
               </Box>
               {renderTranscript()}
             </Box>
@@ -204,7 +217,7 @@ export default function Video(props: VideoFormat) {
               onError={setControlErrorMessage}
             />
             <Box className="rustic-video-controls-right">
-              {renderTranscriptToggle()}
+              {renderToggleTranscriptButton()}
               <FullscreenButton
                 element={videoContainerRef.current}
                 onError={setControlErrorMessage}
@@ -223,9 +236,7 @@ export default function Video(props: VideoFormat) {
           <Box
             className="rustic-video-controls"
             data-cy="controls"
-            sx={{
-              backgroundColor: backgroundColor,
-            }}
+            sx={controlStyles}
           >
             <ProgressSlider mediaElement={videoRef.current} />
 
@@ -256,7 +267,7 @@ export default function Video(props: VideoFormat) {
               </Box>
 
               <Box className="rustic-video-bottom-controls-right">
-                {renderTranscriptToggle()}
+                {renderToggleTranscriptButton()}
                 <PictureInPictureButton
                   mediaElement={videoRef.current}
                   onError={setControlErrorMessage}
@@ -296,7 +307,9 @@ export default function Video(props: VideoFormat) {
       <Box
         ref={videoContainerRef}
         className="rustic-video-screen"
-        sx={{ visibility: isLoading ? 'hidden' : 'visible' }}
+        sx={{
+          visibility: isLoading ? 'hidden' : 'visible',
+        }}
       >
         <Fade in={controlErrorMessage.length > 0}>
           <Alert

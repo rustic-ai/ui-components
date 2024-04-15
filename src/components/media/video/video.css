@@ -15,8 +15,8 @@
 
 .rustic-video-control-error-message {
   position: absolute;
-  top: 0px;
-  left: 0px;
+  top: 0;
+  left: 0;
   margin: 16px;
   z-index: 1000;
 }
@@ -38,13 +38,9 @@
 .rustic-video-controls {
   transition: 0.2s ease-in-out;
   width: 100%;
-  opacity: 0;
 }
 
-.rustic-video-screen:hover .rustic-video-title,
-.rustic-video-screen:hover .rustic-video-controls,
 .rustic-video-screen:focus-within .rustic-video-controls,
-.rustic-video-screen:focus-within .rustic-video-title,
 .rustic-video-screen:focus-within .rustic-video-title {
   opacity: 1;
 }
