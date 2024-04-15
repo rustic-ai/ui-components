@@ -169,14 +169,9 @@ export function PlayOrPauseButton(props: PlayOrPauseButtonProps) {
     if (isPlaying) {
       props.mediaElement.pause()
     } else {
-      props.mediaElement
-        .play()
-        .then(() => {
-          props.onError('')
-        })
-        .catch(() => {
-          props.onError('Failed to play the media. Please try again.')
-        })
+      props.mediaElement.play().catch(() => {
+        props.onError('Failed to play the media. Please try again.')
+      })
     }
   }
 

@@ -28,7 +28,6 @@ export function PictureInPictureButton(props: PictureInPictureButtonProps) {
       document
         .exitPictureInPicture()
         .then(() => {
-          props.onError('')
           setIsPictureInPicture(false)
         })
         .catch(() => {
@@ -40,7 +39,6 @@ export function PictureInPictureButton(props: PictureInPictureButtonProps) {
       videoElement
         .requestPictureInPicture()
         .then(() => {
-          props.onError('')
           setIsPictureInPicture(true)
         })
         .catch(() => {
@@ -69,7 +67,6 @@ export function FullscreenButton(props: FullscreenButtonProps) {
       document
         .exitFullscreen()
         .then(() => {
-          props.onError('')
           setIsFullscreen(false)
         })
         .catch(() => {
@@ -79,7 +76,6 @@ export function FullscreenButton(props: FullscreenButtonProps) {
       props.element
         .requestFullscreen()
         .then(() => {
-          props.onError('')
           setIsFullscreen(true)
         })
         .catch(() => {

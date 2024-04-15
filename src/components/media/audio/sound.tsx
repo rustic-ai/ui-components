@@ -233,7 +233,9 @@ export default function Sound(props: AudioFormat) {
       {renderVideoElement()}
       {renderControls()}
       <Fade in={controlErrorMessage.length > 0}>
-        <Alert severity="error">{controlErrorMessage}</Alert>
+        <Alert severity="error" onClose={() => setControlErrorMessage('')}>
+          {controlErrorMessage}
+        </Alert>
       </Fade>
     </Box>
   )

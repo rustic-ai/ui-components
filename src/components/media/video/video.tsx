@@ -72,18 +72,7 @@ export default function Video(props: VideoFormat) {
     })
   }, [])
 
-  function adjustHexColorOpacity(color: string, opacity: number) {
-    const r = parseInt(color.slice(1, 3), 16)
-    const g = parseInt(color.slice(3, 5), 16)
-    const b = parseInt(color.slice(5, 7), 16)
-
-    return `rgba(${r}, ${g}, ${b}, ${opacity})`
-  }
-
-  const backgroundColor = adjustHexColorOpacity(
-    theme.palette.background.paper,
-    0.6
-  )
+  const backgroundColor = theme.palette.background.paper
 
   function renderVideoElement() {
     return (
@@ -314,6 +303,7 @@ export default function Video(props: VideoFormat) {
             severity="error"
             className="rustic-video-control-error-message"
             data-cy="control-error-message"
+            onClose={() => setControlErrorMessage('')}
           >
             {controlErrorMessage}
           </Alert>
