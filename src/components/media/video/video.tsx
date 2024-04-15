@@ -1,4 +1,3 @@
-/* eslint-disable no-magic-numbers */
 import './video.css'
 
 import { useMediaQuery, useTheme } from '@mui/material'
@@ -41,7 +40,7 @@ export default function Video(props: VideoFormat) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
-
+ const inActivityTimeout = 3000 // Hide controls after 3 seconds of inactivity
   useEffect(() => {
     const loadingErrorMessage = 'The video resource has failed to load'
     const stalledErrorMessage = 'Failed to fetch data, but trying'
@@ -63,7 +62,7 @@ export default function Video(props: VideoFormat) {
 
     function startTimeout() {
       clearTimeout(timeoutId)
-      timeoutId = setTimeout(() => setAreControlsVisible(false), 3000) // Hide controls after 3 seconds of inactivity
+      timeoutId = setTimeout(() => setAreControlsVisible(false), inActivityTimeout) 
     }
 
     videoRef.current?.addEventListener('timeupdate', updateElapsedTime)
