@@ -80,6 +80,13 @@ export default function Input(props: Input) {
     setMessageText(e.target.value)
   }
 
+  function handleDelete(id: string, fileController: AbortController) {
+    setErrorMessages([])
+    setAddedFiles((prev) => prev.filter((file) => file.id !== id))
+    fileController.abort()
+    props.onFileDelete(id)
+  }
+
   const isSendButtonDisabled =
     (isEmptyMessage && addedFiles.length === 0) || pendingUploadCount !== 0
 
@@ -116,15 +123,9 @@ export default function Input(props: Input) {
                 addedFiles.map((file, index) => (
                   <FilePreview
                     key={index}
-                    id={file.id}
                     name={file.name}
-                    onFileDelete={() => {
-                      file.controller.abort()
-                      return props.onFileDelete(file.id)
-                    }}
-                    setAddedFiles={setAddedFiles}
+                    onDelete={() => handleDelete(file.id, file.controller)}
                     loadingProgress={file.loadingProgress}
-                    setErrorMessages={setErrorMessages}
                   />
                 ))}
             </Box>

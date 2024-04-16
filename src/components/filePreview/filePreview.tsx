@@ -8,25 +8,16 @@ import Box from '@mui/system/Box'
 import React from 'react'
 
 import { getShortenString } from '../helper'
-import type { FileInfo } from '../input/input'
 
 type FilePreview = {
   name: string
-  id: string
-  setAddedFiles: React.Dispatch<React.SetStateAction<FileInfo[]>>
-  onFileDelete: () => Promise<{ isDeleted: boolean }>
   loadingProgress: number
-  setErrorMessages: React.Dispatch<React.SetStateAction<string[]>>
+  onDelete: () => void
 }
 
 function FilePreview(props: FilePreview) {
   const maximumFileNameLength = 15
   const maximumLoadingProgress = 100
-  function handleDelete() {
-    props.setErrorMessages([])
-    props.setAddedFiles((prev) => prev.filter((file) => file.id !== props.id))
-    props.onFileDelete()
-  }
 
   return (
     <Card className="rustic-file-preview">
@@ -45,7 +36,7 @@ function FilePreview(props: FilePreview) {
         )}
         <IconButton
           color="primary"
-          onClick={handleDelete}
+          onClick={props.onDelete}
           className="rustic-delete-button"
         >
           <span className="material-symbols-rounded">cancel</span>
