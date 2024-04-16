@@ -6,3 +6,13 @@
   justify-content: space-between;
   width: 220px;
 }
+
+.rustic-file-preview .rustic-upload-progress {
+  width: 40px;
+  height: 8px;
+}
+
+.rustic-file-preview .rustic-flex-center {
+  display: flex;
+  align-items: center;
+}

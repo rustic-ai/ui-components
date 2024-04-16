@@ -27,6 +27,7 @@ export interface FileInfo {
   url?: string
   name: string
   loadingProgress: number
+  controller: AbortController
 }
 
 export default function Input(props: Input) {
@@ -117,8 +118,13 @@ export default function Input(props: Input) {
                     key={index}
                     id={file.id}
                     name={file.name}
-                    onFileDelete={props.onFileDelete}
+                    onFileDelete={() => {
+                      file.controller.abort()
+                      return props.onFileDelete(file.id)
+                    }}
                     setAddedFiles={setAddedFiles}
+                    loadingProgress={file.loadingProgress}
+                    setErrorMessages={setErrorMessages}
                   />
                 ))}
             </Box>

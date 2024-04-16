@@ -1,7 +1,7 @@
 import type { StoryFn } from '@storybook/react'
 import React from 'react'
 
-import Input from './input'
+import Input, { type FileInfo } from './input'
 
 export default {
   title: 'Rustic UI/Input/Input',
@@ -34,41 +34,86 @@ function getRandomDelayInSeconds(maxSeconds: number) {
   return Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay
 }
 
-function onFileAdd(_file: File, fileId: string): Promise<{ url: string }> {
+function onFileAdd(
+  file: File,
+  fileId: string,
+  onUploadProgress: (progressEvent: ProgressEvent) => void,
+  fileInfo: FileInfo
+) {
+  const signal = fileInfo.controller.signal
+  const delayTime = 50
+  let progress = 0
+  const progressTotal = 100
+  const progressIncrementRate = 5
   return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve({ url: `https://example.com/${fileId}` })
-    }, getRandomDelayInSeconds(1))
-  })
-}
-
-function onFileAddFailed(): Promise<{ url: string }> {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      const error = { response: { status: 500 } }
-      reject(error)
-    }, getRandomDelayInSeconds(1))
-  })
-}
-
-function onFileAddRandomResult(
-  _file: File,
-  fileId: string
-): Promise<{ url: string }> {
-  const tenSeconds = 10
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      const fiftyPercent = 0.5
-      const shouldReject = Math.random() < fiftyPercent
-      if (shouldReject) {
-        const error = { response: { status: 500 } }
-        reject(error)
+    const listener = () => {
+      clearTimeout(timer)
+    }
+    signal?.throwIfAborted()
+    const timer = setInterval(() => {
+      if (progress < progressTotal) {
+        const incrementAmount = Math.random() * progressIncrementRate
+        progress += incrementAmount
+        onUploadProgress({
+          loaded: progress,
+          total: progressTotal,
+        } as ProgressEvent)
       } else {
-        resolve({ url: `https://example.com/${fileId}` })
+        signal?.removeEventListener('abort', listener)
+        resolve('success')
       }
-    }, getRandomDelayInSeconds(tenSeconds))
+    }, delayTime)
+    signal?.addEventListener('abort', listener)
   })
 }
+
+function delayReject(ms: number, signal: AbortSignal) {
+  return new Promise((resolve, reject) => {
+    const listener = () => {
+      clearTimeout(timer)
+    }
+    signal?.throwIfAborted()
+    const timer = setTimeout(() => {
+      signal?.removeEventListener('abort', listener)
+      reject('failed normally')
+    }, ms)
+    signal?.addEventListener('abort', listener)
+  })
+}
+
+function onFileAddFailed(
+  file: File,
+  fileId: string,
+  onUploadProgress: (progressEvent: ProgressEvent) => void,
+  fileInfo: FileInfo
+) {
+  const deplayTimeInSeconds = 5
+  return delayReject(
+    getRandomDelayInSeconds(deplayTimeInSeconds),
+    fileInfo.controller.signal
+  )
+}
+
+// function onFileAddRandomResult(
+//   file: File,
+//   fileId: string,
+//   onUploadProgress: (progressEvent: ProgressEvent) => void,
+//   fileInfo: FileInfo
+// ): Promise<{ url: string }> {
+//   const delayTimeInSeconds = 2
+//   return new Promise((resolve, reject) => {
+//     setTimeout(() => {
+//       const fiftyPercent = 0.5
+//       const shouldReject = Math.random() < fiftyPercent
+//       if (shouldReject) {
+//         const error = { response: { status: 500 } }
+//         reject(error)
+//       } else {
+//         onFileAdd(file, fileId, onUploadProgress, fileInfo)
+//       }
+//     }, getRandomDelayInSeconds(delayTimeInSeconds))
+//   })
+// }
 
 function onFileDelete(fileId: string): Promise<{ isDeleted: boolean }> {
   return new Promise((resolve) => {
@@ -115,19 +160,19 @@ export const FailToUpload = {
   },
 }
 
-export const RandomUploadResult = {
-  args: {
-    sender: 'You',
-    conversationId: '1',
-    placeholder: 'Type your message',
-    ws: {
-      // eslint-disable-next-line no-console
-      send: (message: any) => console.log('Message sent:', message),
-    },
-    onFileAdd: onFileAddRandomResult,
-    onFileDelete,
-  },
-}
+// export const RandomUploadResult = {
+//   args: {
+//     sender: 'You',
+//     conversationId: '1',
+//     placeholder: 'Type your message',
+//     ws: {
+//       // eslint-disable-next-line no-console
+//       send: (message: any) => console.log('Message sent:', message),
+//     },
+//     onFileAdd: onFileAddRandomResult,
+//     onFileDelete,
+//   },
+// }
 
 export const SmallFilesOnly = {
   args: {

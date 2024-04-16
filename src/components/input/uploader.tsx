@@ -10,7 +10,12 @@ export type UploaderProps = {
   addedFiles: FileInfo[]
   setAddedFiles: React.Dispatch<React.SetStateAction<FileInfo[]>>
   acceptedFileTypes?: string
-  onFileAdd: (file: File, fileId: string) => Promise<{ url: string }>
+  onFileAdd: (
+    file: File,
+    fileId: string,
+    onUploadProcess: (progressEvent: ProgressEvent) => void,
+    fileInfo: FileInfo
+  ) => Promise<{ url: string }>
   setErrorMessages: React.Dispatch<React.SetStateAction<string[]>>
   setPendingUploadCount: React.Dispatch<React.SetStateAction<number>>
   maxFileSize?: number
@@ -47,10 +52,19 @@ function Uploader(props: UploaderProps) {
       ])
     }
 
-    const filesToAdd = props.maxFileCount
-      ? files?.slice(0, props.maxFileCount - totalFileCount)
-      : files
+    function getFilesToAdd() {
+      if (props.maxFileCount) {
+        if (totalFileCount <= props.maxFileCount) {
+          return files
+        } else {
+          return files?.slice(0, props.maxFileCount - totalFileCount)
+        }
+      } else {
+        return files
+      }
+    }
 
+    const filesToAdd = getFilesToAdd()
     filesToAdd &&
       props.setPendingUploadCount((prev) => prev + filesToAdd.length)
 
@@ -64,13 +78,37 @@ function Uploader(props: UploaderProps) {
         ])
       } else {
         const fileId = getUUID()
-        props.setAddedFiles((prev) => [
-          ...prev,
-          { name: file.name, loadingProgress: 0, id: fileId },
-        ])
+
+        const onUploadProgress = (progressEvent: ProgressEvent) => {
+          const percentageConversionRate = 100
+          const loadedPecentage =
+            (progressEvent.loaded / progressEvent.total) *
+            percentageConversionRate
+
+          props.setAddedFiles((prevFiles) => {
+            const fileIndex = prevFiles.findIndex((item) => item.id === fileId)
+            if (fileIndex !== -1) {
+              const updatedFiles = [...prevFiles]
+              updatedFiles[fileIndex] = {
+                ...updatedFiles[fileIndex],
+                loadingProgress: loadedPecentage,
+              }
+              return updatedFiles
+            }
+            return prevFiles
+          })
+        }
+        const controller = new AbortController()
+        const newAddedFile = {
+          name: file.name,
+          loadingProgress: 0,
+          id: fileId,
+          controller,
+        }
+        props.setAddedFiles((prev) => [...prev, newAddedFile])
 
         props
-          .onFileAdd(file, fileId)
+          .onFileAdd(file, fileId, onUploadProgress, newAddedFile)
           .then((res) => {
             props.setAddedFiles((prevFiles) => {
               const fileIndex = prevFiles.findIndex(
