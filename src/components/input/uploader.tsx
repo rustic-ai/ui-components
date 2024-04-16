@@ -9,7 +9,6 @@ import type { FileInfo } from './input'
 export type UploaderProps = {
   addedFiles: FileInfo[]
   setAddedFiles: React.Dispatch<React.SetStateAction<FileInfo[]>>
-  acceptedFileTypes?: string
   onFileAdd: (
     file: File,
     fileId: string,
@@ -18,6 +17,7 @@ export type UploaderProps = {
   ) => Promise<{ url: string }>
   setErrorMessages: React.Dispatch<React.SetStateAction<string[]>>
   setPendingUploadCount: React.Dispatch<React.SetStateAction<number>>
+  acceptedFileTypes?: string
   maxFileSize?: number
   maxFileCount?: number
 }

@@ -24,10 +24,10 @@ export interface Input extends TextInput {
 
 export interface FileInfo {
   id: string
-  url?: string
   name: string
   loadingProgress: number
   controller: AbortController
+  url?: string
 }
 
 export default function Input(props: Input) {
@@ -83,6 +83,7 @@ export default function Input(props: Input) {
   function handleDelete(id: string, fileController: AbortController) {
     setErrorMessages([])
     setAddedFiles((prev) => prev.filter((file) => file.id !== id))
+    setPendingUploadCount((prev) => (prev === 0 ? prev : prev - 1))
     fileController.abort()
     props.onFileDelete(id)
   }
