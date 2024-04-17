@@ -33,15 +33,100 @@ export interface TextInputProps {
   fullWidth?: boolean
   /** Boolean to allow option for speech-to-text. See which browsers are supported [here](https://developer.mozilla.org/en-US/docs/Web/API/SpeechRecognition#browser_compatibility). */
   speechToText?: boolean
+  /** BCP 47 language tag to use for identifying speech when opting into `speechToText`. If this is not specified, this defaults to the HTML `lang` attribute value, or the user agent's language setting. However, setting this is good practice and recommended. e.g. "en", "en-US", "fr", "fr-FR", "es-ES", etc.  */
+  lang?: string
 }
 
 export default function TextInput(props: TextInputProps) {
   const [messageText, setMessageText] = useState<string>('')
+  const [errorMessage, setErrorMessage] = useState<string>('')
   const [isRecording, setIsRecording] = useState(false)
   const [isFocused, setIsFocused] = useState(false)
   const [isEndingRecording, setIsEndingRecording] = useState(false)
 
   const isEmptyMessage = !messageText.trim().length
+  const speechToTextTooltipTitle = `${isRecording ? 'Stop' : 'Start'} speech to text`
+  const speechToTextIconColor = isFocused ? 'primary.main' : 'primary.light'
+
+  function renderSpeechToTextIcon() {
+    return (
+      <>
+        {isRecording ? (
+          <MicRoundedIcon color="secondary" />
+        ) : (
+          <MicNoneRoundedIcon
+            sx={{
+              color: speechToTextIconColor,
+            }}
+          />
+        )}
+      </>
+    )
+  }
+
+  const speechToTextButtonAdornment = {
+    endAdornment: (
+      <InputAdornment position="end">
+        {isEndingRecording ? (
+          <CircularProgress size={24} data-cy="spinner" />
+        ) : (
+          <Tooltip title={speechToTextTooltipTitle}>
+            <IconButton
+              data-cy="record-button"
+              onClick={handleToggleSpeechToText}
+              size="small"
+            >
+              {renderSpeechToTextIcon()}
+            </IconButton>
+          </Tooltip>
+        )}
+      </InputAdornment>
+    ),
+  }
+
+  function handleToggleSpeechToText() {
+    const microphone = new window.webkitSpeechRecognition()
+    const recognitionLang =
+      props.lang || document.documentElement.lang || navigator.language
+
+    microphone.lang = recognitionLang
+
+    if (isRecording) {
+      microphone.stop()
+      setIsEndingRecording(true)
+      setIsRecording(false)
+    } else {
+      microphone.start()
+      setErrorMessage('')
+      setIsRecording(true)
+    }
+
+    microphone.onstart = () => {
+      setIsRecording(true)
+    }
+
+    microphone.onresult = (event: SpeechRecognitionEvent) => {
+      const currentTranscript = event.results[0][0].transcript
+
+      if (messageText.length > 0) {
+        setMessageText(messageText + ' ' + currentTranscript)
+      } else {
+        setMessageText(currentTranscript)
+      }
+
+      setIsRecording(false)
+    }
+
+    microphone.onerror = (event: SpeechRecognitionErrorEvent) => {
+      setErrorMessage(`Error: ${event.error}`)
+      setIsRecording(false)
+    }
+
+    microphone.onend = () => {
+      setIsEndingRecording(false)
+      setIsRecording(false)
+    }
+  }
 
   function handleSendMessage(): void {
     if (!isEmptyMessage) {
@@ -69,82 +154,12 @@ export default function TextInput(props: TextInputProps) {
   }
 
   function handleOnChange(e: React.ChangeEvent<HTMLInputElement>): void {
+    setErrorMessage('')
     setMessageText(e.target.value)
   }
 
   function handleOnFocusToggle() {
     setIsFocused(!isFocused)
-  }
-
-  function handleToggleSpeechToText() {
-    const microphone = new window.webkitSpeechRecognition()
-
-    microphone.lang = 'en-US'
-
-    if (isRecording) {
-      microphone.stop()
-      setIsEndingRecording(true)
-      setIsRecording(false)
-    } else {
-      microphone.start()
-      setIsRecording(true)
-    }
-
-    microphone.onstart = () => {
-      setIsRecording(true)
-    }
-
-    microphone.onresult = (event: SpeechRecognitionEvent) => {
-      // eslint-disable-next-line no-console
-      console.log('onresult happened')
-      const currentTranscript = event.results[0][0].transcript
-
-      if (messageText.length > 0) {
-        setMessageText(messageText + ' ' + currentTranscript)
-      } else {
-        setMessageText(currentTranscript)
-      }
-
-      setIsRecording(false)
-    }
-
-    microphone.onerror = (event: SpeechRecognitionErrorEvent) => {
-      console.error('Speech recognition error:', event.error)
-      setIsRecording(false)
-    }
-
-    microphone.onend = () => {
-      setIsEndingRecording(false)
-      setIsRecording(false)
-    }
-  }
-
-  const speechToTextButtonAdornment = {
-    endAdornment: (
-      <InputAdornment position="end">
-        {isEndingRecording ? (
-          <CircularProgress size={24} data-cy="spinner" />
-        ) : (
-          <Tooltip title={`${isRecording ? 'Stop' : 'Start'} speech to text`}>
-            <IconButton
-              data-cy="record-button"
-              onClick={handleToggleSpeechToText}
-              size="small"
-            >
-              {isRecording ? (
-                <MicRoundedIcon color="secondary" />
-              ) : (
-                <MicNoneRoundedIcon
-                  sx={{
-                    color: isFocused ? 'primary.main' : 'primary.light',
-                  }}
-                />
-              )}
-            </IconButton>
-          </Tooltip>
-        )}
-      </InputAdornment>
-    ),
   }
 
   return (
@@ -165,6 +180,8 @@ export default function TextInput(props: TextInputProps) {
         onBlur={handleOnFocusToggle}
         color="secondary"
         size="small"
+        error={!!errorMessage}
+        helperText={errorMessage}
         InputProps={props.speechToText ? speechToTextButtonAdornment : {}}
       />
       <IconButton
