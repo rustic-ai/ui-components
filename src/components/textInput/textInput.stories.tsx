@@ -29,6 +29,12 @@ export const Default = {
   },
 }
 
+export const SpeechToText = {
+  args: {
+    ...Default.args,
+    speechToText: true,
+  },
+}
 export const NoMultiLine = {
   args: {
     ...Default.args,
