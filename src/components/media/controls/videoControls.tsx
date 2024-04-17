@@ -60,6 +60,8 @@ export function PictureInPictureButton(props: PictureInPictureButtonProps) {
 export function FullscreenButton(props: FullscreenButtonProps) {
   const [isFullscreen, setIsFullscreen] = useState(!!document.fullscreenElement)
 
+  const videoContainer = props.element
+
   const action = isFullscreen ? 'fullscreenExit' : 'fullscreen'
 
   function handleFullscreen() {
@@ -75,7 +77,7 @@ export function FullscreenButton(props: FullscreenButtonProps) {
           )
         })
     } else {
-      props.element
+      videoContainer
         .requestFullscreen()
         .then(() => {
           setIsFullscreen(true)
@@ -86,6 +88,11 @@ export function FullscreenButton(props: FullscreenButtonProps) {
           )
         })
     }
+  }
+
+  // State is updated by event listeners so that the icon is displayed correctly, even when fullscreen is exited without direct use of this toggle (e.g. exiting from fullscreen by pressing Esc).
+  videoContainer.onfullscreenchange = function () {
+    setIsFullscreen(!!document.fullscreenElement)
   }
 
   return <MediaIconButton onClick={handleFullscreen} action={action} />
