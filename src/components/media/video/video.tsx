@@ -40,7 +40,7 @@ export default function Video(props: VideoFormat) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
- const inActivityTimeout = 3000 // Hide controls after 3 seconds of inactivity
+  const inActivityTimeout = 3000 // Hide controls after 3 seconds of inactivity
   useEffect(() => {
     const loadingErrorMessage = 'The video resource has failed to load'
     const stalledErrorMessage = 'Failed to fetch data, but trying'
@@ -62,7 +62,10 @@ export default function Video(props: VideoFormat) {
 
     function startTimeout() {
       clearTimeout(timeoutId)
-      timeoutId = setTimeout(() => setAreControlsVisible(false), inActivityTimeout) 
+      timeoutId = setTimeout(
+        () => setAreControlsVisible(false),
+        inActivityTimeout
+      )
     }
 
     videoRef.current?.addEventListener('timeupdate', updateElapsedTime)
@@ -310,6 +313,7 @@ export default function Video(props: VideoFormat) {
       <Box
         ref={videoContainerRef}
         className="rustic-video-screen"
+        data-cy="video-screen"
         sx={{
           visibility: isLoading ? 'hidden' : 'visible',
         }}

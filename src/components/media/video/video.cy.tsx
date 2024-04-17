@@ -1,3 +1,4 @@
+/* eslint-disable no-magic-numbers */
 import 'cypress-real-events'
 
 import { supportedViewports } from '../../../../cypress/support/variables'
@@ -28,12 +29,14 @@ describe('Video', () => {
   context('Mobile and Desktop', () => {
     beforeEach(() => {
       cy.mount(
-        <Video
-          src={src}
-          title={title}
-          captions={captions}
-          transcript={transcriptContent}
-        />
+        <div style={{ width: '200px' }}>
+          <Video
+            src={src}
+            title={title}
+            captions={captions}
+            transcript={transcriptContent}
+          />
+        </div>
       )
     })
 
@@ -68,20 +71,27 @@ describe('Video', () => {
       })
       it(`should toggle between fullscreen and normal mode when clicking the fullscreen button on ${viewport} screen`, () => {
         cy.viewport(viewport)
+        cy.get('[data-cy="spinner"]').should('not.exist')
         cy.get(fullScreenEnterButton).should('exist')
         if (viewport === 'macbook-13') {
           cy.get(controls).realHover()
         }
+        cy.get(fullScreenEnterButton).should('be.visible')
+
         cy.get(fullScreenEnterButton).realClick()
-        cy.document().then((doc) => {
-          expect(doc.fullscreenElement).to.not.be.null
-        })
+        cy.wait(1000)
+        if (viewport === 'macbook-13') {
+          cy.get(controls).realHover()
+        }
         cy.get(fullScreenExitButton).should('exist')
-        cy.get(controls).realHover()
-        cy.get(fullScreenExitButton).click()
-        cy.document().then((doc) => {
-          expect(doc.fullscreenElement).to.be.null
-        })
+        cy.document().its('fullscreenElement').should('exist')
+
+        if (viewport === 'macbook-13') {
+          cy.get(controls).realHover()
+        }
+        cy.get(fullScreenExitButton).realClick()
+        cy.wait(1000)
+        cy.document().its('fullscreenElement').should('not.exist')
       })
       it(`should display an error message when no valid sources are found on ${viewport} screen`, () => {
         cy.viewport(viewport)
@@ -158,6 +168,7 @@ describe('Video', () => {
     it('should show all the controls on fullscreen mode', () => {
       cy.get(fullScreenEnterButton).should('exist')
       cy.get(fullScreenEnterButton).realClick()
+      cy.wait(1000)
       cy.get(controls).click()
       cy.get(playButton).should('exist')
       cy.get(transcriptToggle).should('exist')
@@ -217,30 +228,30 @@ describe('Video', () => {
       cy.get(fullScreenEnterButton).should('exist')
       cy.get(controls).realHover()
       cy.get(fullScreenEnterButton).realClick()
-      cy.document().then((doc) => {
-        expect(doc.fullscreenElement).to.not.be.null
-      })
-      cy.viewport('iphone-6')
+      cy.wait(1000)
       cy.get(fullScreenExitButton).should('exist')
+      cy.document().its('fullscreenElement').should('exist')
+
+      cy.viewport('iphone-6')
       cy.get(controls).realHover()
       cy.get(fullScreenExitButton).click()
-      cy.document().then((doc) => {
-        expect(doc.fullscreenElement).to.be.null
-      })
+      cy.wait(1000)
+      cy.get(fullScreenEnterButton).should('exist')
+      cy.document().its('fullscreenElement').should('not.exist')
     })
     it('should toggle between picture-in-picture and normal mode when clicking the picture-in-picture button', () => {
       cy.get(pictureInPictureButton).should('exist')
       cy.get(controls).realHover()
       cy.get(pictureInPictureButton).realClick()
-      cy.document().then((doc) => {
-        expect(doc.pictureInPictureElement).to.not.be.null
-      })
+      cy.wait(1000)
       cy.get(pictureInPictureExitButton).should('exist')
+      cy.document().its('pictureInPictureElement').should('exist')
+
       cy.get(controls).realHover()
       cy.get(pictureInPictureExitButton).click()
-      cy.document().then((doc) => {
-        expect(doc.pictureInPictureElement).to.be.null
-      })
+      cy.wait(1000)
+      cy.get(pictureInPictureButton).should('exist')
+      cy.document().its('pictureInPictureElement').should('not.exist')
     })
   })
 })
