@@ -1,13 +1,43 @@
 import type { StoryFn } from '@storybook/react'
 import React from 'react'
 
-import Input from './input'
+import Input, { type FileInfo } from './input'
 import {
-  onFileAddFailed,
-  onFileAddRandom,
+  delayReject,
+  getRandomDelayInSeconds,
   onFileAddSuccess,
   onFileDelete,
 } from './mockFunctions'
+
+function onFileAddFailed(
+  file: File,
+  fileId: string,
+  onUploadProgress: (progressEvent: ProgressEvent) => void,
+  fileInfo: FileInfo
+): Promise<{ url: string }> {
+  const deplayTimeInSeconds = 5
+  return delayReject(
+    getRandomDelayInSeconds(deplayTimeInSeconds),
+    fileInfo.controller.signal
+  )
+}
+
+function onFileAddRandom(
+  file: File,
+  fileId: string,
+  onUploadProgress: (progressEvent: ProgressEvent) => void,
+  fileInfo: FileInfo
+): Promise<{ url: string }> {
+  const fiftyPercent = 0.5
+  const shouldReject = Math.random() < fiftyPercent
+
+  if (shouldReject) {
+    return onFileAddSuccess(file, fileId, onUploadProgress, fileInfo)
+  } else {
+    return onFileAddFailed(file, fileId, onUploadProgress, fileInfo)
+  }
+}
+
 export default {
   title: 'Rustic UI/Input/Input',
   component: Input,

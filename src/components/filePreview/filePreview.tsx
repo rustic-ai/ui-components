@@ -28,6 +28,7 @@ function FilePreview(props: FilePreview) {
       <Box className="rustic-flex-center">
         {props.loadingProgress < maximumLoadingProgress && (
           <LinearProgress
+            data-cy="loading-progress"
             variant="determinate"
             color="secondary"
             value={props.loadingProgress}
@@ -35,6 +36,7 @@ function FilePreview(props: FilePreview) {
           />
         )}
         <IconButton
+          data-cy="delete-button"
           color="primary"
           onClick={props.onDelete}
           className="rustic-delete-button"

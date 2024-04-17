@@ -1,10 +1,34 @@
 import type { FileInfo } from './input'
 
-function getRandomDelayInSeconds(maxSeconds: number) {
+export function getRandomDelayInSeconds(maxSeconds: number) {
   const conversionRate = 1000
   const minDelay = 1000
   const maxDelay = maxSeconds * conversionRate
   return Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay
+}
+
+export function onFileDelete(fileId: string): Promise<{ isDeleted: boolean }> {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve({ isDeleted: true })
+      // eslint-disable-next-line no-console
+      console.log('File deleted:', fileId)
+    }, getRandomDelayInSeconds(1))
+  })
+}
+
+export function delayReject(ms: number, signal: AbortSignal) {
+  return new Promise((resolve, reject) => {
+    const listener = () => {
+      clearTimeout(timer)
+    }
+    signal?.throwIfAborted()
+    const timer = setTimeout(() => {
+      signal?.removeEventListener('abort', listener)
+      reject('failed to upload')
+    }, ms)
+    signal?.addEventListener('abort', listener)
+  }) as Promise<{ url: string }>
 }
 
 export function onFileAddSuccess(
@@ -37,58 +61,5 @@ export function onFileAddSuccess(
       }
     }, delayTime)
     signal?.addEventListener('abort', listener)
-  })
-}
-
-function delayReject(ms: number, signal: AbortSignal) {
-  return new Promise((resolve, reject) => {
-    const listener = () => {
-      clearTimeout(timer)
-    }
-    signal?.throwIfAborted()
-    const timer = setTimeout(() => {
-      signal?.removeEventListener('abort', listener)
-      reject('failed to upload')
-    }, ms)
-    signal?.addEventListener('abort', listener)
-  })
-}
-
-export function onFileAddFailed(
-  file: File,
-  fileId: string,
-  onUploadProgress: (progressEvent: ProgressEvent) => void,
-  fileInfo: FileInfo
-) {
-  const deplayTimeInSeconds = 5
-  return delayReject(
-    getRandomDelayInSeconds(deplayTimeInSeconds),
-    fileInfo.controller.signal
-  )
-}
-
-export function onFileAddRandom(
-  file: File,
-  fileId: string,
-  onUploadProgress: (progressEvent: ProgressEvent) => void,
-  fileInfo: FileInfo
-) {
-  const fiftyPercent = 0.5
-  const shouldReject = Math.random() < fiftyPercent
-
-  if (shouldReject) {
-    return onFileAddSuccess(file, fileId, onUploadProgress, fileInfo)
-  } else {
-    return onFileAddFailed(file, fileId, onUploadProgress, fileInfo)
-  }
-}
-
-export function onFileDelete(fileId: string): Promise<{ isDeleted: boolean }> {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve({ isDeleted: true })
-      // eslint-disable-next-line no-console
-      console.log('File deleted:', fileId)
-    }, getRandomDelayInSeconds(1))
   })
 }

@@ -3,6 +3,7 @@ import RechartsTimeSeries from './chart/rechartsTimeSeries'
 import CodeSnippet from './codeSnippet/codeSnippet'
 import ElementRenderer from './elementRenderer/elementRenderer'
 import Image from './image/image'
+import Input from './input/input'
 import OpenLayersMap from './map/openLayersMap'
 import MarkedMarkdown from './markdown/markedMarkdown'
 import MarkedStreamingMarkdown from './markdown/markedStreamingMarkdown'
@@ -25,6 +26,7 @@ export {
   ElementRenderer,
   FCCalendar,
   Image,
+  Input,
   MarkedMarkdown,
   MarkedStreamingMarkdown,
   MessageCanvas,

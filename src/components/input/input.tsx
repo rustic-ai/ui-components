@@ -41,37 +41,39 @@ export default function Input(props: Input) {
   const [errorMessages, setErrorMessages] = useState<string[]>([])
   const [pendingUploadCount, setPendingUploadCount] = useState(0)
   const isEmptyMessage = !messageText.trim().length
-
+  const hasUploadedFiles = addedFiles.length > 0 && pendingUploadCount === 0
   function handleSendMessage(): void {
-    const currentTime = new Date().toISOString()
+    if (!isEmptyMessage || hasUploadedFiles) {
+      const currentTime = new Date().toISOString()
 
-    const formattedMessage: Message = {
-      id: getUUID(),
-      timestamp: currentTime,
-      sender: props.sender,
-      format: 'text',
-      conversationId: props.conversationId,
-      data: {},
-    }
+      const formattedMessage: Message = {
+        id: getUUID(),
+        timestamp: currentTime,
+        sender: props.sender,
+        format: 'text',
+        conversationId: props.conversationId,
+        data: {},
+      }
 
-    if (addedFiles.length > 0) {
-      const files = addedFiles.map((file) => {
-        return { name: file.name, url: file.url }
-      })
-      formattedMessage.format = 'files'
-      formattedMessage.data = {
-        description: messageText,
-        files: files,
+      if (addedFiles.length > 0) {
+        const files = addedFiles.map((file) => {
+          return { name: file.name, url: file.url }
+        })
+        formattedMessage.format = 'files'
+        formattedMessage.data = {
+          description: messageText,
+          files: files,
+        }
+      } else {
+        formattedMessage.data = {
+          text: messageText,
+        }
       }
-    } else {
-      formattedMessage.data = {
-        text: messageText,
-      }
+      props.ws.send(formattedMessage)
+      setMessageText('')
+      setAddedFiles([])
+      setErrorMessages([])
     }
-    props.ws.send(formattedMessage)
-    setMessageText('')
-    setAddedFiles([])
-    setErrorMessages([])
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>): void {
@@ -104,6 +106,7 @@ export default function Input(props: Input) {
           color="error"
           className="rustic-error-message"
           key={index}
+          data-cy="error-message"
         >
           {errorMessage}
         </Typography>
