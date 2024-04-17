@@ -21,7 +21,7 @@ function FilePreview(props: FilePreview) {
 
   return (
     <Card className="rustic-file-preview">
-      <Typography variant="subtitle2">
+      <Typography variant="subtitle2" data-cy="file-name">
         {getShortenString(props.name, maximumFileNameLength)}
       </Typography>
 

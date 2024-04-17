@@ -22,7 +22,7 @@ export type UploaderProps = {
   maxFileCount?: number
 }
 
-function getFileSizeAbbrev(bytes: number): string {
+export function getFileSizeAbbrev(bytes: number): string {
   const units = ['Bytes', 'KB', 'MB', 'GB']
   let unitIndex = 0
 
@@ -143,7 +143,7 @@ function Uploader(props: UploaderProps) {
 
   return (
     <div className="rustic-uploader">
-      <label htmlFor={inputId}>
+      <label htmlFor={inputId} data-cy="upload-button">
         <IconButton component="span" aria-label="Upload file" color="primary">
           <span className="material-symbols-rounded">attach_file</span>
         </IconButton>

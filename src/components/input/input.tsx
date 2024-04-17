@@ -18,7 +18,12 @@ export interface Input extends TextInput {
   acceptedFileTypes?: string
   maxFileSize?: number
   maxFileCount?: number
-  onFileAdd: (file: File) => Promise<{ url: string }>
+  onFileAdd: (
+    file: File,
+    fileId: string,
+    onUploadProgress: (progressEvent: ProgressEvent) => void,
+    fileInfo: FileInfo
+  ) => Promise<{ url: string }>
   onFileDelete: (fileId: string) => Promise<{ isDeleted: boolean }>
 }
 
