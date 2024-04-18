@@ -151,3 +151,47 @@ export interface VideoFormat extends MediaFormat {
   /** URL of an image to be shown while the video is downloading. If not provided, nothing is displayed until the first frame is available. */
   poster?: string
 }
+
+export interface TextInputProps {
+  ws: WebSocketClient
+  /** Id of the current user. */
+  sender: string
+  /** Id of the current conversation. */
+  conversationId: string
+  /** Label text to be displayed in the input, which will then move to the top when the input is focused on. If both label and placeholder are provided, the placeholder will only be visible once the input is focused on. */
+  label?: string
+  /** Placeholder text to be displayed in the input before user starts typing. */
+  placeholder?: string
+  /** Boolean that dictates whether `TextInput` can expand to be multiline. */
+  multiline?: boolean
+  /** Maximum number of rows to be displayed. */
+  maxRows?: number
+  /** Boolean that dictates whether `TextInput` takes up 100% width of the parent container. */
+  fullWidth?: boolean
+}
+
+export interface InputProps extends TextInputProps {
+  /** The types of files that are allowed to be selected for upload. For more information, refer to the [mdn web docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file#unique_file_type_specifiers). */
+  acceptedFileTypes?: string
+  /** The maximum allowed size for each uploaded file, in bytes. */
+  maxFileSize?: number
+  /** The maximum number of files that can be uploaded in one message. */
+  maxFileCount?: number
+  /** A callback function that is called when a file is added for upload. Http request should be made here to upload the file and return an url for the file. onUploadProgress is used to get upload progress events to update UI. */
+  onFileAdd: (
+    file: File,
+    fileId: string,
+    onUploadProgress: (progressEvent: ProgressEvent) => void,
+    fileInfo: FileInfo
+  ) => Promise<{ url: string }>
+  /** A callback function called when a file is deleted from the upload queue. Http request should be made here to abort/delete the file upload. */
+  onFileDelete: (fileId: string) => Promise<{ isDeleted: boolean }>
+}
+
+export interface FileInfo {
+  id: string
+  name: string
+  loadingProgress: number
+  controller: AbortController
+  url?: string
+}

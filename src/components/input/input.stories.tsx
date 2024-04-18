@@ -1,7 +1,8 @@
 import type { StoryFn } from '@storybook/react'
 import React from 'react'
 
-import Input, { type FileInfo } from './input'
+import type { FileInfo } from '../types'
+import Input from './input'
 import {
   delayReject,
   getRandomDelayInSeconds,
@@ -38,7 +39,7 @@ function onFileAddRandom(
   }
 }
 
-export default {
+const meta = {
   title: 'Rustic UI/Input/Input',
   component: Input,
   tags: ['autodocs'],
@@ -61,6 +62,7 @@ export default {
     },
   ],
 }
+export default meta
 
 export const Default = {
   args: {

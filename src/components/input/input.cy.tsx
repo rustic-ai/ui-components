@@ -1,5 +1,6 @@
 import { supportedViewports } from '../../../cypress/support/variables'
-import Input, { type FileInfo } from './input'
+import type { FileInfo } from '../types'
+import Input from './input'
 import { delayReject, onFileAddSuccess, onFileDelete } from './mockFunctions'
 
 function onFileAddFailed(

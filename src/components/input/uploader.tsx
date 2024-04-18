@@ -4,7 +4,7 @@ import IconButton from '@mui/material/IconButton'
 import React from 'react'
 import { v4 as getUUID } from 'uuid'
 
-import type { FileInfo } from './input'
+import type { FileInfo } from '../types'
 
 export type UploaderProps = {
   addedFiles: FileInfo[]

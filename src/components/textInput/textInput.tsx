@@ -12,29 +12,9 @@ import React from 'react'
 import { v4 as getUUID } from 'uuid'
 
 import Icon from '../icon'
-import type { Message, WebSocketClient } from '../types'
+import type { Message, TextInputProps } from '../types'
 
-export interface TextInput {
-  ws: WebSocketClient
-  /** Id of the current user. */
-  sender: string
-  /** Id of the current conversation. */
-  conversationId: string
-  /** Label text to be displayed in the input, which will then move to the top when the input is focused on. If both label and placeholder are provided, the placeholder will only be visible once the input is focused on. */
-  label?: string
-  /** Placeholder text to be displayed in the input before user starts typing. */
-  placeholder?: string
-  /** Boolean that dictates whether `TextInput` can expand to be multiline. */
-  multiline?: boolean
-  /** Maximum number of rows to be displayed. */
-  maxRows?: number
-  /** Boolean that dictates whether `TextInput` takes up 100% width of the parent container. */
-  fullWidth?: boolean
-  /** Boolean to enable speech-to-text. See which browsers are supported [here](https://developer.mozilla.org/en-US/docs/Web/API/SpeechRecognition#browser_compatibility). */
-  enableSpeechToText?: boolean
-}
-
-export default function TextInput(props: TextInput) {
+export default function TextInput(props: TextInputProps) {
   const [messageText, setMessageText] = useState<string>('')
   const [errorMessage, setErrorMessage] = useState<string>('')
   const [isRecording, setIsRecording] = useState(false)

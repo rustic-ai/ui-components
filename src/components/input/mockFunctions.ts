@@ -1,4 +1,4 @@
-import type { FileInfo } from './input'
+import type { FileInfo } from '../types'
 
 export function getRandomDelayInSeconds(maxSeconds: number) {
   const conversionRate = 1000

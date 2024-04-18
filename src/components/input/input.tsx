@@ -10,32 +10,10 @@ import React from 'react'
 import { v4 as getUUID } from 'uuid'
 
 import FilePreview from '../filePreview/filePreview'
-import type { TextInput } from '../textInput/textInput'
-import type { Message } from '../types'
+import type { FileInfo, InputProps, Message } from '../types'
 import Uploader from './uploader'
 
-export interface Input extends TextInput {
-  acceptedFileTypes?: string
-  maxFileSize?: number
-  maxFileCount?: number
-  onFileAdd: (
-    file: File,
-    fileId: string,
-    onUploadProgress: (progressEvent: ProgressEvent) => void,
-    fileInfo: FileInfo
-  ) => Promise<{ url: string }>
-  onFileDelete: (fileId: string) => Promise<{ isDeleted: boolean }>
-}
-
-export interface FileInfo {
-  id: string
-  name: string
-  loadingProgress: number
-  controller: AbortController
-  url?: string
-}
-
-export default function Input(props: Input) {
+export default function Input(props: InputProps) {
   const [messageText, setMessageText] = useState<string>('')
   const [addedFiles, setAddedFiles] = useState<FileInfo[]>([])
   const [errorMessages, setErrorMessages] = useState<string[]>([])
