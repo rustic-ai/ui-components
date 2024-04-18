@@ -1,5 +1,6 @@
 import Icon from '@mui/material/Icon'
 import IconButton from '@mui/material/IconButton'
+import Tooltip from '@mui/material/Tooltip'
 import React from 'react'
 
 interface MediaIconButtonProps {
@@ -45,17 +46,21 @@ export function MediaIconButton(props: MediaIconButtonProps) {
   const dataCyPrefix = controls[props.action].label.replaceAll(' ', '-')
 
   return (
-    <IconButton
-      onClick={props.onClick}
-      aria-label={`click to ${controls[props.action].label}`}
-      className={props.className}
-      data-cy={`${dataCyPrefix}-button`}
+    <Tooltip
+      title={controls[props.action].label}
+      PopperProps={{ container: document.fullscreenElement ?? document.body }}
     >
-      <Icon color="primary">
-        <span className="material-symbols-rounded">
-          {controls[props.action].symbol}
-        </span>
-      </Icon>
-    </IconButton>
+      <IconButton
+        onClick={props.onClick}
+        className={props.className}
+        data-cy={`${dataCyPrefix}-button`}
+      >
+        <Icon color="primary">
+          <span className="material-symbols-rounded">
+            {controls[props.action].symbol}
+          </span>
+        </Icon>
+      </IconButton>
+    </Tooltip>
   )
 }

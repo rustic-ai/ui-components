@@ -6,6 +6,7 @@ import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import LinearProgress from '@mui/material/LinearProgress'
 import Slider from '@mui/material/Slider'
+import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
 import React, { useState } from 'react'
 
@@ -214,14 +215,20 @@ export function PlaybackRateButton(props: MediaControls) {
   }
 
   return (
-    <Button
-      onClick={handlePlaybackRateChange}
-      className="rustic-playback-rate-button"
-      aria-label={`Playback rate: ${playbackRate}x, click to change`}
-      data-cy="playback-rate-button"
+    <Tooltip
+      title="playback rate"
+      PopperProps={{
+        container: document.fullscreenElement ?? document.body,
+      }}
     >
-      <Typography variant="body1">{playbackRate}X</Typography>
-    </Button>
+      <Button
+        onClick={handlePlaybackRateChange}
+        className="rustic-playback-rate-button"
+        data-cy="playback-rate-button"
+      >
+        <Typography variant="body1">{playbackRate}X</Typography>
+      </Button>
+    </Tooltip>
   )
 }
 
