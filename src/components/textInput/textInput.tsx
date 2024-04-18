@@ -2,13 +2,13 @@ import './textInput.css'
 
 import MicNoneRoundedIcon from '@mui/icons-material/MicNoneRounded'
 import MicRoundedIcon from '@mui/icons-material/MicRounded'
-import SendIcon from '@mui/icons-material/Send'
 import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
 import IconButton from '@mui/material/IconButton'
 import InputAdornment from '@mui/material/InputAdornment'
 import TextField from '@mui/material/TextField'
 import Tooltip from '@mui/material/Tooltip'
+import Typography from '@mui/material/Typography'
 import { useState } from 'react'
 import React from 'react'
 import { v4 as getUUID } from 'uuid'
@@ -33,8 +33,6 @@ export interface TextInputProps {
   fullWidth?: boolean
   /** Boolean to allow option for speech-to-text. See which browsers are supported [here](https://developer.mozilla.org/en-US/docs/Web/API/SpeechRecognition#browser_compatibility). */
   speechToText?: boolean
-  /** BCP 47 language tag to use for identifying speech when opting into `speechToText`. If this is not specified, this defaults to the HTML `lang` attribute value, or the user agent's language setting. However, setting this is good practice and recommended. e.g. "en", "en-US", "fr", "fr-FR", "es-ES", etc.  */
-  lang?: string
 }
 
 export default function TextInput(props: TextInputProps) {
@@ -47,6 +45,20 @@ export default function TextInput(props: TextInputProps) {
   const isEmptyMessage = !messageText.trim().length
   const speechToTextTooltipTitle = `${isRecording ? 'Stop' : 'Start'} speech to text`
   const speechToTextIconColor = isFocused ? 'primary.main' : 'primary.light'
+
+  const speechRecognitionErrors = {
+    'no-speech': 'no speech was detected',
+    aborted: 'speech input was aborted, possibly due to user action',
+    'audio-capture': 'audio capture failed',
+    network: 'network communication required for recognition failed',
+    'not-allowed':
+      'speech input disallowed due to security, privacy, or user preference',
+    'service-not-allowed':
+      'requested speech recognition service not allowed by user agent',
+    'bad-grammar': 'error in speech recognition grammar or unsupported format',
+    'language-not-supported':
+      'user agent does not support the specified language for recognition',
+  }
 
   function renderSpeechToTextIcon() {
     return (
@@ -86,8 +98,7 @@ export default function TextInput(props: TextInputProps) {
 
   function handleToggleSpeechToText() {
     const microphone = new window.webkitSpeechRecognition()
-    const recognitionLang =
-      props.lang || document.documentElement.lang || navigator.language
+    const recognitionLang = navigator.language
 
     microphone.lang = recognitionLang
 
@@ -118,7 +129,9 @@ export default function TextInput(props: TextInputProps) {
     }
 
     microphone.onerror = (event: SpeechRecognitionErrorEvent) => {
-      setErrorMessage(`Error: ${event.error}`)
+      const errorDescription = speechRecognitionErrors[event.error]
+
+      setErrorMessage(`An error occurred: ${errorDescription}.`)
       setIsRecording(false)
     }
 
@@ -164,26 +177,36 @@ export default function TextInput(props: TextInputProps) {
 
   return (
     <Box className="rustic-text-input-container">
-      <TextField
-        data-cy="text-input"
-        className="rustic-text-input"
-        variant="outlined"
-        value={messageText}
-        label={props.label}
-        placeholder={props.placeholder}
-        maxRows={props.maxRows}
-        multiline={props.multiline}
-        fullWidth={props.fullWidth}
-        onKeyDown={handleKeyDown}
-        onChange={handleOnChange}
-        onFocus={handleOnFocusToggle}
-        onBlur={handleOnFocusToggle}
-        color="secondary"
-        size="small"
-        error={!!errorMessage}
-        helperText={errorMessage}
-        InputProps={props.speechToText ? speechToTextButtonAdornment : {}}
-      />
+      <Box className="rustic-text-input-and-error-container">
+        {errorMessage.length > 0 && (
+          <Typography
+            variant="caption"
+            color="error"
+            className="rustic-error-message"
+          >
+            {errorMessage}
+          </Typography>
+        )}
+        <TextField
+          data-cy="text-input"
+          className="rustic-text-input"
+          variant="outlined"
+          value={messageText}
+          label={props.label}
+          placeholder={props.placeholder}
+          maxRows={props.maxRows}
+          multiline={props.multiline}
+          fullWidth={props.fullWidth}
+          onKeyDown={handleKeyDown}
+          onChange={handleOnChange}
+          onFocus={handleOnFocusToggle}
+          onBlur={handleOnFocusToggle}
+          color="secondary"
+          size="small"
+          error={!!errorMessage}
+          InputProps={props.speechToText ? speechToTextButtonAdornment : {}}
+        />
+      </Box>
       <IconButton
         data-cy="send-button"
         aria-label="send message"
@@ -191,7 +214,7 @@ export default function TextInput(props: TextInputProps) {
         disabled={isEmptyMessage}
         color="primary"
       >
-        <SendIcon />
+        <span className="material-symbols-rounded">send</span>
       </IconButton>
     </Box>
   )
