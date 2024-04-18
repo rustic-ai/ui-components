@@ -1,5 +1,4 @@
 import { supportedViewports } from '../../../cypress/support/variables'
-import type { FileInfo } from '../types'
 import Input from './input'
 import { delayReject, onFileAddSuccess, onFileDelete } from './mockFunctions'
 
@@ -7,9 +6,9 @@ function onFileAddFailed(
   file: File,
   fileId: string,
   onUploadProgress: (progressEvent: ProgressEvent) => void,
-  fileInfo: FileInfo
+  abortController: AbortController
 ): Promise<{ url: string }> {
-  return delayReject(1, fileInfo.controller.signal)
+  return delayReject(1, abortController.signal)
 }
 
 describe('Input', () => {

@@ -182,7 +182,7 @@ export interface InputProps extends TextInputProps {
     file: File,
     fileId: string,
     onUploadProgress: (progressEvent: ProgressEvent) => void,
-    fileInfo: FileInfo
+    abortController: AbortController
   ) => Promise<{ url: string }>
   /** A callback function called when a file is deleted from the upload queue. Http request should be made here to abort/delete the file upload. */
   onFileDelete: (fileId: string) => Promise<{ isDeleted: boolean }>

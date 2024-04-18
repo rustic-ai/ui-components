@@ -1,7 +1,6 @@
 import type { StoryFn } from '@storybook/react'
 import React from 'react'
 
-import type { FileInfo } from '../types'
 import Input from './input'
 import {
   delayReject,
@@ -14,12 +13,12 @@ function onFileAddFailed(
   file: File,
   fileId: string,
   onUploadProgress: (progressEvent: ProgressEvent) => void,
-  fileInfo: FileInfo
+  abortController: AbortController
 ): Promise<{ url: string }> {
   const deplayTimeInSeconds = 5
   return delayReject(
     getRandomDelayInSeconds(deplayTimeInSeconds),
-    fileInfo.controller.signal
+    abortController.signal
   )
 }
 
@@ -27,15 +26,15 @@ function onFileAddRandom(
   file: File,
   fileId: string,
   onUploadProgress: (progressEvent: ProgressEvent) => void,
-  fileInfo: FileInfo
+  abortController: AbortController
 ): Promise<{ url: string }> {
   const fiftyPercent = 0.5
   const shouldReject = Math.random() < fiftyPercent
 
   if (shouldReject) {
-    return onFileAddSuccess(file, fileId, onUploadProgress, fileInfo)
+    return onFileAddSuccess(file, fileId, onUploadProgress, abortController)
   } else {
-    return onFileAddFailed(file, fileId, onUploadProgress, fileInfo)
+    return onFileAddFailed(file, fileId, onUploadProgress, abortController)
   }
 }
 

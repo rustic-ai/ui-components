@@ -13,7 +13,7 @@ export type UploaderProps = {
     file: File,
     fileId: string,
     onUploadProcess: (progressEvent: ProgressEvent) => void,
-    fileInfo: FileInfo
+    abortController: AbortController
   ) => Promise<{ url: string }>
   setErrorMessages: React.Dispatch<React.SetStateAction<string[]>>
   setPendingUploadCount: React.Dispatch<React.SetStateAction<number>>
@@ -108,7 +108,7 @@ function Uploader(props: UploaderProps) {
         props.setAddedFiles((prev) => [...prev, newAddedFile])
 
         props
-          .onFileAdd(file, fileId, onUploadProgress, newAddedFile)
+          .onFileAdd(file, fileId, onUploadProgress, controller)
           .then((res) => {
             props.setAddedFiles((prevFiles) => {
               const fileIndex = prevFiles.findIndex(

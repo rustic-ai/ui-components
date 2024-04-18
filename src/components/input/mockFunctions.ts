@@ -1,5 +1,3 @@
-import type { FileInfo } from '../types'
-
 export function getRandomDelayInSeconds(maxSeconds: number) {
   const conversionRate = 1000
   const minDelay = 1000
@@ -35,9 +33,9 @@ export function onFileAddSuccess(
   file: File,
   fileId: string,
   onUploadProgress: (progressEvent: ProgressEvent) => void,
-  fileInfo: FileInfo
+  abortController: AbortController
 ): Promise<{ url: string }> {
-  const signal = fileInfo.controller.signal
+  const signal = abortController.signal
   const delayTime = 50
   let progress = 0
   const progressTotal = 100
