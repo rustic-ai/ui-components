@@ -192,6 +192,6 @@ export interface FileInfo {
   id: string
   name: string
   loadingProgress: number
-  controller: AbortController
+  abortController: AbortController
   url?: string
 }

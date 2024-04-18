@@ -103,7 +103,7 @@ function Uploader(props: UploaderProps) {
           name: file.name,
           loadingProgress: 0,
           id: fileId,
-          controller,
+          abortController: controller,
         }
         props.setAddedFiles((prev) => [...prev, newAddedFile])
 
@@ -145,7 +145,7 @@ function Uploader(props: UploaderProps) {
     <div className="rustic-uploader">
       <label htmlFor={inputId} data-cy="upload-button">
         <IconButton component="span" aria-label="Upload file" color="primary">
-          <span className="material-symbols-rounded">attach_file</span>
+          <span className="material-symbols-rounded">upload_2</span>
         </IconButton>
       </label>
       <input

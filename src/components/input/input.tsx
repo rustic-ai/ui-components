@@ -111,7 +111,7 @@ export default function Input(props: InputProps) {
                   <FilePreview
                     key={index}
                     name={file.name}
-                    onDelete={() => handleDelete(file.id, file.controller)}
+                    onDelete={() => handleDelete(file.id, file.abortController)}
                     loadingProgress={file.loadingProgress}
                   />
                 ))}
