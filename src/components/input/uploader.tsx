@@ -12,7 +12,7 @@ export type UploaderProps = {
   onFileAdd: (
     file: File,
     fileId: string,
-    onUploadProcess: (progressEvent: ProgressEvent) => void,
+    onUploadProgress: (progressEvent: ProgressEvent) => void,
     abortController: AbortController
   ) => Promise<{ url: string }>
   setErrorMessages: React.Dispatch<React.SetStateAction<string[]>>
@@ -64,81 +64,87 @@ function Uploader(props: UploaderProps) {
       }
     }
 
-    const filesToAdd = getFilesToAdd()
-    filesToAdd &&
-      props.setPendingUploadCount((prev) => prev + filesToAdd.length)
+    const maybeFilesToAdd = getFilesToAdd()
+    if (maybeFilesToAdd) {
+      props.setPendingUploadCount((prev) => prev + maybeFilesToAdd.length)
 
-    filesToAdd?.forEach((file) => {
-      if (props.maxFileSize && file.size > props.maxFileSize) {
-        props.setPendingUploadCount((prev) => prev - 1)
+      maybeFilesToAdd.forEach((file) => {
+        if (props.maxFileSize && file.size > props.maxFileSize) {
+          props.setPendingUploadCount((prev) => prev - 1)
 
-        props.setErrorMessages((prevMessages) => [
-          ...prevMessages,
-          `Failed to upload ${file.name}. You cannot upload files larger than ${props.maxFileSize && getFileSizeAbbrev(props.maxFileSize)}.`,
-        ])
-      } else {
-        const fileId = getUUID()
+          props.setErrorMessages((prevMessages) => [
+            ...prevMessages,
+            `Failed to upload ${file.name}. You cannot upload files larger than ${props.maxFileSize && getFileSizeAbbrev(props.maxFileSize)}.`,
+          ])
+        } else {
+          const fileId = getUUID()
 
-        const onUploadProgress = (progressEvent: ProgressEvent) => {
-          const percentageConversionRate = 100
-          const loadedPecentage =
-            (progressEvent.loaded / progressEvent.total) *
-            percentageConversionRate
+          const onUploadProgress = (progressEvent: ProgressEvent) => {
+            const percentageConversionRate = 100
+            const loadedPercentage =
+              (progressEvent.loaded / progressEvent.total) *
+              percentageConversionRate
 
-          props.setAddedFiles((prevFiles) => {
-            const fileIndex = prevFiles.findIndex((item) => item.id === fileId)
-            if (fileIndex !== -1) {
-              const updatedFiles = [...prevFiles]
-              updatedFiles[fileIndex] = {
-                ...updatedFiles[fileIndex],
-                loadingProgress: loadedPecentage,
-              }
-              return updatedFiles
-            }
-            return prevFiles
-          })
-        }
-        const controller = new AbortController()
-        const newAddedFile = {
-          name: file.name,
-          loadingProgress: 0,
-          id: fileId,
-          abortController: controller,
-        }
-        props.setAddedFiles((prev) => [...prev, newAddedFile])
-
-        props
-          .onFileAdd(file, fileId, onUploadProgress, controller)
-          .then((res) => {
+            //update the loading progress of the file in the addedFiles state
             props.setAddedFiles((prevFiles) => {
-              const fileIndex = prevFiles.findIndex(
+              const currentFileIndex = prevFiles.findIndex(
                 (item) => item.id === fileId
               )
-              if (fileIndex !== -1) {
+              const isFileInAddedFiles = currentFileIndex !== -1
+              if (isFileInAddedFiles) {
                 const updatedFiles = [...prevFiles]
-                updatedFiles[fileIndex] = {
-                  ...updatedFiles[fileIndex],
-                  url: res.url,
+                updatedFiles[currentFileIndex] = {
+                  ...updatedFiles[currentFileIndex],
+                  loadingProgress: loadedPercentage,
                 }
                 return updatedFiles
               }
               return prevFiles
             })
-          })
-          .catch((error) => {
-            props.setErrorMessages((prevMessages) => [
-              ...prevMessages,
-              `Failed to upload ${file.name}. ${error?.message ? error.message : ''}`,
-            ])
-            props.setAddedFiles((prevFiles) => {
-              return prevFiles.filter((item) => item.id !== fileId)
+          }
+          const controller = new AbortController()
+          const newAddedFile = {
+            name: file.name,
+            loadingProgress: 0,
+            id: fileId,
+            abortController: controller,
+          }
+          props.setAddedFiles((prev) => [...prev, newAddedFile])
+
+          props
+            .onFileAdd(file, fileId, onUploadProgress, controller)
+            .then((res) => {
+              props.setAddedFiles((prevFiles) => {
+                const fileIndex = prevFiles.findIndex(
+                  (item) => item.id === fileId
+                )
+                if (fileIndex !== -1) {
+                  const updatedFiles = [...prevFiles]
+                  updatedFiles[fileIndex] = {
+                    ...updatedFiles[fileIndex],
+                    url: res.url,
+                  }
+                  return updatedFiles
+                }
+                return prevFiles
+              })
             })
-          })
-          .finally(() => {
-            props.setPendingUploadCount((prev) => prev - 1)
-          })
-      }
-    })
+            .catch((error) => {
+              props.setErrorMessages((prevMessages) => [
+                ...prevMessages,
+                `Failed to upload ${file.name}. ${error?.message ? error.message : ''}`,
+              ])
+              props.setAddedFiles((prevFiles) => {
+                return prevFiles.filter((item) => item.id !== fileId)
+              })
+            })
+            .finally(() => {
+              props.setPendingUploadCount((prev) => prev - 1)
+            })
+        }
+      })
+    }
+    event.target.value = ''
   }
 
   return (

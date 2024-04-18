@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography'
 import Box from '@mui/system/Box'
 import React from 'react'
 
-import { getShortenString } from '../helper'
+import { shortenString } from '../helper'
 
 type FilePreview = {
   name: string
@@ -22,7 +22,7 @@ function FilePreview(props: FilePreview) {
   return (
     <Card className="rustic-file-preview">
       <Typography variant="subtitle2" data-cy="file-name">
-        {getShortenString(props.name, maximumFileNameLength)}
+        {shortenString(props.name, maximumFileNameLength)}
       </Typography>
 
       <Box className="rustic-flex-center">
@@ -40,6 +40,7 @@ function FilePreview(props: FilePreview) {
           color="primary"
           onClick={props.onDelete}
           className="rustic-delete-button"
+          aria-label="cancel file upload"
         >
           <span className="material-symbols-rounded">cancel</span>
         </IconButton>

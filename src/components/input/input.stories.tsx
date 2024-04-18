@@ -3,40 +3,10 @@ import React from 'react'
 
 import Input from './input'
 import {
-  delayReject,
-  getRandomDelayInSeconds,
+  onFileAddFailedSlow,
   onFileAddSuccess,
   onFileDelete,
 } from './mockFunctions'
-
-function onFileAddFailed(
-  file: File,
-  fileId: string,
-  onUploadProgress: (progressEvent: ProgressEvent) => void,
-  abortController: AbortController
-): Promise<{ url: string }> {
-  const deplayTimeInSeconds = 5
-  return delayReject(
-    getRandomDelayInSeconds(deplayTimeInSeconds),
-    abortController.signal
-  )
-}
-
-function onFileAddRandom(
-  file: File,
-  fileId: string,
-  onUploadProgress: (progressEvent: ProgressEvent) => void,
-  abortController: AbortController
-): Promise<{ url: string }> {
-  const fiftyPercent = 0.5
-  const shouldReject = Math.random() < fiftyPercent
-
-  if (shouldReject) {
-    return onFileAddSuccess(file, fileId, onUploadProgress, abortController)
-  } else {
-    return onFileAddFailed(file, fileId, onUploadProgress, abortController)
-  }
-}
 
 const meta = {
   title: 'Rustic UI/Input/Input',
@@ -93,21 +63,7 @@ export const FailToUpload = {
       // eslint-disable-next-line no-console
       send: (message: any) => console.log('Message sent:', message),
     },
-    onFileAdd: onFileAddFailed,
-    onFileDelete,
-  },
-}
-
-export const RandomUploadResult = {
-  args: {
-    sender: 'You',
-    conversationId: '1',
-    placeholder: 'Type your message',
-    ws: {
-      // eslint-disable-next-line no-console
-      send: (message: any) => console.log('Message sent:', message),
-    },
-    onFileAdd: onFileAddRandom,
+    onFileAdd: onFileAddFailedSlow,
     onFileDelete,
   },
 }

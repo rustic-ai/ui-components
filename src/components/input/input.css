@@ -11,9 +11,8 @@
   min-width: 248px;
 }
 
-.rustic-input-container .rustic-text-input .MuiOutlinedInput-root {
+.rustic-input-container .rustic-text-input > div {
   flex-wrap: wrap;
-  align-items: flex-start;
 }
 
 .rustic-input-container .rustic-files {

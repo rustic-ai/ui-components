@@ -1,6 +1,5 @@
 import './input.css'
 
-import SendIcon from '@mui/icons-material/Send'
 import Box from '@mui/material/Box'
 import IconButton from '@mui/material/IconButton'
 import TextField from '@mui/material/TextField'
@@ -137,7 +136,7 @@ export default function Input(props: InputProps) {
           disabled={isSendButtonDisabled}
           color="primary"
         >
-          <SendIcon />
+          <span className="material-symbols-rounded">send</span>
         </IconButton>
       </Box>
     </Box>

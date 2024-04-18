@@ -1,15 +1,10 @@
 import { supportedViewports } from '../../../cypress/support/variables'
 import Input from './input'
-import { delayReject, onFileAddSuccess, onFileDelete } from './mockFunctions'
-
-function onFileAddFailed(
-  file: File,
-  fileId: string,
-  onUploadProgress: (progressEvent: ProgressEvent) => void,
-  abortController: AbortController
-): Promise<{ url: string }> {
-  return delayReject(1, abortController.signal)
-}
+import {
+  onFileAddFailedQuick,
+  onFileAddSuccess,
+  onFileDelete,
+} from './mockFunctions'
 
 describe('Input', () => {
   const textInput = '[data-cy=text-input]'
@@ -115,6 +110,20 @@ describe('Input', () => {
       cy.get(fileName).should('not.contain', 'image-compon...')
       cy.get(fileName).should('contain', 'pdfExample.pdf')
       cy.get(fileName).should('contain', 'videoCaption...')
+    })
+
+    it(`allows adding the same file after deleting it on ${viewport} screen`, () => {
+      cy.viewport(viewport)
+      cy.get('input[type=file]').selectFile([imageFile], {
+        force: true,
+      })
+      cy.get(fileName).should('contain', 'image-compon...')
+      cy.get(deleteButton).click()
+      cy.get(fileName).should('not.exist')
+      cy.get('input[type=file]').selectFile([imageFile], {
+        force: true,
+      })
+      cy.get(fileName).should('contain', 'image-compon...')
     })
 
     it(`should disable the send button while the file is loading on ${viewport} screen`, () => {
@@ -242,7 +251,7 @@ describe('Input', () => {
             reconnect: cy.stub(),
           }}
           label="Type you message"
-          onFileAdd={onFileAddFailed}
+          onFileAdd={onFileAddFailedQuick}
           onFileDelete={onFileDelete}
         />
       )

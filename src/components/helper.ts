@@ -154,7 +154,7 @@ export function getSizeStyles(
   return stylingAttributes
 }
 
-export function getShortenString(str: string, maxLength: number) {
+export function shortenString(str: string, maxLength: number) {
   if (str.length <= maxLength) {
     return str
   }
