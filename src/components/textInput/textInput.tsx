@@ -44,8 +44,9 @@ export default function TextInput(props: TextInputProps) {
   const speechToTextTooltipTitle = `${isRecording ? 'Stop' : 'Start'} speech to text`
   const speechToTextInactiveColor = isFocused ? 'primary.main' : 'primary.light'
   const speechToTextIconColor = isRecording
-    ? 'secondary.main'
+    ? 'error.main'
     : speechToTextInactiveColor
+  const speechToTextIconName = isRecording ? 'stop_circle' : 'speech_to_text'
 
   const speechRecognitionErrors = {
     'no-speech': 'no speech was detected',
@@ -74,7 +75,9 @@ export default function TextInput(props: TextInputProps) {
               size="small"
               sx={{ color: speechToTextIconColor }}
             >
-              <span className="material-symbols-rounded">speech_to_text</span>
+              <span className="material-symbols-rounded">
+                {speechToTextIconName}
+              </span>
             </IconButton>
           </Tooltip>
         )}
