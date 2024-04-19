@@ -13,7 +13,7 @@
   height: 40px;
 }
 
-.rustic-video-control-error-message {
+.rustic-video-screen .rustic-control-error {
   position: absolute;
   top: 0;
   left: 0;
