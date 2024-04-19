@@ -1,7 +1,5 @@
 import './textInput.css'
 
-import MicNoneRoundedIcon from '@mui/icons-material/MicNoneRounded'
-import MicRoundedIcon from '@mui/icons-material/MicRounded'
 import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
 import IconButton from '@mui/material/IconButton'
@@ -44,7 +42,10 @@ export default function TextInput(props: TextInputProps) {
 
   const isEmptyMessage = !messageText.trim().length
   const speechToTextTooltipTitle = `${isRecording ? 'Stop' : 'Start'} speech to text`
-  const speechToTextIconColor = isFocused ? 'primary.main' : 'primary.light'
+  const speechToTextInactiveColor = isFocused ? 'primary.main' : 'primary.light'
+  const speechToTextIconColor = isRecording
+    ? 'secondary.main'
+    : speechToTextInactiveColor
 
   const speechRecognitionErrors = {
     'no-speech': 'no speech was detected',
@@ -64,13 +65,9 @@ export default function TextInput(props: TextInputProps) {
     return (
       <>
         {isRecording ? (
-          <MicRoundedIcon color="secondary" />
+          <span className="material-symbols-rounded">mic_off</span>
         ) : (
-          <MicNoneRoundedIcon
-            sx={{
-              color: speechToTextIconColor,
-            }}
-          />
+          <span className="material-symbols-rounded">mic</span>
         )}
       </>
     )
@@ -87,6 +84,7 @@ export default function TextInput(props: TextInputProps) {
               data-cy="record-button"
               onClick={handleToggleSpeechToText}
               size="small"
+              sx={{ color: speechToTextIconColor }}
             >
               {renderSpeechToTextIcon()}
             </IconButton>
@@ -171,10 +169,6 @@ export default function TextInput(props: TextInputProps) {
     setMessageText(e.target.value)
   }
 
-  function handleOnFocusToggle() {
-    setIsFocused(!isFocused)
-  }
-
   return (
     <Box className="rustic-text-input-container">
       <Box className="rustic-text-input-and-error-container">
@@ -199,8 +193,8 @@ export default function TextInput(props: TextInputProps) {
           fullWidth={props.fullWidth}
           onKeyDown={handleKeyDown}
           onChange={handleOnChange}
-          onFocus={handleOnFocusToggle}
-          onBlur={handleOnFocusToggle}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
           color="secondary"
           size="small"
           error={!!errorMessage}
