@@ -7,6 +7,10 @@
   font-size: 16px;
 }
 
+.rustic-sound .rustic-control-error {
+  margin-top: 16px;
+}
+
 /* style video element if has captions */
 .rustic-sound .rustic-has-captions {
   display: unset;
