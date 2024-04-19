@@ -38,6 +38,23 @@ export function getFileSizeAbbrev(bytes: number): string {
 
 function Uploader(props: UploaderProps) {
   const inputId = getUUID()
+
+  function getFilesToAdd(
+    files: File[],
+    totalFileCount: number,
+    maxFileCount?: number
+  ): File[] | undefined {
+    if (maxFileCount) {
+      if (totalFileCount <= maxFileCount) {
+        return files
+      } else {
+        return files.slice(0, maxFileCount - totalFileCount)
+      }
+    } else {
+      return files
+    }
+  }
+
   function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
     props.setErrorMessages([])
 
@@ -52,31 +69,26 @@ function Uploader(props: UploaderProps) {
       ])
     }
 
-    function getFilesToAdd() {
-      if (props.maxFileCount) {
-        if (totalFileCount <= props.maxFileCount) {
-          return files
-        } else {
-          return files?.slice(0, props.maxFileCount - totalFileCount)
-        }
-      } else {
-        return files
-      }
-    }
+    const maybeFilesToAdd =
+      files && getFilesToAdd(files, totalFileCount, props.maxFileCount)
 
-    const maybeFilesToAdd = getFilesToAdd()
     if (maybeFilesToAdd) {
       props.setPendingUploadCount((prev) => prev + maybeFilesToAdd.length)
 
       maybeFilesToAdd.forEach((file) => {
-        if (props.maxFileSize && file.size > props.maxFileSize) {
+        const isFileSizeExceedingLimit =
+          props.maxFileSize && file.size > props.maxFileSize
+
+        function rejectFile() {
           props.setPendingUploadCount((prev) => prev - 1)
 
           props.setErrorMessages((prevMessages) => [
             ...prevMessages,
             `Failed to upload ${file.name}. You cannot upload files larger than ${props.maxFileSize && getFileSizeAbbrev(props.maxFileSize)}.`,
           ])
-        } else {
+        }
+
+        function addFile() {
           const fileId = getUUID()
 
           const onUploadProgress = (progressEvent: ProgressEvent) => {
@@ -142,6 +154,12 @@ function Uploader(props: UploaderProps) {
               props.setPendingUploadCount((prev) => prev - 1)
             })
         }
+
+        if (isFileSizeExceedingLimit) {
+          rejectFile()
+        } else {
+          addFile()
+        }
       })
     }
     event.target.value = ''
@@ -160,7 +178,6 @@ function Uploader(props: UploaderProps) {
         onChange={handleFileChange}
         multiple
         accept={props.acceptedFileTypes}
-        className="rustic-input"
       />
     </div>
   )

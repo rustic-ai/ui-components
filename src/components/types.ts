@@ -173,18 +173,18 @@ export interface TextInputProps {
 export interface InputProps extends TextInputProps {
   /** The types of files that are allowed to be selected for upload. For more information, refer to the [mdn web docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file#unique_file_type_specifiers). */
   acceptedFileTypes?: string
-  /** The maximum allowed size for each uploaded file, in bytes. */
+  /** The maximum size for each uploaded file, in bytes. */
   maxFileSize?: number
   /** The maximum number of files that can be uploaded in one message. */
   maxFileCount?: number
-  /** A callback function that is called when a file is added for upload. Http request should be made here to upload the file and return an url for the file. onUploadProgress is used to get upload progress events to update UI. */
+  /** A callback function that is called when a file is added for upload. An HTTP request should be made here to upload the file and return a URL for the file. `onUploadProgress` is used to get upload progress events to update UI. */
   onFileAdd: (
     file: File,
     fileId: string,
     onUploadProgress: (progressEvent: ProgressEvent) => void,
     abortController: AbortController
   ) => Promise<{ url: string }>
-  /** A callback function called when a file is deleted from the upload queue. Http request should be made here to abort/delete the file upload. */
+  /** A callback function called when a file is deleted from the upload queue. An HTTP request should be made here to abort/delete the file upload. */
   onFileDelete: (fileId: string) => Promise<{ isDeleted: boolean }>
 }
 
