@@ -61,18 +61,6 @@ export default function TextInput(props: TextInputProps) {
       'user agent does not support the specified language for recognition',
   }
 
-  function renderSpeechToTextIcon() {
-    return (
-      <>
-        {isRecording ? (
-          <span className="material-symbols-rounded">mic_off</span>
-        ) : (
-          <span className="material-symbols-rounded">mic</span>
-        )}
-      </>
-    )
-  }
-
   const speechToTextButtonAdornment = {
     endAdornment: (
       <InputAdornment position="end">
@@ -86,7 +74,7 @@ export default function TextInput(props: TextInputProps) {
               size="small"
               sx={{ color: speechToTextIconColor }}
             >
-              {renderSpeechToTextIcon()}
+              <span className="material-symbols-rounded">speech_to_text</span>
             </IconButton>
           </Tooltip>
         )}
