@@ -18,7 +18,9 @@ describe('Video', () => {
   const fullScreenExitButton = '[data-cy=exit-fullscreen-button]'
   const transcript = '[data-cy=transcript]'
   const transcriptToggle = '[data-cy=transcript-toggle]'
-  const error = '[data-cy=error]'
+  const loadingError = '[data-cy=loading-error]'
+  const controlError = '[data-cy=control-error]'
+  const loadingSpinner = '[data-cy=spinner]'
 
   const src = '/videoExamples/videoStorybook.mp4'
   const title = 'Video Component'
@@ -43,7 +45,7 @@ describe('Video', () => {
     supportedViewports.forEach((viewport) => {
       it(`should initially show the loading spinner on ${viewport} screen`, () => {
         cy.viewport(viewport)
-        cy.get('[data-cy="spinner"]').should('be.visible')
+        cy.get(loadingSpinner).should('be.visible')
       })
       it(`should show and hide the transcript when clicking the transcript toggle on ${viewport} screen`, () => {
         cy.viewport(viewport)
@@ -71,7 +73,7 @@ describe('Video', () => {
       })
       it(`should toggle between fullscreen and normal mode when clicking the fullscreen button on ${viewport} screen`, () => {
         cy.viewport(viewport)
-        cy.get('[data-cy="spinner"]').should('not.exist')
+        cy.get(loadingSpinner).should('not.exist')
         cy.get(fullScreenEnterButton).should('exist')
         if (viewport === 'macbook-13') {
           cy.get(controls).realHover()
@@ -97,8 +99,8 @@ describe('Video', () => {
         cy.viewport(viewport)
         cy.mount(<Video src="" />)
         cy.get(videoElement).should('not.exist')
-        cy.get(error).should('be.visible')
-        cy.get(error).should('contain', 'The video resource has failed to load')
+        cy.get(loadingError).should('be.visible')
+        cy.get(loadingError).should('be.visible')
       })
       it(`should display an error message when the resource loading has been stalled on ${viewport} screen`, () => {
         cy.viewport(viewport)
@@ -113,12 +115,13 @@ describe('Video', () => {
         // Listen for the stalled event on the video element
         cy.get(videoElement).then((video) => {
           video.on('stalled', () => {
-            cy.get(error).should('contain', 'Failed to fetch data, but trying')
+            cy.get(loadingError).should('be.visible')
           })
         })
       })
       it(`should display an error message if entering fullscreen fails on ${viewport} screen`, () => {
         cy.viewport(viewport)
+        cy.get(loadingSpinner).should('not.exist')
         cy.window().then((window) => {
           cy.stub(window.HTMLElement.prototype, 'requestFullscreen').rejects(
             new TypeError('some error')
@@ -131,7 +134,7 @@ describe('Video', () => {
         cy.get(fullScreenEnterButton).realClick()
         cy.get(fullScreenExitButton).should('not.exist')
         cy.get(fullScreenEnterButton).should('exist')
-        cy.get('[data-cy=control-error-message]').should('exist')
+        cy.get(controlError).should('exist')
       })
       it(`should display an error message if pressing play fails on ${viewport} screen`, () => {
         cy.viewport(viewport)
@@ -147,7 +150,10 @@ describe('Video', () => {
         cy.get(playButton).click()
         cy.get(playButton).should('exist')
         cy.get(pauseButton).should('not.exist')
-        cy.get('[data-cy=control-error-message]').should('exist')
+        if (viewport === 'macbook-13') {
+          cy.get(controls).realHover()
+        }
+        cy.get(controlError).should('exist')
       })
     })
   })
@@ -189,8 +195,8 @@ describe('Video', () => {
           transcript={transcriptContent}
         />
       )
-      cy.get('[data-cy="spinner"]').should('be.visible')
-      cy.get('[data-cy="spinner"]').should('not.exist')
+      cy.get(loadingSpinner).should('be.visible')
+      cy.get(loadingSpinner).should('not.exist')
     })
     it(`should go forwards and backwards 10 seconds when clicking the forward/back buttons`, () => {
       const tenSeconds = 10

@@ -3,7 +3,6 @@ import './video.css'
 import { useMediaQuery, useTheme } from '@mui/material'
 import Alert from '@mui/material/Alert'
 import CircularProgress from '@mui/material/CircularProgress'
-import Fade from '@mui/material/Fade'
 import Typography from '@mui/material/Typography'
 import { Box } from '@mui/system'
 import React, { useEffect, useRef, useState } from 'react'
@@ -33,7 +32,7 @@ export default function Video(props: VideoFormat) {
   const [areControlsVisible, setAreControlsVisible] = useState(false)
 
   const [controlErrorMessage, setControlErrorMessage] = useState('')
-  const [errorMessage, setErrorMessage] = useState('')
+  const [loadingErrorMessage, setLoadingErrorMessage] = useState('')
   const [elapsedTime, setElapsedTime] = useState(0)
 
   const videoContainerRef = useRef<HTMLElement>(null)
@@ -41,25 +40,23 @@ export default function Video(props: VideoFormat) {
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
   const inActivityTimeout = 3000 // Hide controls after 3 seconds of inactivity
-  useEffect(() => {
-    const loadingErrorMessage = 'The video resource has failed to load'
-    const stalledErrorMessage = 'Failed to fetch data, but trying'
 
+  useEffect(() => {
     function updateElapsedTime() {
       if (videoRef.current) {
         setElapsedTime(videoRef.current.currentTime)
       }
     }
     function handleCanPlay() {
-      setErrorMessage('')
+      setLoadingErrorMessage('')
       setIsLoading(false)
     }
     function handleError(errorMessage: string) {
-      setErrorMessage(errorMessage)
+      setLoadingErrorMessage(errorMessage)
       setIsLoading(false)
     }
-    let timeoutId: ReturnType<typeof setTimeout>
 
+    let timeoutId: ReturnType<typeof setTimeout>
     function startTimeout() {
       clearTimeout(timeoutId)
       timeoutId = setTimeout(
@@ -71,10 +68,10 @@ export default function Video(props: VideoFormat) {
     videoRef.current?.addEventListener('timeupdate', updateElapsedTime)
     videoRef.current?.addEventListener('canplay', handleCanPlay)
     videoRef.current?.addEventListener('error', () =>
-      handleError(loadingErrorMessage)
+      handleError('Failed to load the video.')
     )
     videoRef.current?.addEventListener('stalled', () =>
-      handleError(stalledErrorMessage)
+      handleError('Failed to fetch video data, but trying.')
     )
     document.addEventListener('fullscreenchange', () => {
       setIsFullscreen(!!document.fullscreenElement)
@@ -293,10 +290,10 @@ export default function Video(props: VideoFormat) {
 
   const renderControls = isMobile ? renderMobileView : renderDesktopView
 
-  if (errorMessage.length > 0) {
+  if (loadingErrorMessage.length > 0) {
     return (
-      <Alert severity="error" data-cy="error">
-        {errorMessage}
+      <Alert severity="error" data-cy="loading-error">
+        {loadingErrorMessage}
       </Alert>
     )
   }
@@ -318,16 +315,16 @@ export default function Video(props: VideoFormat) {
           visibility: isLoading ? 'hidden' : 'visible',
         }}
       >
-        <Fade in={controlErrorMessage.length > 0}>
+        {controlErrorMessage.length > 0 && (
           <Alert
             severity="error"
-            className="rustic-video-control-error-message"
-            data-cy="control-error-message"
+            data-cy="control-error"
+            className="rustic-control-error"
             onClose={() => setControlErrorMessage('')}
           >
             {controlErrorMessage}
           </Alert>
-        </Fade>
+        )}
 
         {(!isMobile || isFullscreen) && renderTitle()}
         {renderVideoElement()}

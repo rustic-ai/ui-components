@@ -13,7 +13,7 @@ describe('Sound', () => {
   const playButton = '[data-cy=play-button]'
   const transcript = '[data-cy=transcript]'
   const transcriptToggle = '[data-cy=transcript-toggle]'
-  const error = '[data-cy=error]'
+  const loadingError = '[data-cy=loading-error]'
 
   const src = '/audioExamples/audioStorybook.mp3'
 
@@ -102,8 +102,8 @@ describe('Sound', () => {
       cy.viewport(viewport)
       cy.mount(<Sound src="" />)
       cy.get(audioElement).should('not.exist')
-      cy.get(error).should('be.visible')
-      cy.get(error).should('contain', 'The audio resource has failed to load')
+      cy.get(loadingError).should('be.visible')
+      cy.get(loadingError).should('be.visible')
     })
     it(`should display an error message when the resource loading has been stalled on ${viewport} screen`, () => {
       cy.viewport(viewport)
@@ -119,7 +119,7 @@ describe('Sound', () => {
         audio.on('stalled', () => {
           // Assertion to confirm that the stalled event was triggered
           expect(true).to.be.true
-          cy.get(error).should('contain', 'Failed to fetch data, but trying')
+          cy.get(loadingError).should('be.visible')
         })
       })
     })

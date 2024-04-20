@@ -3,7 +3,6 @@ import './sound.css'
 import { useMediaQuery, useTheme } from '@mui/material'
 import Alert from '@mui/material/Alert'
 import CircularProgress from '@mui/material/CircularProgress'
-import Fade from '@mui/material/Fade'
 import Typography from '@mui/material/Typography'
 import { Box } from '@mui/system'
 import React, { useEffect, useRef, useState } from 'react'
@@ -26,7 +25,7 @@ export default function Sound(props: AudioFormat) {
   const [areCaptionsShown, setAreCaptionsShown] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [elapsedTime, setElapsedTime] = useState(0)
-  const [errorMessage, setErrorMessage] = useState('')
+  const [loadingErrorMessage, setLoadingErrorMessage] = useState('')
   const [controlErrorMessage, setControlErrorMessage] = useState('')
 
   const theme = useTheme()
@@ -35,29 +34,26 @@ export default function Sound(props: AudioFormat) {
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
 
   useEffect(() => {
-    const loadingErrorMessage = 'The audio resource has failed to load'
-    const stalledErrorMessage = 'Failed to fetch data, but trying'
-
     function updateElapsedTime() {
       if (audioRef.current) {
         setElapsedTime(audioRef.current.currentTime)
       }
     }
     function handleCanPlay() {
-      setErrorMessage('')
+      setLoadingErrorMessage('')
       setIsLoading(false)
     }
     function handleError(errorMessage: string) {
-      setErrorMessage(errorMessage)
+      setLoadingErrorMessage(errorMessage)
     }
 
     audioRef.current?.addEventListener('timeupdate', updateElapsedTime)
     audioRef.current?.addEventListener('canplay', handleCanPlay)
     audioRef.current?.addEventListener('error', () =>
-      handleError(loadingErrorMessage)
+      handleError('Failed to load the audio.')
     )
     audioRef.current?.addEventListener('stalled', () =>
-      handleError(stalledErrorMessage)
+      handleError('Failed to fetch audio data, but trying.')
     )
   }, [])
 
@@ -213,10 +209,10 @@ export default function Sound(props: AudioFormat) {
 
   const renderControls = isMobile ? renderMobileView : renderDesktopView
 
-  if (errorMessage.length > 0) {
+  if (loadingErrorMessage.length > 0) {
     return (
-      <Alert severity="error" data-cy="error">
-        {errorMessage}
+      <Alert severity="error" data-cy="loading-error">
+        {loadingErrorMessage}
       </Alert>
     )
   }
@@ -234,11 +230,16 @@ export default function Sound(props: AudioFormat) {
     <Box className="rustic-sound" data-cy="audio">
       {renderVideoElement()}
       {renderControls()}
-      <Fade in={controlErrorMessage.length > 0}>
-        <Alert severity="error" onClose={() => setControlErrorMessage('')}>
+      {controlErrorMessage.length > 0 && (
+        <Alert
+          severity="error"
+          data-cy="control-error"
+          className="rustic-control-error"
+          onClose={() => setControlErrorMessage('')}
+        >
           {controlErrorMessage}
         </Alert>
-      </Fade>
+      )}
     </Box>
   )
 }
