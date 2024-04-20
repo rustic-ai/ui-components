@@ -42,7 +42,7 @@ export const Default = {
 export const SpeechToText = {
   args: {
     ...Default.args,
-    speechToText: true,
+    enableSpeechToText: true,
   },
 }
 

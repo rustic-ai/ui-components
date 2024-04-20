@@ -99,7 +99,7 @@ describe('TextInput', () => {
           conversationId="1"
           ws={mockWsClient}
           label="Type your message"
-          speechToText={true}
+          enableSpeechToText={true}
         />
       )
     })

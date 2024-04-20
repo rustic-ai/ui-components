@@ -29,8 +29,8 @@ export interface TextInputProps {
   maxRows?: number
   /** Boolean that dictates whether `TextInput` takes up 100% width of the parent container. */
   fullWidth?: boolean
-  /** Boolean to allow option for speech-to-text. See which browsers are supported [here](https://developer.mozilla.org/en-US/docs/Web/API/SpeechRecognition#browser_compatibility). */
-  speechToText?: boolean
+  /** Boolean to enable speech-to-text. See which browsers are supported [here](https://developer.mozilla.org/en-US/docs/Web/API/SpeechRecognition#browser_compatibility). */
+  enableSpeechToText?: boolean
 }
 
 export default function TextInput(props: TextInputProps) {
@@ -189,7 +189,9 @@ export default function TextInput(props: TextInputProps) {
           color="secondary"
           size="small"
           error={!!errorMessage}
-          InputProps={props.speechToText ? speechToTextButtonAdornment : {}}
+          InputProps={
+            props.enableSpeechToText ? speechToTextButtonAdornment : {}
+          }
         />
       </Box>
       <IconButton
@@ -209,4 +211,5 @@ TextInput.defaultProps = {
   multiline: true,
   fullWidth: true,
   maxRows: 6,
+  enableSpeechToText: false,
 }
