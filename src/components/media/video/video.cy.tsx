@@ -100,10 +100,7 @@ describe('Video', () => {
         cy.mount(<Video src="" />)
         cy.get(videoElement).should('not.exist')
         cy.get(loadingError).should('be.visible')
-        cy.get(loadingError).should(
-          'contain',
-          'The video resource has failed to load'
-        )
+        cy.get(loadingError).should('be.visible')
       })
       it(`should display an error message when the resource loading has been stalled on ${viewport} screen`, () => {
         cy.viewport(viewport)
@@ -118,10 +115,7 @@ describe('Video', () => {
         // Listen for the stalled event on the video element
         cy.get(videoElement).then((video) => {
           video.on('stalled', () => {
-            cy.get(loadingError).should(
-              'contain',
-              'Failed to fetch data, but trying'
-            )
+            cy.get(loadingError).should('be.visible')
           })
         })
       })

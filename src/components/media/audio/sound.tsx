@@ -34,9 +34,6 @@ export default function Sound(props: AudioFormat) {
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
 
   useEffect(() => {
-    const onErrorMessage = 'The audio resource has failed to load'
-    const onStalledMessage = 'Failed to fetch data, but trying'
-
     function updateElapsedTime() {
       if (audioRef.current) {
         setElapsedTime(audioRef.current.currentTime)
@@ -53,10 +50,10 @@ export default function Sound(props: AudioFormat) {
     audioRef.current?.addEventListener('timeupdate', updateElapsedTime)
     audioRef.current?.addEventListener('canplay', handleCanPlay)
     audioRef.current?.addEventListener('error', () =>
-      handleError(onErrorMessage)
+      handleError('Failed to load the audio.')
     )
     audioRef.current?.addEventListener('stalled', () =>
-      handleError(onStalledMessage)
+      handleError('Failed to fetch audio data, but trying.')
     )
   }, [])
 

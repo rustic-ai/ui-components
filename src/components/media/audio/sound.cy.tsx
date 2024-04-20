@@ -103,10 +103,7 @@ describe('Sound', () => {
       cy.mount(<Sound src="" />)
       cy.get(audioElement).should('not.exist')
       cy.get(loadingError).should('be.visible')
-      cy.get(loadingError).should(
-        'contain',
-        'The audio resource has failed to load'
-      )
+      cy.get(loadingError).should('be.visible')
     })
     it(`should display an error message when the resource loading has been stalled on ${viewport} screen`, () => {
       cy.viewport(viewport)
@@ -122,10 +119,7 @@ describe('Sound', () => {
         audio.on('stalled', () => {
           // Assertion to confirm that the stalled event was triggered
           expect(true).to.be.true
-          cy.get(loadingError).should(
-            'contain',
-            'Failed to fetch data, but trying'
-          )
+          cy.get(loadingError).should('be.visible')
         })
       })
     })

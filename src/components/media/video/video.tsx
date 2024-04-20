@@ -40,10 +40,8 @@ export default function Video(props: VideoFormat) {
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
   const inActivityTimeout = 3000 // Hide controls after 3 seconds of inactivity
-  useEffect(() => {
-    const onErrorMessage = 'The video resource has failed to load'
-    const onStalledMessage = 'Failed to fetch data, but trying'
 
+  useEffect(() => {
     function updateElapsedTime() {
       if (videoRef.current) {
         setElapsedTime(videoRef.current.currentTime)
@@ -57,8 +55,8 @@ export default function Video(props: VideoFormat) {
       setLoadingErrorMessage(errorMessage)
       setIsLoading(false)
     }
-    let timeoutId: ReturnType<typeof setTimeout>
 
+    let timeoutId: ReturnType<typeof setTimeout>
     function startTimeout() {
       clearTimeout(timeoutId)
       timeoutId = setTimeout(
@@ -70,10 +68,10 @@ export default function Video(props: VideoFormat) {
     videoRef.current?.addEventListener('timeupdate', updateElapsedTime)
     videoRef.current?.addEventListener('canplay', handleCanPlay)
     videoRef.current?.addEventListener('error', () =>
-      handleError(onErrorMessage)
+      handleError('Failed to load the video.')
     )
     videoRef.current?.addEventListener('stalled', () =>
-      handleError(onStalledMessage)
+      handleError('Failed to fetch video data, but trying.')
     )
     document.addEventListener('fullscreenchange', () => {
       setIsFullscreen(!!document.fullscreenElement)
