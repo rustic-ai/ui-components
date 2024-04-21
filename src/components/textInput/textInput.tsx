@@ -7,7 +7,7 @@ import InputAdornment from '@mui/material/InputAdornment'
 import TextField from '@mui/material/TextField'
 import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import React from 'react'
 import { v4 as getUUID } from 'uuid'
 
@@ -40,6 +40,8 @@ export default function TextInput(props: TextInputProps) {
   const [isFocused, setIsFocused] = useState(false)
   const [isEndingRecording, setIsEndingRecording] = useState(false)
 
+  const inputRef = useRef<HTMLInputElement>(null)
+
   const isEmptyMessage = !messageText.trim().length
   const speechToTextTooltipTitle = `${isRecording ? 'Stop' : 'Start'} speech to text`
   const speechToTextInactiveColor = isFocused ? 'primary.main' : 'primary.light'
@@ -49,17 +51,22 @@ export default function TextInput(props: TextInputProps) {
   const speechToTextIconName = isRecording ? 'stop_circle' : 'speech_to_text'
 
   const speechRecognitionErrors = {
-    'no-speech': 'no speech was detected',
-    aborted: 'speech input was aborted, possibly due to user action',
-    'audio-capture': 'audio capture failed',
-    network: 'network communication required for recognition failed',
+    'no-speech':
+      'No speech detected. Check your microphone volume and try again.',
+    aborted:
+      'Speech input was aborted. Ensure no other windows are accessing your microphone and try again.',
+    'audio-capture':
+      'Could not capture any audio. Check that your microphone is connected and try again.',
+    network:
+      'Failed to connect to the internet for recognition. Check your internet connection and try again.',
     'not-allowed':
-      'speech input disallowed due to security, privacy, or user preference',
+      'This functionality requires microphone access. Please allow microphone access and try again.',
     'service-not-allowed':
-      'requested speech recognition service not allowed by user agent',
-    'bad-grammar': 'error in speech recognition grammar or unsupported format',
+      "Speech recognition service is not allowed, either because the browser doesn't support it or because of reasons of security, privacy or user preference.",
+    'bad-grammar':
+      'There was an error in the speech recognition grammar or format. Check your speech input or grammar rules.',
     'language-not-supported':
-      'user agent does not support the specified language for recognition',
+      "The language you're speaking isn't supported. Try speaking in a different language or check your device settings.",
   }
 
   const speechToTextButtonAdornment = {
@@ -114,13 +121,14 @@ export default function TextInput(props: TextInputProps) {
         setMessageText(currentTranscript)
       }
 
+      inputRef.current?.focus()
       setIsRecording(false)
     }
 
     microphone.onerror = (event: SpeechRecognitionErrorEvent) => {
       const errorDescription = speechRecognitionErrors[event.error]
 
-      setErrorMessage(`An error occurred: ${errorDescription}.`)
+      setErrorMessage(errorDescription)
       setIsRecording(false)
     }
 
@@ -186,6 +194,7 @@ export default function TextInput(props: TextInputProps) {
           onChange={handleOnChange}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
+          inputRef={inputRef}
           color="secondary"
           size="small"
           error={!!errorMessage}
