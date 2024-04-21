@@ -1,3 +1,6 @@
+import type { StoryFn } from '@storybook/react'
+import React from 'react'
+
 import TextInput from './textInput'
 
 export default {
@@ -19,6 +22,13 @@ export default {
       },
     },
   },
+  decorators: [
+    (Story: StoryFn) => (
+      <div style={{ width: 'clamp(250px, 25vw, 500px)' }}>
+        <Story />
+      </div>
+    ),
+  ],
 }
 
 export const Default = {
@@ -26,6 +36,13 @@ export const Default = {
     sender: 'You',
     conversationId: '1',
     placeholder: 'Type your message',
+  },
+}
+
+export const SpeechToText = {
+  args: {
+    ...Default.args,
+    enableSpeechToText: true,
   },
 }
 

@@ -2,11 +2,7 @@
   "compilerOptions": {
     "target": "es5",
     "outDir": "dist",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -21,12 +17,13 @@
     "noEmit": false,
     "jsx": "react-jsx",
     "verbatimModuleSyntax": true,
-    "types": ["cypress-real-events"]
+    "types": ["cypress-real-events", "dom-speech-recognition"]
   },
   "include": [
     "src",
     "cypress",
     "./cypress.d.ts",
-    "cypress.config.ts"
+    "cypress.config.ts",
+    "global.d.ts"
   ]
 }
