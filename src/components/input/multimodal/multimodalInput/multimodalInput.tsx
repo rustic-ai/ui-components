@@ -154,7 +154,9 @@ export default function MultimodalInput(props: InputProps) {
                     : ''
                   if (xhr.status === successStatus) {
                     resolve(response)
-                  } else if (xhr.status !== 0) {
+                  } else if (xhr.status === 0) {
+                    reject('Task canceled')
+                  } else {
                     reject(response)
                   }
                 } else if (xhr.readyState === XMLHttpRequest.OPENED) {
@@ -188,15 +190,17 @@ export default function MultimodalInput(props: InputProps) {
               })
             })
             .catch((error) => {
-              setErrorMessages((prevMessages) => [
-                ...prevMessages,
-                `Failed to upload ${file.name}. ${
-                  error?.message ? error.message : ''
-                }`,
-              ])
-              setAddedFiles((prevFiles) => {
-                return prevFiles.filter((item) => item.id !== fileId)
-              })
+              if (error !== 'Task canceled') {
+                setErrorMessages((prevMessages) => [
+                  ...prevMessages,
+                  `Failed to upload ${file.name}. ${
+                    error?.message ? error.message : ''
+                  }`,
+                ])
+                setAddedFiles((prevFiles) => {
+                  return prevFiles.filter((item) => item.id !== fileId)
+                })
+              }
             })
             .finally(() => {
               setPendingUploadCount((prev) => prev - 1)
