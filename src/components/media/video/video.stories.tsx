@@ -8,6 +8,7 @@ export default {
   component: Video,
   tags: ['autodocs'],
   parameters: {
+    layout: 'centered',
     docs: {
       description: {
         component:
@@ -15,6 +16,15 @@ export default {
       },
     },
   },
+  decorators: [
+    (Story: StoryFn) => {
+      return (
+        <div style={{ maxWidth: '750px' }}>
+          <Story />
+        </div>
+      )
+    },
+  ],
 }
 
 const videoSrc = 'videoExamples/videoStorybook.mp4'
@@ -40,13 +50,10 @@ export const WithCaptions = {
     title: 'Sound with Captions',
     captions: 'audioExamples/captions.vtt',
   },
-  parameters: {
-    layout: 'centered',
-  },
   decorators: [
     (Story: StoryFn) => {
       return (
-        <div style={{ width: '500px' }}>
+        <div style={{ maxWidth: '500px' }}>
           <Story />
         </div>
       )
