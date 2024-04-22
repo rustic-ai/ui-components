@@ -7,3 +7,7 @@
 .rustic-base-input .rustic-text-field fieldset[aria-hidden='true'] {
   border-width: 1px;
 }
+
+.rustic-error-and-text-field-container {
+  width: 100%;
+}

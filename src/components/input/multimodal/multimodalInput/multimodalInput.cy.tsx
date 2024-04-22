@@ -210,7 +210,10 @@ describe('Input', () => {
 
         cy.get(fileName).should('contain', 'image-compon...')
         cy.get(fileName).should('not.contain', 'pdfExample.pdf')
-        cy.get(errorMessage).should('not.exist')
+        cy.get(errorMessage).should(
+          'not.contain',
+          'You can only upload up to 2 files'
+        )
 
         //add a new file
         cy.get('input[type=file]').selectFile([videoFile], {

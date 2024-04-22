@@ -169,8 +169,8 @@ export interface BaseInputProps {
   fullWidth?: boolean
   send: (message: Message) => void
   isSendEnabled?: boolean
-  errorMessages?: string[]
-  setErrorMessages?: React.Dispatch<React.SetStateAction<string[]>>
+  multimodalErrorMessages?: string[]
+  setMultimodalErrorMessages?: React.Dispatch<React.SetStateAction<string[]>>
   /** Boolean to enable speech-to-text. See which browsers are supported [here](https://developer.mozilla.org/en-US/docs/Web/API/SpeechRecognition#browser_compatibility). */
   enableSpeechToText?: boolean
 }
@@ -178,7 +178,10 @@ export interface BaseInputProps {
 export interface TextInputProps
   extends Omit<
     BaseInputProps,
-    'send' | 'isSendEnabled' | 'errorMessages' | 'setErrorMessages'
+    | 'send'
+    | 'isSendEnabled'
+    | 'multimodalErrorMessages'
+    | 'setMultimodalErrorMessages'
   > {
   ws: WebSocketClient
 }
