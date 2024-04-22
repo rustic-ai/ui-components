@@ -129,8 +129,9 @@ function Uploader(props: UploaderProps) {
               xhr.onreadystatechange = () => {
                 if (xhr.readyState === XMLHttpRequest.DONE) {
                   const successStatus = 200
-                  const response =
-                    xhr.responseText && JSON.parse(xhr.responseText)
+                  const response = xhr.responseText
+                    ? JSON.parse(xhr.responseText)
+                    : ''
                   if (xhr.status === successStatus) {
                     resolve(response)
                   } else if (xhr.status !== 0) {
