@@ -152,8 +152,7 @@ export interface VideoFormat extends MediaFormat {
   poster?: string
 }
 
-export interface TextInputProps {
-  ws: WebSocketClient
+export interface BaseInputProps {
   /** Id of the current user. */
   sender: string
   /** Id of the current conversation. */
@@ -168,24 +167,33 @@ export interface TextInputProps {
   maxRows?: number
   /** Boolean that dictates whether `TextInput` takes up 100% width of the parent container. */
   fullWidth?: boolean
+  send: (message: Message) => void
+  isSendEnabled?: boolean
+  errorMessages?: string[]
+  setErrorMessages?: React.Dispatch<React.SetStateAction<string[]>>
+  /** Boolean to enable speech-to-text. See which browsers are supported [here](https://developer.mozilla.org/en-US/docs/Web/API/SpeechRecognition#browser_compatibility). */
+  enableSpeechToText?: boolean
+}
+
+export interface TextInputProps
+  extends Omit<
+    BaseInputProps,
+    'send' | 'isSendEnabled' | 'errorMessages' | 'setErrorMessages'
+  > {
+  ws: WebSocketClient
 }
 
 export interface InputProps extends TextInputProps {
-  /** The types of files that are allowed to be selected for upload. For more information, refer to the [mdn web docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file#unique_file_type_specifiers). */
-  acceptedFileTypes?: string
+  /** The types of files that are allowed to be selected for upload. For safety reasons, only allow file types that can be handled by your server. Avoid accepting executable file types like .exe, .bat, or .msi. For more information, refer to the [mdn web docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file#unique_file_type_specifiers). */
+  acceptedFileTypes: string
   /** The maximum size for each uploaded file, in bytes. */
   maxFileSize?: number
   /** The maximum number of files that can be uploaded in one message. */
   maxFileCount?: number
-  /** A callback function that is called when a file is added for upload. An HTTP request should be made here to upload the file and return a URL for the file. `onUploadProgress` is used to get upload progress events to update UI. */
-  onFileAdd: (
-    file: File,
-    fileId: string,
-    onUploadProgress: (progressEvent: ProgressEvent) => void,
-    abortController: AbortController
-  ) => Promise<{ url: string }>
-  /** A callback function called when a file is deleted from the upload queue. An HTTP request should be made here to abort/delete the file upload. */
-  onFileDelete: (fileId: string) => Promise<{ isDeleted: boolean }>
+  /** The API endpoint where files will be uploaded. File id will be appended to the end of API endpoint. */
+  uploadFileEndpoint: string
+  /** The API endpoint to delete/cancel uploaded files. File id will be appended to the end of API endpoint. */
+  deleteFileEndpoint: string
 }
 
 export interface FileInfo {

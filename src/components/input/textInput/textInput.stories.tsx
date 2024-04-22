@@ -1,10 +1,11 @@
 import type { StoryFn } from '@storybook/react'
 import React from 'react'
 
+import type { Message } from '../../types'
 import TextInput from './textInput'
 
 export default {
-  title: 'Rustic UI/Text Input/Text Input',
+  title: 'Rustic UI/Input/Text Input',
   component: TextInput,
   tags: ['autodocs'],
   argTypes: {
@@ -36,6 +37,9 @@ export const Default = {
     sender: 'You',
     conversationId: '1',
     placeholder: 'Type your message',
+    ws: {
+      send: (message: Message) => alert(`Message sent: ${message.data.text}`),
+    },
   },
 }
 

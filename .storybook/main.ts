@@ -5,6 +5,7 @@ const config: StorybookConfig = {
   addons: [
     '@storybook/addon-toolbars',
     '@storybook/addon-viewport',
+    'storybook-addon-mock',
     {
       name: '@storybook/addon-docs',
       options: { transcludeMarkdown: true },

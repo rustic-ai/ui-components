@@ -3,7 +3,8 @@ import RechartsTimeSeries from './chart/rechartsTimeSeries'
 import CodeSnippet from './codeSnippet/codeSnippet'
 import ElementRenderer from './elementRenderer/elementRenderer'
 import Image from './image/image'
-import Input from './input/input'
+import MultimodalInput from './input/multimodal/multimodalInput/multimodalInput'
+import TextInput from './input/textInput/textInput'
 import OpenLayersMap from './map/openLayersMap'
 import MarkedMarkdown from './markdown/markedMarkdown'
 import MarkedStreamingMarkdown from './markdown/markedStreamingMarkdown'
@@ -17,7 +18,6 @@ import ParticipantsContainer from './participantsContainer/participantsContainer
 import Table from './table/table'
 import StreamingText from './text/streamingText'
 import Text from './text/text'
-import TextInput from './textInput/textInput'
 import Timestamp from './timestamp/timestamp'
 import YoutubeVideo from './video/youtubeVideo'
 
@@ -26,11 +26,11 @@ export {
   ElementRenderer,
   FCCalendar,
   Image,
-  Input,
   MarkedMarkdown,
   MarkedStreamingMarkdown,
   MessageCanvas,
   MessageSpace,
+  MultimodalInput,
   NavBar,
   OpenLayersMap,
   ParticipantsContainer,

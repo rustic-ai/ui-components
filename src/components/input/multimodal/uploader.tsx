@@ -4,17 +4,12 @@ import IconButton from '@mui/material/IconButton'
 import React from 'react'
 import { v4 as getUUID } from 'uuid'
 
-import type { FileInfo } from '../types'
+import type { FileInfo } from '../../types'
 
 export type UploaderProps = {
   addedFiles: FileInfo[]
   setAddedFiles: React.Dispatch<React.SetStateAction<FileInfo[]>>
-  onFileAdd: (
-    file: File,
-    fileId: string,
-    onUploadProgress: (progressEvent: ProgressEvent) => void,
-    abortController: AbortController
-  ) => Promise<{ url: string }>
+  uploadFileEndpoint: string
   setErrorMessages: React.Dispatch<React.SetStateAction<string[]>>
   setPendingUploadCount: React.Dispatch<React.SetStateAction<number>>
   acceptedFileTypes?: string
@@ -59,7 +54,6 @@ function Uploader(props: UploaderProps) {
     props.setErrorMessages([])
 
     const files = event.target.files && Array.from(event.target.files)
-
     const totalFileCount = props.addedFiles.length + (files ? files.length : 0)
 
     if (props.maxFileCount && totalFileCount > props.maxFileCount) {
@@ -84,36 +78,17 @@ function Uploader(props: UploaderProps) {
 
           props.setErrorMessages((prevMessages) => [
             ...prevMessages,
-            `Failed to upload ${file.name}. You cannot upload files larger than ${props.maxFileSize && getFileSizeAbbrev(props.maxFileSize)}.`,
+            `Failed to upload ${file.name}. You cannot upload files larger than ${
+              props.maxFileSize && getFileSizeAbbrev(props.maxFileSize)
+            }.`,
           ])
         }
 
         function addFile() {
           const fileId = getUUID()
-
-          const onUploadProgress = (progressEvent: ProgressEvent) => {
-            const percentageConversionRate = 100
-            const loadedPercentage =
-              (progressEvent.loaded / progressEvent.total) *
-              percentageConversionRate
-
-            //update the loading progress of the file in the addedFiles state
-            props.setAddedFiles((prevFiles) => {
-              const currentFileIndex = prevFiles.findIndex(
-                (item) => item.id === fileId
-              )
-              const isFileInAddedFiles = currentFileIndex !== -1
-              if (isFileInAddedFiles) {
-                const updatedFiles = [...prevFiles]
-                updatedFiles[currentFileIndex] = {
-                  ...updatedFiles[currentFileIndex],
-                  loadingProgress: loadedPercentage,
-                }
-                return updatedFiles
-              }
-              return prevFiles
-            })
-          }
+          const formData = new FormData()
+          formData.append('file', file)
+          formData.append('fileId', fileId)
           const controller = new AbortController()
           const newAddedFile = {
             name: file.name,
@@ -123,8 +98,58 @@ function Uploader(props: UploaderProps) {
           }
           props.setAddedFiles((prev) => [...prev, newAddedFile])
 
-          props
-            .onFileAdd(file, fileId, onUploadProgress, controller)
+          function uploadFile(): Promise<{ url: string }> {
+            return new Promise((resolve, reject) => {
+              const xhr = new XMLHttpRequest()
+              xhr.open('POST', `${props.uploadFileEndpoint}${fileId}`)
+              xhr.upload.onprogress = (progressEvent: ProgressEvent) => {
+                const percentageConversionRate = 100
+                const loadedPercentage =
+                  (progressEvent.loaded / progressEvent.total) *
+                  percentageConversionRate
+
+                //update the loading progress of the file in the addedFiles state
+                props.setAddedFiles((prevFiles) => {
+                  const currentFileIndex = prevFiles.findIndex(
+                    (item) => item.id === fileId
+                  )
+                  const isFileInAddedFiles = currentFileIndex !== -1
+                  if (isFileInAddedFiles) {
+                    const updatedFiles = [...prevFiles]
+                    updatedFiles[currentFileIndex] = {
+                      ...updatedFiles[currentFileIndex],
+                      loadingProgress: loadedPercentage,
+                    }
+                    return updatedFiles
+                  }
+                  return prevFiles
+                })
+              }
+
+              xhr.onreadystatechange = () => {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                  const successStatus = 200
+                  const response =
+                    xhr.responseText && JSON.parse(xhr.responseText)
+                  if (xhr.status === successStatus) {
+                    resolve(response)
+                  } else if (xhr.status !== 0) {
+                    reject(response)
+                  }
+                } else if (xhr.readyState === XMLHttpRequest.OPENED) {
+                  reject()
+                }
+              }
+
+              xhr.send(formData)
+
+              controller.signal.addEventListener('abort', () => {
+                xhr.abort()
+              })
+            })
+          }
+
+          uploadFile()
             .then((res) => {
               props.setAddedFiles((prevFiles) => {
                 const fileIndex = prevFiles.findIndex(
@@ -144,7 +169,9 @@ function Uploader(props: UploaderProps) {
             .catch((error) => {
               props.setErrorMessages((prevMessages) => [
                 ...prevMessages,
-                `Failed to upload ${file.name}. ${error?.message ? error.message : ''}`,
+                `Failed to upload ${file.name}. ${
+                  error?.message ? error.message : ''
+                }`,
               ])
               props.setAddedFiles((prevFiles) => {
                 return prevFiles.filter((item) => item.id !== fileId)

@@ -1,0 +1,48 @@
+.rustic-multimodal-input .rustic-bottom-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.rustic-multimodal-input .rustic-text-field fieldset[aria-hidden='true'] {
+  border-width: 1px;
+}
+
+.rustic-multimodal-input .rustic-text-field {
+  min-width: 248px;
+}
+
+.rustic-multimodal-input .rustic-files {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 8px;
+}
+
+.rustic-multimodal-input .rustic-error-message {
+  display: block;
+}
+
+.rustic-multimodal-input .rustic-base-input {
+  flex-direction: column;
+}
+
+.rustic-multimodal-input
+  .rustic-base-input
+  .rustic-text-field
+  fieldset[aria-hidden='true'] {
+  border-width: 1px;
+  border-bottom: none;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.rustic-multimodal-input .rustic-input-actions {
+  width: 100%;
+  position: relative;
+}
+
+.rustic-multimodal-input .rustic-input-actions .rustic-send-button {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}

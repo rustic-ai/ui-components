@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography'
 import Box from '@mui/system/Box'
 import React from 'react'
 
-import { shortenString } from '../helper'
+import { shortenString } from '../../../helper'
 
 type FilePreview = {
   name: string
