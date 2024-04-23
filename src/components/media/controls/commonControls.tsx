@@ -1,7 +1,5 @@
 import './commonControls.css'
 
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import LinearProgress from '@mui/material/LinearProgress'
@@ -143,9 +141,11 @@ export function VolumeSettings(props: MediaControls) {
 }
 
 export function ToggleTranscriptButton(props: ToggleTranscriptButtonProps) {
-  const Icon = props.isTranscriptVisible
-    ? KeyboardArrowUpIcon
-    : KeyboardArrowDownIcon
+  const iconName = props.isTranscriptVisible
+    ? 'keyboard_arrow_up'
+    : 'keyboard_arrow_down'
+
+  const Icon = <span className="material-symbols-rounded">{iconName}</span>
 
   const buttonText = `${props.isTranscriptVisible ? 'Hide' : 'Show'} Transcript`
 
@@ -154,7 +154,7 @@ export function ToggleTranscriptButton(props: ToggleTranscriptButtonProps) {
       className="rustic-transcript-toggle"
       data-cy="transcript-toggle"
       onClick={props.setIsTranscriptVisible}
-      endIcon={<Icon />}
+      endIcon={Icon}
     >
       <Typography variant="overline">{buttonText}</Typography>
     </Button>

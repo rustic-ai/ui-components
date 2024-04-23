@@ -1,7 +1,4 @@
 /* eslint-disable no-console */
-import CheckIcon from '@mui/icons-material/Check'
-import ClearIcon from '@mui/icons-material/Clear'
-import DeviceThermostatIcon from '@mui/icons-material/DeviceThermostat'
 import React from 'react'
 
 import { supportedViewports } from '../../../cypress/support/variables'
@@ -16,22 +13,39 @@ describe('PopOverMenu', () => {
   const drawer = '.MuiDrawer-root'
   const popover = '.MuiPopover-root'
 
+  function renderIcon(iconName: string) {
+    const dataCyPrefix = iconName.replaceAll('_', '-')
+
+    return (
+      <span
+        className="material-symbols-rounded"
+        data-cy={`${dataCyPrefix}-icon`}
+      >
+        {iconName}
+      </span>
+    )
+  }
+
+  const checkIcon = renderIcon('check')
+  const thermostatIcon = renderIcon('device_thermostat')
+  const cancelIcon = renderIcon('cancel')
+
   const menuItems = [
     {
       label: 'Celsius',
       onClick: () => {
         console.log(celsiusClicked)
       },
-      startDecorator: <DeviceThermostatIcon />,
-      endDecorator: <CheckIcon />,
+      startDecorator: thermostatIcon,
+      endDecorator: checkIcon,
     },
     {
       label: 'Fahrenheit',
       onClick: () => {
         console.log(fahrenheitClicked)
       },
-      startDecorator: <DeviceThermostatIcon />,
-      endDecorator: <ClearIcon />,
+      startDecorator: thermostatIcon,
+      endDecorator: cancelIcon,
     },
   ]
 
@@ -45,9 +59,11 @@ describe('PopOverMenu', () => {
       cy.get(openMenu).click()
       cy.get(popoverMenu).should('be.visible')
       cy.get(`${popoverMenu} li`).should('have.length', menuItems.length)
-      // 4 icons in total should be seen
+
       // eslint-disable-next-line no-magic-numbers
-      cy.get(`${popoverMenu} li svg`).should('have.length', 4)
+      cy.get('[data-cy=device-thermostat-icon]').should('have.length', 2)
+      cy.get('[data-cy=cancel-icon]').should('exist')
+      cy.get('[data-cy=check-icon]').should('exist')
     })
 
     it(`renders the menu items in the order provided on ${viewport} screen`, () => {
@@ -87,8 +103,8 @@ describe('PopOverMenu', () => {
               onClick: (event?: React.MouseEvent<HTMLElement>) => {
                 return console.log(event?.type)
               },
-              startDecorator: <DeviceThermostatIcon />,
-              endDecorator: <ClearIcon />,
+              startDecorator: thermostatIcon,
+              endDecorator: cancelIcon,
             },
           ]}
           ariaLabel={ariaLabel}
@@ -114,7 +130,7 @@ describe('PopOverMenu', () => {
         <PopoverMenu
           menuItems={menuItems}
           ariaLabel={ariaLabel}
-          icon={<DeviceThermostatIcon />}
+          icon={thermostatIcon}
         />
       )
 
@@ -135,7 +151,7 @@ describe('PopOverMenu', () => {
         <PopoverMenu
           menuItems={menuItems}
           ariaLabel={ariaLabel}
-          icon={<DeviceThermostatIcon />}
+          icon={thermostatIcon}
           buttonText="Temperature"
         />
       )

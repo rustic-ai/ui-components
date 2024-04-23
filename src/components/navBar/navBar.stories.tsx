@@ -1,6 +1,4 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import BookmarkIcon from '@mui/icons-material/Bookmark'
-import MessageIcon from '@mui/icons-material/Message'
 import Typography from '@mui/material/Typography'
 import { Box } from '@mui/system'
 import React from 'react'
@@ -32,11 +30,15 @@ const Logo = () => {
   )
 }
 
+function renderIcon(iconName: string) {
+  return <span className="material-symbols-rounded">{iconName}</span>
+}
+
 export const Default = {
   args: {
     logo: <Logo />,
-    leftDrawerIcon: <MessageIcon />,
-    rightDrawerIcon: <BookmarkIcon />,
+    leftDrawerIcon: renderIcon('chat'),
+    rightDrawerIcon: renderIcon('bookmark'),
     leftDrawerAriaLabel: 'Open Left Drawer',
     rightDrawerAriaLabel: 'Open Right Drawer',
     handleLeftDrawerToggle: () => {},

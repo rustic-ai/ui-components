@@ -1,5 +1,3 @@
-import AccountCircleIcon from '@mui/icons-material/AccountCircle'
-import SmartToyIcon from '@mui/icons-material/SmartToy'
 import React from 'react'
 import { v4 as getUUID } from 'uuid'
 
@@ -141,6 +139,9 @@ const tableData = [
 
 const chartColors = ['#648FFF', '#785EF0', '#DC267F', '#FE6100', '#FFB000']
 
+function renderIcon(iconName: string) {
+  return <span className="material-symbols-rounded">{iconName}</span>
+}
 export const Default = {
   args: {
     messages: [
@@ -349,9 +350,9 @@ export const Default = {
     },
     getProfileComponent: (message: Message) => {
       if (message.sender.includes('Agent')) {
-        return <SmartToyIcon />
+        return renderIcon('smart_toy')
       } else {
-        return <AccountCircleIcon />
+        return renderIcon('account_circle')
       }
     },
   },

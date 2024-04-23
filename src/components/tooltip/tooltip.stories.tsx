@@ -1,4 +1,3 @@
-import NotificationsIcon from '@mui/icons-material/Notifications'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import React from 'react'
@@ -18,14 +17,16 @@ export default {
   },
 }
 
+const notificationsIcon = (
+  <IconButton>
+    <span className="material-symbols-rounded">notifications</span>
+  </IconButton>
+)
+
 export const Default = {
   args: {
     title: 'Notifications',
-    children: (
-      <IconButton>
-        <NotificationsIcon />
-      </IconButton>
-    ),
+    children: notificationsIcon,
   },
   parameters: {
     docs: {
@@ -43,11 +44,7 @@ export const Default = {
 export const ShowAtTop = {
   args: {
     title: 'Notifications',
-    children: (
-      <IconButton>
-        <NotificationsIcon />
-      </IconButton>
-    ),
+    children: notificationsIcon,
     placement: 'top',
   },
   parameters: {
@@ -66,11 +63,7 @@ export const ShowAtTop = {
 export const CustomizeDistance = {
   args: {
     title: 'Notifications',
-    children: (
-      <IconButton>
-        <NotificationsIcon />
-      </IconButton>
-    ),
+    children: notificationsIcon,
     placement: 'top',
     slotProps: {
       popper: {

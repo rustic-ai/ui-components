@@ -1,6 +1,3 @@
-import BookmarkIcon from '@mui/icons-material/Bookmark'
-import MessageIcon from '@mui/icons-material/Message'
-
 import { supportedViewports } from '../../../cypress/support/variables'
 import NavBar from './navBar'
 
@@ -18,12 +15,16 @@ describe('NavBar', () => {
   // eslint-disable-next-line no-console
   const openRightDrawer = () => console.log('right drawer opened')
 
+  function renderIcon(iconName: string) {
+    return <span className="material-symbols-rounded">{iconName}</span>
+  }
+
   beforeEach(() => {
     cy.mount(
       <NavBar
         logo={<Logo />}
-        leftDrawerIcon={<BookmarkIcon />}
-        rightDrawerIcon={<MessageIcon />}
+        leftDrawerIcon={renderIcon('bookmark')}
+        rightDrawerIcon={renderIcon('chat')}
         leftDrawerAriaLabel="open left drawer"
         rightDrawerAriaLabel="open right drawer"
         handleLeftDrawerToggle={openLeftDrawer}

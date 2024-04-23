@@ -1,8 +1,5 @@
 import './participantsContainer.css'
 
-import AccountCircleIcon from '@mui/icons-material/AccountCircle'
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
-import SmartToy from '@mui/icons-material/SmartToy'
 import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
 import DialogTitle from '@mui/material/DialogTitle'
@@ -26,6 +23,10 @@ export interface ParticipantsContainerProps {
   isParticipantListOpen: boolean
   /** Callback function to close the participants modal. */
   onClose: () => void
+}
+
+function renderIcon(iconName: string) {
+  return <span className="material-symbols-rounded">{iconName}</span>
 }
 
 const ParticipantList = (props: {
@@ -85,7 +86,7 @@ const ParticipantList = (props: {
                 }
                 color="primary"
                 size="small"
-                startIcon={<KeyboardArrowDownIcon />}
+                startIcon={renderIcon('keyboard_arrow_down')}
               >
                 {buttonLabel}
               </Button>
@@ -177,7 +178,7 @@ const ParticipantsContainer = (props: ParticipantsContainerProps) => {
 
       <ParticipantList
         participantType="Human"
-        participantTypeIcon={<AccountCircleIcon />}
+        participantTypeIcon={renderIcon('account_circle')}
         participants={sortedHumanParticipants}
       />
 
@@ -187,7 +188,7 @@ const ParticipantsContainer = (props: ParticipantsContainerProps) => {
 
           <ParticipantList
             participantType="Agent"
-            participantTypeIcon={<SmartToy />}
+            participantTypeIcon={renderIcon('smart_toy')}
             participants={sortedAgentParticipants}
           />
         </>

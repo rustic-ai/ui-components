@@ -19,7 +19,7 @@ describe('Map', () => {
 
     it(`shows the marker on ${viewport} screen`, () => {
       cy.viewport(viewport)
-      cy.get('[data-cy=marker-container] svg')
+      cy.get('[data-cy=marker-container] span')
         .should('be.visible')
         .should('have.class', 'rustic-open-layers-map-marker')
     })

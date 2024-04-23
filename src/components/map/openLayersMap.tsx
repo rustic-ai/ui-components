@@ -1,7 +1,6 @@
 import 'ol/ol.css'
 import './openLayersMap.css'
 
-import PlaceIcon from '@mui/icons-material/Place'
 import Alert from '@mui/material/Alert'
 import Box from '@mui/material/Box'
 import TileLayer from 'ol/layer/Tile.js'
@@ -77,7 +76,9 @@ export default function OpenLayersMap(props: LocationFormat) {
       ) : (
         <Box>
           <Box data-cy="marker-container" ref={markerElement}>
-            <PlaceIcon className="rustic-open-layers-map-marker" />
+            <span className="rustic-open-layers-map-marker material-symbols-rounded ">
+              location_on
+            </span>
           </Box>
           <div
             ref={mapTargetElement}

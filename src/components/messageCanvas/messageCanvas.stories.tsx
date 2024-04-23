@@ -1,5 +1,3 @@
-import AccountCircleIcon from '@mui/icons-material/AccountCircle'
-import SmartToyIcon from '@mui/icons-material/SmartToy'
 import React from 'react'
 
 import { ElementRenderer, type ThreadableMessage } from '..'
@@ -54,9 +52,16 @@ export const WithProfileIcon = {
     message: messageFromHuman,
     getProfileComponent: (message: ThreadableMessage) => {
       if (message.sender.includes('agent')) {
-        return <SmartToyIcon />
+        return <span className="material-symbols-rounded">smart_toy</span>
       } else {
-        return <AccountCircleIcon />
+        return (
+          <span
+            className="material-symbols-rounded"
+            data-cy="account-circle-icon"
+          >
+            account_circle
+          </span>
+        )
       }
     },
   },
