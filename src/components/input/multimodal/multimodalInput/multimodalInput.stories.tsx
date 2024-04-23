@@ -20,7 +20,7 @@ const meta = {
         url: 'http://localhost:6006/upload/:id',
         method: 'POST',
         status: 200,
-        response: { url: 'https://jsonplaceholder.typicode.com/todos/1' },
+        response: { url: 'https://example-file/1' },
         delay: 1000,
       },
     ],

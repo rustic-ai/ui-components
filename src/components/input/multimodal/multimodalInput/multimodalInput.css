@@ -11,14 +11,14 @@
   min-width: 248px;
 }
 
-.rustic-multimodal-input .rustic-files {
+.rustic-files {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
   padding: 8px;
 }
 
-.rustic-multimodal-input .rustic-error-message {
+.rustic-error-message {
   display: block;
 }
 

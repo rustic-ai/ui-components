@@ -8,9 +8,10 @@ import { v4 as getUUID } from 'uuid'
 import type { FileInfo, InputProps, Message } from '../../../types'
 import BaseInput from '../../baseInput/baseInput'
 import FilePreview from '../filePreview/filePreview'
+// import Upload from '../upload/upload'
 import Uploader from '../uploader/uploader'
 
-function getFilesToAdd(
+export function getFilesToAdd(
   files: File[],
   totalFileCount: number,
   maxFileCount?: number
@@ -243,6 +244,13 @@ export default function MultimodalInput(props: InputProps) {
               acceptedFileTypes={props.acceptedFileTypes}
               handleFileChange={handleFileChange}
             />
+            {/* <Upload
+              acceptedFileTypes={props.acceptedFileTypes}
+              maxFileCount={props.maxFileCount}
+              maxFileSize={props.maxFileSize}
+              uploadFileEndpoint={props.uploadFileEndpoint}
+              deleteFileEndpoint={props.deleteFileEndpoint}
+            /> */}
           </Box>
         </Box>
       </BaseInput>
