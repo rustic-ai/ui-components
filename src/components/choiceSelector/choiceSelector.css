@@ -1,0 +1,7 @@
+.rustic-choice-selector > p > *:first-child {
+  margin-top: 0;
+}
+
+.rustic-submit-button {
+  margin-top: 8px;
+}

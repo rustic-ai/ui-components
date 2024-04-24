@@ -1,5 +1,6 @@
 import FCCalendar from './calendar/fCCalendar'
 import RechartsTimeSeries from './chart/rechartsTimeSeries'
+import ChoiceSelector from './choiceSelector/choiceSelector'
 import CodeSnippet from './codeSnippet/codeSnippet'
 import ElementRenderer from './elementRenderer/elementRenderer'
 import Image from './image/image'
@@ -21,6 +22,7 @@ import Timestamp from './timestamp/timestamp'
 import YoutubeVideo from './video/youtubeVideo'
 
 export {
+  ChoiceSelector,
   CodeSnippet,
   ElementRenderer,
   FCCalendar,
