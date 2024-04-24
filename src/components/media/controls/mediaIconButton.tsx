@@ -1,7 +1,8 @@
-import Icon from '@mui/material/Icon'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import React from 'react'
+
+import Icon from '../../icon'
 
 interface MediaIconButtonProps {
   onClick: () => void
@@ -54,12 +55,9 @@ export function MediaIconButton(props: MediaIconButtonProps) {
         onClick={props.onClick}
         className={props.className}
         data-cy={`${dataCyPrefix}-button`}
+        color="primary"
       >
-        <Icon color="primary">
-          <span className="material-symbols-rounded">
-            {controls[props.action].symbol}
-          </span>
-        </Icon>
+        <Icon name={controls[props.action].symbol} />
       </IconButton>
     </Tooltip>
   )

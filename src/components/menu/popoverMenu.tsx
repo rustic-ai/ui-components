@@ -13,6 +13,8 @@ import { Box } from '@mui/system'
 import type { ReactNode } from 'react'
 import React, { useRef, useState } from 'react'
 
+import Icon from '../icon'
+
 export interface PopoverMenuItem {
   label: string
   onClick: (event?: React.MouseEvent<HTMLElement>) => void
@@ -97,9 +99,7 @@ export default function PopoverMenu(props: PopoverMenuProps) {
       className: 'rustic-popover-menu-button',
     }
 
-    const defaultIcon = (
-      <span className="material-symbols-rounded">more_vert</span>
-    )
+    const defaultIcon = <Icon name="more_vert" />
 
     if (props.buttonText) {
       return (

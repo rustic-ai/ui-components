@@ -2,6 +2,7 @@
 import React from 'react'
 
 import { supportedViewports } from '../../../cypress/support/variables'
+import Icon from '../icon'
 import PopoverMenu from './popoverMenu'
 
 describe('PopOverMenu', () => {
@@ -13,22 +14,9 @@ describe('PopOverMenu', () => {
   const drawer = '.MuiDrawer-root'
   const popover = '.MuiPopover-root'
 
-  function renderIcon(iconName: string) {
-    const dataCyPrefix = iconName.replaceAll('_', '-')
-
-    return (
-      <span
-        className="material-symbols-rounded"
-        data-cy={`${dataCyPrefix}-icon`}
-      >
-        {iconName}
-      </span>
-    )
-  }
-
-  const checkIcon = renderIcon('check')
-  const thermostatIcon = renderIcon('device_thermostat')
-  const cancelIcon = renderIcon('cancel')
+  const checkIcon = <Icon name="check" />
+  const thermostatIcon = <Icon name="device_thermostat" />
+  const cancelIcon = <Icon name="cancel" />
 
   const menuItems = [
     {

@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { ElementRenderer, type ThreadableMessage } from '..'
+import Icon from '../icon'
 import Text from '../text/text'
 import MessageCanvas from './messageCanvas'
 
@@ -52,16 +53,9 @@ export const WithProfileIcon = {
     message: messageFromHuman,
     getProfileComponent: (message: ThreadableMessage) => {
       if (message.sender.includes('agent')) {
-        return <span className="material-symbols-rounded">smart_toy</span>
+        return <Icon name="smart_toy" />
       } else {
-        return (
-          <span
-            className="material-symbols-rounded"
-            data-cy="account-circle-icon"
-          >
-            account_circle
-          </span>
-        )
+        return <Icon name="account_circle" />
       }
     },
   },

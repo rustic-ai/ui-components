@@ -12,6 +12,7 @@ import View from 'ol/View.js'
 import React from 'react'
 import { useEffect, useRef, useState } from 'react'
 
+import Icon from '../icon'
 import type { LocationFormat } from '../types'
 
 export default function OpenLayersMap(props: LocationFormat) {
@@ -76,9 +77,10 @@ export default function OpenLayersMap(props: LocationFormat) {
       ) : (
         <Box>
           <Box data-cy="marker-container" ref={markerElement}>
-            <span className="rustic-open-layers-map-marker material-symbols-rounded ">
-              location_on
-            </span>
+            <Icon
+              className="rustic-open-layers-map-marker"
+              name="location_on"
+            />
           </Box>
           <div
             ref={mapTargetElement}

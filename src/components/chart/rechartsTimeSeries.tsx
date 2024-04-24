@@ -25,6 +25,7 @@ import {
 } from 'recharts'
 
 import { calculateTimeDiffInDays, formatTimestampLabel } from '../helper'
+import Icon from '../icon'
 
 export interface TimeSeriesData {
   timestamp: number
@@ -254,7 +255,7 @@ function RechartsTimeSeries(props: RechartsTimeSeriesProps) {
               color: getLegendColor(dataKey, index),
             }}
           >
-            <span className="material-symbols-rounded">crop_16_9</span>
+            <Icon name="crop_16_9" />
             <Typography
               variant="body2"
               display="inline"
@@ -295,7 +296,7 @@ function RechartsTimeSeries(props: RechartsTimeSeriesProps) {
               onClick={handleChartTypeToggle}
               color="primary"
             >
-              <span className="material-symbols-rounded">more_vert</span>
+              <Icon name="more_vert" />
             </IconButton>
             <Menu
               anchorOrigin={{

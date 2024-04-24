@@ -1,4 +1,5 @@
 import { supportedViewports } from '../../../cypress/support/variables'
+import Icon from '../icon'
 import NavBar from './navBar'
 
 describe('NavBar', () => {
@@ -15,16 +16,12 @@ describe('NavBar', () => {
   // eslint-disable-next-line no-console
   const openRightDrawer = () => console.log('right drawer opened')
 
-  function renderIcon(iconName: string) {
-    return <span className="material-symbols-rounded">{iconName}</span>
-  }
-
   beforeEach(() => {
     cy.mount(
       <NavBar
         logo={<Logo />}
-        leftDrawerIcon={renderIcon('bookmark')}
-        rightDrawerIcon={renderIcon('chat')}
+        leftDrawerIcon={<Icon name="bookmark" />}
+        rightDrawerIcon={<Icon name="chat" />}
         leftDrawerAriaLabel="open left drawer"
         rightDrawerAriaLabel="open right drawer"
         handleLeftDrawerToggle={openLeftDrawer}

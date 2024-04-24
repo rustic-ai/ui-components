@@ -15,6 +15,7 @@ import React from 'react'
 import { useState } from 'react'
 
 import { capitalizeFirstLetter } from '../helper'
+import Icon from '../icon'
 import { type Participant, ParticipantRole, ParticipantType } from '../types'
 
 export interface ParticipantsContainerProps {
@@ -23,10 +24,6 @@ export interface ParticipantsContainerProps {
   isParticipantListOpen: boolean
   /** Callback function to close the participants modal. */
   onClose: () => void
-}
-
-function renderIcon(iconName: string) {
-  return <span className="material-symbols-rounded">{iconName}</span>
 }
 
 const ParticipantList = (props: {
@@ -86,7 +83,7 @@ const ParticipantList = (props: {
                 }
                 color="primary"
                 size="small"
-                startIcon={renderIcon('keyboard_arrow_down')}
+                startIcon={<Icon name="keyboard_arrow_down" />}
               >
                 {buttonLabel}
               </Button>
@@ -178,7 +175,7 @@ const ParticipantsContainer = (props: ParticipantsContainerProps) => {
 
       <ParticipantList
         participantType="Human"
-        participantTypeIcon={renderIcon('account_circle')}
+        participantTypeIcon={<Icon name="account_circle" />}
         participants={sortedHumanParticipants}
       />
 
@@ -188,7 +185,7 @@ const ParticipantsContainer = (props: ParticipantsContainerProps) => {
 
           <ParticipantList
             participantType="Agent"
-            participantTypeIcon={renderIcon('smart_toy')}
+            participantTypeIcon={<Icon name="smart_toy" />}
             participants={sortedAgentParticipants}
           />
         </>

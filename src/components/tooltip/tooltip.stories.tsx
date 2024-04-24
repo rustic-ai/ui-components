@@ -2,6 +2,8 @@ import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import React from 'react'
 
+import Icon from '../icon'
+
 export default {
   title: 'Rustic UI/Tooltip/Tooltip',
   component: Tooltip,
@@ -19,7 +21,7 @@ export default {
 
 const notificationsIcon = (
   <IconButton>
-    <span className="material-symbols-rounded">notifications</span>
+    <Icon name="notifications" />
   </IconButton>
 )
 

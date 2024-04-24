@@ -2,6 +2,7 @@
 import 'cypress-real-events'
 
 import { supportedViewports } from '../../../cypress/support/variables'
+import Icon from '../icon'
 import MessageCanvas from './messageCanvas'
 
 describe('MessageCanvas', () => {
@@ -35,16 +36,7 @@ describe('MessageCanvas', () => {
       cy.mount(
         <MessageCanvas
           message={testMessage}
-          getProfileComponent={() => {
-            return (
-              <span
-                className="material-symbols-rounded"
-                data-cy="account-circle-icon"
-              >
-                account_circle
-              </span>
-            )
-          }}
+          getProfileComponent={() => <Icon name="account_circle" />}
         >
           <p>Hello World</p>
         </MessageCanvas>

@@ -9,6 +9,7 @@ import Typography from '@mui/material/Typography'
 import React, { useState } from 'react'
 
 import { formatDurationTime } from '../../helper'
+import Icon from '../../icon'
 import { MediaIconButton } from './mediaIconButton'
 
 export interface MediaControls {
@@ -145,8 +146,6 @@ export function ToggleTranscriptButton(props: ToggleTranscriptButtonProps) {
     ? 'keyboard_arrow_up'
     : 'keyboard_arrow_down'
 
-  const Icon = <span className="material-symbols-rounded">{iconName}</span>
-
   const buttonText = `${props.isTranscriptVisible ? 'Hide' : 'Show'} Transcript`
 
   return (
@@ -154,7 +153,7 @@ export function ToggleTranscriptButton(props: ToggleTranscriptButtonProps) {
       className="rustic-transcript-toggle"
       data-cy="transcript-toggle"
       onClick={props.setIsTranscriptVisible}
-      endIcon={Icon}
+      endIcon={<Icon name={iconName} />}
     >
       <Typography variant="overline">{buttonText}</Typography>
     </Button>

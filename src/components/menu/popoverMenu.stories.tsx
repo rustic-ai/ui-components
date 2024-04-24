@@ -2,6 +2,7 @@ import Typography from '@mui/material/Typography'
 import Box from '@mui/system/Box'
 import React from 'react'
 
+import Icon from '../icon'
 import PopoverMenu from './popoverMenu'
 
 export default {
@@ -25,23 +26,21 @@ export default {
   },
 }
 
-const pinIcon = <span className="material-symbols-rounded">keep</span>
+const pinIcon = <Icon name="keep" />
 const addBoxIcon = (
   <Box sx={{ color: 'secondary.main' }}>
-    <span className="material-symbols-rounded">add_box</span>
+    <Icon name="add_box" />
   </Box>
 )
-const deleteIcon = <span className="material-symbols-rounded">delete</span>
-const thermostatIcon = (
-  <span className="material-symbols-rounded">device_thermostat</span>
-)
-const listIcon = <span className="material-symbols-rounded">list</span>
+const deleteIcon = <Icon name="delete" />
+const thermostatIcon = <Icon name="device_thermostat" />
+const listIcon = <Icon name="list" />
 
 const defaultMenuItems = [
   {
     label: 'Rename',
     onClick: () => {},
-    startDecorator: <span className="material-symbols-rounded">edit</span>,
+    startDecorator: <Icon name="edit" />,
   },
   {
     label: 'Pin Topic',
@@ -51,19 +50,17 @@ const defaultMenuItems = [
   {
     label: 'Share',
     onClick: () => {},
-    startDecorator: <span className="material-symbols-rounded">ios_share</span>,
+    startDecorator: <Icon name="ios_share" />,
   },
   {
     label: 'View Participants',
     onClick: () => {},
-    startDecorator: <span className="material-symbols-rounded">groups</span>,
+    startDecorator: <Icon name="groups" />,
   },
   {
     label: 'Leave Topic',
     onClick: () => {},
-    startDecorator: (
-      <span className="material-symbols-rounded">exit_to_app</span>
-    ),
+    startDecorator: <Icon name="exit_to_app" />,
   },
   {
     label: 'Delete',

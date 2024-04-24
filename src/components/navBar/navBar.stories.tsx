@@ -3,6 +3,7 @@ import Typography from '@mui/material/Typography'
 import { Box } from '@mui/system'
 import React from 'react'
 
+import Icon from '../icon'
 import NavBar from './navBar'
 
 const meta = {
@@ -30,15 +31,11 @@ const Logo = () => {
   )
 }
 
-function renderIcon(iconName: string) {
-  return <span className="material-symbols-rounded">{iconName}</span>
-}
-
 export const Default = {
   args: {
     logo: <Logo />,
-    leftDrawerIcon: renderIcon('chat'),
-    rightDrawerIcon: renderIcon('bookmark'),
+    leftDrawerIcon: <Icon name="chat" />,
+    rightDrawerIcon: <Icon name="bookmark" />,
     leftDrawerAriaLabel: 'Open Left Drawer',
     rightDrawerAriaLabel: 'Open Right Drawer',
     handleLeftDrawerToggle: () => {},

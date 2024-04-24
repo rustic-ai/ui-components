@@ -14,6 +14,7 @@ import {
   Text,
   YoutubeVideo,
 } from '..'
+import Icon from '../icon'
 import MessageSpace from './messageSpace'
 
 describe('MessageSpace Component', () => {
@@ -80,17 +81,9 @@ describe('MessageSpace Component', () => {
           supportedElements={supportedElements}
           getProfileComponent={(message: Message) => {
             if (message.sender.includes('Agent')) {
-              return (
-                <span className="material-symbols-rounded" data-cy="agent-icon">
-                  smart_toy
-                </span>
-              )
+              return <Icon name="smart_toy" />
             } else {
-              return (
-                <span className="material-symbols-rounded" data-cy="human-icon">
-                  account_circle
-                </span>
-              )
+              return <Icon name="account_circle" />
             }
           }}
         />
@@ -107,13 +100,13 @@ describe('MessageSpace Component', () => {
           cy.get(messageCanvas)
             .eq(index)
             .within(() => {
-              cy.get('span[data-cy="agent-icon"]').should('exist')
+              cy.get('span[data-cy="smart-toy-icon"]').should('exist')
             })
         } else {
           cy.get(messageCanvas)
             .eq(index)
             .within(() => {
-              cy.get('span[data-cy="human-icon"]').should('exist')
+              cy.get('span[data-cy="account-circle-icon"]').should('exist')
             })
         }
       })

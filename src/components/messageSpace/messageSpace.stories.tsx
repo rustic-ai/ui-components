@@ -15,6 +15,7 @@ import {
   YoutubeVideo,
 } from '..'
 import CodeSnippet from '../codeSnippet/codeSnippet'
+import Icon from '../icon'
 import MessageSpace from './messageSpace'
 
 export default {
@@ -139,9 +140,6 @@ const tableData = [
 
 const chartColors = ['#648FFF', '#785EF0', '#DC267F', '#FE6100', '#FFB000']
 
-function renderIcon(iconName: string) {
-  return <span className="material-symbols-rounded">{iconName}</span>
-}
 export const Default = {
   args: {
     messages: [
@@ -350,9 +348,9 @@ export const Default = {
     },
     getProfileComponent: (message: Message) => {
       if (message.sender.includes('Agent')) {
-        return renderIcon('smart_toy')
+        return <Icon name="smart_toy" />
       } else {
-        return renderIcon('account_circle')
+        return <Icon name="account_circle" />
       }
     },
   },
