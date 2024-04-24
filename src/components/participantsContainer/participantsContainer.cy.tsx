@@ -83,7 +83,7 @@ describe('ParticipantsContainer', () => {
 
       cy.get(toggleParticipantListButton)
         .first()
-        .should('have.text', `Show All ${participantsVisbileAfterShowAll}`)
+        .should('contain', `Show All ${participantsVisbileAfterShowAll}`)
 
       cy.get(toggleParticipantListButton).first().click()
       cy.get(participantList)
@@ -91,9 +91,7 @@ describe('ParticipantsContainer', () => {
         .find(participantListItem)
         .should('have.length', participantsVisbileAfterShowAll)
 
-      cy.get(toggleParticipantListButton)
-        .first()
-        .should('have.text', 'Show Less')
+      cy.get(toggleParticipantListButton).first().should('contain', 'Show Less')
     })
   })
 })

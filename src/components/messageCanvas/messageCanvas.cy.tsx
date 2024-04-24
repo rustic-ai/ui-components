@@ -1,9 +1,8 @@
 /* eslint-disable no-magic-numbers */
 import 'cypress-real-events'
 
-import AccountCircleIcon from '@mui/icons-material/AccountCircle'
-
 import { supportedViewports } from '../../../cypress/support/variables'
+import Icon from '../icon'
 import MessageCanvas from './messageCanvas'
 
 describe('MessageCanvas', () => {
@@ -37,9 +36,7 @@ describe('MessageCanvas', () => {
       cy.mount(
         <MessageCanvas
           message={testMessage}
-          getProfileComponent={() => {
-            return <AccountCircleIcon />
-          }}
+          getProfileComponent={() => <Icon name="account_circle" />}
         >
           <p>Hello World</p>
         </MessageCanvas>
@@ -47,7 +44,7 @@ describe('MessageCanvas', () => {
 
       cy.contains('Hello World').should('be.visible')
       cy.contains('senderId').should('be.visible')
-      cy.get('[data-testid="AccountCircleIcon"]').should('be.visible')
+      cy.get('[data-cy="account-circle-icon"]').should('be.visible')
     })
   })
 

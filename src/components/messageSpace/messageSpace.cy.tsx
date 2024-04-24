@@ -1,5 +1,3 @@
-import AccountCircleIcon from '@mui/icons-material/AccountCircle'
-import SmartToyIcon from '@mui/icons-material/SmartToy'
 import { v4 as getUUID } from 'uuid'
 
 import { supportedViewports } from '../../../cypress/support/variables'
@@ -16,6 +14,7 @@ import {
   Text,
   YoutubeVideo,
 } from '..'
+import Icon from '../icon'
 import MessageSpace from './messageSpace'
 
 describe('MessageSpace Component', () => {
@@ -82,15 +81,15 @@ describe('MessageSpace Component', () => {
           supportedElements={supportedElements}
           getProfileComponent={(message: Message) => {
             if (message.sender.includes('Agent')) {
-              return <SmartToyIcon data-cy="agent-icon" />
+              return <Icon name="smart_toy" />
             } else {
-              return <AccountCircleIcon data-cy="human-icon" />
+              return <Icon name="account_circle" />
             }
           }}
         />
       )
       const messageSpace = '[data-cy=message-space]'
-
+      const messageCanvas = '[data-cy=message-canvas]'
       cy.get(messageSpace).should('exist')
 
       messages.forEach((message, index) => {
@@ -98,9 +97,17 @@ describe('MessageSpace Component', () => {
           .should('contain', message.sender)
           .and('contain', message.data.text)
         if (message.sender === 'Agent') {
-          cy.get('svg').eq(index).should('have.attr', 'data-cy', 'agent-icon')
+          cy.get(messageCanvas)
+            .eq(index)
+            .within(() => {
+              cy.get('span[data-cy="smart-toy-icon"]').should('exist')
+            })
         } else {
-          cy.get('svg').eq(index).should('have.attr', 'data-cy', 'human-icon')
+          cy.get(messageCanvas)
+            .eq(index)
+            .within(() => {
+              cy.get('span[data-cy="account-circle-icon"]').should('exist')
+            })
         }
       })
     })

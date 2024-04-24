@@ -1,15 +1,8 @@
-import AddBoxIcon from '@mui/icons-material/AddBox'
-import DeleteIcon from '@mui/icons-material/Delete'
-import DeviceThermostatIcon from '@mui/icons-material/DeviceThermostat'
-import EditIcon from '@mui/icons-material/Edit'
-import ExitToAppIcon from '@mui/icons-material/ExitToApp'
-import GroupsIcon from '@mui/icons-material/Groups'
-import IosShareIcon from '@mui/icons-material/IosShare'
-import ListIcon from '@mui/icons-material/List'
-import PushPinIcon from '@mui/icons-material/PushPin'
 import Typography from '@mui/material/Typography'
+import Box from '@mui/system/Box'
 import React from 'react'
 
+import Icon from '../icon'
 import PopoverMenu from './popoverMenu'
 
 export default {
@@ -33,54 +26,67 @@ export default {
   },
 }
 
+const pinIcon = <Icon name="keep" />
+const addBoxIcon = (
+  <Box sx={{ color: 'secondary.main' }}>
+    <Icon name="add_box" />
+  </Box>
+)
+const deleteIcon = <Icon name="delete" />
+const thermostatIcon = <Icon name="device_thermostat" />
+const listIcon = <Icon name="list" />
+
 const defaultMenuItems = [
   {
     label: 'Rename',
     onClick: () => {},
-    startDecorator: <EditIcon />,
+    startDecorator: <Icon name="edit" />,
   },
   {
     label: 'Pin Topic',
     onClick: () => {},
-    startDecorator: <PushPinIcon />,
+    startDecorator: pinIcon,
   },
   {
     label: 'Share',
     onClick: () => {},
-    startDecorator: <IosShareIcon />,
+    startDecorator: <Icon name="ios_share" />,
   },
   {
     label: 'View Participants',
     onClick: () => {},
-    startDecorator: <GroupsIcon />,
+    startDecorator: <Icon name="groups" />,
   },
   {
     label: 'Leave Topic',
     onClick: () => {},
-    startDecorator: <ExitToAppIcon />,
+    startDecorator: <Icon name="exit_to_app" />,
   },
   {
     label: 'Delete',
     onClick: () => {},
-    startDecorator: <DeleteIcon />,
+    startDecorator: deleteIcon,
   },
 ]
 
+const renderPinIconWithColor = (
+  <Box sx={{ color: 'secondary.main' }}>{pinIcon}</Box>
+)
 const endDecoratorMenuItems = [
   {
     label: 'Charts',
     onClick: () => {},
-    endDecorator: <PushPinIcon sx={{ color: 'secondary.main' }} />,
+    endDecorator: renderPinIconWithColor,
   },
   {
     label: 'Graphs',
     onClick: () => {},
-    endDecorator: <PushPinIcon sx={{ color: 'secondary.main' }} />,
+    endDecorator: renderPinIconWithColor,
   },
   {
     label: 'Marketing',
     onClick: () => {},
-    endDecorator: <PushPinIcon sx={{ color: 'secondary.main' }} />,
+    endDecorator: renderPinIconWithColor,
   },
 ]
 
@@ -88,14 +94,14 @@ const startAndEndDecoratorMenuItems = [
   {
     label: 'Celsius',
     onClick: () => {},
-    startDecorator: <DeviceThermostatIcon />,
-    endDecorator: <AddBoxIcon sx={{ color: 'secondary.main' }} />,
+    startDecorator: thermostatIcon,
+    endDecorator: addBoxIcon,
   },
   {
     label: 'Fahrenheit',
     onClick: () => {},
-    startDecorator: <DeviceThermostatIcon />,
-    endDecorator: <AddBoxIcon sx={{ color: 'secondary.main' }} />,
+    startDecorator: thermostatIcon,
+    endDecorator: addBoxIcon,
   },
 ]
 
@@ -103,13 +109,13 @@ const textDecorator = [
   {
     label: 'Celsius',
     onClick: () => {},
-    startDecorator: <DeviceThermostatIcon />,
+    startDecorator: thermostatIcon,
     endDecorator: <Typography variant="caption">°C</Typography>,
   },
   {
     label: 'Fahrenheit',
     onClick: () => {},
-    startDecorator: <DeviceThermostatIcon />,
+    startDecorator: thermostatIcon,
     endDecorator: <Typography variant="caption">°F</Typography>,
   },
 ]
@@ -164,7 +170,7 @@ export const WithCustomButtonIcon = {
   args: {
     menuItems: defaultMenuItems,
     ariaLabel: 'open menu showing custom button icon',
-    icon: <ListIcon />,
+    icon: listIcon,
   },
 }
 
@@ -180,7 +186,7 @@ export const WithCustomButtonIconAndText = {
   args: {
     menuItems: defaultMenuItems,
     ariaLabel: 'open menu showing custom button icon and text',
-    icon: <ListIcon />,
+    icon: listIcon,
     buttonText: 'Menu',
   },
 }

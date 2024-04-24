@@ -1,7 +1,5 @@
-import BookmarkIcon from '@mui/icons-material/Bookmark'
-import MessageIcon from '@mui/icons-material/Message'
-
 import { supportedViewports } from '../../../cypress/support/variables'
+import Icon from '../icon'
 import NavBar from './navBar'
 
 describe('NavBar', () => {
@@ -22,8 +20,8 @@ describe('NavBar', () => {
     cy.mount(
       <NavBar
         logo={<Logo />}
-        leftDrawerIcon={<BookmarkIcon />}
-        rightDrawerIcon={<MessageIcon />}
+        leftDrawerIcon={<Icon name="bookmark" />}
+        rightDrawerIcon={<Icon name="chat" />}
         leftDrawerAriaLabel="open left drawer"
         rightDrawerAriaLabel="open right drawer"
         handleLeftDrawerToggle={openLeftDrawer}

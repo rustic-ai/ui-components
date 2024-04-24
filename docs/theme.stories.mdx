@@ -44,11 +44,22 @@ You can empower users to switch between light and dark modes seamlessly. Here's 
 ```
 import React, { useState } from 'react';
 import { ThemeProvider, createTheme, CssBaseline, IconButton } from '@mui/material';
-import { Brightness4 as DarkModeIcon, Brightness7 as LightModeIcon } from '@mui/icons-material';
 import {
   rusticDarkTheme,
   rusticLightTheme,
 } from '@rustic-ai/ui-components'
+
+ const DarkModeToggle = ({ isDarkMode, toggleDarkMode }) => {
+    return (
+      <IconButton onClick={toggleDarkMode}>
+        {isDarkMode ? (
+          <span className="material-symbols-rounded">light_mode</span>
+        ) : (
+          <span className="material-symbols-rounded">dark_mode</span>
+        )}
+      </IconButton>
+    );
+  };
 
 const App = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -62,10 +73,7 @@ const App = () => {
     <ThemeProvider theme={isDarkMode ? rusticDarkTheme : rusticLightTheme}>
       <CssBaseline />
       <div>
-        {/* Dark mode toggle button */}
-        <IconButton onClick={toggleDarkMode}>
-          {isDarkMode ? <LightModeIcon /> : <DarkModeIcon />}
-        </IconButton>
+        <DarkModeToggle isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} />
         {/* Your application content */}
       </div>
     </ThemeProvider>

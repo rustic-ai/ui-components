@@ -1,5 +1,3 @@
-import AccountCircleIcon from '@mui/icons-material/AccountCircle'
-import SmartToyIcon from '@mui/icons-material/SmartToy'
 import React from 'react'
 import { v4 as getUUID } from 'uuid'
 
@@ -17,6 +15,7 @@ import {
   YoutubeVideo,
 } from '..'
 import CodeSnippet from '../codeSnippet/codeSnippet'
+import Icon from '../icon'
 import MessageSpace from './messageSpace'
 
 export default {
@@ -349,9 +348,9 @@ export const Default = {
     },
     getProfileComponent: (message: Message) => {
       if (message.sender.includes('Agent')) {
-        return <SmartToyIcon />
+        return <Icon name="smart_toy" />
       } else {
-        return <AccountCircleIcon />
+        return <Icon name="account_circle" />
       }
     },
   },

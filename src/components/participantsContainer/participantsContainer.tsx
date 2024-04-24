@@ -1,8 +1,5 @@
 import './participantsContainer.css'
 
-import AccountCircleIcon from '@mui/icons-material/AccountCircle'
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
-import SmartToy from '@mui/icons-material/SmartToy'
 import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
 import DialogTitle from '@mui/material/DialogTitle'
@@ -18,6 +15,7 @@ import React from 'react'
 import { useState } from 'react'
 
 import { capitalizeFirstLetter } from '../helper'
+import Icon from '../icon'
 import { type Participant, ParticipantRole, ParticipantType } from '../types'
 
 export interface ParticipantsContainerProps {
@@ -85,7 +83,7 @@ const ParticipantList = (props: {
                 }
                 color="primary"
                 size="small"
-                startIcon={<KeyboardArrowDownIcon />}
+                startIcon={<Icon name="keyboard_arrow_down" />}
               >
                 {buttonLabel}
               </Button>
@@ -177,7 +175,7 @@ const ParticipantsContainer = (props: ParticipantsContainerProps) => {
 
       <ParticipantList
         participantType="Human"
-        participantTypeIcon={<AccountCircleIcon />}
+        participantTypeIcon={<Icon name="account_circle" />}
         participants={sortedHumanParticipants}
       />
 
@@ -187,7 +185,7 @@ const ParticipantsContainer = (props: ParticipantsContainerProps) => {
 
           <ParticipantList
             participantType="Agent"
-            participantTypeIcon={<SmartToy />}
+            participantTypeIcon={<Icon name="smart_toy" />}
             participants={sortedAgentParticipants}
           />
         </>

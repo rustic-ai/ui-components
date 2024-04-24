@@ -1,10 +1,9 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import BookmarkIcon from '@mui/icons-material/Bookmark'
-import MessageIcon from '@mui/icons-material/Message'
 import Typography from '@mui/material/Typography'
 import { Box } from '@mui/system'
 import React from 'react'
 
+import Icon from '../icon'
 import NavBar from './navBar'
 
 const meta = {
@@ -35,8 +34,8 @@ const Logo = () => {
 export const Default = {
   args: {
     logo: <Logo />,
-    leftDrawerIcon: <MessageIcon />,
-    rightDrawerIcon: <BookmarkIcon />,
+    leftDrawerIcon: <Icon name="chat" />,
+    rightDrawerIcon: <Icon name="bookmark" />,
     leftDrawerAriaLabel: 'Open Left Drawer',
     rightDrawerAriaLabel: 'Open Right Drawer',
     handleLeftDrawerToggle: () => {},

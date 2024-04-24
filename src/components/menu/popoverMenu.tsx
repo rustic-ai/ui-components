@@ -1,6 +1,5 @@
 import './popoverMenu.css'
 
-import MoreVertIcon from '@mui/icons-material/MoreVert'
 import { useMediaQuery } from '@mui/material'
 import Button from '@mui/material/Button'
 import Drawer from '@mui/material/Drawer'
@@ -13,6 +12,8 @@ import Typography from '@mui/material/Typography'
 import { Box } from '@mui/system'
 import type { ReactNode } from 'react'
 import React, { useRef, useState } from 'react'
+
+import Icon from '../icon'
 
 export interface PopoverMenuItem {
   label: string
@@ -98,6 +99,8 @@ export default function PopoverMenu(props: PopoverMenuProps) {
       className: 'rustic-popover-menu-button',
     }
 
+    const defaultIcon = <Icon name="more_vert" />
+
     if (props.buttonText) {
       return (
         <Button
@@ -111,7 +114,7 @@ export default function PopoverMenu(props: PopoverMenuProps) {
     } else {
       return (
         <IconButton {...buttonAttributes} data-cy="menu-icon-button">
-          {props.icon ? props.icon : <MoreVertIcon />}
+          {props.icon ? props.icon : defaultIcon}
         </IconButton>
       )
     }

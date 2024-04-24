@@ -11,6 +11,7 @@ import { useRef, useState } from 'react'
 import React from 'react'
 import { v4 as getUUID } from 'uuid'
 
+import Icon from '../icon'
 import type { Message, WebSocketClient } from '../types'
 
 export interface TextInputProps {
@@ -82,9 +83,7 @@ export default function TextInput(props: TextInputProps) {
               size="small"
               sx={{ color: speechToTextIconColor }}
             >
-              <span className="material-symbols-rounded">
-                {speechToTextIconName}
-              </span>
+              <Icon name={speechToTextIconName} />
             </IconButton>
           </Tooltip>
         )}
@@ -210,7 +209,7 @@ export default function TextInput(props: TextInputProps) {
         disabled={isEmptyMessage}
         color="primary"
       >
-        <span className="material-symbols-rounded">send</span>
+        <Icon name="send" />
       </IconButton>
     </Box>
   )

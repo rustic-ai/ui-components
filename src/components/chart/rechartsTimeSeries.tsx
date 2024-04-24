@@ -1,7 +1,5 @@
 import './rechartsTimeSeries.css'
 
-import Crop32Icon from '@mui/icons-material/Crop169'
-import MoreVertIcon from '@mui/icons-material/MoreVert'
 import FormControl from '@mui/material/FormControl'
 import IconButton from '@mui/material/IconButton'
 import Menu from '@mui/material/Menu'
@@ -27,6 +25,7 @@ import {
 } from 'recharts'
 
 import { calculateTimeDiffInDays, formatTimestampLabel } from '../helper'
+import Icon from '../icon'
 
 export interface TimeSeriesData {
   timestamp: number
@@ -252,17 +251,15 @@ function RechartsTimeSeries(props: RechartsTimeSeriesProps) {
             className="rustic-recharts-time-series-legend-item"
             onClick={() => handleLegendClick(dataKey)}
             data-cy="legend-item"
+            sx={{
+              color: getLegendColor(dataKey, index),
+            }}
           >
-            <Crop32Icon
-              sx={{
-                color: getLegendColor(dataKey, index),
-              }}
-            />
+            <Icon name="crop_16_9" />
             <Typography
               variant="body2"
               display="inline"
               sx={{
-                color: getLegendColor(dataKey, index),
                 textDecorationLine: getLegendTextDecorationStyle(dataKey),
               }}
             >
@@ -297,8 +294,9 @@ function RechartsTimeSeries(props: RechartsTimeSeriesProps) {
               aria-expanded={Boolean(anchorEl)}
               aria-haspopup="true"
               onClick={handleChartTypeToggle}
+              color="primary"
             >
-              <MoreVertIcon sx={{ color: 'primary.main' }} />
+              <Icon name="more_vert" />
             </IconButton>
             <Menu
               anchorOrigin={{
