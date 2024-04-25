@@ -8,7 +8,7 @@ const SecondaryDarkColor = '#E54500'
 const actionActiveColor = '#5F5C5A'
 const actionFocusColor = '#FDFDFD'
 const actionDisabledBackgroundColor = '#E5E5E5'
-const actionDisabledColor = '#C7C2C0'
+const actionDisabledColor = '#A7A19E'
 const actionSelectedColor = '#D6D0D0'
 const dividerColor = '#D0C4BE'
 
@@ -20,76 +20,88 @@ const baseTheme = createTheme({
     fontFamily: 'Inter',
     h1: {
       fontStyle: 'normal',
-      fontWeight: 400,
-      fontSize: '96px',
+      fontWeight: 300,
+      fontSize: '94px',
+      lineHeight: 1.167,
       letterSpacing: '-1.5px',
     },
     h2: {
       fontStyle: 'normal',
-      fontWeight: 400,
-      fontSize: '60px',
+      fontWeight: 300,
+      fontSize: '59px',
       letterSpacing: '-0.5px',
+      lineHeight: 1.2,
     },
     h3: {
       fontStyle: 'normal',
       fontWeight: 400,
-      fontSize: '48px',
+      fontSize: '47px',
       letterSpacing: '0px',
+      lineHeight: 1.167,
     },
     h4: {
       fontStyle: 'normal',
       fontWeight: 400,
-      fontSize: '34px',
+      fontSize: '33px',
       letterSpacing: '0.25px',
+      lineHeight: 1.235,
     },
     h5: {
       fontStyle: 'normal',
       fontWeight: 400,
       fontSize: '24px',
       letterSpacing: '0px',
+      lineHeight: 1.334,
     },
     h6: {
       fontStyle: 'normal',
-      fontWeight: 400,
+      fontWeight: 500,
       fontSize: '20px',
       letterSpacing: '0.15px',
+      lineHeight: 1.6,
     },
     body1: {
       fontStyle: 'normal',
       fontWeight: 400,
       fontSize: '16px',
-      letterSpacing: '0.15px',
+      letterSpacing: '0.5px',
+      lineHeight: 1.5,
     },
     body2: {
       fontStyle: 'normal',
       fontWeight: 400,
-      fontSize: '16px',
-      letterSpacing: '0.17px',
+      fontSize: '14px',
+      letterSpacing: '0.25px',
+      lineHeight: 1.43,
     },
     subtitle1: {
       fontStyle: 'normal',
       fontWeight: 400,
       fontSize: '16px',
       letterSpacing: '0.15px',
-      textDecoration: 'none',
+      lineHeight: 1.75,
     },
     subtitle2: {
       fontStyle: 'normal',
       fontWeight: 500,
       fontSize: '14px',
-      letterSpacing: '0.01px',
+      letterSpacing: '0.1px',
+      lineHeight: 1.57,
     },
     overline: {
       fontStyle: 'normal',
       fontWeight: 400,
-      fontSize: '14px',
-      letterSpacing: '0.15px',
+      fontSize: '10px',
+      letterSpacing: '1.5px',
+      lineHeight: 1.5,
+      textTransform: 'uppercase',
     },
     caption: {
       fontStyle: 'normal',
-      fontWeight: 500,
+      fontWeight: 400,
       fontSize: '12px',
-      letterSpacing: '0.04px',
+      letterSpacing: '0.4px',
+      lineHeight: 1.66,
     },
   },
   palette: {
@@ -135,12 +147,12 @@ let rusticLightTheme = createTheme({
     text: {
       primary: '#1E0C04',
       secondary: '#4E443F',
-      disabled: '#B0ACAB',
+      disabled: '#9C9795',
     },
     primary: {
       main: lightModePrimaryMainColor,
       dark: '#2D2825',
-      light: '#BAACA5',
+      light: '#716865',
     },
     secondary: {
       main: SecondaryMainColor,
