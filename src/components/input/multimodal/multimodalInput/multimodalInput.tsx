@@ -114,7 +114,7 @@ export default function MultimodalInput(props: InputProps) {
           const newAddedFile = {
             name: file.name,
             loadingProgress: 0,
-            id: fileId,
+            fileId: fileId,
             abortController: controller,
           }
           setAddedFiles((prev) => [...prev, newAddedFile])
@@ -122,7 +122,7 @@ export default function MultimodalInput(props: InputProps) {
           function uploadFile(): Promise<{ url: string }> {
             return new Promise((resolve, reject) => {
               const xhr = new XMLHttpRequest()
-              xhr.open('POST', `${props.uploadFileEndpoint}${fileId}`)
+              xhr.open('POST', `${props.uploadFileEndpoint}`)
               xhr.upload.onprogress = (progressEvent: ProgressEvent) => {
                 const percentageConversionRate = 100
                 const loadedPercentage =

@@ -17,7 +17,7 @@ const meta = {
     },
     mockData: [
       {
-        url: 'http://localhost:6006/upload/:id',
+        url: 'http://localhost:8080/upload',
         method: 'POST',
         status: 200,
         response: { url: 'https://example-file/1' },
@@ -46,7 +46,7 @@ export const Default = {
       // eslint-disable-next-line no-console
       send: (message: any) => console.log('Message sent:', message),
     },
-    uploadFileEndpoint: 'http://localhost:6006/upload/',
+    uploadFileEndpoint: 'http://localhost:8080/upload',
     deleteFileEndpoint: 'http://localhost:6006/delete/',
     acceptedFileTypes:
       'image/*,.pdf,.doc,.docx,application/x-iwork-pages-sffpages',
