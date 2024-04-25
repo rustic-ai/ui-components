@@ -17,14 +17,14 @@ const meta = {
     },
     mockData: [
       {
-        url: 'http://localhost:8080/upload',
+        url: 'http://localhost:8080/upload/message?id=1',
         method: 'POST',
         status: 200,
-        response: { url: 'https://file/1', id: '1' },
+        response: { fileId: '1' },
         delay: 1000,
       },
       {
-        url: 'http://localhost:8080/files/:id',
+        url: 'http://localhost:8080/files/file?message-id=1&file-id=:fileId',
         method: 'DELETE',
         status: 200,
         response: { message: 'Delete successfully!' },
@@ -46,9 +46,11 @@ export default meta
 
 export const Default = {
   args: {
-    uploadFileEndpoint: 'http://localhost:8080/upload',
+    uploadFileEndpoint: 'http://localhost:8080/upload/',
     deleteFileEndpoint: 'http://localhost:8080/files/',
     acceptedFileTypes:
       'image/*,.pdf,.doc,.docx,application/x-iwork-pages-sffpages',
+    messageId: 1,
+    handleFileCountChange: () => {},
   },
 }

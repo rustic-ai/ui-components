@@ -200,10 +200,9 @@ export interface InputProps extends TextInputProps {
 }
 
 export interface FileInfo {
-  fileId: string
+  id: string
   name: string
   loadingProgress: number
   abortController: AbortController
-  url?: string
-  id?: string
+  fileId?: string
 }

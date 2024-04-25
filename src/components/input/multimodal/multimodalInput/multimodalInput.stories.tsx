@@ -17,11 +17,18 @@ const meta = {
     },
     mockData: [
       {
-        url: 'http://localhost:8080/upload',
+        url: 'http://localhost:8080/upload/message?id=1',
         method: 'POST',
         status: 200,
-        response: { url: 'https://example-file/1' },
+        response: { fileId: '1' },
         delay: 1000,
+      },
+      {
+        url: 'http://localhost:8080/files/file?message-id=1&file-id=:fileId',
+        method: 'DELETE',
+        status: 200,
+        response: { message: 'Delete successfully!' },
+        delay: 500,
       },
     ],
   },
@@ -46,8 +53,8 @@ export const Default = {
       // eslint-disable-next-line no-console
       send: (message: any) => console.log('Message sent:', message),
     },
-    uploadFileEndpoint: 'http://localhost:8080/upload',
-    deleteFileEndpoint: 'http://localhost:6006/delete/',
+    uploadFileEndpoint: 'http://localhost:8080/upload/',
+    deleteFileEndpoint: 'http://localhost:6006/files/',
     acceptedFileTypes:
       'image/*,.pdf,.doc,.docx,application/x-iwork-pages-sffpages',
   },
@@ -70,18 +77,7 @@ export const FailToUpload = {
       send: (message: any) => console.log('Message sent:', message),
     },
     uploadFileEndpoint: 'http://localhost:6006/upload/',
-    deleteFileEndpoint: 'http://localhost:6006/delete/',
-  },
-  parameters: {
-    mockData: [
-      {
-        url: 'http://localhost:6006/upload/:id',
-        method: 'POST',
-        status: 500,
-        response: { message: 'Please try again later.' },
-        delay: 1000,
-      },
-    ],
+    deleteFileEndpoint: 'http://localhost:6006/files/',
   },
 }
 

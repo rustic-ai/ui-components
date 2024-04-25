@@ -1,11 +1,12 @@
 import '../uploader/uploader.css'
+import '../filePreview/filePreview.css'
 
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
 import IconButton from '@mui/material/IconButton'
 import LinearProgress from '@mui/material/LinearProgress'
 import Typography from '@mui/material/Typography'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { v4 as getUUID } from 'uuid'
 
 import { shortenString } from '../../../helper'
@@ -16,12 +17,13 @@ import {
 } from '../multimodalInput/multimodalInput'
 
 export type UploaderProps = {
+  uploadFileEndpoint: string
+  deleteFileEndpoint: string
+  messageId: string
+  handleFileCountChange: (fileCountChange: 1 | -1) => void
   acceptedFileTypes?: string
   maxFileCount?: number
   maxFileSize?: number
-  uploadFileEndpoint: string
-  deleteFileEndpoint: string
-  filesRef?: React.Ref<HTMLDivElement>
 }
 
 const successStatus = 200
@@ -32,6 +34,11 @@ function Upload(props: UploaderProps) {
   const [addedFiles, setAddedFiles] = useState<FileInfo[]>([])
   const [errorMessages, setErrorMessages] = useState<string[]>([])
   const inputId = getUUID()
+
+  useEffect(() => {
+    setAddedFiles([])
+    setErrorMessages([])
+  }, [props.messageId])
 
   function rejectFile(fileName: string) {
     setErrorMessages((prevMessages) => [
@@ -77,10 +84,10 @@ function Upload(props: UploaderProps) {
     }
   }
 
-  function updateProgress(loadedPercentage: number, fileId: string) {
+  function updateProgress(loadedPercentage: number, id: string) {
     setAddedFiles((prevFiles) => {
       const updatedFiles = prevFiles.map((file) => {
-        if (file.fileId === fileId) {
+        if (file.id === id) {
           return {
             ...file,
             loadingProgress: loadedPercentage,
@@ -92,18 +99,14 @@ function Upload(props: UploaderProps) {
     })
   }
 
-  function handleSuccessfulUpload(
-    res: { url: string; id: string },
-    fileId: string
-  ) {
+  function handleSuccessfulUpload(res: { fileId: string }, id: string) {
     setAddedFiles((prevFiles) => {
-      const index = prevFiles.findIndex((file) => file.fileId === fileId)
+      const index = prevFiles.findIndex((file) => file.id === id)
       if (index !== -1) {
         const updatedFiles = [...prevFiles]
         updatedFiles[index] = {
           ...updatedFiles[index],
-          url: res.url,
-          id: res.id,
+          fileId: res.fileId,
         }
         return updatedFiles
       }
@@ -113,14 +116,14 @@ function Upload(props: UploaderProps) {
 
   function handleFailedUpload(
     fileName: string,
-    fileId: string,
+    id: string,
     response?: { message?: string }
   ) {
     setErrorMessages((prevMessages) => [
       ...prevMessages,
       `Failed to upload ${fileName}. ${response?.message || ''}`,
     ])
-    setAddedFiles((prev) => prev.filter((file) => file.fileId !== fileId))
+    setAddedFiles((prev) => prev.filter((file) => file.id !== id))
   }
 
   function uploadFile(file: File) {
@@ -128,73 +131,86 @@ function Upload(props: UploaderProps) {
     const controller = new AbortController()
     formData.append('file', file)
 
-    const fileId = getUUID()
+    const id = getUUID()
     const newAddedFile = {
       name: file.name,
       loadingProgress: 0,
       abortController: controller,
-      fileId: fileId,
+      id: id,
     }
 
     setAddedFiles((prev) => [...prev, newAddedFile])
 
     const xhr = new XMLHttpRequest()
-    xhr.open('POST', props.uploadFileEndpoint)
+    xhr.open('POST', `${props.uploadFileEndpoint}message?id=${props.messageId}`)
     xhr.upload.onprogress = (progressEvent: ProgressEvent) => {
       const percentageConversionRate = 100
       const loadedPercentage =
         (progressEvent.loaded / progressEvent.total) * percentageConversionRate
-      updateProgress(loadedPercentage, fileId)
+      updateProgress(loadedPercentage, id)
     }
 
     xhr.onreadystatechange = () => {
       if (xhr.readyState === XMLHttpRequest.DONE) {
         const response = xhr.responseText ? JSON.parse(xhr.responseText) : ''
         if (xhr.status === successStatus) {
-          handleSuccessfulUpload(response, fileId)
+          handleSuccessfulUpload(response, id)
         } else if (xhr.status !== 0) {
-          handleFailedUpload(file.name, fileId, response)
+          props.handleFileCountChange(-1)
+          handleFailedUpload(file.name, id, response)
         }
       } else if (xhr.readyState === XMLHttpRequest.OPENED) {
         //no response in here
-        handleFailedUpload(file.name, fileId)
+        handleFailedUpload(file.name, id)
+        props.handleFileCountChange(-1)
       }
     }
 
     xhr.send(formData)
+    props.handleFileCountChange(1)
     controller.signal.addEventListener('abort', () => {
       xhr.abort()
     })
   }
 
-  function deleteFile(id: string): Promise<void> {
+  function deleteFile(fileId: string): Promise<void> {
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest()
-      xhr.open('DELETE', `${props.deleteFileEndpoint}${id}`)
-      xhr.onload = () => {
-        if (xhr.status === successStatus) {
-          resolve()
-        } else {
+      xhr.open(
+        'DELETE',
+        `${props.deleteFileEndpoint}file?message-id=${props.messageId}&file-id=${fileId}`
+      )
+
+      xhr.onreadystatechange = () => {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+          if (xhr.status === successStatus) {
+            resolve()
+          } else if (xhr.status !== 0) {
+            reject()
+          }
+        } else if (xhr.readyState === XMLHttpRequest.OPENED) {
           reject()
         }
       }
-
       xhr.send()
     })
   }
 
-  function handleDelete(index: number, file: FileInfo) {
+  function handleDelete(file: FileInfo, index: number) {
     setErrorMessages([])
-
-    if (file.id) {
-      deleteFile(file.id)
-        .then(() => setAddedFiles((prev) => prev.filter((_, i) => i !== index)))
-        .catch(() =>
-          setErrorMessages((prevMessages) => [
+    props.handleFileCountChange(-1)
+    if (file.fileId) {
+      deleteFile(file.fileId)
+        .then(() => {
+          return setAddedFiles((prev) => prev.filter((_, i) => i !== index))
+        })
+        .catch(() => {
+          props.handleFileCountChange(1)
+          return setErrorMessages((prevMessages) => [
             ...prevMessages,
             `Failed to delete ${file.name}. Please try again.`,
           ])
-        )
+        })
     } else {
       file.abortController.abort()
       setAddedFiles((prev) => prev.filter((_file, i) => i !== index))
@@ -221,7 +237,7 @@ function Upload(props: UploaderProps) {
           <IconButton
             data-cy="delete-button"
             color="primary"
-            onClick={() => handleDelete(index, file)}
+            onClick={() => handleDelete(file, index)}
             className="rustic-delete-button"
             aria-label="cancel file upload"
           >
@@ -260,7 +276,7 @@ function Upload(props: UploaderProps) {
             {errorMessage}
           </Typography>
         ))}
-      <Box className="rustic-files" ref={props.filesRef}>
+      <Box className="rustic-files">
         {addedFiles.map((file, index) => renderFilePreview(file, index))}
       </Box>
     </>
