@@ -15,6 +15,8 @@ export default function MultimodalInput(props: InputProps) {
   const messageIdRef = useRef<string>(getUUID())
   const filePreviewRef = useRef<HTMLDivElement>(null)
   const errorMessagesRef = useRef<HTMLDivElement>(null)
+  const filePreviewContainerId = getUUID()
+  const errorContainerId = getUUID()
 
   const hasAddedFiles = fileCount > 0
   function handleFileCountChange(fileCountChange: 1 | -1) {
@@ -32,7 +34,7 @@ export default function MultimodalInput(props: InputProps) {
   useEffect(() => {
     if (filePreviewRef.current) {
       const filePreviewContainer = document.getElementById(
-        'filePreviewContainer'
+        filePreviewContainerId
       )
 
       if (filePreviewContainer) {
@@ -43,7 +45,7 @@ export default function MultimodalInput(props: InputProps) {
 
   useEffect(() => {
     if (errorMessagesRef.current) {
-      const errorContainer = document.getElementById('errorContainer')
+      const errorContainer = document.getElementById(errorContainerId)
 
       if (errorContainer) {
         errorContainer.appendChild(errorMessagesRef.current)
@@ -54,7 +56,7 @@ export default function MultimodalInput(props: InputProps) {
   return (
     <>
       <Box className="rustic-multimodal-input">
-        <div id="errorContainer"></div>
+        <div id={errorContainerId}></div>
         <BaseInput
           {...props}
           send={handleSendMessage}
@@ -64,7 +66,7 @@ export default function MultimodalInput(props: InputProps) {
         >
           <Box sx={{ flex: '1 1 auto' }}>
             <Box
-              id="filePreviewContainer"
+              id={filePreviewContainerId}
               sx={{ border: '1px solid #ccc' }}
             ></Box>
             <Box className="rustic-bottom-buttons">

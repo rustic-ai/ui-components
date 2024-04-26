@@ -1,5 +1,4 @@
-import '../uploader/uploader.css'
-import '../filePreview/filePreview.css'
+import './upload.css'
 
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'

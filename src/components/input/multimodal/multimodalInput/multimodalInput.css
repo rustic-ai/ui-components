@@ -11,17 +11,6 @@
   min-width: 248px;
 }
 
-.rustic-files {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  padding: 8px;
-}
-
-.rustic-error-message {
-  display: block;
-}
-
 .rustic-multimodal-input .rustic-base-input {
   flex-direction: column;
 }

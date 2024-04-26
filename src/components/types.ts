@@ -186,15 +186,14 @@ export interface TextInputProps
   ws: WebSocketClient
 }
 
-export interface InputProps
-  extends TextInputProps,
-    Omit<
-      UploaderProps,
-      | 'messageId'
-      | 'handleFileCountChange'
-      | 'filePreviewRef'
-      | 'errorMessagesRef'
-    > {}
+export type InputProps = TextInputProps &
+  Omit<
+    UploaderProps,
+    | 'messageId'
+    | 'handleFileCountChange'
+    | 'filePreviewRef'
+    | 'errorMessagesRef'
+  >
 
 export interface UploaderProps {
   /** The API endpoint where files will be uploaded. File id will be appended to the end of API endpoint. */
@@ -205,6 +204,9 @@ export interface UploaderProps {
   messageId: string
   /** A function to handle changes in the file count. Parent component should use this to track file count change and handle submit accordingly. */
   handleFileCountChange: (fileCountChange: 1 | -1) => void
+  /** Define a ref in Uploader's parent container and add this ref to the div element where you want to display the error messages from the Uploader component. */
+  errorMessagesRef: React.RefObject<HTMLDivElement>
+  /** Define a ref in Uploader's parent container and use this ref to display a collection of file previews from the Uploader component at the desired location within the parent container. */
   filePreviewRef: React.RefObject<HTMLDivElement>
   /** The types of files that are allowed to be selected for upload. For safety reasons, only allow file types that can be handled by your server. Avoid accepting executable file types like .exe, .bat, or .msi. For more information, refer to the [mdn web docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file#unique_file_type_specifiers). */
   acceptedFileTypes?: string
@@ -212,7 +214,6 @@ export interface UploaderProps {
   maxFileCount?: number
   /** The maximum size for each uploaded file, in bytes. */
   maxFileSize?: number
-  errorMessagesRef: React.RefObject<HTMLDivElement>
 }
 
 export interface FileInfo {
