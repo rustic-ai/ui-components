@@ -10,25 +10,41 @@ import React, { useEffect, useState } from 'react'
 import { v4 as getUUID } from 'uuid'
 
 import { shortenString } from '../../../helper'
-import type { FileInfo } from '../../../types'
-import {
-  getFileSizeAbbrev,
-  getFilesToAdd,
-} from '../multimodalInput/multimodalInput'
-
-export type UploaderProps = {
-  uploadFileEndpoint: string
-  deleteFileEndpoint: string
-  messageId: string
-  handleFileCountChange: (fileCountChange: 1 | -1) => void
-  acceptedFileTypes?: string
-  maxFileCount?: number
-  maxFileSize?: number
-}
+import type { FileInfo, UploaderProps } from '../../../types'
 
 const successStatus = 200
 const maximumFileNameLength = 15
 const maximumLoadingProgress = 100
+
+export function getFilesToAdd(
+  files: File[],
+  totalFileCount: number,
+  maxFileCount?: number
+): File[] | undefined {
+  if (maxFileCount) {
+    if (totalFileCount <= maxFileCount) {
+      return files
+    } else {
+      return files.slice(0, maxFileCount - totalFileCount)
+    }
+  } else {
+    return files
+  }
+}
+
+export function getFileSizeAbbrev(bytes: number): string {
+  const units = ['Bytes', 'KB', 'MB', 'GB']
+  let unitIndex = 0
+
+  const byteConversionRate = 1024
+  while (bytes >= byteConversionRate && unitIndex < units.length - 1) {
+    bytes /= byteConversionRate
+    unitIndex++
+  }
+
+  const formattedString = bytes.toFixed(1).toString().replace(/\.0$/, '')
+  return `${formattedString} ${units[unitIndex]}`
+}
 
 function Upload(props: UploaderProps) {
   const [addedFiles, setAddedFiles] = useState<FileInfo[]>([])
@@ -227,7 +243,6 @@ function Upload(props: UploaderProps) {
         <Box className="rustic-flex-center">
           {file.loadingProgress < maximumLoadingProgress && (
             <LinearProgress
-              data-cy="loading-progress"
               variant="determinate"
               color="secondary"
               value={file.loadingProgress}
@@ -264,19 +279,22 @@ function Upload(props: UploaderProps) {
           accept={props.acceptedFileTypes}
         />
       </Box>
-      {errorMessages &&
-        errorMessages.map((errorMessage, index) => (
-          <Typography
-            variant="caption"
-            color="error"
-            className="rustic-error-message"
-            data-cy="error-message"
-            key={index}
-          >
-            {errorMessage}
-          </Typography>
-        ))}
-      <Box className="rustic-files">
+      <Box ref={props.errorMessagesRef}>
+        {errorMessages &&
+          errorMessages.map((errorMessage, index) => (
+            <Typography
+              variant="caption"
+              color="error"
+              className="rustic-error-message"
+              data-cy="error-message"
+              key={index}
+            >
+              {errorMessage}
+            </Typography>
+          ))}
+      </Box>
+
+      <Box className="rustic-files" ref={props.filePreviewRef}>
         {addedFiles.map((file, index) => renderFilePreview(file, index))}
       </Box>
     </>

@@ -186,17 +186,33 @@ export interface TextInputProps
   ws: WebSocketClient
 }
 
-export interface InputProps extends TextInputProps {
-  /** The types of files that are allowed to be selected for upload. For safety reasons, only allow file types that can be handled by your server. Avoid accepting executable file types like .exe, .bat, or .msi. For more information, refer to the [mdn web docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file#unique_file_type_specifiers). */
-  acceptedFileTypes: string
-  /** The maximum size for each uploaded file, in bytes. */
-  maxFileSize?: number
-  /** The maximum number of files that can be uploaded in one message. */
-  maxFileCount?: number
+export interface InputProps
+  extends TextInputProps,
+    Omit<
+      UploaderProps,
+      | 'messageId'
+      | 'handleFileCountChange'
+      | 'filePreviewRef'
+      | 'errorMessagesRef'
+    > {}
+
+export interface UploaderProps {
   /** The API endpoint where files will be uploaded. File id will be appended to the end of API endpoint. */
   uploadFileEndpoint: string
   /** The API endpoint to delete/cancel uploaded files. File id will be appended to the end of API endpoint. */
   deleteFileEndpoint: string
+  /** Used in the API request to link the file with the message that's going to be sent. */
+  messageId: string
+  /** A function to handle changes in the file count. Parent component should use this to track file count change and handle submit accordingly. */
+  handleFileCountChange: (fileCountChange: 1 | -1) => void
+  filePreviewRef: React.RefObject<HTMLDivElement>
+  /** The types of files that are allowed to be selected for upload. For safety reasons, only allow file types that can be handled by your server. Avoid accepting executable file types like .exe, .bat, or .msi. For more information, refer to the [mdn web docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file#unique_file_type_specifiers). */
+  acceptedFileTypes?: string
+  /** The maximum number of files that can be uploaded in one message. */
+  maxFileCount?: number
+  /** The maximum size for each uploaded file, in bytes. */
+  maxFileSize?: number
+  errorMessagesRef: React.RefObject<HTMLDivElement>
 }
 
 export interface FileInfo {

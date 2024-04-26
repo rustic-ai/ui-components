@@ -1,5 +1,5 @@
 /* eslint-disable no-magic-numbers */
-import { getFileSizeAbbrev } from '../../src/components/input/multimodal/multimodalInput/multimodalInput'
+import { getFileSizeAbbrev } from '../../src/components/input/multimodal/upload/upload'
 
 describe('getFileSizeAbbrev', () => {
   const oneKBInBytes = 1024

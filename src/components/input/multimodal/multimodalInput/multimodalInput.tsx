@@ -1,7 +1,7 @@
 import './multimodalInput.css'
 
 import Box from '@mui/material/Box'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import React from 'react'
 import { v4 as getUUID } from 'uuid'
 
@@ -9,42 +9,14 @@ import type { InputProps, Message } from '../../../types'
 import BaseInput from '../../baseInput/baseInput'
 import Upload from '../upload/upload'
 
-export function getFilesToAdd(
-  files: File[],
-  totalFileCount: number,
-  maxFileCount?: number
-): File[] | undefined {
-  if (maxFileCount) {
-    if (totalFileCount <= maxFileCount) {
-      return files
-    } else {
-      return files.slice(0, maxFileCount - totalFileCount)
-    }
-  } else {
-    return files
-  }
-}
-
-export function getFileSizeAbbrev(bytes: number): string {
-  const units = ['Bytes', 'KB', 'MB', 'GB']
-  let unitIndex = 0
-
-  const byteConversionRate = 1024
-  while (bytes >= byteConversionRate && unitIndex < units.length - 1) {
-    bytes /= byteConversionRate
-    unitIndex++
-  }
-
-  const formattedString = bytes.toFixed(1).toString().replace(/\.0$/, '')
-  return `${formattedString} ${units[unitIndex]}`
-}
-
 export default function MultimodalInput(props: InputProps) {
   const [errorMessages, setErrorMessages] = useState<string[]>([])
   const [fileCount, setFileCount] = useState(0)
   const messageIdRef = useRef<string>(getUUID())
-  const hasAddedFiles = fileCount > 0
+  const filePreviewRef = useRef<HTMLDivElement>(null)
+  const errorMessagesRef = useRef<HTMLDivElement>(null)
 
+  const hasAddedFiles = fileCount > 0
   function handleFileCountChange(fileCountChange: 1 | -1) {
     setFileCount((prev) => prev + fileCountChange)
   }
@@ -57,170 +29,32 @@ export default function MultimodalInput(props: InputProps) {
     messageIdRef.current = getUUID()
   }
 
-  // function handleDelete(id: string, fileController: AbortController): void {
-  //   setErrorMessages([])
-  //   setAddedFiles((prev) => prev.filter((file) => file.fileId !== id))
-  //   setPendingUploadCount((prev) => (prev === 0 ? prev : prev - 1))
-  //   fileController.abort()
+  useEffect(() => {
+    if (filePreviewRef.current) {
+      const filePreviewContainer = document.getElementById(
+        'filePreviewContainer'
+      )
 
-  //   const xhr = new XMLHttpRequest()
-  //   xhr.open('DELETE', `${props.deleteFileEndpoint}${id}`)
-  //   xhr.send()
-  // }
+      if (filePreviewContainer) {
+        filePreviewContainer.appendChild(filePreviewRef.current)
+      }
+    }
+  }, [filePreviewRef.current])
 
-  // const isSendButtonDisabled =
-  //   addedFiles.length === 0 || pendingUploadCount !== 0
+  useEffect(() => {
+    if (errorMessagesRef.current) {
+      const errorContainer = document.getElementById('errorContainer')
 
-  // function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
-  //   setErrorMessages([])
-
-  //   const files = event.target.files && Array.from(event.target.files)
-  //   const totalFileCount = addedFiles.length + (files ? files.length : 0)
-
-  //   if (props.maxFileCount && totalFileCount > props.maxFileCount) {
-  //     setErrorMessages((prevMessages) => [
-  //       ...prevMessages,
-  //       `You can only upload up to ${props.maxFileCount} files.`,
-  //     ])
-  //   }
-
-  //   const maybeFilesToAdd =
-  //     files && getFilesToAdd(files, totalFileCount, props.maxFileCount)
-
-  //   if (maybeFilesToAdd) {
-  //     setPendingUploadCount((prev) => prev + maybeFilesToAdd.length)
-
-  //     maybeFilesToAdd.forEach((file) => {
-  //       const isFileSizeExceedingLimit =
-  //         props.maxFileSize && file.size > props.maxFileSize
-
-  //       function rejectFile() {
-  //         setPendingUploadCount((prev) => prev - 1)
-
-  //         setErrorMessages((prevMessages) => [
-  //           ...prevMessages,
-  //           `Failed to upload ${file.name}. You cannot upload files larger than ${
-  //             props.maxFileSize && getFileSizeAbbrev(props.maxFileSize)
-  //           }.`,
-  //         ])
-  //       }
-
-  //       function addFile() {
-  //         const fileId = getUUID()
-  //         const formData = new FormData()
-  //         formData.append('file', file)
-  //         formData.append('fileId', fileId)
-  //         const controller = new AbortController()
-  //         const newAddedFile = {
-  //           name: file.name,
-  //           loadingProgress: 0,
-  //           fileId: fileId,
-  //           abortController: controller,
-  //         }
-  //         setAddedFiles((prev) => [...prev, newAddedFile])
-
-  //         function uploadFile(): Promise<{ url: string }> {
-  //           return new Promise((resolve, reject) => {
-  //             const xhr = new XMLHttpRequest()
-  //             xhr.open('POST', `${props.uploadFileEndpoint}`)
-  //             xhr.upload.onprogress = (progressEvent: ProgressEvent) => {
-  //               const percentageConversionRate = 100
-  //               const loadedPercentage =
-  //                 (progressEvent.loaded / progressEvent.total) *
-  //                 percentageConversionRate
-
-  //               //update the loading progress of the file in the addedFiles state
-  //               setAddedFiles((prevFiles) => {
-  //                 const currentFileIndex = prevFiles.findIndex(
-  //                   (item) => item.fileId === fileId
-  //                 )
-  //                 const isFileInAddedFiles = currentFileIndex !== -1
-  //                 if (isFileInAddedFiles) {
-  //                   const updatedFiles = [...prevFiles]
-  //                   updatedFiles[currentFileIndex] = {
-  //                     ...updatedFiles[currentFileIndex],
-  //                     loadingProgress: loadedPercentage,
-  //                   }
-  //                   return updatedFiles
-  //                 }
-  //                 return prevFiles
-  //               })
-  //             }
-
-  //             xhr.onreadystatechange = () => {
-  //               if (xhr.readyState === XMLHttpRequest.DONE) {
-  //                 const successStatus = 200
-  //                 const response = xhr.responseText
-  //                   ? JSON.parse(xhr.responseText)
-  //                   : ''
-  //                 if (xhr.status === successStatus) {
-  //                   resolve(response)
-  //                 } else if (xhr.status === 0) {
-  //                   reject('Task canceled')
-  //                 } else {
-  //                   reject(response)
-  //                 }
-  //               } else if (xhr.readyState === XMLHttpRequest.OPENED) {
-  //                 reject()
-  //               }
-  //             }
-
-  //             xhr.send(formData)
-
-  //             controller.signal.addEventListener('abort', () => {
-  //               xhr.abort()
-  //             })
-  //           })
-  //         }
-
-  //         uploadFile()
-  //           .then((res) => {
-  //             setAddedFiles((prevFiles) => {
-  //               const fileIndex = prevFiles.findIndex(
-  //                 (item) => item.fileId === fileId
-  //               )
-  //               if (fileIndex !== -1) {
-  //                 const updatedFiles = [...prevFiles]
-  //                 updatedFiles[fileIndex] = {
-  //                   ...updatedFiles[fileIndex],
-  //                   url: res.url,
-  //                 }
-  //                 return updatedFiles
-  //               }
-  //               return prevFiles
-  //             })
-  //           })
-  //           .catch((error) => {
-  //             if (error !== 'Task canceled') {
-  //               setErrorMessages((prevMessages) => [
-  //                 ...prevMessages,
-  //                 `Failed to upload ${file.name}. ${
-  //                   error?.message ? error.message : ''
-  //                 }`,
-  //               ])
-  //               setAddedFiles((prevFiles) => {
-  //                 return prevFiles.filter((item) => item.fileId !== fileId)
-  //               })
-  //             }
-  //           })
-  //           .finally(() => {
-  //             setPendingUploadCount((prev) => prev - 1)
-  //           })
-  //       }
-
-  //       if (isFileSizeExceedingLimit) {
-  //         rejectFile()
-  //       } else {
-  //         addFile()
-  //       }
-  //     })
-  //   }
-  //   event.target.value = ''
-  // }
+      if (errorContainer) {
+        errorContainer.appendChild(errorMessagesRef.current)
+      }
+    }
+  }, [errorMessagesRef.current])
 
   return (
     <>
       <Box className="rustic-multimodal-input">
+        <div id="errorContainer"></div>
         <BaseInput
           {...props}
           send={handleSendMessage}
@@ -229,24 +63,11 @@ export default function MultimodalInput(props: InputProps) {
           setMultimodalErrorMessages={setErrorMessages}
         >
           <Box sx={{ flex: '1 1 auto' }}>
-            {/* <Box className="rustic-files" sx={{ border: '1px solid #ccc' }}>
-            {addedFiles.length > 0 &&
-              addedFiles.map((file, index) => (
-                <FilePreview
-                  key={index}
-                  name={file.name}
-                  onDelete={() =>
-                    handleDelete(file.fileId, file.abortController)
-                  }
-                  loadingProgress={file.loadingProgress}
-                />
-              ))}
-          </Box> */}
+            <Box
+              id="filePreviewContainer"
+              sx={{ border: '1px solid #ccc' }}
+            ></Box>
             <Box className="rustic-bottom-buttons">
-              {/* <Uploader
-              acceptedFileTypes={props.acceptedFileTypes}
-              handleFileChange={handleFileChange}
-            /> */}
               <Upload
                 acceptedFileTypes={props.acceptedFileTypes}
                 maxFileCount={props.maxFileCount}
@@ -255,6 +76,8 @@ export default function MultimodalInput(props: InputProps) {
                 deleteFileEndpoint={props.deleteFileEndpoint}
                 handleFileCountChange={handleFileCountChange}
                 messageId={messageIdRef.current}
+                filePreviewRef={filePreviewRef}
+                errorMessagesRef={errorMessagesRef}
               />
             </Box>
           </Box>
