@@ -9,9 +9,11 @@ import {
   type Message,
   OpenLayersMap,
   RechartsTimeSeries,
+  Sound,
   StreamingText,
   Table,
   Text,
+  Video,
   YoutubeVideo,
 } from '..'
 import CodeSnippet from '../codeSnippet/codeSnippet'
@@ -332,6 +334,44 @@ export const Default = {
           language: 'javascript',
         },
       },
+      {
+        ...humanMessageData,
+        id: getUUID(),
+        timestamp: '2024-01-02T00:16:00.000Z',
+        format: 'text',
+        data: {
+          text: 'Could you show me an example of the sound component?',
+        },
+      },
+      {
+        ...agentMessageData,
+        id: getUUID(),
+        timestamp: '2024-01-02T00:17:00.000Z',
+        format: 'sound',
+        data: {
+          src: 'audioExamples/audioStorybook.mp3',
+          title: 'Sound Title',
+        },
+      },
+      {
+        ...humanMessageData,
+        id: getUUID(),
+        timestamp: '2024-01-02T00:18:00.000Z',
+        format: 'text',
+        data: {
+          text: 'Could you show me an example of the video component?',
+        },
+      },
+      {
+        ...agentMessageData,
+        id: getUUID(),
+        timestamp: '2024-01-02T00:19:00.000Z',
+        format: 'video',
+        data: {
+          src: 'videoExamples/videoStorybook.mp4',
+          title: 'Video Title',
+        },
+      },
     ],
     supportedElements: {
       text: Text,
@@ -345,6 +385,8 @@ export const Default = {
       table: Table,
       calendar: FCCalendar,
       codeSnippet: CodeSnippet,
+      sound: Sound,
+      video: Video,
     },
     getProfileComponent: (message: Message) => {
       if (message.sender.includes('Agent')) {
