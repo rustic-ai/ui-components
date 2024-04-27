@@ -145,6 +145,7 @@ export default function BaseInput(
 
     props.send(formattedMessage)
     setMessageText('')
+    setSpeechToTextError('')
     props.setMultimodalErrorMessages && props.setMultimodalErrorMessages([])
   }
 
@@ -165,10 +166,6 @@ export default function BaseInput(
       <Box className="rustic-error-and-text-field-container">
         <Box>
           <ErrorMessage errorMessage={speechToTextError} />
-          {props.multimodalErrorMessages &&
-            props.multimodalErrorMessages.map((errorMessage, index) => (
-              <ErrorMessage errorMessage={errorMessage} key={index} />
-            ))}
         </Box>
         <TextField
           data-cy="text-field"

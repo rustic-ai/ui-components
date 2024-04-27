@@ -167,10 +167,10 @@ export interface BaseInputProps {
   maxRows?: number
   /** Boolean that dictates whether `TextInput` takes up 100% width of the parent container. */
   fullWidth?: boolean
+  /** function to send the message */
   send: (message: Message) => void
+  /** Additional condition to enable the send button. */
   isSendEnabled?: boolean
-  multimodalErrorMessages?: string[]
-  setMultimodalErrorMessages?: React.Dispatch<React.SetStateAction<string[]>>
   /** Boolean to enable speech-to-text. See which browsers are supported [here](https://developer.mozilla.org/en-US/docs/Web/API/SpeechRecognition#browser_compatibility). */
   enableSpeechToText?: boolean
 }
@@ -186,7 +186,7 @@ export interface TextInputProps
   ws: WebSocketClient
 }
 
-export type InputProps = TextInputProps &
+export type MultimodalInputProps = TextInputProps &
   Omit<
     UploaderProps,
     | 'messageId'

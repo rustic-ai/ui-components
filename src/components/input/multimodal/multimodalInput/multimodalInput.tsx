@@ -5,14 +5,13 @@ import { useEffect, useRef, useState } from 'react'
 import React from 'react'
 import { v4 as getUUID } from 'uuid'
 
-import type { InputProps, Message } from '../../../types'
+import type { Message, MultimodalInputProps } from '../../../types'
 import BaseInput from '../../baseInput/baseInput'
 import Upload from '../upload/upload'
 
-export default function MultimodalInput(props: InputProps) {
-  const [errorMessages, setErrorMessages] = useState<string[]>([])
+export default function MultimodalInput(props: MultimodalInputProps) {
   const [fileCount, setFileCount] = useState(0)
-  const messageIdRef = useRef<string>(getUUID())
+  const [messageId, setMessageId] = useState(getUUID())
   const filePreviewRef = useRef<HTMLDivElement>(null)
   const errorMessagesRef = useRef<HTMLDivElement>(null)
   const filePreviewContainerId = getUUID()
@@ -25,10 +24,10 @@ export default function MultimodalInput(props: InputProps) {
 
   function handleSendMessage(formattedMessage: Message): void {
     if (hasAddedFiles) {
-      formattedMessage.id = messageIdRef.current
+      formattedMessage.id = messageId
     }
     props.ws.send(formattedMessage)
-    messageIdRef.current = getUUID()
+    setMessageId(getUUID())
   }
 
   useEffect(() => {
@@ -61,8 +60,6 @@ export default function MultimodalInput(props: InputProps) {
           {...props}
           send={handleSendMessage}
           isSendEnabled={hasAddedFiles}
-          multimodalErrorMessages={errorMessages}
-          setMultimodalErrorMessages={setErrorMessages}
         >
           <Box sx={{ flex: '1 1 auto' }}>
             <Box
@@ -77,7 +74,7 @@ export default function MultimodalInput(props: InputProps) {
                 uploadFileEndpoint={props.uploadFileEndpoint}
                 deleteFileEndpoint={props.deleteFileEndpoint}
                 handleFileCountChange={handleFileCountChange}
-                messageId={messageIdRef.current}
+                messageId={messageId}
                 filePreviewRef={filePreviewRef}
                 errorMessagesRef={errorMessagesRef}
               />

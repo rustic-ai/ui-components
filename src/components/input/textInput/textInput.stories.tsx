@@ -1,10 +1,10 @@
-import type { StoryFn } from '@storybook/react'
+import type { Meta, StoryFn } from '@storybook/react'
 import React from 'react'
 
 import type { Message } from '../../types'
 import TextInput from './textInput'
 
-export default {
+const meta: Meta<React.ComponentProps<typeof TextInput>> = {
   title: 'Rustic UI/Input/Text Input',
   component: TextInput,
   tags: ['autodocs'],
@@ -31,6 +31,59 @@ export default {
     ),
   ],
 }
+
+meta.argTypes = {
+  ...meta.argTypes,
+  ws: {
+    description:
+      'WebSocket connection to send and receive messages to and from a backend.',
+    table: {
+      type: {
+        summary: 'WebSocketClient.\n',
+        detail:
+          'send: (message: Message) => void\nclose: () => void\nreconnect: () => void\n',
+      },
+    },
+  },
+  sender: {
+    description: 'The sender of the message.',
+    type: { summary: 'string' },
+  },
+  conversationId: {
+    description: 'Id of the current conversation.',
+    type: { summary: 'string' },
+  },
+  label: {
+    description:
+      'Label text to be displayed in the input, which will then move to the top when the input is focused on. If both label and placeholder are provided, the placeholder will only be visible once the input is focused on.',
+    type: { summary: 'string' },
+  },
+  placeholder: {
+    description:
+      'Placeholder text to be displayed in the input before user starts typing.',
+    type: { summary: 'string' },
+  },
+  multiline: {
+    description:
+      'Boolean that dictates whether `TextInput` can expand to be multiline.',
+    type: { summary: 'boolean' },
+  },
+  maxRows: {
+    description: 'Maximum number of rows to be displayed.',
+    type: { summary: 'number' },
+  },
+  fullWidth: {
+    description:
+      'Boolean that dictates whether `TextInput` takes up 100% width of the parent container.',
+    type: { summary: 'boolean' },
+  },
+  enableSpeechToText: {
+    description:
+      'Boolean to enable speech-to-text. See which browsers are supported [here](https://developer.mozilla.org/en-US/docs/Web/API/SpeechRecognition#browser_compatibility).',
+    type: { summary: 'boolean' },
+  },
+}
+export default meta
 
 export const Default = {
   args: {
