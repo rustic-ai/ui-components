@@ -13,6 +13,7 @@
 
 .rustic-multimodal-input .rustic-base-input {
   flex-direction: column;
+  gap: 0;
 }
 
 .rustic-multimodal-input

@@ -146,7 +146,6 @@ export default function BaseInput(
     props.send(formattedMessage)
     setMessageText('')
     setSpeechToTextError('')
-    props.setMultimodalErrorMessages && props.setMultimodalErrorMessages([])
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>): void {

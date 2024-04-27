@@ -176,13 +176,7 @@ export interface BaseInputProps {
 }
 
 export interface TextInputProps
-  extends Omit<
-    BaseInputProps,
-    | 'send'
-    | 'isSendEnabled'
-    | 'multimodalErrorMessages'
-    | 'setMultimodalErrorMessages'
-  > {
+  extends Omit<BaseInputProps, 'send' | 'isSendEnabled'> {
   ws: WebSocketClient
 }
 
@@ -196,6 +190,8 @@ export type MultimodalInputProps = TextInputProps &
   >
 
 export interface UploaderProps {
+  /** The types of files that are allowed to be selected for upload. For safety reasons, only allow file types that can be handled by your server. Avoid accepting executable file types like .exe, .bat, or .msi. For more information, refer to the [mdn web docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file#unique_file_type_specifiers). */
+  acceptedFileTypes: string
   /** The API endpoint where files will be uploaded. File id will be appended to the end of API endpoint. */
   uploadFileEndpoint: string
   /** The API endpoint to delete/cancel uploaded files. File id will be appended to the end of API endpoint. */
@@ -205,11 +201,9 @@ export interface UploaderProps {
   /** A function to handle changes in the file count. Parent component should use this to track file count change and handle submit accordingly. */
   handleFileCountChange: (fileCountChange: 1 | -1) => void
   /** Define a ref in Uploader's parent container and add this ref to the div element where you want to display the error messages from the Uploader component. */
-  errorMessagesRef: React.RefObject<HTMLDivElement>
+  errorMessagesRef?: HTMLDivElement | null
   /** Define a ref in Uploader's parent container and use this ref to display a collection of file previews from the Uploader component at the desired location within the parent container. */
-  filePreviewRef: React.RefObject<HTMLDivElement>
-  /** The types of files that are allowed to be selected for upload. For safety reasons, only allow file types that can be handled by your server. Avoid accepting executable file types like .exe, .bat, or .msi. For more information, refer to the [mdn web docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file#unique_file_type_specifiers). */
-  acceptedFileTypes?: string
+  filePreviewRef?: HTMLDivElement | null
   /** The maximum number of files that can be uploaded in one message. */
   maxFileCount?: number
   /** The maximum size for each uploaded file, in bytes. */

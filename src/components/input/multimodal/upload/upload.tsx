@@ -6,6 +6,7 @@ import IconButton from '@mui/material/IconButton'
 import LinearProgress from '@mui/material/LinearProgress'
 import Typography from '@mui/material/Typography'
 import React, { useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { v4 as getUUID } from 'uuid'
 
 import { shortenString } from '../../../helper'
@@ -262,6 +263,39 @@ function Upload(props: UploaderProps) {
     )
   }
 
+  const filePreviews = (
+    <Box className="rustic-files">
+      {addedFiles.map((file, index) => renderFilePreview(file, index))}
+    </Box>
+  )
+
+  const errors = (
+    <Box>
+      {errorMessages.map((errorMessage, index) => (
+        <Typography
+          variant="caption"
+          color="error"
+          className="rustic-error-message"
+          data-cy="error-message"
+          key={index}
+        >
+          {errorMessage}
+        </Typography>
+      ))}
+    </Box>
+  )
+
+  function renderContentWithRef(
+    content: JSX.Element,
+    ref?: HTMLDivElement | null
+  ) {
+    if (ref) {
+      return createPortal(content, ref)
+    } else {
+      return content
+    }
+  }
+
   return (
     <>
       <Box className="rustic-uploader">
@@ -278,26 +312,11 @@ function Upload(props: UploaderProps) {
           accept={props.acceptedFileTypes}
         />
       </Box>
-      <Box ref={props.errorMessagesRef}>
-        {errorMessages &&
-          errorMessages.map((errorMessage, index) => (
-            <Typography
-              variant="caption"
-              color="error"
-              className="rustic-error-message"
-              data-cy="error-message"
-              key={index}
-            >
-              {errorMessage}
-            </Typography>
-          ))}
-      </Box>
-
-      <Box className="rustic-files" ref={props.filePreviewRef}>
-        {addedFiles.map((file, index) => renderFilePreview(file, index))}
-      </Box>
+      {errorMessages.length > 0 &&
+        renderContentWithRef(errors, props.errorMessagesRef)}
+      {addedFiles.length > 0 &&
+        renderContentWithRef(filePreviews, props.filePreviewRef)}
     </>
   )
 }
-
 export default Upload
