@@ -47,40 +47,56 @@ meta.argTypes = {
   },
   sender: {
     description: 'The sender of the message.',
-    type: { summary: 'string' },
+    table: {
+      type: { summary: 'string' },
+    },
   },
   conversationId: {
     description: 'Id of the current conversation.',
-    type: { summary: 'string' },
+    table: {
+      type: { summary: 'string' },
+    },
   },
   label: {
     description:
-      'Label text to be displayed in the input, which will then move to the top when the input is focused on. If both label and placeholder are provided, the placeholder will only be visible once the input is focused on.',
-    type: { summary: 'string' },
+      'Optional label text to be displayed in the input, which will then move to the top when the input is focused on. If both label and placeholder are provided, the placeholder will only be visible once the input is focused on.',
+    table: {
+      type: { summary: 'string' },
+    },
   },
   placeholder: {
     description:
-      'Placeholder text to be displayed in the input before user starts typing.',
-    type: { summary: 'string' },
+      'Optional placeholder text to be displayed in the input before user starts typing.',
+    table: {
+      type: { summary: 'string' },
+    },
   },
   multiline: {
     description:
-      'Boolean that dictates whether `TextInput` can expand to be multiline.',
-    type: { summary: 'boolean' },
+      'Optional boolean that dictates whether `TextInput` can expand to be multiline.',
+    table: {
+      type: { summary: 'boolean' },
+    },
   },
   maxRows: {
-    description: 'Maximum number of rows to be displayed.',
-    type: { summary: 'number' },
+    description: 'Optional maximum number of rows to be displayed.',
+    table: {
+      type: { summary: 'number' },
+    },
   },
   fullWidth: {
     description:
-      'Boolean that dictates whether `TextInput` takes up 100% width of the parent container.',
-    type: { summary: 'boolean' },
+      'Optional boolean that dictates whether `TextInput` takes up 100% width of the parent container.',
+    table: {
+      type: { summary: 'boolean' },
+    },
   },
   enableSpeechToText: {
     description:
-      'Boolean to enable speech-to-text. See which browsers are supported [here](https://developer.mozilla.org/en-US/docs/Web/API/SpeechRecognition#browser_compatibility).',
-    type: { summary: 'boolean' },
+      'Optional boolean to enable speech-to-text. See which browsers are supported [here](https://developer.mozilla.org/en-US/docs/Web/API/SpeechRecognition#browser_compatibility).',
+    table: {
+      type: { summary: 'boolean' },
+    },
   },
 }
 export default meta

@@ -57,66 +57,94 @@ meta.argTypes = {
   },
   sender: {
     description: 'The sender of the message.',
-    type: { summary: 'string' },
+    table: {
+      type: { summary: 'string' },
+    },
   },
   conversationId: {
     description: 'Id of the current conversation.',
-    type: { summary: 'string' },
-  },
-  label: {
-    description:
-      'Label text to be displayed in the input, which will then move to the top when the input is focused on. If both label and placeholder are provided, the placeholder will only be visible once the input is focused on.',
-    type: { summary: 'string' },
-  },
-  placeholder: {
-    description:
-      'Placeholder text to be displayed in the input before user starts typing.',
-    type: { summary: 'string' },
-  },
-  multiline: {
-    description:
-      'Boolean that dictates whether `TextInput` can expand to be multiline.',
-    type: { summary: 'boolean' },
-  },
-  maxRows: {
-    description: 'Maximum number of rows to be displayed.',
-    type: { summary: 'number' },
-  },
-  fullWidth: {
-    description:
-      'Boolean that dictates whether `TextInput` takes up 100% width of the parent container.',
-    type: { summary: 'boolean' },
-  },
-  enableSpeechToText: {
-    description:
-      'Boolean to enable speech-to-text. See which browsers are supported [here](https://developer.mozilla.org/en-US/docs/Web/API/SpeechRecognition#browser_compatibility).',
-    type: { summary: 'boolean' },
+    table: {
+      type: { summary: 'string' },
+    },
   },
   uploadFileEndpoint: {
     description:
       'The API endpoint where files will be uploaded. File id will be appended to the end of API endpoint.',
-    type: { summary: 'string' },
+    table: {
+      type: { summary: 'string' },
+    },
   },
   deleteFileEndpoint: {
     description:
       'The API endpoint to delete/cancel uploaded files. File id will be appended to the end of API endpoint.',
-    type: { summary: 'string' },
+    table: {
+      type: { summary: 'string' },
+    },
   },
   acceptedFileTypes: {
     description:
       'The types of files that are allowed to be selected for upload. For safety reasons, only allow file types that can be handled by your server. Avoid accepting executable file types like .exe, .bat, or .msi. For more information, refer to the [mdn web docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file#unique_file_type_specifiers).',
-    type: { summary: 'string' },
+    table: {
+      type: { summary: 'string' },
+    },
+  },
+  label: {
+    description:
+      'Optional label text to be displayed in the input, which will then move to the top when the input is focused on. If both label and placeholder are provided, the placeholder will only be visible once the input is focused on.',
+    table: {
+      type: { summary: 'string' },
+    },
+  },
+  placeholder: {
+    description:
+      'Optional Placeholder text to be displayed in the input before user starts typing.',
+    table: {
+      type: { summary: 'string' },
+    },
+  },
+  multiline: {
+    description:
+      'Optional boolean that dictates whether `TextInput` can expand to be multiline.',
+    table: {
+      type: { summary: 'boolean' },
+    },
+  },
+  maxRows: {
+    description: 'Optional maximum number of rows to be displayed.',
+    table: {
+      type: { summary: 'number' },
+    },
+  },
+  fullWidth: {
+    description:
+      'Optional boolean that dictates whether `TextInput` takes up 100% width of the parent container.',
+    table: {
+      type: { summary: 'boolean' },
+    },
+  },
+  enableSpeechToText: {
+    description:
+      'Optional boolean to enable speech-to-text. See which browsers are supported [here](https://developer.mozilla.org/en-US/docs/Web/API/SpeechRecognition#browser_compatibility).',
+    table: {
+      type: { summary: 'boolean' },
+    },
   },
   maxFileCount: {
     description:
-      'The maximum number of files that can be uploaded in one message.',
-    type: { summary: 'number' },
+      'Optional props. Maximum number of files that can be uploaded in one message.',
+    table: {
+      type: { summary: 'number' },
+    },
   },
   maxFileSize: {
-    description: 'The maximum size for each uploaded file, in bytes.',
-    type: { summary: 'number' },
+    description:
+      'Optional props. The maximum size for each uploaded file, in bytes.',
+    table: {
+      type: { summary: 'number' },
+    },
   },
 }
+
 export default meta
 
 export const Default = {
