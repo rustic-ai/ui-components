@@ -7,7 +7,7 @@ import { v4 as getUUID } from 'uuid'
 
 import type { Message, MultimodalInputProps } from '../../../types'
 import BaseInput from '../../baseInput/baseInput'
-import Upload from '../upload/upload'
+import Uploader from '../uploader/uploader'
 
 export default function MultimodalInput(props: MultimodalInputProps) {
   const [fileCount, setFileCount] = useState(0)
@@ -51,7 +51,7 @@ export default function MultimodalInput(props: MultimodalInputProps) {
       >
         <Box className="rustic-file-preview-container" ref={filePreviewRef} />
         <Box className="rustic-bottom-buttons">
-          <Upload
+          <Uploader
             acceptedFileTypes={props.acceptedFileTypes}
             maxFileCount={props.maxFileCount}
             maxFileSize={props.maxFileSize}

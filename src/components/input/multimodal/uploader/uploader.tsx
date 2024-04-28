@@ -1,4 +1,4 @@
-import './upload.css'
+import './uploader.css'
 
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
@@ -46,7 +46,7 @@ export function getFileSizeAbbrev(bytes: number): string {
   return `${formattedString} ${units[unitIndex]}`
 }
 
-function Upload(props: UploaderProps) {
+function Uploader(props: UploaderProps) {
   const [addedFiles, setAddedFiles] = useState<FileInfo[]>([])
   const [errorMessages, setErrorMessages] = useState<string[]>([])
   const inputId = getUUID()
@@ -319,4 +319,4 @@ function Upload(props: UploaderProps) {
     </>
   )
 }
-export default Upload
+export default Uploader

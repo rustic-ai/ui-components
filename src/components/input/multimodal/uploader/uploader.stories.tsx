@@ -1,11 +1,11 @@
 import type { StoryFn } from '@storybook/react'
 import React from 'react'
 
-import Upload from './upload'
+import Uploader from './uploader'
 
 const meta = {
   title: 'Rustic UI/Input/Upload',
-  component: Upload,
+  component: Uploader,
   tags: ['autodocs'],
   parameters: {
     layout: 'centered',
