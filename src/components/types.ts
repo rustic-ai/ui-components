@@ -201,9 +201,9 @@ export interface UploaderProps {
   /** A function to handle changes in the file count. Parent component should use this to track file count change and handle submit accordingly. */
   handleFileCountChange: (fileCountChange: 1 | -1) => void
   /** Define a ref in Uploader's parent container and add this ref to the div element where you want to display the error messages from the Uploader component. */
-  errorMessagesRef?: HTMLDivElement | null
+  errorMessagesRef?: HTMLDivElement
   /** Define a ref in Uploader's parent container and use this ref to display a collection of file previews from the Uploader component at the desired location within the parent container. */
-  filePreviewRef?: HTMLDivElement | null
+  filePreviewRef?: HTMLDivElement
   /** The maximum number of files that can be uploaded in one message. */
   maxFileCount?: number
   /** The maximum size for each uploaded file, in bytes. */

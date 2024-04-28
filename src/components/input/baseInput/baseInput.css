@@ -1,13 +1,45 @@
 .rustic-base-input {
   display: flex;
-  align-items: flex-end;
-  gap: 8px;
+  align-items: flex-start;
+}
+
+.rustic-base-input .rustic-text-field {
+  padding: 16px;
 }
 
 .rustic-base-input .rustic-text-field fieldset[aria-hidden='true'] {
   border-width: 1px;
+  border: none;
 }
 
-.rustic-error-and-text-field-container {
+.rustic-error-and-input-container {
   width: 100%;
+}
+
+.rustic-base-input .rustic-input-field {
+  display: flex;
+  border-radius: 16px;
+  position: relative;
+}
+
+.rustic-base-input .rustic-text-field .MuiOutlinedInput-input {
+  padding: 0;
+}
+
+.rustic-base-input .rustic-text-field .MuiOutlinedInput-root {
+  flex-wrap: wrap;
+  align-items: flex-start;
+  padding: 0;
+}
+
+.rustic-speech-to-text {
+  padding: 16px;
+}
+
+.rustic-speech-to-text .rustic-record-button {
+  padding: 0;
+}
+
+.rustic-base-input .rustic-send-button {
+  margin: 10px 8px;
 }

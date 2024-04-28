@@ -24,7 +24,6 @@
 .rustic-files {
   display: flex;
   gap: 8px;
-  padding: 8px;
   flex-wrap: wrap;
 }
 

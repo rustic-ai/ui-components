@@ -7,23 +7,9 @@
   border-width: 1px;
 }
 
-.rustic-multimodal-input .rustic-text-field {
-  min-width: 248px;
-}
-
 .rustic-multimodal-input .rustic-base-input {
   flex-direction: column;
   gap: 0;
-}
-
-.rustic-multimodal-input
-  .rustic-base-input
-  .rustic-text-field
-  fieldset[aria-hidden='true'] {
-  border-width: 1px;
-  border-bottom: none;
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
 }
 
 .rustic-multimodal-input .rustic-input-actions {
@@ -35,4 +21,8 @@
   position: absolute;
   bottom: 0;
   right: 0;
+}
+
+.rustic-bottom-buttons {
+  padding: 8px;
 }
