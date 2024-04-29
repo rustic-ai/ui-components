@@ -191,6 +191,7 @@ function BaseInputElement(
               endAdornment: <div className="rustic-end-adornment"></div>,
             }}
             InputLabelProps={{
+              className: !isFocused ? 'rustic-input-label' : '',
               sx: {
                 backgroundColor: 'background.paper',
               },

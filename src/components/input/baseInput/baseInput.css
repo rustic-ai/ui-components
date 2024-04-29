@@ -22,6 +22,10 @@
   position: relative;
 }
 
+.rustic-base-input .rustic-input-label {
+  padding-top: 8px;
+}
+
 .rustic-base-input .rustic-text-field .MuiOutlinedInput-input {
   padding: 0;
 }

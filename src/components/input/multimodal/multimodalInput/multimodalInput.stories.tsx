@@ -1,6 +1,7 @@
 import type { Meta, StoryFn } from '@storybook/react'
 import React from 'react'
 
+import type { Message } from '../../../types'
 import MultimodalInput from './multimodalInput'
 
 const meta: Meta<React.ComponentProps<typeof MultimodalInput>> = {
@@ -154,7 +155,12 @@ export const Default = {
     placeholder: 'Type your message',
     ws: {
       // eslint-disable-next-line no-console
-      send: (message: any) => console.log('Message sent:', message),
+      send: (message: Message) =>
+        alert(
+          message.data.text
+            ? `Message sent: ${message.data.text}`
+            : 'File(s) sent!'
+        ),
     },
     uploadFileEndpoint: 'http://localhost:8080/upload/',
     deleteFileEndpoint: 'http://localhost:8080/files/',
@@ -167,20 +173,6 @@ export const PDFAndImageOnly = {
   args: {
     ...Default.args,
     acceptedFileTypes: 'image/*,.pdf',
-  },
-}
-
-export const FailToUpload = {
-  args: {
-    sender: 'You',
-    conversationId: '1',
-    placeholder: 'Type your message',
-    ws: {
-      // eslint-disable-next-line no-console
-      send: (message: any) => console.log('Message sent:', message),
-    },
-    uploadFileEndpoint: 'http://localhost:8080/upload/',
-    deleteFileEndpoint: 'http://localhost:8080files/',
   },
 }
 
