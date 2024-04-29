@@ -12,8 +12,9 @@ import Uploader from '../uploader/uploader'
 export default function MultimodalInput(props: MultimodalInputProps) {
   const [fileCount, setFileCount] = useState(0)
   const [messageId, setMessageId] = useState(getUUID())
-  const [filePreviewDomNode, setFilePreviewDomNode] = useState<HTMLDivElement>()
-  const [errorMessagesDomNode, setErrorMessagesDomNode] =
+  const [filePreviewContainer, setFilePreviewContainer] =
+    useState<HTMLDivElement>()
+  const [errorMessagesContainer, setErrorMessagesContainer] =
     useState<HTMLDivElement>()
   const inputRef = useRef<HTMLDivElement>(null)
   const hasAddedFiles = fileCount > 0
@@ -25,13 +26,13 @@ export default function MultimodalInput(props: MultimodalInputProps) {
   useEffect(() => {
     if (inputRef.current) {
       //classNames are from BaseInput component
-      setErrorMessagesDomNode(
+      setErrorMessagesContainer(
         inputRef.current.querySelector(
           '.rustic-error-container'
         ) as HTMLDivElement
       )
 
-      setFilePreviewDomNode(
+      setFilePreviewContainer(
         inputRef.current.querySelector(
           '.rustic-end-adornment'
         ) as HTMLDivElement
@@ -66,8 +67,8 @@ export default function MultimodalInput(props: MultimodalInputProps) {
             deleteFileEndpoint={props.deleteFileEndpoint}
             handleFileCountChange={handleFileCountChange}
             messageId={messageId}
-            filePreviewDomNode={filePreviewDomNode}
-            errorMessagesDomNode={errorMessagesDomNode}
+            filePreviewContainer={filePreviewContainer}
+            errorMessagesContainer={errorMessagesContainer}
           />
         </Box>
       </BaseInput>
@@ -75,13 +76,12 @@ export default function MultimodalInput(props: MultimodalInputProps) {
   )
 }
 
-const oneMb = 1024
-const two = 2
+const twoMB = 2097152
 
 MultimodalInput.defaultProps = {
   multiline: true,
   fullWidth: true,
   maxRows: 6,
-  maxFileSize: oneMb * oneMb * two,
+  maxFileSize: twoMB,
   maxFileCount: 1,
 }

@@ -74,7 +74,7 @@ function Uploader(props: UploaderProps) {
     if (props.maxFileCount && totalFileCount > props.maxFileCount) {
       setErrorMessages((prevMessages) => [
         ...prevMessages,
-        `You can only upload up to ${props.maxFileCount} files.`,
+        `You can only upload ${props.maxFileCount} files.`,
       ])
     }
 
@@ -313,9 +313,9 @@ function Uploader(props: UploaderProps) {
         />
       </Box>
       {errorMessages.length > 0 &&
-        renderContentWithRef(errors, props.errorMessagesDomNode)}
+        renderContentWithRef(errors, props.errorMessagesContainer)}
       {addedFiles.length > 0 &&
-        renderContentWithRef(filePreviews, props.filePreviewDomNode)}
+        renderContentWithRef(filePreviews, props.filePreviewContainer)}
     </>
   )
 }

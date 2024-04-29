@@ -9,8 +9,8 @@ import Typography from '@mui/material/Typography'
 import { type ForwardedRef, forwardRef, useRef, useState } from 'react'
 import React from 'react'
 
+import Icon from '../../icon'
 import type { BaseInputProps, Message } from '../../types'
-import Icon from '../icon'
 
 function BaseInputElement(
   props: React.PropsWithChildren<BaseInputProps>,
@@ -66,6 +66,7 @@ function BaseInputElement(
             data-cy="record-button"
             onClick={handleToggleSpeechToText}
             size="small"
+            className="rustic-record-button"
             sx={{ color: speechToTextIconColor }}
           >
             <Icon name={speechToTextIconName} />
@@ -186,7 +187,6 @@ function BaseInputElement(
             inputRef={inputRef}
             color="secondary"
             size="small"
-            error={!!speechToTextError}
             InputProps={{
               endAdornment: <div className="rustic-end-adornment"></div>,
             }}

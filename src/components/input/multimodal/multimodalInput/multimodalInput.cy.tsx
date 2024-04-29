@@ -138,7 +138,7 @@ describe('Input', () => {
       cy.get(fileName).should('contain', 'image-compon...')
     })
 
-    it(`can only allow people to upload up to the specified maximum file count if maxFileCount props is available on ${viewport} screen`, () => {
+    it(`can only allow people to upload the specified maximum file count if maxFileCount props is available on ${viewport} screen`, () => {
       cy.viewport(viewport)
       cy.mount(
         <MultimodalInput
@@ -173,10 +173,7 @@ describe('Input', () => {
         cy.get(fileName).should('contain', 'image-compon...')
         cy.get(fileName).should('contain', 'pdfExample.pdf')
         cy.get(fileName).should('not.contain', 'videoCaption...')
-        cy.get(errorMessage).should(
-          'contain',
-          'You can only upload up to 2 files'
-        )
+        cy.get(errorMessage).should('contain', 'You can only upload 2 files')
 
         //remove 1 file
         cy.get(deleteButton).last().realClick()
@@ -185,7 +182,7 @@ describe('Input', () => {
         cy.get(fileName).should('not.contain', 'pdfExample.pdf')
         cy.get(errorMessage).should(
           'not.contain',
-          'You can only upload up to 2 files'
+          'You can only upload 2 files'
         )
 
         //add a new file
