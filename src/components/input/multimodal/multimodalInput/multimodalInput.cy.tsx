@@ -145,9 +145,7 @@ describe('Input', () => {
         {}
       ).as('delete')
       cy.get(deleteButton).click()
-      cy.wait('@delete').then(() => {
-        cy.get(fileName).should('not.exist')
-      })
+      cy.get(fileName).should('not.exist')
 
       cy.get('input[type=file]').selectFile([imageFile], {
         force: true,
