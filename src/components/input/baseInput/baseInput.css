@@ -20,6 +20,7 @@
   display: flex;
   border-radius: 16px;
   position: relative;
+  flex-direction: column;
 }
 
 .rustic-base-input .rustic-input-label {
@@ -31,16 +32,6 @@
 }
 
 .rustic-base-input .rustic-text-field .MuiOutlinedInput-root {
-  flex-wrap: wrap;
-  align-items: flex-start;
-  padding: 0;
-}
-
-.rustic-speech-to-text {
-  padding: 16px;
-}
-
-.rustic-speech-to-text .rustic-record-button {
   padding: 0;
 }
 

@@ -3,6 +3,7 @@ import './baseInput.css'
 import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
 import IconButton from '@mui/material/IconButton'
+import InputAdornment from '@mui/material/InputAdornment'
 import TextField from '@mui/material/TextField'
 import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
@@ -52,29 +53,26 @@ function BaseInputElement(
       "The language you're speaking isn't supported. Try speaking in a different language or check your device settings.",
   }
 
-  const speechToTextButtonAdornment = (
-    <Box
-      className="rustic-speech-to-text"
-      onFocus={() => setIsFocused(true)}
-      onBlur={() => setIsFocused(false)}
-    >
-      {isEndingRecording ? (
-        <CircularProgress size={24} data-cy="spinner" />
-      ) : (
-        <Tooltip title={speechToTextTooltipTitle}>
-          <IconButton
-            data-cy="record-button"
-            onClick={handleToggleSpeechToText}
-            size="small"
-            className="rustic-record-button"
-            sx={{ color: speechToTextIconColor }}
-          >
-            <Icon name={speechToTextIconName} />
-          </IconButton>
-        </Tooltip>
-      )}
-    </Box>
-  )
+  const speechToTextButtonAdornment = {
+    endAdornment: (
+      <InputAdornment position="end">
+        {isEndingRecording ? (
+          <CircularProgress size={24} data-cy="spinner" />
+        ) : (
+          <Tooltip title={speechToTextTooltipTitle}>
+            <IconButton
+              data-cy="record-button"
+              onClick={handleToggleSpeechToText}
+              size="small"
+              sx={{ color: speechToTextIconColor }}
+            >
+              <Icon name={speechToTextIconName} />
+            </IconButton>
+          </Tooltip>
+        )}
+      </InputAdornment>
+    ),
+  }
 
   function handleToggleSpeechToText() {
     const microphone = new window.webkitSpeechRecognition()
@@ -187,9 +185,9 @@ function BaseInputElement(
             inputRef={inputRef}
             color="secondary"
             size="small"
-            InputProps={{
-              endAdornment: <div className="rustic-end-adornment"></div>,
-            }}
+            InputProps={
+              props.enableSpeechToText ? speechToTextButtonAdornment : {}
+            }
             InputLabelProps={{
               className: !isFocused ? 'rustic-input-label' : '',
               sx: {
@@ -197,7 +195,7 @@ function BaseInputElement(
               },
             }}
           />
-          {props.enableSpeechToText && speechToTextButtonAdornment}
+          <div className="rustic-file-preview-container"></div>
         </Box>
       </Box>
       <Box className="rustic-input-actions">

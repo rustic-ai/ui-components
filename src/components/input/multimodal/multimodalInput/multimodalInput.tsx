@@ -34,7 +34,7 @@ export default function MultimodalInput(props: MultimodalInputProps) {
 
       setFilePreviewContainer(
         inputRef.current.querySelector(
-          '.rustic-end-adornment'
+          '.rustic-file-preview-container'
         ) as HTMLDivElement
       )
     }
