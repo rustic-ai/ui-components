@@ -6,8 +6,8 @@ const whiteColor = '#FFFFFF'
 const SecondaryMainColor = '#FF6928'
 const SecondaryDarkColor = '#E54500'
 const actionActiveColor = '#5F5C5A'
-const actionFocusColor = '#FDFDFD'
-const actionDisabledBackgroundColor = '#E5E5E5'
+const actionFocusColor = '#E7E7E7'
+const actionDisabledBackgroundColor = '#CFCFCF'
 const actionDisabledColor = '#A7A19E'
 const actionSelectedColor = '#D6D0D0'
 const dividerColor = '#D0C4BE'
@@ -138,7 +138,7 @@ const baseTheme = createTheme({
 })
 
 const lightModePrimaryMainColor = '#3D3834'
-const lightModeBackgroundDefaultColor = '#F4F0EF'
+
 let rusticLightTheme = createTheme({
   ...baseTheme,
   palette: {
@@ -160,7 +160,7 @@ let rusticLightTheme = createTheme({
       dark: SecondaryDarkColor,
     },
     background: {
-      default: lightModeBackgroundDefaultColor,
+      default: '#F7F6F5',
       paper: whiteColor,
     },
     action: {
