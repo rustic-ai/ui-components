@@ -287,10 +287,10 @@ function Uploader(props: UploaderProps) {
 
   function renderContentWithRef(
     content: JSX.Element,
-    ref?: HTMLDivElement | null
+    domNode?: HTMLDivElement | null
   ) {
-    if (ref) {
-      return createPortal(content, ref)
+    if (domNode) {
+      return createPortal(content, domNode)
     } else {
       return content
     }
@@ -313,9 +313,9 @@ function Uploader(props: UploaderProps) {
         />
       </Box>
       {errorMessages.length > 0 &&
-        renderContentWithRef(errors, props.errorMessagesRef)}
+        renderContentWithRef(errors, props.errorMessagesDomNode)}
       {addedFiles.length > 0 &&
-        renderContentWithRef(filePreviews, props.filePreviewRef)}
+        renderContentWithRef(filePreviews, props.filePreviewDomNode)}
     </>
   )
 }

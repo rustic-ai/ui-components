@@ -28,7 +28,7 @@ const meta: Meta<React.ComponentProps<typeof MultimodalInput>> = {
         method: 'DELETE',
         status: 200,
         response: { message: 'Delete successfully!' },
-        delay: 500,
+        delay: 200,
       },
     ],
   },
@@ -157,7 +157,7 @@ export const Default = {
       send: (message: any) => console.log('Message sent:', message),
     },
     uploadFileEndpoint: 'http://localhost:8080/upload/',
-    deleteFileEndpoint: 'http://localhost:6006/files/',
+    deleteFileEndpoint: 'http://localhost:8080/files/',
     acceptedFileTypes:
       'image/*,.pdf,.doc,.docx,application/x-iwork-pages-sffpages',
   },
@@ -179,8 +179,8 @@ export const FailToUpload = {
       // eslint-disable-next-line no-console
       send: (message: any) => console.log('Message sent:', message),
     },
-    uploadFileEndpoint: 'http://localhost:6006/upload/',
-    deleteFileEndpoint: 'http://localhost:6006/files/',
+    uploadFileEndpoint: 'http://localhost:8080/upload/',
+    deleteFileEndpoint: 'http://localhost:8080files/',
   },
 }
 

@@ -12,8 +12,9 @@ import Uploader from '../uploader/uploader'
 export default function MultimodalInput(props: MultimodalInputProps) {
   const [fileCount, setFileCount] = useState(0)
   const [messageId, setMessageId] = useState(getUUID())
-  const filePreviewRef = useRef<HTMLDivElement>()
-  const errorMessagesRef = useRef<HTMLDivElement>()
+  const [filePreviewDomNode, setFilePreviewDomNode] = useState<HTMLDivElement>()
+  const [errorMessagesDomNode, setErrorMessagesDomNode] =
+    useState<HTMLDivElement>()
   const inputRef = useRef<HTMLDivElement>(null)
   const hasAddedFiles = fileCount > 0
 
@@ -23,12 +24,18 @@ export default function MultimodalInput(props: MultimodalInputProps) {
 
   useEffect(() => {
     if (inputRef.current) {
-      errorMessagesRef.current = inputRef.current.querySelector(
-        '.rustic-error-container'
-      ) as HTMLDivElement
-      filePreviewRef.current = inputRef.current.querySelector(
-        '.rustic-end-adornment'
-      ) as HTMLDivElement
+      //classNames are from BaseInput component
+      setErrorMessagesDomNode(
+        inputRef.current.querySelector(
+          '.rustic-error-container'
+        ) as HTMLDivElement
+      )
+
+      setFilePreviewDomNode(
+        inputRef.current.querySelector(
+          '.rustic-end-adornment'
+        ) as HTMLDivElement
+      )
     }
   })
 
@@ -39,6 +46,7 @@ export default function MultimodalInput(props: MultimodalInputProps) {
 
     props.ws.send(formattedMessage)
     setMessageId(getUUID())
+    setFileCount(0)
   }
 
   return (
@@ -49,7 +57,6 @@ export default function MultimodalInput(props: MultimodalInputProps) {
         isSendEnabled={hasAddedFiles}
         ref={inputRef}
       >
-        <Box className="rustic-file-preview-container" ref={filePreviewRef} />
         <Box className="rustic-bottom-buttons">
           <Uploader
             acceptedFileTypes={props.acceptedFileTypes}
@@ -59,8 +66,8 @@ export default function MultimodalInput(props: MultimodalInputProps) {
             deleteFileEndpoint={props.deleteFileEndpoint}
             handleFileCountChange={handleFileCountChange}
             messageId={messageId}
-            filePreviewRef={filePreviewRef.current}
-            errorMessagesRef={errorMessagesRef.current}
+            filePreviewDomNode={filePreviewDomNode}
+            errorMessagesDomNode={errorMessagesDomNode}
           />
         </Box>
       </BaseInput>
