@@ -151,3 +151,61 @@ export interface VideoFormat extends MediaFormat {
   /** URL of an image to be shown while the video is downloading. If not provided, nothing is displayed until the first frame is available. */
   poster?: string
 }
+
+export interface BaseInputProps {
+  /** Id of the current user. */
+  sender: string
+  /** Id of the current conversation. */
+  conversationId: string
+  /** Label text to be displayed in the input, which will then move to the top when the input is focused on. If both label and placeholder are provided, the placeholder will only be visible once the input is focused on. */
+  label?: string
+  /** Placeholder text to be displayed in the input before user starts typing. */
+  placeholder?: string
+  /** Boolean that dictates whether `TextInput` can expand to be multiline. */
+  multiline?: boolean
+  /** Maximum number of rows to be displayed. */
+  maxRows?: number
+  /** Boolean that dictates whether `TextInput` takes up 100% width of the parent container. */
+  fullWidth?: boolean
+  /** function to send the message */
+  send: (message: Message) => void
+  /** Additional condition to enable the send button. */
+  isSendEnabled?: boolean
+  /** Boolean to enable speech-to-text. See which browsers are supported [here](https://developer.mozilla.org/en-US/docs/Web/API/SpeechRecognition#browser_compatibility). */
+  enableSpeechToText?: boolean
+}
+
+export interface TextInputProps
+  extends Omit<BaseInputProps, 'send' | 'isSendEnabled'> {
+  ws: WebSocketClient
+}
+
+export interface UploaderProps {
+  /** The types of files that are allowed to be selected for upload. For safety reasons, only allow file types that can be handled by your server. Avoid accepting executable file types like .exe, .bat, or .msi. For more information, refer to the [mdn web docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file#unique_file_type_specifiers). */
+  acceptedFileTypes: string
+  /** The API endpoint where files will be uploaded. File id will be appended to the end of API endpoint. */
+  uploadFileEndpoint: string
+  /** The API endpoint to delete/cancel uploaded files. File id will be appended to the end of API endpoint. */
+  deleteFileEndpoint: string
+  /** Used in the API request to link the file with the message that's going to be sent. */
+  messageId: string
+  /** A function to handle changes in the file count. Parent component should use this to track file count change and handle submit accordingly. */
+  handleFileCountChange: (fileCountChange: 1 | -1) => void
+  /** Optional HTML div where the errors should be shown. */
+  errorMessagesContainer?: HTMLDivElement
+  /** Optional HTML div where the filePreviews should be shown. */
+  filePreviewsContainer?: HTMLDivElement
+  /** The maximum number of files that can be uploaded in one message. */
+  maxFileCount?: number
+  /** The maximum size for each uploaded file, in bytes. */
+  maxFileSize?: number
+}
+
+export type MultimodalInputProps = TextInputProps &
+  Omit<
+    UploaderProps,
+    | 'messageId'
+    | 'handleFileCountChange'
+    | 'filePreviewsContainer'
+    | 'errorMessagesContainer'
+  >

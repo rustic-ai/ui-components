@@ -1,0 +1,32 @@
+.rustic-multimodal-input .rustic-bottom-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.rustic-multimodal-input .rustic-text-field fieldset[aria-hidden='true'] {
+  border-width: 1px;
+}
+
+.rustic-multimodal-input .rustic-base-input {
+  flex-direction: column;
+  gap: 0;
+}
+
+.rustic-multimodal-input .rustic-input-actions {
+  width: 100%;
+  position: relative;
+}
+
+.rustic-multimodal-input .rustic-input-actions .rustic-send-button {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
+.rustic-bottom-buttons {
+  padding: 8px;
+}
+
+.rustic-multimodal-input .rustic-files {
+  padding: 16px;
+}
