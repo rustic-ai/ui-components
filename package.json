@@ -26,6 +26,7 @@
     "@mui/material": "5.15.7",
     "@mui/styled-engine-sc": "5.14.11",
     "@mui/system": "5.15.8",
+    "axios": "1.6.8",
     "dompurify": "3.0.6",
     "marked": "10.0.0",
     "ol": "9.0.0",

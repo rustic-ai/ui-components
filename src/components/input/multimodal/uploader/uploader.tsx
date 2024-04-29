@@ -5,6 +5,8 @@ import Card from '@mui/material/Card'
 import IconButton from '@mui/material/IconButton'
 import LinearProgress from '@mui/material/LinearProgress'
 import Typography from '@mui/material/Typography'
+import type { AxiosProgressEvent } from 'axios'
+import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { v4 as getUUID } from 'uuid'
@@ -12,7 +14,6 @@ import { v4 as getUUID } from 'uuid'
 import { shortenString } from '../../../helper'
 import type { FileInfo, UploaderProps } from '../../../types'
 
-const successStatus = 200
 const maximumFileNameLength = 15
 const maximumLoadingProgress = 100
 
@@ -157,66 +158,41 @@ function Uploader(props: UploaderProps) {
 
     setAddedFiles((prev) => [...prev, newAddedFile])
 
-    const xhr = new XMLHttpRequest()
-    xhr.open('POST', `${props.uploadFileEndpoint}message?id=${props.messageId}`)
-    xhr.upload.onprogress = (progressEvent: ProgressEvent) => {
-      const percentageConversionRate = 100
-      const loadedPercentage =
-        (progressEvent.loaded / progressEvent.total) * percentageConversionRate
-      updateProgress(loadedPercentage, id)
-    }
-
-    xhr.onreadystatechange = () => {
-      if (xhr.readyState === XMLHttpRequest.DONE) {
-        const response = xhr.responseText ? JSON.parse(xhr.responseText) : ''
-        if (xhr.status === successStatus) {
-          handleSuccessfulUpload(response, id)
-        } else if (xhr.status !== 0) {
-          props.handleFileCountChange(-1)
-          handleFailedUpload(file.name, id, response)
-        }
-      } else if (xhr.readyState === XMLHttpRequest.OPENED) {
-        //no response in here
-        handleFailedUpload(file.name, id)
-        props.handleFileCountChange(-1)
-      }
-    }
-
-    xhr.send(formData)
     props.handleFileCountChange(1)
-    controller.signal.addEventListener('abort', () => {
-      xhr.abort()
-    })
-  }
 
-  function deleteFile(fileId: string): Promise<void> {
-    return new Promise((resolve, reject) => {
-      const xhr = new XMLHttpRequest()
-      xhr.open(
-        'DELETE',
-        `${props.deleteFileEndpoint}file?message-id=${props.messageId}&file-id=${fileId}`
-      )
-
-      xhr.onreadystatechange = () => {
-        if (xhr.readyState === XMLHttpRequest.DONE) {
-          if (xhr.status === successStatus) {
-            resolve()
-          } else if (xhr.status !== 0) {
-            reject()
-          }
-        } else if (xhr.readyState === XMLHttpRequest.OPENED) {
-          reject()
-        }
+    function onUploadProgress(progressEvent: AxiosProgressEvent) {
+      const percentageConversionRate = 100
+      if (progressEvent.total) {
+        const loadedPercentage =
+          (progressEvent.loaded / progressEvent.total) *
+          percentageConversionRate
+        updateProgress(loadedPercentage, id)
       }
-      xhr.send()
-    })
+    }
+
+    axios
+      .post(
+        `${props.uploadFileEndpoint}message?id=${props.messageId}`,
+        formData,
+        { onUploadProgress }
+      )
+      .then((response) => {
+        handleSuccessfulUpload(response.data, id)
+      })
+      .catch((error) => {
+        props.handleFileCountChange(-1)
+        handleFailedUpload(file.name, id, error.response?.data)
+      })
   }
 
   function handleDelete(file: FileInfo, index: number) {
     setErrorMessages([])
     props.handleFileCountChange(-1)
     if (file.fileId) {
-      deleteFile(file.fileId)
+      axios
+        .delete(
+          `${props.deleteFileEndpoint}file?message-id=${props.messageId}&file-id=${file.fileId}`
+        )
         .then(() => {
           return setAddedFiles((prev) => prev.filter((_, i) => i !== index))
         })
