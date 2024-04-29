@@ -33,9 +33,7 @@ export default function MultimodalInput(props: MultimodalInputProps) {
       )
 
       setFilePreviewsContainer(
-        inputRef.current.querySelector(
-          '.rustic-file-preview-container'
-        ) as HTMLDivElement
+        inputRef.current.querySelector('.rustic-input-extras') as HTMLDivElement
       )
     }
   })

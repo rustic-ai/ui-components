@@ -196,7 +196,7 @@ function BaseInputElement(
               },
             }}
           />
-          <div className="rustic-file-preview-container"></div>
+          <div className="rustic-input-extras"></div>
         </Box>
       </Box>
       <Box className="rustic-input-actions">
