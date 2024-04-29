@@ -9,6 +9,7 @@ import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
 import { type ForwardedRef, forwardRef, useRef, useState } from 'react'
 import React from 'react'
+import { v4 as getUUID } from 'uuid'
 
 import Icon from '../../icon'
 import type { BaseInputProps, Message } from '../../types'
@@ -123,7 +124,7 @@ function BaseInputElement(
   function handleSendMessage(): void {
     const currentTime = new Date().toISOString()
     const formattedMessage: Message = {
-      id: '',
+      id: getUUID(),
       timestamp: currentTime,
       sender: props.sender,
       conversationId: props.conversationId,
@@ -149,7 +150,7 @@ function BaseInputElement(
   }
 
   return (
-    <Box className="rustic-base-input" ref={ref}>
+    <Box className="rustic-base-input" ref={ref} data-cy="base-input">
       <Box className="rustic-error-and-input-container">
         <Box className="rustic-error-container">
           <Typography

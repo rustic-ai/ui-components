@@ -191,10 +191,10 @@ export interface UploaderProps {
   messageId: string
   /** A function to handle changes in the file count. Parent component should use this to track file count change and handle submit accordingly. */
   handleFileCountChange: (fileCountChange: 1 | -1) => void
-  /** Define a DOM node state in Uploader's parent container to render error messages from the Uploader component at the desired location within the parent container. Search for `.rustic-error-container` to find the right dom. */
+  /** Optional HTML div where the errors should be shown. */
   errorMessagesContainer?: HTMLDivElement
-  /** Define a DOM node state in Uploader's parent container to display a collection of file previews from the Uploader component at the desired location within the parent container. Search for `.rustic-end-adornment` to find the right dom.*/
-  filePreviewContainer?: HTMLDivElement
+  /** Optional HTML div where the filePreviews should be shown. */
+  filePreviewsContainer?: HTMLDivElement
   /** The maximum number of files that can be uploaded in one message. */
   maxFileCount?: number
   /** The maximum size for each uploaded file, in bytes. */
@@ -206,6 +206,6 @@ export type MultimodalInputProps = TextInputProps &
     UploaderProps,
     | 'messageId'
     | 'handleFileCountChange'
-    | 'filePreviewRef'
-    | 'errorMessagesRef'
+    | 'filePreviewsContainer'
+    | 'errorMessagesContainer'
   >

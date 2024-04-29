@@ -22,7 +22,6 @@ interface FileInfo {
   name: string
   loadingProgress: number
   abortController: AbortController
-  fileId?: string
 }
 
 export function getFilesToAdd(
@@ -125,17 +124,17 @@ function Uploader(props: UploaderProps) {
   }
 
   function handleSuccessfulUpload(res: { fileId: string }, id: string) {
-    setAddedFiles((prevFiles) => {
-      const index = prevFiles.findIndex((file) => file.id === id)
+    setAddedFiles((existingFiles) => {
+      const index = existingFiles.findIndex((file) => file.id === id)
       if (index !== -1) {
-        const updatedFiles = [...prevFiles]
+        const updatedFiles = [...existingFiles]
         updatedFiles[index] = {
           ...updatedFiles[index],
-          fileId: res.fileId,
+          id: res.fileId,
         }
         return updatedFiles
       }
-      return prevFiles
+      return existingFiles
     })
   }
 
@@ -156,45 +155,48 @@ function Uploader(props: UploaderProps) {
     const controller = new AbortController()
     formData.append('file', file)
 
-    const id = getUUID()
+    const temporaryFileId = getUUID()
     const newAddedFile = {
       name: file.name,
       loadingProgress: 0,
       abortController: controller,
-      id: id,
+      id: temporaryFileId,
     }
 
     setAddedFiles((prev) => [...prev, newAddedFile])
 
     props.handleFileCountChange(1)
 
-    function onUploadProgress(progressEvent: AxiosProgressEvent) {
+    function handleUploadProgress(progressEvent: AxiosProgressEvent) {
       const percentageConversionRate = 100
       if (progressEvent.total) {
         const loadedPercentage =
           (progressEvent.loaded / progressEvent.total) *
           percentageConversionRate
-        updateProgress(loadedPercentage, id)
+        updateProgress(loadedPercentage, temporaryFileId)
       }
     }
 
-    const uploadUrl = `${props.uploadFileEndpoint}message?id=${props.messageId}`
+    const uploadUrl = `${props.uploadFileEndpoint}?message-id=${props.messageId}`
     axios
-      .post(uploadUrl, formData, { onUploadProgress })
+      .post(uploadUrl, formData, {
+        onUploadProgress: handleUploadProgress,
+        signal: controller.signal,
+      })
       .then((response) => {
-        handleSuccessfulUpload(response.data, id)
+        handleSuccessfulUpload(response.data, temporaryFileId)
       })
       .catch((error) => {
         props.handleFileCountChange(-1)
-        handleFailedUpload(file.name, id, error.response?.data)
+        handleFailedUpload(file.name, temporaryFileId, error.response?.data)
       })
   }
 
   function handleDelete(file: FileInfo, index: number) {
     setErrorMessages([])
     props.handleFileCountChange(-1)
-    if (file.fileId) {
-      const deleteUrl = `${props.deleteFileEndpoint}file?message-id=${props.messageId}&file-id=${file.fileId}`
+    if (file.loadingProgress === maximumLoadingProgress) {
+      const deleteUrl = `${props.deleteFileEndpoint}?message-id=${props.messageId}&file-id=${file.id}`
       axios
         .delete(deleteUrl)
         .then(() => {
@@ -295,7 +297,7 @@ function Uploader(props: UploaderProps) {
       {errorMessages.length > 0 &&
         renderContentWithRef(errors, props.errorMessagesContainer)}
       {addedFiles.length > 0 &&
-        renderContentWithRef(filePreviews, props.filePreviewContainer)}
+        renderContentWithRef(filePreviews, props.filePreviewsContainer)}
     </>
   )
 }

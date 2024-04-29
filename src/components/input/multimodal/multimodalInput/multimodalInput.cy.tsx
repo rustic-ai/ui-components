@@ -111,6 +111,13 @@ describe('Input', () => {
       cy.get(fileName).should('contain', 'image-compon...')
       cy.get(fileName).should('contain', 'pdfExample.pdf')
       cy.get(fileName).should('contain', 'videoCaption...')
+      cy.intercept(
+        {
+          method: 'DELETE',
+          url: '/delete/*',
+        },
+        {}
+      ).as('delete')
       cy.get(deleteButton).first().realClick()
       cy.get(fileName).should('not.contain', 'image-compon...')
       cy.get(fileName).should('contain', 'pdfExample.pdf')
@@ -130,8 +137,18 @@ describe('Input', () => {
         force: true,
       })
       cy.get(fileName).should('contain', 'image-compon...')
+      cy.intercept(
+        {
+          method: 'DELETE',
+          url: '/delete/*',
+        },
+        {}
+      ).as('delete')
       cy.get(deleteButton).click()
-      cy.get(fileName).should('not.exist')
+      cy.wait('@delete').then(() => {
+        cy.get(fileName).should('not.exist')
+      })
+
       cy.get('input[type=file]').selectFile([imageFile], {
         force: true,
       })
@@ -175,6 +192,13 @@ describe('Input', () => {
         cy.get(fileName).should('not.contain', 'videoCaption...')
         cy.get(errorMessage).should('contain', 'You can only upload 2 files')
 
+        cy.intercept(
+          {
+            method: 'DELETE',
+            url: '/delete/*',
+          },
+          {}
+        ).as('delete')
         //remove 1 file
         cy.get(deleteButton).last().realClick()
 

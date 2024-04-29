@@ -18,14 +18,14 @@ const meta: Meta<React.ComponentProps<typeof MultimodalInput>> = {
     },
     mockData: [
       {
-        url: 'http://localhost:8080/upload/message?id=1',
+        url: 'http://localhost:8080/upload?message-id=1',
         method: 'POST',
         status: 200,
         response: { fileId: '1' },
         delay: 1000,
       },
       {
-        url: 'http://localhost:8080/files/file?message-id=1&file-id=:fileId',
+        url: 'http://localhost:8080/files?message-id=1&file-id=:fileId',
         method: 'DELETE',
         status: 200,
         response: { message: 'Delete successfully!' },
@@ -70,14 +70,14 @@ meta.argTypes = {
   },
   uploadFileEndpoint: {
     description:
-      'The API endpoint where files will be uploaded. File id will be appended to the end of API endpoint.',
+      'The API endpoint to send a POST multipart-form request with query params - `message-id`. The JSON response should contain a `fileId` property which will be used for deleting the file later.',
     table: {
       type: { summary: 'string' },
     },
   },
   deleteFileEndpoint: {
     description:
-      'The API endpoint to delete/cancel uploaded files. File id will be appended to the end of API endpoint.',
+      'The API endpoint to send a DELETE request with query params - `message-id` and `file-id`.',
     table: {
       type: { summary: 'string' },
     },
@@ -162,8 +162,8 @@ export const Default = {
             : 'File(s) sent!'
         ),
     },
-    uploadFileEndpoint: 'http://localhost:8080/upload/',
-    deleteFileEndpoint: 'http://localhost:8080/files/',
+    uploadFileEndpoint: 'http://localhost:8080/upload',
+    deleteFileEndpoint: 'http://localhost:8080/files',
     acceptedFileTypes:
       'image/*,.pdf,.doc,.docx,application/x-iwork-pages-sffpages',
   },

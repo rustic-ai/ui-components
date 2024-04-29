@@ -12,7 +12,7 @@ import Uploader from '../uploader/uploader'
 export default function MultimodalInput(props: MultimodalInputProps) {
   const [fileCount, setFileCount] = useState(0)
   const [messageId, setMessageId] = useState(getUUID())
-  const [filePreviewContainer, setFilePreviewContainer] =
+  const [filePreviewsContainer, setFilePreviewsContainer] =
     useState<HTMLDivElement>()
   const [errorMessagesContainer, setErrorMessagesContainer] =
     useState<HTMLDivElement>()
@@ -32,7 +32,7 @@ export default function MultimodalInput(props: MultimodalInputProps) {
         ) as HTMLDivElement
       )
 
-      setFilePreviewContainer(
+      setFilePreviewsContainer(
         inputRef.current.querySelector(
           '.rustic-file-preview-container'
         ) as HTMLDivElement
@@ -43,6 +43,7 @@ export default function MultimodalInput(props: MultimodalInputProps) {
   function handleSendMessage(formattedMessage: Message): void {
     if (hasAddedFiles) {
       formattedMessage.id = messageId
+      formattedMessage.format = 'multipart'
     }
 
     props.ws.send(formattedMessage)
@@ -67,7 +68,7 @@ export default function MultimodalInput(props: MultimodalInputProps) {
             deleteFileEndpoint={props.deleteFileEndpoint}
             handleFileCountChange={handleFileCountChange}
             messageId={messageId}
-            filePreviewContainer={filePreviewContainer}
+            filePreviewsContainer={filePreviewsContainer}
             errorMessagesContainer={errorMessagesContainer}
           />
         </Box>
