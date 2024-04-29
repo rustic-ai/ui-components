@@ -180,15 +180,6 @@ export interface TextInputProps
   ws: WebSocketClient
 }
 
-export type MultimodalInputProps = TextInputProps &
-  Omit<
-    UploaderProps,
-    | 'messageId'
-    | 'handleFileCountChange'
-    | 'filePreviewRef'
-    | 'errorMessagesRef'
-  >
-
 export interface UploaderProps {
   /** The types of files that are allowed to be selected for upload. For safety reasons, only allow file types that can be handled by your server. Avoid accepting executable file types like .exe, .bat, or .msi. For more information, refer to the [mdn web docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file#unique_file_type_specifiers). */
   acceptedFileTypes: string
@@ -210,10 +201,11 @@ export interface UploaderProps {
   maxFileSize?: number
 }
 
-export interface FileInfo {
-  id: string
-  name: string
-  loadingProgress: number
-  abortController: AbortController
-  fileId?: string
-}
+export type MultimodalInputProps = TextInputProps &
+  Omit<
+    UploaderProps,
+    | 'messageId'
+    | 'handleFileCountChange'
+    | 'filePreviewRef'
+    | 'errorMessagesRef'
+  >

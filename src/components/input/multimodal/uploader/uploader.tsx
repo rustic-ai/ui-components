@@ -12,10 +12,18 @@ import { createPortal } from 'react-dom'
 import { v4 as getUUID } from 'uuid'
 
 import { shortenString } from '../../../helper'
-import type { FileInfo, UploaderProps } from '../../../types'
+import type { UploaderProps } from '../../../types'
 
 const maximumFileNameLength = 15
 const maximumLoadingProgress = 100
+
+interface FileInfo {
+  id: string
+  name: string
+  loadingProgress: number
+  abortController: AbortController
+  fileId?: string
+}
 
 export function getFilesToAdd(
   files: File[],
@@ -170,12 +178,9 @@ function Uploader(props: UploaderProps) {
       }
     }
 
+    const uploadUrl = `${props.uploadFileEndpoint}message?id=${props.messageId}`
     axios
-      .post(
-        `${props.uploadFileEndpoint}message?id=${props.messageId}`,
-        formData,
-        { onUploadProgress }
-      )
+      .post(uploadUrl, formData, { onUploadProgress })
       .then((response) => {
         handleSuccessfulUpload(response.data, id)
       })
@@ -189,10 +194,9 @@ function Uploader(props: UploaderProps) {
     setErrorMessages([])
     props.handleFileCountChange(-1)
     if (file.fileId) {
+      const deleteUrl = `${props.deleteFileEndpoint}file?message-id=${props.messageId}&file-id=${file.fileId}`
       axios
-        .delete(
-          `${props.deleteFileEndpoint}file?message-id=${props.messageId}&file-id=${file.fileId}`
-        )
+        .delete(deleteUrl)
         .then(() => {
           return setAddedFiles((prev) => prev.filter((_, i) => i !== index))
         })
