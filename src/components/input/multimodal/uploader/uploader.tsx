@@ -4,6 +4,7 @@ import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
 import IconButton from '@mui/material/IconButton'
 import LinearProgress from '@mui/material/LinearProgress'
+import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
 import type { AxiosProgressEvent } from 'axios'
 import axios from 'axios'
@@ -231,15 +232,17 @@ function Uploader(props: UploaderProps) {
               className="rustic-upload-progress"
             />
           )}
-          <IconButton
-            data-cy="delete-button"
-            color="primary"
-            onClick={() => handleDelete(file, index)}
-            className="rustic-delete-button"
-            aria-label="cancel file upload"
-          >
-            <span className="material-symbols-rounded">cancel</span>
-          </IconButton>
+          <Tooltip title="Delete">
+            <IconButton
+              data-cy="delete-button"
+              color="primary"
+              onClick={() => handleDelete(file, index)}
+              className="rustic-delete-button"
+              aria-label="cancel file upload"
+            >
+              <span className="material-symbols-rounded">cancel</span>
+            </IconButton>
+          </Tooltip>
         </Box>
       </Card>
     )
@@ -282,9 +285,15 @@ function Uploader(props: UploaderProps) {
     <>
       <Box className="rustic-uploader">
         <label htmlFor={inputId} data-cy="upload-button">
-          <IconButton component="span" aria-label="Upload file" color="primary">
-            <span className="material-symbols-rounded">upload_2</span>
-          </IconButton>
+          <Tooltip title="Upload">
+            <IconButton
+              component="span"
+              aria-label="Upload file"
+              color="primary"
+            >
+              <span className="material-symbols-rounded">upload_2</span>
+            </IconButton>
+          </Tooltip>
         </label>
         <input
           type="file"
