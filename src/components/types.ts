@@ -152,6 +152,15 @@ export interface VideoFormat extends MediaFormat {
   poster?: string
 }
 
+export interface MultipartFormat extends DataFormat {
+  /** An array of file names. */
+  files: string[]
+  /** Text content sent along with the files. */
+  text?: string
+}
+
+export type MultipartData = MultipartFormat & Updates<MultipartFormat>
+
 export interface BaseInputProps {
   /** Id of the current user. */
   sender: string
