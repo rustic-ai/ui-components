@@ -10,17 +10,21 @@ import BaseInput from '../../baseInput/baseInput'
 import Uploader from '../uploader/uploader'
 
 export default function MultimodalInput(props: MultimodalInputProps) {
-  const [fileCount, setFileCount] = useState(0)
+  const [fileNames, setFileNames] = useState<string[]>([])
   const [messageId, setMessageId] = useState(getUUID())
   const [filePreviewsContainer, setFilePreviewsContainer] =
     useState<HTMLDivElement>()
   const [errorMessagesContainer, setErrorMessagesContainer] =
     useState<HTMLDivElement>()
   const inputRef = useRef<HTMLDivElement>(null)
-  const hasAddedFiles = fileCount > 0
+  const hasAddedFiles = fileNames.length > 0
 
-  function handleFileCountChange(fileCountChange: 1 | -1) {
-    setFileCount((prev) => prev + fileCountChange)
+  function handleFileUpdates(action: 'add' | 'remove', fileName: string) {
+    if (action === 'add') {
+      setFileNames((prev) => [...prev, fileName])
+    } else {
+      setFileNames((prev) => prev.filter((file) => file !== fileName))
+    }
   }
 
   useEffect(() => {
@@ -42,11 +46,12 @@ export default function MultimodalInput(props: MultimodalInputProps) {
     if (hasAddedFiles) {
       formattedMessage.id = messageId
       formattedMessage.format = 'multipart'
+      formattedMessage.data.files = fileNames
     }
 
     props.ws.send(formattedMessage)
     setMessageId(getUUID())
-    setFileCount(0)
+    setFileNames([])
   }
 
   return (
@@ -64,7 +69,7 @@ export default function MultimodalInput(props: MultimodalInputProps) {
             maxFileSize={props.maxFileSize}
             uploadFileEndpoint={props.uploadFileEndpoint}
             deleteFileEndpoint={props.deleteFileEndpoint}
-            handleFileCountChange={handleFileCountChange}
+            onFileUpdate={handleFileUpdates}
             messageId={messageId}
             filePreviewsContainer={filePreviewsContainer}
             errorMessagesContainer={errorMessagesContainer}

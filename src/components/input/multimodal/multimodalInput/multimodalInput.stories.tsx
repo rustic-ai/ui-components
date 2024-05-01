@@ -1,5 +1,6 @@
 import type { Meta, StoryFn } from '@storybook/react'
 import React from 'react'
+import { v4 as getUUID } from 'uuid'
 
 import type { Message } from '../../../types'
 import MultimodalInput from './multimodalInput'
@@ -18,14 +19,14 @@ const meta: Meta<React.ComponentProps<typeof MultimodalInput>> = {
     },
     mockData: [
       {
-        url: 'http://localhost:8080/upload?message-id=1',
+        url: 'http://localhost:8080/upload?message-id=:messageId',
         method: 'POST',
         status: 200,
-        response: { fileId: '1' },
+        response: { fileId: getUUID() },
         delay: 1000,
       },
       {
-        url: 'http://localhost:8080/files?message-id=1&file-id=:fileId',
+        url: 'http://localhost:8080/files?message-id=:messageId&file-id=:fileId',
         method: 'DELETE',
         status: 200,
         response: { message: 'Delete successfully!' },
@@ -154,13 +155,24 @@ export const Default = {
     conversationId: '1',
     placeholder: 'Type your message',
     ws: {
-      // eslint-disable-next-line no-console
-      send: (message: Message) =>
+      send: (message: Message) => {
+        let fileMessage = ''
+        let textMessage = ''
+        if (message.data.files && message.data.files.length > 0) {
+          const fileNames = message.data.files.join(', ')
+          fileMessage = `File(s): ${fileNames}`
+        }
+        if (message.data.text) {
+          textMessage = `Text content: ${message.data.text}`
+        }
         alert(
-          message.data.text
-            ? `Message sent: ${message.data.text}`
-            : 'File(s) sent!'
-        ),
+          'Message sent!' +
+            '\n' +
+            textMessage +
+            `${textMessage.length > 0 ? '\n' : ''}` +
+            fileMessage
+        )
+      },
     },
     uploadFileEndpoint: 'http://localhost:8080/upload',
     deleteFileEndpoint: 'http://localhost:8080/files',

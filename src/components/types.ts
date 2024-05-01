@@ -189,8 +189,8 @@ export interface UploaderProps {
   deleteFileEndpoint: string
   /** Used in the API request to link the file with the message that's going to be sent. */
   messageId: string
-  /** A function to handle changes in the file count. Parent component should use this to track file count change and handle submit accordingly. */
-  handleFileCountChange: (fileCountChange: 1 | -1) => void
+  /** A function to handle changes in the file list. The parent component should use this to track file names and handle submit accordingly. */
+  onFileUpdate: (action: 'add' | 'remove', fileName: string) => void
   /** Optional HTML div where the errors should be shown. */
   errorMessagesContainer?: HTMLDivElement
   /** Optional HTML div where the filePreviews should be shown. */
@@ -205,7 +205,7 @@ export type MultimodalInputProps = TextInputProps &
   Omit<
     UploaderProps,
     | 'messageId'
-    | 'handleFileCountChange'
+    | 'onFileUpdate'
     | 'filePreviewsContainer'
     | 'errorMessagesContainer'
   >
