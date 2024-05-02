@@ -1,5 +1,6 @@
-import Copy from './copy'
+import 'cypress-real-events'
 
+import Copy from './copy'
 describe('Copy component', () => {
   const copyButton = '[data-cy=copy-button]'
 
@@ -16,7 +17,8 @@ describe('Copy component', () => {
   it('should copy text when clicked', () => {
     cy.mount(<Copy message={message} />)
 
-    cy.get(copyButton).click()
+    cy.get(copyButton).focus().realClick()
+
     cy.window().then((win) => {
       win.navigator.clipboard.readText().then((text) => {
         expect(text).to.eq('Hello World')
