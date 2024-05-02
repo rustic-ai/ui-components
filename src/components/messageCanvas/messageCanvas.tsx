@@ -37,11 +37,7 @@ export default function MessageCanvas(props: MessageCanvasProps) {
         {props.children}
       </Card>
       <Box className="rustic-message-footer">
-        {props.getActionsComponent && (
-          <Card variant="outlined">
-            {props.getActionsComponent(props.message)}
-          </Card>
-        )}
+        {props.getActionsComponent && props.getActionsComponent(props.message)}
         <Box className="rustic-timestamp">
           {props.message.lastThreadMessage && (
             <Typography variant="caption">last updated: </Typography>

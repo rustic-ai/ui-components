@@ -11,6 +11,7 @@ import MarkedStreamingMarkdown from './markdown/markedStreamingMarkdown'
 import Sound from './media/audio/sound'
 import Video from './media/video/video'
 import PopoverMenu from './menu/popoverMenu'
+import Copy from './messageCanvas/actions/copy/copy'
 import MessageCanvas from './messageCanvas/messageCanvas'
 import MessageSpace from './messageSpace/messageSpace'
 import Multipart from './multipart/multipart'
@@ -24,6 +25,7 @@ import YoutubeVideo from './video/youtubeVideo'
 
 export {
   CodeSnippet,
+  Copy,
   ElementRenderer,
   FCCalendar,
   Image,

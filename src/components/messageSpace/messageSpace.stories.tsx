@@ -1,3 +1,4 @@
+import Card from '@mui/material/Card'
 import React from 'react'
 import { v4 as getUUID } from 'uuid'
 
@@ -14,11 +15,13 @@ import {
   StreamingText,
   Table,
   Text,
+  type ThreadableMessage,
   Video,
   YoutubeVideo,
 } from '..'
 import CodeSnippet from '../codeSnippet/codeSnippet'
 import Icon from '../icon'
+import Copy from '../messageCanvas/actions/copy/copy'
 import MessageSpace from './messageSpace'
 
 export default {
@@ -47,7 +50,7 @@ export default {
     docs: {
       description: {
         component:
-          'The `MessageSpace` component uses `MessageCanvas` and `ElementRenderer` to render a list of messages. It serves as a container for individual message items, each encapsulated within a `MessageCanvas` for consistent styling and layout.',
+          "The `MessageSpace` component uses `MessageCanvas` and `ElementRenderer` to render a list of messages. It serves as a container for individual message items, each encapsulated within a `MessageCanvas` for consistent styling and layout. \n\n Note: For more information about the usage of `getActionsComponent` and `getProfileComponent`, refer to the examples provided in `MessageCanvas`'s stories.",
       },
     },
   },
@@ -414,6 +417,12 @@ export const Default = {
         return <Icon name="smart_toy" />
       } else {
         return <Icon name="account_circle" />
+      }
+    },
+    getActionsComponent: (message: ThreadableMessage) => {
+      const copyButton = message.format === 'text' && <Copy message={message} />
+      if (copyButton) {
+        return <Card variant="outlined">{copyButton}</Card>
       }
     },
   },
