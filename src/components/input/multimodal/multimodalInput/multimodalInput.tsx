@@ -1,29 +1,30 @@
 import './multimodalInput.css'
+import '../../../../index.css'
 
 import Box from '@mui/material/Box'
 import { useEffect, useRef, useState } from 'react'
 import React from 'react'
 import { v4 as getUUID } from 'uuid'
 
-import type { Message, MultimodalInputProps } from '../../../types'
+import type { FileData, Message, MultimodalInputProps } from '../../../types'
 import BaseInput from '../../baseInput/baseInput'
 import Uploader from '../uploader/uploader'
 
 export default function MultimodalInput(props: MultimodalInputProps) {
-  const [fileNames, setFileNames] = useState<string[]>([])
+  const [filesInfo, setFilesInfo] = useState<FileData[]>([])
   const [messageId, setMessageId] = useState(getUUID())
   const [filePreviewsContainer, setFilePreviewsContainer] =
     useState<HTMLDivElement>()
   const [errorMessagesContainer, setErrorMessagesContainer] =
     useState<HTMLDivElement>()
   const inputRef = useRef<HTMLDivElement>(null)
-  const hasAddedFiles = fileNames.length > 0
+  const hasAddedFiles = filesInfo.length > 0
 
   function handleFileUpdates(action: 'add' | 'remove', fileName: string) {
     if (action === 'add') {
-      setFileNames((prev) => [...prev, fileName])
+      setFilesInfo((prev) => [...prev, { name: fileName }])
     } else {
-      setFileNames((prev) => prev.filter((file) => file !== fileName))
+      setFilesInfo((prev) => prev.filter((file) => file.name !== fileName))
     }
   }
 
@@ -46,12 +47,12 @@ export default function MultimodalInput(props: MultimodalInputProps) {
     if (hasAddedFiles) {
       formattedMessage.id = messageId
       formattedMessage.format = 'multipart'
-      formattedMessage.data.files = fileNames
+      formattedMessage.data.files = filesInfo
     }
 
     props.ws.send(formattedMessage)
     setMessageId(getUUID())
-    setFileNames([])
+    setFilesInfo([])
   }
 
   return (

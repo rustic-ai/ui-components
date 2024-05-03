@@ -1,7 +1,6 @@
 import './uploader.css'
 
 import Box from '@mui/material/Box'
-import Card from '@mui/material/Card'
 import IconButton from '@mui/material/IconButton'
 import LinearProgress from '@mui/material/LinearProgress'
 import Tooltip from '@mui/material/Tooltip'
@@ -12,10 +11,9 @@ import React, { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { v4 as getUUID } from 'uuid'
 
-import { shortenString } from '../../../helper'
+import FilePreview from '../../../filePreview/filePreview'
 import type { UploaderProps } from '../../../types'
 
-const maximumFileNameLength = 15
 const maximumLoadingProgress = 100
 
 interface FileInfo {
@@ -251,41 +249,33 @@ function Uploader(props: UploaderProps) {
     }
   }
 
-  function renderFilePreview(file: FileInfo, index: number) {
-    return (
-      <Card className="rustic-file-preview" key={index}>
-        <Typography variant="subtitle2" data-cy="file-name">
-          {shortenString(file.name, maximumFileNameLength)}
-        </Typography>
-
-        <Box className="rustic-flex-center">
-          {file.loadingProgress < maximumLoadingProgress && (
-            <LinearProgress
-              variant="determinate"
-              color="secondary"
-              value={file.loadingProgress}
-              className="rustic-upload-progress"
-            />
-          )}
-          <Tooltip title="Delete">
-            <IconButton
-              data-cy="delete-button"
-              color="primary"
-              onClick={() => handleDelete(file, index)}
-              className="rustic-delete-button"
-              aria-label="cancel file upload"
-            >
-              <span className="material-symbols-rounded">cancel</span>
-            </IconButton>
-          </Tooltip>
-        </Box>
-      </Card>
-    )
-  }
-
   const filePreviews = (
-    <Box className="rustic-files">
-      {addedFiles.map((file, index) => renderFilePreview(file, index))}
+    <Box className="rustic-files rustic-padding-16">
+      {addedFiles.map((file, index) => (
+        <FilePreview file={file} key={index}>
+          <Box className="rustic-flex-center">
+            {file.loadingProgress < maximumLoadingProgress && (
+              <LinearProgress
+                variant="determinate"
+                color="secondary"
+                value={file.loadingProgress}
+                className="rustic-upload-progress"
+              />
+            )}
+            <Tooltip title="Delete">
+              <IconButton
+                data-cy="delete-button"
+                color="primary"
+                onClick={() => handleDelete(file, index)}
+                className="rustic-delete-button"
+                aria-label="cancel file upload"
+              >
+                <span className="material-symbols-rounded">cancel</span>
+              </IconButton>
+            </Tooltip>
+          </Box>
+        </FilePreview>
+      ))}
     </Box>
   )
 

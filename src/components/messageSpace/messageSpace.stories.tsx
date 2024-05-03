@@ -389,7 +389,7 @@ export const Default = {
         format: 'multipart',
         data: {
           text: 'Here is an example of the multipart component:',
-          files: ['imageExample.png', 'pdfExample.pdf'],
+          files: [{ name: 'imageExample.png' }, { name: 'pdfExample.pdf' }],
         },
       },
     ],

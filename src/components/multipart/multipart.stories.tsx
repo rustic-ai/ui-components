@@ -4,6 +4,19 @@ const meta = {
   title: 'Rustic UI/Multipart/Multipart',
   component: Multipart,
   tags: ['autodocs'],
+  argTypes: {
+    files: {
+      table: {
+        type: {
+          summary: 'An array of FileData.\n',
+          detail:
+            'Each FileData has the following fields:\n' +
+            '  name: The name of the file.\n' +
+            '  url: Optional string of the file url. \n',
+        },
+      },
+    },
+  },
   parameters: {
     docs: {
       description: {
@@ -17,11 +30,11 @@ const meta = {
 export default meta
 
 const fileList = [
-  'file1.pdf',
-  'file2.doc',
-  'file3.docx',
-  'file4.png',
-  'file5.jpg',
+  { name: 'File1.pdf' },
+  { name: 'File2.doc' },
+  { name: 'File3.docx' },
+  { name: 'File4.png' },
+  { name: 'File5.jpg' },
 ]
 
 export const Default = {

@@ -6,23 +6,23 @@ import Multipart from './multipart'
 describe('Multipart Component', () => {
   const props = {
     text: 'This is a test message',
-    files: ['image.jpg', 'document.pdf'],
+    files: [{ name: 'image.jpg' }, { name: 'document.pdf' }],
   }
 
-  const filePreviw = `[data-cy=file-preview]`
+  const filePreview = `[data-cy=file-preview]`
   supportedViewports.forEach((viewport) => {
     it(`renders text and file previews correctly on ${viewport} screen`, () => {
       const maximumFileNameLength = 15
       cy.mount(<Multipart {...props} />)
 
       cy.contains(props.text).should('be.visible')
-      cy.get(filePreviw).should('have.length', props.files.length)
+      cy.get(filePreview).should('have.length', props.files.length)
 
       props.files.forEach((file, index) => {
-        cy.get(`${filePreviw}:eq(${index})`).within(() => {
+        cy.get(`${filePreview}:eq(${index})`).within(() => {
           cy.get('[data-cy=file-name]').should(
             'contain',
-            file.substring(0, maximumFileNameLength)
+            file.name.substring(0, maximumFileNameLength)
           )
         })
       })
@@ -32,7 +32,7 @@ describe('Multipart Component', () => {
       cy.mount(<Multipart files={props.files} />)
 
       cy.contains(props.text).should('not.exist')
-      cy.get(filePreviw).should('have.length', props.files.length)
+      cy.get(filePreview).should('have.length', props.files.length)
     })
   })
 })

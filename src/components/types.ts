@@ -152,9 +152,14 @@ export interface VideoFormat extends MediaFormat {
   poster?: string
 }
 
+export interface FileData {
+  name: string
+  url?: string
+}
+
 export interface MultipartFormat extends DataFormat {
-  /** An array of file names. */
-  files: string[]
+  /** An array of file data. */
+  files: FileData[]
   /** Text content sent along with the files. */
   text?: string
 }
