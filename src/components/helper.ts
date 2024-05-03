@@ -39,7 +39,7 @@ export function formatDateAndTime(isoDateTimeInUtc: string): string {
   const isDifferentYear =
     convertedDate.getFullYear() !== currentDate.getFullYear()
 
-  const dataAndTimeConnector = isDifferentYear ? ' at ' : ', '
+  const dateAndTimeConnector = isDifferentYear ? ' at ' : ', '
 
   if (isDifferentYear) {
     dateOptions.year = 'numeric'
@@ -47,7 +47,7 @@ export function formatDateAndTime(isoDateTimeInUtc: string): string {
 
   const formattedDateTime =
     convertedDate.toLocaleDateString(userLocale, dateOptions) +
-    dataAndTimeConnector +
+    dateAndTimeConnector +
     convertedDate.toLocaleTimeString(userLocale, timeOptions)
   return formattedDateTime
 }
