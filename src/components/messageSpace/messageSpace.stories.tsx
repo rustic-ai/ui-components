@@ -1,4 +1,3 @@
-import Card from '@mui/material/Card'
 import React from 'react'
 import { v4 as getUUID } from 'uuid'
 
@@ -39,7 +38,7 @@ export default {
     },
     getActionsComponent: {
       description:
-        'Message actions. For example, this could be a list of buttons for different actions (e.g. copy, delete, save, etc.)',
+        'A function that returns a single React element which contains message actions. For example, this could be a list of buttons for different actions (e.g. copy, delete, save, etc.). However, the function may also return no element if no actions are applicable or available for a particular message.',
     },
     getProfileComponent: {
       description: "Profile icon to be shown before the sender's name.",
@@ -422,7 +421,7 @@ export const Default = {
     getActionsComponent: (message: ThreadableMessage) => {
       const copyButton = message.format === 'text' && <Copy message={message} />
       if (copyButton) {
-        return <Card variant="outlined">{copyButton}</Card>
+        return <>{copyButton}</>
       }
     },
   },

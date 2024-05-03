@@ -1,4 +1,3 @@
-import Card from '@mui/material/Card'
 import React from 'react'
 
 import { ElementRenderer, type ThreadableMessage } from '..'
@@ -165,7 +164,7 @@ export const WithCopyIcon = {
     getActionsComponent: (message: ThreadableMessage) => {
       const copyButton = message.format === 'text' && <Copy message={message} />
       if (copyButton) {
-        return <Card variant="outlined">{copyButton}</Card>
+        return <>{copyButton}</>
       }
     },
   },
@@ -180,7 +179,7 @@ export const WithCopyIcon = {
   getActionsComponent: (message: ThreadableMessage) => {
     const copyButton = message.format === 'text' && <Copy message={message} />
     if (copyButton) {
-      return <Card variant="outlined">{copyButton}</Card>
+      return <>{copyButton}</>
     }
   },
   message={{

@@ -16,8 +16,8 @@ export interface MessageCanvasProps {
   message: ThreadableMessage
   /** React component to be displayed in the message canvas. */
   children: ReactNode
-  /** Message actions. For example, this could be a list of buttons for different actions (e.g. copy, delete, save, etc.) */
-  getActionsComponent?: (message: ThreadableMessage) => ReactNode
+  /** A function that returns a single React element which contains message actions. For example, this could be a list of buttons for different actions (e.g. copy, delete, save, etc.). The function may also return no element if no actions are applicable or available for a particular message. */
+  getActionsComponent?: (message: ThreadableMessage) => ReactNode | undefined
 }
 
 export default function MessageCanvas(props: MessageCanvasProps) {
@@ -37,7 +37,12 @@ export default function MessageCanvas(props: MessageCanvasProps) {
         {props.children}
       </Card>
       <Box className="rustic-message-footer">
-        {props.getActionsComponent && props.getActionsComponent(props.message)}
+        {props.getActionsComponent &&
+          props.getActionsComponent(props.message) && (
+            <Card variant="outlined">
+              {props.getActionsComponent(props.message)}
+            </Card>
+          )}
         <Box className="rustic-timestamp">
           {props.message.lastThreadMessage && (
             <Typography variant="caption">last updated: </Typography>
