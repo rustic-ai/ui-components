@@ -8,12 +8,12 @@ describe('formatDateAndTime', () => {
   it('should format the date correctly', () => {
     const utcTimestamp = '2023-01-01T12:00:00Z'
     const formatted = formatDateAndTime(utcTimestamp)
-    expect(formatted).to.eq('Jan 1 4:00 AM')
+    expect(formatted).to.eq('Jan 1, 4:00 AM')
   })
 
-  it('should include year when the time difference is more than 365 days', () => {
+  it('should include the year when showing a date from a different year', () => {
     const utcTimestamp = '2022-01-01T12:00:00Z'
     const formatted = formatDateAndTime(utcTimestamp)
-    expect(formatted).to.eq('Jan 1 2022 4:00 AM')
+    expect(formatted).to.eq('Jan 1, 2022 at 4:00 AM')
   })
 })

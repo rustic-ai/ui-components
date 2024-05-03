@@ -15,15 +15,36 @@ export default {
   },
 }
 
-const newDate = new Date()
+function getYesterdayDate() {
+  const today = new Date()
+  const yesterday = new Date(today)
+  yesterday.setDate(today.getDate() - 1)
+  return yesterday
+}
+
+const yesterday = getYesterdayDate()
+const now = new Date()
+
 export const Default = {
   args: {
     timestamp: '2023-11-26T23:25:44Z',
   },
 }
 
+export const OverADayAgo = {
+  args: {
+    timestamp: yesterday,
+  },
+}
+
+export const NotThisYear = {
+  args: {
+    timestamp: '2022-11-26T23:25:44Z',
+  },
+}
+
 export const TimeAgo = {
   args: {
-    timestamp: newDate,
+    timestamp: now,
   },
 }
