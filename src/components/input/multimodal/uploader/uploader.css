@@ -1,12 +1,3 @@
-.rustic-file-preview {
-  position: relative;
-  display: flex;
-  align-items: center;
-  padding: 8px;
-  justify-content: space-between;
-  width: 220px;
-}
-
 .rustic-file-preview .rustic-upload-progress {
   width: 40px;
   height: 8px;
@@ -21,12 +12,10 @@
   display: none;
 }
 
-.rustic-files {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
 .rustic-error-message {
   display: block;
+}
+
+.rustic-padding-16 {
+  padding: 16px;
 }

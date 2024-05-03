@@ -2,7 +2,7 @@ import type { Meta, StoryFn } from '@storybook/react'
 import React from 'react'
 import { v4 as getUUID } from 'uuid'
 
-import type { Message } from '../../../types'
+import type { FileData, Message } from '../../../types'
 import MultimodalInput from './multimodalInput'
 
 const meta: Meta<React.ComponentProps<typeof MultimodalInput>> = {
@@ -159,7 +159,9 @@ export const Default = {
         let fileMessage = ''
         let textMessage = ''
         if (message.data.files && message.data.files.length > 0) {
-          const fileNames = message.data.files.join(', ')
+          const fileNames = message.data.files
+            .map((file: FileData) => file.name)
+            .join(', ')
           fileMessage = `File(s): ${fileNames}`
         }
         if (message.data.text) {

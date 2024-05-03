@@ -17,3 +17,9 @@ code {
   width: 100%;
   height: 100%;
 }
+
+.rustic-files {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}

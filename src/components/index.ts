@@ -13,6 +13,7 @@ import Video from './media/video/video'
 import PopoverMenu from './menu/popoverMenu'
 import MessageCanvas from './messageCanvas/messageCanvas'
 import MessageSpace from './messageSpace/messageSpace'
+import Multipart from './multipart/multipart'
 import NavBar from './navBar/navBar'
 import ParticipantsContainer from './participantsContainer/participantsContainer'
 import Table from './table/table'
@@ -31,6 +32,7 @@ export {
   MessageCanvas,
   MessageSpace,
   MultimodalInput,
+  Multipart,
   NavBar,
   OpenLayersMap,
   ParticipantsContainer,

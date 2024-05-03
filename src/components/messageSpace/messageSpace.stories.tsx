@@ -7,6 +7,7 @@ import {
   MarkedMarkdown,
   MarkedStreamingMarkdown,
   type Message,
+  Multipart,
   OpenLayersMap,
   RechartsTimeSeries,
   Sound,
@@ -372,6 +373,25 @@ export const Default = {
           title: 'Video Title',
         },
       },
+      {
+        ...humanMessageData,
+        id: getUUID(),
+        timestamp: '2024-01-02T00:20:00.000Z',
+        format: 'text',
+        data: {
+          text: 'Could you show me an example of the multipart component?',
+        },
+      },
+      {
+        ...agentMessageData,
+        id: getUUID(),
+        timestamp: '2024-01-02T00:21:00.000Z',
+        format: 'multipart',
+        data: {
+          text: 'Here is an example of the multipart component:',
+          files: [{ name: 'imageExample.png' }, { name: 'pdfExample.pdf' }],
+        },
+      },
     ],
     supportedElements: {
       text: Text,
@@ -387,6 +407,7 @@ export const Default = {
       codeSnippet: CodeSnippet,
       sound: Sound,
       video: Video,
+      multipart: Multipart,
     },
     getProfileComponent: (message: Message) => {
       if (message.sender.includes('Agent')) {
