@@ -1,4 +1,5 @@
 import '../../index.css'
+import './multipart.css'
 
 import Box from '@mui/system/Box'
 import React from 'react'

@@ -252,7 +252,7 @@ function Uploader(props: UploaderProps) {
   const filePreviews = (
     <Box className="rustic-files rustic-padding-16">
       {addedFiles.map((file, index) => (
-        <FilePreview file={file} key={index}>
+        <FilePreview file={{ name: file.name }} key={index}>
           <Box className="rustic-flex-center">
             {file.loadingProgress < maximumLoadingProgress && (
               <LinearProgress
