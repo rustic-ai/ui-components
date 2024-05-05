@@ -12,7 +12,7 @@ describe('formatTimestamp', () => {
 
   it('should return date and time when time difference is more than 24 hours', () => {
     const utcTimestamp = '2021-01-01T00:00:00Z'
-    const expected = 'Dec 31 2020 4:00 PM'
+    const expected = 'Dec 31, 2020 at 4:00 PM'
     const result = formatMessageTimestamp(utcTimestamp)
     expect(result).to.eq(expected)
   })

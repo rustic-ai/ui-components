@@ -59,9 +59,9 @@ describe('MessageCanvas', () => {
           <p>Hello World</p>
         </MessageCanvas>
       )
-      cy.contains('Jan 1 2020').should('not.be.visible')
+      cy.contains('Jan 1, 2020').should('not.be.visible')
       cy.get('.rustic-message-canvas').realHover()
-      cy.contains('Jan 1 2020').should('be.visible')
+      cy.contains('Jan 1, 2020').should('be.visible')
     })
 
     it('shows that it was last updated if an update is provided', () => {
@@ -87,9 +87,9 @@ describe('MessageCanvas', () => {
           <p>Hello World</p>
         </MessageCanvas>
       )
-      cy.contains('Jan 1 2020').should('not.be.visible')
+      cy.contains('Jan 1, 2020').should('not.be.visible')
       cy.get('.rustic-message-canvas').realTouch()
-      cy.contains('Jan 1 2020').should('be.visible')
+      cy.contains('Jan 1, 2020').should('be.visible')
     })
 
     it('shows that it was last updated if an update is provided', () => {

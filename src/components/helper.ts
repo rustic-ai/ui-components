@@ -24,23 +24,31 @@ export function calculateTimeAgo(isoDate: string): string {
 export function formatDateAndTime(isoDateTimeInUtc: string): string {
   const convertedDate = new Date(isoDateTimeInUtc)
   const userLocale = navigator.language
-  const options: Intl.DateTimeFormatOptions = {
+  const dateOptions: Intl.DateTimeFormatOptions = {
     month: 'short',
     day: 'numeric',
+  }
+
+  const timeOptions: Intl.DateTimeFormatOptions = {
     hour: 'numeric',
     minute: '2-digit',
     hour12: true,
   }
 
-  const timeDifferenceInDays =
-    calculateTimeDiffInSeconds(isoDateTimeInUtc) / (60 * 60 * 24)
+  const currentDate = new Date()
+  const isDifferentYear =
+    convertedDate.getFullYear() !== currentDate.getFullYear()
 
-  if (timeDifferenceInDays > 365) {
-    options.year = 'numeric'
+  const dateAndTimeConnector = isDifferentYear ? ' at ' : ', '
+
+  if (isDifferentYear) {
+    dateOptions.year = 'numeric'
   }
-  const formattedDateTime = convertedDate
-    .toLocaleTimeString(userLocale, options)
-    .replace(/,/g, '')
+
+  const formattedDateTime =
+    convertedDate.toLocaleDateString(userLocale, dateOptions) +
+    dateAndTimeConnector +
+    convertedDate.toLocaleTimeString(userLocale, timeOptions)
   return formattedDateTime
 }
 
