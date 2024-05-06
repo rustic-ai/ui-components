@@ -142,20 +142,11 @@ export const JS = {
   },
 }
 
-export const PythonInsideAParentContainer = {
+export const Python = {
   args: {
     code: pyCode,
     language: 'Python',
   },
-  decorators: [
-    (Story: StoryFn) => {
-      return (
-        <div style={{ width: '600px' }}>
-          <Story />
-        </div>
-      )
-    },
-  ],
 }
 
 export const PHP = {
@@ -200,7 +191,7 @@ export const HTMLInsideAParentContainer = {
   decorators: [
     (Story: StoryFn) => {
       return (
-        <div style={{ width: '600px' }}>
+        <div style={{ maxWidth: '600px' }}>
           <Story />
         </div>
       )
