@@ -1,5 +1,6 @@
 import 'cypress-real-events'
 
+import { supportedViewports } from '../../../../../cypress/support/variables'
 import Copy from './copy'
 describe('Copy component', () => {
   const copyButton = '[data-cy=copy-text-button]'
@@ -14,14 +15,21 @@ describe('Copy component', () => {
     data: { text: 'Hello World' },
   }
 
-  it('should copy text when clicked', () => {
-    cy.mount(<Copy message={message} />)
+  supportedViewports.forEach((viewport) => {
+    it(`should copy text when clicked on ${viewport} screen`, () => {
+      cy.viewport(viewport)
+      cy.mount(<Copy message={message} />)
 
-    cy.get(copyButton).focus().realClick()
+      if (viewport === 'iphone-6') {
+        cy.get(copyButton).focus().realTouch()
+      } else {
+        cy.get(copyButton).focus().realClick()
+      }
 
-    cy.window().then((win) => {
-      win.navigator.clipboard.readText().then((text) => {
-        expect(text).to.eq('Hello World')
+      cy.window().then((win) => {
+        win.navigator.clipboard.readText().then((text) => {
+          expect(text).to.eq('Hello World')
+        })
       })
     })
   })
