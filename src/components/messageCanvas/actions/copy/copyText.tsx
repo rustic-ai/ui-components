@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 
 import Icon from '../../../icon'
 import type { ThreadableMessage } from '../../../types'
-import Action from '../index/index'
+import Action from '../index'
 
 export interface CopyTextProps {
   message: ThreadableMessage

@@ -3,10 +3,29 @@ import './messageCanvas.css'
 import Card from '@mui/material/Card'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/system/Box'
-import React from 'react'
+import React, { type ReactNode } from 'react'
 
 import Timestamp from '../timestamp/timestamp'
-import type { MessageCanvasProps } from '../types'
+import type { ThreadableMessage } from '../types'
+
+export interface MessageContainerProps {
+  /** Profile icon to be shown before sender's name. */
+  getProfileComponent?: (message: ThreadableMessage) => ReactNode
+  /** A function that returns a single React element which may be composed of several actions supported for the message, such as editing, copying, and deleting, etc.
+   * In case no actions are applicable or available for a particular message, the function may return `undefined`.
+   * This approach offers flexibility in tailoring message interactions to specific application requirements.
+   * To define individual message actions, developers can extend the `Action` component's functionality.
+   * One such example is the `CopyText` component.
+   */
+  getActionsComponent?: (message: ThreadableMessage) => ReactNode | undefined
+}
+
+export interface MessageCanvasProps extends MessageContainerProps {
+  /** Message information to be displayed. Please see the `MessageSpace` docs for more information about the `ThreadableMessage` interface. */
+  message: ThreadableMessage
+  /** React component to be displayed in the message canvas. */
+  children: ReactNode
+}
 
 /**
  The `MessageCanvas` component serves as a container for displaying messages within a chat interface.

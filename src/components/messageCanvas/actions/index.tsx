@@ -5,7 +5,7 @@ import Tooltip from '@mui/material/Tooltip'
 import type { ReactNode } from 'react'
 import React from 'react'
 
-import type { ThreadableMessage } from '../../../types'
+import type { ThreadableMessage } from '../../types'
 
 interface ActionProps {
   label: string
