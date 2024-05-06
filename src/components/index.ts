@@ -12,6 +12,7 @@ import Sound from './media/audio/sound'
 import Video from './media/video/video'
 import PopoverMenu from './menu/popoverMenu'
 import Copy from './messageCanvas/actions/copy/copy'
+import Action from './messageCanvas/actions/index'
 import MessageCanvas from './messageCanvas/messageCanvas'
 import MessageSpace from './messageSpace/messageSpace'
 import Multipart from './multipart/multipart'
@@ -24,6 +25,7 @@ import Timestamp from './timestamp/timestamp'
 import YoutubeVideo from './video/youtubeVideo'
 
 export {
+  Action,
   CodeSnippet,
   Copy,
   ElementRenderer,

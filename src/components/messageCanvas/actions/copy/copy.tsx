@@ -9,7 +9,7 @@ export interface CopyProps {
 }
 
 export default function Copy(props: CopyProps) {
-  const [tooltipContent, setTooltipContent] = useState('Copy')
+  const [tooltipContent, setTooltipContent] = useState('Copy Text')
   const twoSeconds = 2000
 
   function handleOnClick(message: ThreadableMessage) {
@@ -19,7 +19,7 @@ export default function Copy(props: CopyProps) {
         .then(() => {
           setTooltipContent('Copied')
           setTimeout(() => {
-            setTooltipContent('Copy')
+            setTooltipContent('Copy Text')
           }, twoSeconds)
         })
         .catch(() => {

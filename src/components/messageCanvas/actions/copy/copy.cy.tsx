@@ -2,7 +2,7 @@ import 'cypress-real-events'
 
 import Copy from './copy'
 describe('Copy component', () => {
-  const copyButton = '[data-cy=copy-button]'
+  const copyButton = '[data-cy=copy-text-button]'
 
   const message = {
     id: '1',

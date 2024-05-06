@@ -15,7 +15,7 @@ export default {
     docs: {
       description: {
         component:
-          'The `Message Canvas` component serves as a container for displaying messages within a chat interface. It provides a structured layout for rendering message content along with sender information and timestamp details. This component is designed to encapsulate individual message items and facilitate consistent rendering of messages within an application.',
+          'The `MessageCanvas` component serves as a container for displaying messages within a chat interface. It provides a structured layout for rendering message content along with sender information and timestamp details. This component is designed to encapsulate individual message items and facilitate consistent rendering of messages within an application.\n\n##`getActionsComponent`:\n\n`getActionsComponent` is a single React element and can be composed of several actions supported for the message, such as editing, copying, and deleting. The examples of actions are listed below:\n\n###Copy:\n\nOnly supports copying text from text message.\n\nFields:\n\n```message: ThreadableMessage```\n\nAdditional control options are currently under development.\n\n---\n\n###Advance Usage\n\nFor advanced customization of available message actions, developers can import the `Action` component and extend its functionality to incorporate additional actions as needed. This approach offers flexibility in tailoring message interactions to specific application requirements. For an example, see the copy icon below, which extends the functionality of the `Action` component.',
       },
     },
   },
