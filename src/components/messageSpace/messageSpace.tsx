@@ -1,21 +1,24 @@
 import './messageSpace.css'
 
 import Box from '@mui/system/Box'
-import type { ReactNode } from 'react'
 import React from 'react'
 
 import ElementRenderer from '../elementRenderer/elementRenderer'
-import MessageCanvas from '../messageCanvas/messageCanvas'
-import type { ComponentMap, Message, ThreadableMessage } from '../types'
+import MessageCanvas, {
+  type MessageContainerProps,
+} from '../messageCanvas/messageCanvas'
+import type { ComponentMap, ThreadableMessage } from '../types'
 
-export interface MessageSpaceProps {
+export interface MessageSpaceProps extends MessageContainerProps {
+  /** A component map contains message formats as keys and their corresponding React components as values. */
   supportedElements: ComponentMap
   messages?: ThreadableMessage[]
-  getActionsComponent?: (message: Message) => ReactNode
-  getProfileComponent?: (message: Message) => ReactNode
 }
 
-const MessageSpace = (props: MessageSpaceProps) => {
+/**
+ The `MessageSpace` component uses `MessageCanvas` and `ElementRenderer` to render a list of messages. It serves as a container for individual message items, each encapsulated within a `MessageCanvas` for consistent styling and layout. \n\n Note: For more information about the `getActionsComponent` and `getProfileComponent` fields, refer to the [MessageCanvas' docs](http://localhost:6006/?path=/docs/rustic-ui-message-canvas-message-canvas--docs).
+ */
+export default function MessageSpace(props: MessageSpaceProps) {
   return (
     <Box data-cy="message-space" className="rustic-message-space">
       {props.messages &&
@@ -38,5 +41,3 @@ const MessageSpace = (props: MessageSpaceProps) => {
     </Box>
   )
 }
-
-export default MessageSpace

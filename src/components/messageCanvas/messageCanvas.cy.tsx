@@ -3,6 +3,8 @@ import 'cypress-real-events'
 
 import { supportedViewports } from '../../../cypress/support/variables'
 import Icon from '../icon'
+import type { ThreadableMessage } from '../types'
+import CopyText from './actions/copy/copyText'
 import MessageCanvas from './messageCanvas'
 
 describe('MessageCanvas', () => {
@@ -30,6 +32,7 @@ describe('MessageCanvas', () => {
     },
   }
 
+  const messageCanvas = '[data-cy=message-canvas]'
   supportedViewports.forEach((viewport) => {
     it(`renders the component on ${viewport} screen`, () => {
       cy.viewport(viewport)
@@ -46,6 +49,36 @@ describe('MessageCanvas', () => {
       cy.contains('senderId').should('be.visible')
       cy.get('[data-cy="account-circle-icon"]').should('be.visible')
     })
+
+    it(`allows copying text on ${viewport} screen`, () => {
+      cy.mount(
+        <MessageCanvas
+          message={testMessage}
+          getActionsComponent={(message: ThreadableMessage) => {
+            const copyButton = message.format === 'text' && (
+              <CopyText message={message} />
+            )
+            if (copyButton) {
+              return <>{copyButton}</>
+            }
+          }}
+        >
+          <p>Hello World</p>
+        </MessageCanvas>
+      )
+      if (viewport === 'iphone-6') {
+        cy.get(messageCanvas).realTouch()
+      } else {
+        cy.get(messageCanvas).realHover()
+      }
+
+      cy.get('[data-cy=copy-text-button]').focus().realClick()
+      cy.window().then((win) => {
+        win.navigator.clipboard.readText().then((text) => {
+          expect(text).to.eq('Hello World')
+        })
+      })
+    })
   })
 
   context('Desktop', () => {
@@ -60,7 +93,7 @@ describe('MessageCanvas', () => {
         </MessageCanvas>
       )
       cy.contains('Jan 1, 2020').should('not.be.visible')
-      cy.get('.rustic-message-canvas').realHover()
+      cy.get(messageCanvas).realHover()
       cy.contains('Jan 1, 2020').should('be.visible')
     })
 
@@ -71,7 +104,7 @@ describe('MessageCanvas', () => {
         </MessageCanvas>
       )
 
-      cy.get('.rustic-message-canvas').realHover()
+      cy.get(messageCanvas).realHover()
       cy.contains('last updated').should('be.visible')
     })
   })
@@ -88,7 +121,7 @@ describe('MessageCanvas', () => {
         </MessageCanvas>
       )
       cy.contains('Jan 1, 2020').should('not.be.visible')
-      cy.get('.rustic-message-canvas').realTouch()
+      cy.get(messageCanvas).realTouch()
       cy.contains('Jan 1, 2020').should('be.visible')
     })
 
@@ -99,7 +132,7 @@ describe('MessageCanvas', () => {
         </MessageCanvas>
       )
 
-      cy.get('.rustic-message-canvas').realTouch()
+      cy.get(messageCanvas).realTouch()
       cy.contains('last updated').should('be.visible')
     })
   })
