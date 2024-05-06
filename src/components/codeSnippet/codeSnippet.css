@@ -1,14 +1,13 @@
 .rustic-code-snippet {
-    border-radius: 16px 16px 4px 4px;
-    width: 100%;
-    height: 100%;
+  border-radius: 16px 16px 4px 4px;
+  max-width: calc(100vw - 100px);
 }
 
 .rustic-code-snippet p {
-    padding: 16px;
+  padding: 16px;
 }
 
 .rustic-code-snippet .cm-editor {
-    padding: 24px;
-    overflow-x: auto;
+  padding: 24px;
+  overflow-x: auto;
 }
