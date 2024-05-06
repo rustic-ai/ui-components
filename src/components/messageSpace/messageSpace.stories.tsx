@@ -1,3 +1,4 @@
+import type { Meta } from '@storybook/react'
 import React from 'react'
 import { v4 as getUUID } from 'uuid'
 
@@ -20,41 +21,45 @@ import {
 } from '..'
 import CodeSnippet from '../codeSnippet/codeSnippet'
 import Icon from '../icon'
-import Copy from '../messageCanvas/actions/copy/copy'
+import CopyText from '../messageCanvas/actions/copy/copyText'
 import MessageSpace from './messageSpace'
 
-export default {
+const meta: Meta<React.ComponentProps<typeof MessageSpace>> = {
   title: 'Rustic UI/Message Space/Message Space',
   component: MessageSpace,
   tags: ['autodocs'],
-  argTypes: {
-    supportedElements: {
-      description:
-        'A component map contains message formats as keys and their corresponding React components as values.`interface ComponentMap { [key: string]: React.ComponentType<any> }`',
-    },
-    messages: {
-      description:
-        'Messages to be displayed. Could have thread messages for the streaming components. `interface MessageData { [key: string]: any }`\n\n<pre>```{\ninterface Message {\n  id: string\n  timestamp: string\n  sender: string\n  conversationId: string\n  format: string\n  data: MessageData\n  inReplyTo?: string\n  threadId?: string\n  priority?: string;\n  taggedParticipants?: string[]\n  topicId?: string\n}\n\n```</pre><pre>```{\ninterface ThreadableMessage extends Message {\n  lastThreadMessage?: Message\n  threadMessagesData?: MessageData[]\n}```</pre>',
-    },
-    getActionsComponent: {
-      description:
-        'A function that returns a single React element which contains message actions. For example, this could be a list of buttons for different actions (e.g. copy, delete, save, etc.). However, the function may also return no element if no actions are applicable or available for a particular message.',
-    },
-    getProfileComponent: {
-      description: "Profile icon to be shown before the sender's name.",
-    },
-  },
   parameters: {
     layout: 'centered',
-    docs: {
-      description: {
-        component:
-          "The `MessageSpace` component uses `MessageCanvas` and `ElementRenderer` to render a list of messages. It serves as a container for individual message items, each encapsulated within a `MessageCanvas` for consistent styling and layout. \n\n Note: For more information about the `getActionsComponent` and `getProfileComponent` fields, refer to the [MessageCanvas' docs](http://localhost:6006/?path=/docs/rustic-ui-message-canvas-message-canvas--docs).",
+  },
+}
+
+export default meta
+
+meta.argTypes = {
+  messages: {
+    table: {
+      type: {
+        summary: 'Array of ThreadableMessage.\n',
+        detail:
+          'ThreadableMessage extends the Message interface which has the following fields:\n' +
+          '  id: A string representing the unique identifier of the message.\n' +
+          '  timestamp: A string representing the timestamp of the message.\n' +
+          '  sender: A string representing the sender of the message.\n' +
+          '  conversationId: A string representing the identifier of the conversation to which the message belongs.\n' +
+          '  format: A string representing the format of the message.\n' +
+          '  data: An object of type MessageData, which can contain any key-value pairs.\n' +
+          '  inReplyTo: An optional string representing the identifier of the message to which this message is a reply.\n' +
+          '  threadId: An optional string representing the identifier of the thread to which this message belongs.\n' +
+          '  priority: An optional string representing the priority of the message.\n' +
+          '  taggedParticipants: An optional array of strings representing the participants tagged in the message.\n' +
+          '  topicId: An optional string representing the identifier of the topic associated with the message.\n' +
+          'Other than the fields described above, ThreadableMessage also has the following fields:\n' +
+          '  lastThreadMessage: An optional object of Message interface representing the last message in the thread.\n' +
+          '  threadMessagesData: An optional array of objects of type MessageData, which can contain any key-value pairs.',
       },
     },
   },
 }
-
 const conversationId = '1'
 
 const agentMessageData = {
@@ -419,7 +424,9 @@ export const Default = {
       }
     },
     getActionsComponent: (message: ThreadableMessage) => {
-      const copyButton = message.format === 'text' && <Copy message={message} />
+      const copyButton = message.format === 'text' && (
+        <CopyText message={message} />
+      )
       if (copyButton) {
         return <>{copyButton}</>
       }

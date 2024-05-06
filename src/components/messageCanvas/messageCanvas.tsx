@@ -3,23 +3,16 @@ import './messageCanvas.css'
 import Card from '@mui/material/Card'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/system/Box'
-import type { ReactNode } from 'react'
 import React from 'react'
 
 import Timestamp from '../timestamp/timestamp'
-import type { ThreadableMessage } from '../types'
+import type { MessageCanvasProps } from '../types'
 
-export interface MessageCanvasProps {
-  /** Profile icon to be shown before sender's name. */
-  getProfileComponent?: (message: ThreadableMessage) => ReactNode
-  /** Message information to be displayed. Please see the `MessageSpace` docs for more information about the `ThreadableMessage` interface. */
-  message: ThreadableMessage
-  /** React component to be displayed in the message canvas. */
-  children: ReactNode
-  /** A function that returns a single React element which contains message actions. For example, this could be a list of buttons for different actions (e.g. copy, delete, save, etc.). The function may also return no element if no actions are applicable or available for a particular message. */
-  getActionsComponent?: (message: ThreadableMessage) => ReactNode | undefined
-}
-
+/**
+ The `MessageCanvas` component serves as a container for displaying messages within a chat interface.
+ It provides a structured layout for rendering message content along with sender information and timestamp details.
+ This component is designed to encapsulate individual message items and facilitate consistent rendering of messages within an application.
+ */
 export default function MessageCanvas(props: MessageCanvasProps) {
   return (
     <Box

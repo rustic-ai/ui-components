@@ -1,3 +1,5 @@
+import type { ReactNode } from 'react'
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type MessageData = { [key: string]: any }
 
@@ -223,3 +225,28 @@ export type MultimodalInputProps = TextInputProps &
     | 'filePreviewsContainer'
     | 'errorMessagesContainer'
   >
+
+export interface MessageContainerProps {
+  /** Profile icon to be shown before sender's name. */
+  getProfileComponent?: (message: ThreadableMessage) => ReactNode
+  /** A function that returns a single React element which may be composed of several actions supported for the message, such as editing, copying, and deleting, etc.
+   * In case no actions are applicable or available for a particular message, the function may return `undefined`.
+   * This approach offers flexibility in tailoring message interactions to specific application requirements.
+   * To define individual message actions, developers can extend the `Action` component's functionality.
+   * One such example is the CopyText component.
+   */
+  getActionsComponent?: (message: ThreadableMessage) => ReactNode | undefined
+}
+
+export interface MessageCanvasProps extends MessageContainerProps {
+  /** Message information to be displayed. Please see the `MessageSpace` docs for more information about the `ThreadableMessage` interface. */
+  message: ThreadableMessage
+  /** React component to be displayed in the message canvas. */
+  children: ReactNode
+}
+
+export interface MessageSpaceProps extends MessageContainerProps {
+  /** A component map contains message formats as keys and their corresponding React components as values. */
+  supportedElements: ComponentMap
+  messages?: ThreadableMessage[]
+}

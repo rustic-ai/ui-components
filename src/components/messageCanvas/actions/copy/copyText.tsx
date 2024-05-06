@@ -2,13 +2,13 @@ import React, { useState } from 'react'
 
 import Icon from '../../../icon'
 import type { ThreadableMessage } from '../../../types'
-import Action from '../index'
+import Action from '../index/index'
 
-export interface CopyProps {
+export interface CopyTextProps {
   message: ThreadableMessage
 }
 
-export default function Copy(props: CopyProps) {
+export default function CopyText(props: CopyTextProps) {
   const [tooltipContent, setTooltipContent] = useState('Copy Text')
   const twoSeconds = 2000
 

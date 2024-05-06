@@ -1,7 +1,7 @@
 import 'cypress-real-events'
 
 import { supportedViewports } from '../../../../../cypress/support/variables'
-import Copy from './copy'
+import CopyText from './copyText'
 describe('Copy component', () => {
   const copyButton = '[data-cy=copy-text-button]'
 
@@ -18,7 +18,7 @@ describe('Copy component', () => {
   supportedViewports.forEach((viewport) => {
     it(`should copy text when clicked on ${viewport} screen`, () => {
       cy.viewport(viewport)
-      cy.mount(<Copy message={message} />)
+      cy.mount(<CopyText message={message} />)
 
       if (viewport === 'iphone-6') {
         cy.get(copyButton).focus().realTouch()

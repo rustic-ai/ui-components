@@ -4,7 +4,7 @@ import 'cypress-real-events'
 import { supportedViewports } from '../../../cypress/support/variables'
 import Icon from '../icon'
 import type { ThreadableMessage } from '../types'
-import Copy from './actions/copy/copy'
+import CopyText from './actions/copy/copyText'
 import MessageCanvas from './messageCanvas'
 
 describe('MessageCanvas', () => {
@@ -56,7 +56,7 @@ describe('MessageCanvas', () => {
           message={testMessage}
           getActionsComponent={(message: ThreadableMessage) => {
             const copyButton = message.format === 'text' && (
-              <Copy message={message} />
+              <CopyText message={message} />
             )
             if (copyButton) {
               return <>{copyButton}</>
