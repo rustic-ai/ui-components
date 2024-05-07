@@ -11,12 +11,6 @@ const meta: Meta<React.ComponentProps<typeof MultimodalInput>> = {
   tags: ['autodocs'],
   parameters: {
     layout: 'centered',
-    docs: {
-      description: {
-        component:
-          'The `MultimodalInput` component is a versatile form element that facilitates various types of user input. In addition to supporting text input, it empowers users to upload files seamlessly and efficiently. Designed to be flexible and adaptable, the `MultimodalInput` component serves as a foundation for accommodating diverse input requirements.\n\n**Explainaton of File Upload Process:**\n\nOnce the user selects files for upload, the `MultimodalInput` component validates each file against criteria set by props, such as maximum file count, maximum file size, and accepted file types. Only files that meet all criteria are sent to the `uploadFileEndpoint`.\n\nThe `messageId` parameter is appended to the `uploadFileEndpoint` URL to link uploaded files to the corresponding message on the server. Upon successful upload, the server returns a `url` and `fileId` for each file. The `url` will be used in the file download functionality, while the `fileId` is used for potential file deletion.\n\nTo delete a file, the client sends the fileId and messageId to the `deleteFileEndpoint`. This action unlinks the file from the associated message and removes it from the server. If deletion is triggered before the file is fully uploaded, the uploading task is aborted to prevent incomplete uploads.\n\nThe `MultimodalInput` component provides default error messages for uploading errors. However, you can augment these messages by passing additional information. Your custom error message will be appended to the default error message, providing more context for error resolution. Error messages that occur on deletion cannot be customized for now.',
-      },
-    },
     mockData: [
       {
         url: 'http://localhost:8080/upload?message-id=:messageId',

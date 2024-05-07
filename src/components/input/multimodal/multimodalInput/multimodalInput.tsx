@@ -10,6 +10,16 @@ import type { FileData, Message, MultimodalInputProps } from '../../../types'
 import BaseInput from '../../baseInput/baseInput'
 import Uploader from '../uploader/uploader'
 
+/** The `MultimodalInput` component is a versatile form element that facilitates various types of user input. In addition to supporting text input, it empowers users to upload files seamlessly and efficiently. Designed to be flexible and adaptable, the `MultimodalInput` component serves as a foundation for accommodating diverse input requirements.
+
+__Explainaton of File Upload Process:__
+1. Client sends the files to server via REST APIs.
+2. Server transforms the files (or send them to cloud storage service for the transformation).
+3. Server saves the files to cloud storage service e.g. AWS S3.
+4. Server responds back to the client with urls.
+5. Client sends the links via WebSocket.
+6. WebSocket broadcasts the links to other users in the same chat.
+7. Client renders the links in the chat. */
 export default function MultimodalInput(props: MultimodalInputProps) {
   const [filesInfo, setFilesInfo] = useState<FileData[]>([])
   const [messageId, setMessageId] = useState(getUUID())
