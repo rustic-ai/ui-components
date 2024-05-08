@@ -11,5 +11,6 @@
 @media (max-width: 900px) {
   .rustic-nav-bar-button {
     display: flex;
+    margin: 0 -8px;
   }
 }
