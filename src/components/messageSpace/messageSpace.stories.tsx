@@ -278,8 +278,8 @@ export const Default = {
         timestamp: '2024-01-02T00:09:00.000Z',
         format: 'youtubeVideo',
         data: {
-          width: '900px',
-          height: '600px',
+          height: '300px',
+          width: '100%',
           youtubeVideoId: 'MtN1YnoL46Q',
         },
       },
