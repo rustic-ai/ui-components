@@ -5,6 +5,7 @@ import Box from '@mui/system/Box'
 import React, { useEffect, useRef, useState } from 'react'
 
 import ElementRenderer from '../elementRenderer/elementRenderer'
+import Icon from '../icon'
 import MessageCanvas, {
   type MessageContainerProps,
 } from '../messageCanvas/messageCanvas'
@@ -21,20 +22,54 @@ export interface MessageSpaceProps extends MessageContainerProps {
  */
 export default function MessageSpace(props: MessageSpaceProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
   const [isButtonShown, setIsButtonShown] = useState(false)
+  const [isButtonHiddenTemporarily, setIsButtonHiddenTemporarily] =
+    useState(false)
+  const [areVideosLoaded, setAreVideosLoaded] = useState(false)
+  const hideButtonTime = 2000
 
-  function handleGoToBottom(behavior: ScrollBehavior) {
+  function handleGoToBottom() {
     messagesEndRef.current?.scrollIntoView({
-      behavior: behavior,
+      behavior: 'smooth',
+      block: 'nearest',
     })
-    setIsButtonShown(false)
+    setIsButtonHiddenTemporarily(true)
+    setTimeout(() => {
+      setIsButtonHiddenTemporarily(false)
+    }, hideButtonTime)
+  }
+
+  function getVideoStatus() {
+    const videos = containerRef.current?.querySelectorAll('video')
+    if (!videos || videos.length === 0) {
+      return true
+    }
+    return Array.from(videos).every((video) => video.readyState >= 1)
   }
 
   useEffect(() => {
-    handleGoToBottom('instant')
+    function scrollToBottomIfNeeded() {
+      if (getVideoStatus()) {
+        const container = containerRef.current
+        setAreVideosLoaded(true)
+        if (container) {
+          container.scrollTop = container.scrollHeight - container.clientHeight
+        }
+      } else {
+        setTimeout(scrollToBottomIfNeeded, 1)
+      }
+    }
+    if (!isButtonShown) {
+      setIsButtonHiddenTemporarily(true)
+      setTimeout(() => {
+        setIsButtonHiddenTemporarily(false)
+      }, hideButtonTime)
+      scrollToBottomIfNeeded()
+    }
 
     const options = {
-      root: document.querySelector('#message-space'),
+      root: containerRef.current,
       rootMargin: '16px',
       threshold: 1.0,
     }
@@ -49,11 +84,11 @@ export default function MessageSpace(props: MessageSpaceProps) {
     return () => {
       targetDiv && intersectionObserver.unobserve(targetDiv)
     }
-  }, [])
+  }, [areVideosLoaded, isButtonShown, props.messages?.length])
 
   return (
     <Box
-      id="message-space"
+      ref={containerRef}
       data-cy="message-space"
       className="rustic-message-space"
     >
@@ -75,12 +110,13 @@ export default function MessageSpace(props: MessageSpaceProps) {
           )
         })}
       <div ref={messagesEndRef}></div>
-      {isButtonShown && (
+      {isButtonShown && !isButtonHiddenTemporarily && (
         <Button
           data-cy="go-to-bottom-button"
           variant="contained"
           className="rustic-go-to-bottom-button"
-          onClick={() => handleGoToBottom('smooth')}
+          onClick={handleGoToBottom}
+          endIcon={<Icon name="arrow_downward" className="rustic-end-icon" />}
         >
           Go to bottom
         </Button>

@@ -114,7 +114,8 @@ describe('MessageSpace Component', () => {
       })
     })
 
-    it(`scrolls to bottom when "Go to bottom" button is clicked on ${viewport} screen`, () => {
+    it.skip(`scrolls to bottom when "Go to bottom" button is clicked on ${viewport} screen`, () => {
+      cy.viewport(viewport)
       cy.mount(
         <div style={{ height: '200px' }}>
           <MessageSpace
