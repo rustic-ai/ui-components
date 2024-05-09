@@ -12,8 +12,8 @@ describe('Video', () => {
   const progressSlider = '[data-cy=progress-slider]'
   const pauseButton = '[data-cy=pause-button]'
   const playButton = '[data-cy=play-button]'
-  const pictureInPictureButton = '[data-cy=picture-in-picture-button]'
-  const pictureInPictureExitButton = '[data-cy=exit-picture-in-picture-button]'
+  const miniPlayerButton = '[data-cy=mini-player-button]'
+  const miniPlayerExitButton = '[data-cy=exit-mini-player-button]'
   const fullScreenEnterButton = '[data-cy=fullscreen-button]'
   const fullScreenExitButton = '[data-cy=exit-fullscreen-button]'
   const transcript = '[data-cy=transcript]'
@@ -178,7 +178,7 @@ describe('Video', () => {
       cy.get(playButton).should('exist')
       cy.get(transcriptToggle).should('exist')
       cy.get(fullScreenExitButton).should('exist')
-      cy.get(pictureInPictureButton).should('exist')
+      cy.get(miniPlayerButton).should('exist')
       cy.get(progressSlider).should('exist')
     })
   })
@@ -244,18 +244,18 @@ describe('Video', () => {
       cy.get(fullScreenEnterButton).should('exist')
       cy.document().its('fullscreenElement').should('not.exist')
     })
-    it('should toggle between picture-in-picture and normal mode when clicking the picture-in-picture button', () => {
-      cy.get(pictureInPictureButton).should('exist')
+    it('should toggle between mini player and normal mode when clicking the mini player button', () => {
+      cy.get(miniPlayerButton).should('exist')
       cy.hoverAndDisplay(controls)
-      cy.get(pictureInPictureButton).realClick()
+      cy.get(miniPlayerButton).realClick()
       cy.wait(1000)
-      cy.get(pictureInPictureExitButton).should('exist')
+      cy.get(miniPlayerExitButton).should('exist')
       cy.document().its('pictureInPictureElement').should('exist')
 
       cy.hoverAndDisplay(controls)
-      cy.get(pictureInPictureExitButton).click()
+      cy.get(miniPlayerExitButton).click()
       cy.wait(1000)
-      cy.get(pictureInPictureButton).should('exist')
+      cy.get(miniPlayerButton).should('exist')
       cy.document().its('pictureInPictureElement').should('not.exist')
     })
   })
