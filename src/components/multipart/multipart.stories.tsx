@@ -49,3 +49,14 @@ export const FilesOnly = {
     files: fileList,
   },
 }
+
+export const FileWithURL = {
+  args: {
+    files: [
+      {
+        name: 'image.png',
+        url: 'images/image-component-example.png',
+      },
+    ],
+  },
+}

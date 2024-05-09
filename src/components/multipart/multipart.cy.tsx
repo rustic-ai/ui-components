@@ -34,5 +34,17 @@ describe('Multipart Component', () => {
       cy.contains(props.text).should('not.exist')
       cy.get(filePreview).should('have.length', props.files.length)
     })
+
+    it(`renders download button for files with url on ${viewport} screen`, () => {
+      cy.mount(
+        <Multipart
+          files={[
+            { name: 'image.png', url: 'images/image-component-example.png' },
+          ]}
+        />
+      )
+
+      cy.get('[data-cy=download-button]').should('be.visible')
+    })
   })
 })
