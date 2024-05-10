@@ -6,10 +6,9 @@
   height: 100%;
   overflow: auto;
   position: relative;
-  scroll-behavior: smooth;
 }
 
-.rustic-message-space .rustic-go-to-bottom-button {
+.rustic-message-space .rustic-scroll-down-button {
   position: sticky;
   bottom: 16px;
   left: 50%;

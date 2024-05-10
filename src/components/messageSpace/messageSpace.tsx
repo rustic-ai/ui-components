@@ -15,6 +15,7 @@ export interface MessageSpaceProps extends MessageContainerProps {
   /** A component map contains message formats as keys and their corresponding React components as values. */
   supportedElements: ComponentMap
   messages?: ThreadableMessage[]
+  scrollDownLabel?: string
 }
 
 /**
@@ -29,7 +30,7 @@ export default function MessageSpace(props: MessageSpaceProps) {
   const [areVideosLoaded, setAreVideosLoaded] = useState(false)
   const hideButtonTime = 2000
 
-  function handleGoToBottom() {
+  function handleScrollDown() {
     messagesEndRef.current?.scrollIntoView({
       behavior: 'smooth',
       block: 'nearest',
@@ -49,15 +50,15 @@ export default function MessageSpace(props: MessageSpaceProps) {
   }
 
   useEffect(() => {
-    function scrollToBottomIfNeeded() {
+    function scrollDownIfNeeded() {
       if (getVideoStatus()) {
         const container = containerRef.current
         setAreVideosLoaded(true)
         if (container) {
-          container.scrollTop = container.scrollHeight - container.clientHeight
+          container.scrollTop = container.scrollHeight
         }
       } else {
-        setTimeout(scrollToBottomIfNeeded, 1)
+        setTimeout(scrollDownIfNeeded, 1)
       }
     }
     if (!isButtonShown) {
@@ -65,7 +66,7 @@ export default function MessageSpace(props: MessageSpaceProps) {
       setTimeout(() => {
         setIsButtonHiddenTemporarily(false)
       }, hideButtonTime)
-      scrollToBottomIfNeeded()
+      scrollDownIfNeeded()
     }
 
     const options = {
@@ -112,15 +113,19 @@ export default function MessageSpace(props: MessageSpaceProps) {
       <div ref={messagesEndRef}></div>
       {isButtonShown && !isButtonHiddenTemporarily && (
         <Button
-          data-cy="go-to-bottom-button"
+          data-cy="scroll-down-button"
           variant="contained"
-          className="rustic-go-to-bottom-button"
-          onClick={handleGoToBottom}
+          className="rustic-scroll-down-button"
+          onClick={handleScrollDown}
           endIcon={<Icon name="arrow_downward" className="rustic-end-icon" />}
         >
-          Go to bottom
+          {props.scrollDownLabel}
         </Button>
       )}
     </Box>
   )
+}
+
+MessageSpace.defaultProps = {
+  scrollDownLabel: 'scroll down',
 }
