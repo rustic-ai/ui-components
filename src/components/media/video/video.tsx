@@ -17,10 +17,7 @@ import {
   VolumeSettings,
 } from '../controls/commonControls'
 import { MediaIconButton } from '../controls/mediaIconButton'
-import {
-  FullscreenButton,
-  PictureInPictureButton,
-} from '../controls/videoControls'
+import { FullscreenButton, MiniPlayerButton } from '../controls/videoControls'
 import TimeIndicator from '../timeIndicator/timeIndicator'
 import Transcript from '../transcript/transcript'
 
@@ -120,7 +117,7 @@ export default function Video(props: VideoFormat) {
           </Typography>
           {isFullscreen && isMobile && (
             <Box>
-              <PictureInPictureButton
+              <MiniPlayerButton
                 mediaElement={videoRef.current}
                 onError={setControlErrorMessage}
               />
@@ -271,7 +268,7 @@ export default function Video(props: VideoFormat) {
 
               <Box className="rustic-video-bottom-controls-right">
                 {renderToggleTranscriptButton()}
-                <PictureInPictureButton
+                <MiniPlayerButton
                   mediaElement={videoRef.current}
                   onError={setControlErrorMessage}
                 />

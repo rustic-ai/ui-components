@@ -13,8 +13,8 @@ interface MediaIconButtonProps {
     | 'replay'
     | 'volumeUp'
     | 'volumeOff'
-    | 'pictureInPicture'
-    | 'pictureInPictureExit'
+    | 'miniPlayer'
+    | 'miniPlayerExit'
     | 'fullscreen'
     | 'fullscreenExit'
     | 'captionsOn'
@@ -30,13 +30,13 @@ export function MediaIconButton(props: MediaIconButtonProps) {
     replay: { symbol: 'replay_10', label: 'replay ten seconds' },
     volumeUp: { symbol: 'volume_up', label: 'mute' },
     volumeOff: { symbol: 'volume_off', label: 'unmute' },
-    pictureInPicture: {
+    miniPlayer: {
       symbol: 'picture_in_picture',
-      label: 'picture in picture',
+      label: 'mini player',
     },
-    pictureInPictureExit: {
+    miniPlayerExit: {
       symbol: 'picture_in_picture_off',
-      label: 'exit picture in picture',
+      label: 'exit mini player',
     },
     fullscreen: { symbol: 'fullscreen', label: 'fullscreen' },
     fullscreenExit: { symbol: 'fullscreen_exit', label: 'exit fullscreen' },
