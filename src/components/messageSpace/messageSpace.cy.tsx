@@ -1,3 +1,5 @@
+import 'cypress-real-events'
+
 import { v4 as getUUID } from 'uuid'
 
 import { supportedViewports } from '../../../cypress/support/variables'
@@ -116,6 +118,7 @@ describe('MessageSpace Component', () => {
     })
 
     it(`scrolls to bottom when "Go to bottom" button is clicked on ${viewport} screen`, () => {
+      const waitTime = 500
       cy.viewport(viewport)
       cy.mount(
         <div style={{ height: '200px' }}>
@@ -129,8 +132,14 @@ describe('MessageSpace Component', () => {
       cy.get('p').contains('message 3').should('be.visible')
       cy.get(messageSpace).contains('message 1').should('not.be.visible')
       cy.get(messageSpace).scrollTo('top', { duration: 500 })
-      cy.get('[data-cy=scroll-down-button]').should('be.visible').click()
-      cy.get('p').contains('message 3').should('be.visible')
+      cy.wait(waitTime)
+      cy.get('[data-cy=scroll-down-button]').should('be.visible').realClick()
+
+      cy.get(messageSpace).then((messageList) => {
+        cy.wrap(messageList).within(() => {
+          cy.contains('message 3').should('be.visible')
+        })
+      })
     })
   })
 })

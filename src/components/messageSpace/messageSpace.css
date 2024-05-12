@@ -6,6 +6,7 @@
   height: 100%;
   overflow: auto;
   position: relative;
+  scroll-behavior: smooth;
 }
 
 .rustic-message-space .rustic-scroll-down-button {

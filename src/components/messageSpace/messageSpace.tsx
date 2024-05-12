@@ -15,6 +15,7 @@ export interface MessageSpaceProps extends MessageContainerProps {
   /** A component map contains message formats as keys and their corresponding React components as values. */
   supportedElements: ComponentMap
   messages?: ThreadableMessage[]
+  /** Text label for scroll down button. Default value is 'scroll down'. */
   scrollDownLabel?: string
 }
 
@@ -24,7 +25,7 @@ export interface MessageSpaceProps extends MessageContainerProps {
 export default function MessageSpace(props: MessageSpaceProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
-  const [isButtonShown, setIsButtonShown] = useState(false)
+  const [isAtBottom, setIsAtBottom] = useState(true)
   const [isButtonHiddenTemporarily, setIsButtonHiddenTemporarily] =
     useState(false)
   const [areVideosLoaded, setAreVideosLoaded] = useState(false)
@@ -55,13 +56,16 @@ export default function MessageSpace(props: MessageSpaceProps) {
         const container = containerRef.current
         setAreVideosLoaded(true)
         if (container) {
-          container.scrollTop = container.scrollHeight
+          // Use setTimeout to delay smooth scrolling so that it can scroll to bottom
+          setTimeout(() => {
+            container.scrollTop = container.scrollHeight
+          }, 0)
         }
       } else {
         setTimeout(scrollDownIfNeeded, 1)
       }
     }
-    if (!isButtonShown) {
+    if (isAtBottom) {
       setIsButtonHiddenTemporarily(true)
       setTimeout(() => {
         setIsButtonHiddenTemporarily(false)
@@ -76,7 +80,7 @@ export default function MessageSpace(props: MessageSpaceProps) {
     }
 
     const intersectionObserver = new IntersectionObserver(([entry]) => {
-      setIsButtonShown(!entry.isIntersecting)
+      setIsAtBottom(entry.isIntersecting)
     }, options)
 
     const targetDiv = messagesEndRef.current
@@ -85,7 +89,7 @@ export default function MessageSpace(props: MessageSpaceProps) {
     return () => {
       targetDiv && intersectionObserver.unobserve(targetDiv)
     }
-  }, [areVideosLoaded, isButtonShown, props.messages?.length])
+  }, [areVideosLoaded, isAtBottom, props.messages?.length])
 
   return (
     <Box
@@ -110,8 +114,8 @@ export default function MessageSpace(props: MessageSpaceProps) {
             </MessageCanvas>
           )
         })}
-      <div ref={messagesEndRef}></div>
-      {isButtonShown && !isButtonHiddenTemporarily && (
+      <div ref={messagesEndRef} style={{ height: '1px' }}></div>
+      {!isAtBottom && !isButtonHiddenTemporarily && (
         <Button
           data-cy="scroll-down-button"
           variant="contained"
