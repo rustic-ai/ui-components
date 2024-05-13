@@ -23,27 +23,26 @@ export interface MessageSpaceProps extends MessageContainerProps {
  The `MessageSpace` component uses `MessageCanvas` and `ElementRenderer` to render a list of messages. It serves as a container for individual message items, each encapsulated within a `MessageCanvas` for consistent styling and layout. \n\n Note: For more information about the `getActionsComponent` and `getProfileComponent` fields, refer to the [MessageCanvas' docs](http://localhost:6006/?path=/docs/rustic-ui-message-canvas-message-canvas--docs).
  */
 export default function MessageSpace(props: MessageSpaceProps) {
-  const messagesEndRef = useRef<HTMLDivElement>(null)
-  const containerRef = useRef<HTMLDivElement>(null)
-  const [isAtBottom, setIsAtBottom] = useState(true)
-  const [isButtonHiddenTemporarily, setIsButtonHiddenTemporarily] =
-    useState(false)
+  const scrollEndRef = useRef<HTMLDivElement>(null)
+  const messageContainerRef = useRef<HTMLDivElement>(null)
+  const [isScrolledToBottom, setIsScrolledToBottom] = useState(true)
+  const [isScrollButtonHidden, setIsScrollButtonHidden] = useState(false)
   const [areVideosLoaded, setAreVideosLoaded] = useState(false)
-  const hideButtonTime = 2000
+  const hideScrollButtonDuration = 2000
 
   function handleScrollDown() {
-    messagesEndRef.current?.scrollIntoView({
+    scrollEndRef.current?.scrollIntoView({
       behavior: 'smooth',
       block: 'nearest',
     })
-    setIsButtonHiddenTemporarily(true)
+    setIsScrollButtonHidden(true)
     setTimeout(() => {
-      setIsButtonHiddenTemporarily(false)
-    }, hideButtonTime)
+      setIsScrollButtonHidden(false)
+    }, hideScrollButtonDuration)
   }
 
   function getVideoStatus() {
-    const videos = containerRef.current?.querySelectorAll('video')
+    const videos = messageContainerRef.current?.querySelectorAll('video')
     if (!videos || videos.length === 0) {
       return true
     }
@@ -53,7 +52,7 @@ export default function MessageSpace(props: MessageSpaceProps) {
   useEffect(() => {
     function scrollDownIfNeeded() {
       if (getVideoStatus()) {
-        const container = containerRef.current
+        const container = messageContainerRef.current
         setAreVideosLoaded(true)
         if (container) {
           // Use setTimeout to delay smooth scrolling so that it can scroll to bottom
@@ -65,35 +64,35 @@ export default function MessageSpace(props: MessageSpaceProps) {
         setTimeout(scrollDownIfNeeded, 1)
       }
     }
-    if (isAtBottom) {
-      setIsButtonHiddenTemporarily(true)
+    if (isScrolledToBottom) {
+      setIsScrollButtonHidden(true)
       setTimeout(() => {
-        setIsButtonHiddenTemporarily(false)
-      }, hideButtonTime)
+        setIsScrollButtonHidden(false)
+      }, hideScrollButtonDuration)
       scrollDownIfNeeded()
     }
 
     const options = {
-      root: containerRef.current,
+      root: messageContainerRef.current,
       rootMargin: '16px',
       threshold: 1.0,
     }
 
     const intersectionObserver = new IntersectionObserver(([entry]) => {
-      setIsAtBottom(entry.isIntersecting)
+      setIsScrolledToBottom(entry.isIntersecting)
     }, options)
 
-    const targetDiv = messagesEndRef.current
+    const targetDiv = scrollEndRef.current
     targetDiv && intersectionObserver.observe(targetDiv)
 
     return () => {
       targetDiv && intersectionObserver.unobserve(targetDiv)
     }
-  }, [areVideosLoaded, isAtBottom, props.messages?.length])
+  }, [areVideosLoaded, isScrolledToBottom, props.messages?.length])
 
   return (
     <Box
-      ref={containerRef}
+      ref={messageContainerRef}
       data-cy="message-space"
       className="rustic-message-space"
     >
@@ -114,8 +113,8 @@ export default function MessageSpace(props: MessageSpaceProps) {
             </MessageCanvas>
           )
         })}
-      <div ref={messagesEndRef} style={{ height: '1px' }}></div>
-      {!isAtBottom && !isButtonHiddenTemporarily && (
+      <div ref={scrollEndRef}></div>
+      {!isScrolledToBottom && !isScrollButtonHidden && (
         <Button
           data-cy="scroll-down-button"
           variant="contained"
