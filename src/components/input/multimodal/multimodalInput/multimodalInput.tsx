@@ -10,16 +10,16 @@ import type { FileData, Message, MultimodalInputProps } from '../../../types'
 import BaseInput from '../../baseInput/baseInput'
 import Uploader from '../uploader/uploader'
 
-/** The `MultimodalInput` component is a versatile form element that facilitates various types of user input. In addition to supporting text input, it empowers users to upload files seamlessly and efficiently. Designed to be flexible and adaptable, the `MultimodalInput` component serves as a foundation for accommodating diverse input requirements.
+/** The `MultimodalInput` component  is designed to serve as a foundation for accommodating diverse input modes in conversational apps. Currently, it supports sending text as well as files. The text messages, are directly sent via the WebSocket while for files, it uses a combination of HTTP APIs and the WebSocket.
+ 
+__How does file upload work?__
 
-__Explainaton of File Upload Process:__
-1. Client sends the files to server via REST APIs.
-2. Server transforms the files (or send them to cloud storage service for the transformation).
-3. Server saves the files to cloud storage service e.g. AWS S3.
-4. Server responds back to the client with urls.
-5. Client sends the links via WebSocket.
-6. WebSocket broadcasts the links to other users in the same chat.
-7. Client renders the links in the chat. */
+1. Users can select files to send alongside text messages.
+2. Selected files are sent to a designated HTTP API.
+3. The HTTP API can update the upload progress for each file and is responsible for transforming and storing the files securely.
+4. If deletion is triggered before the file is fully uploaded, the uploading task is aborted using `AbortController`.
+5. Once uploaded, the file names are appended to the data sent over WebSocket. Files can also be deleted after being uploaded and an HTTP API is sent to delete the file from storage.
+6. The backend server of the application utilizes the uploaded files along with the text messages for message processing. */
 export default function MultimodalInput(props: MultimodalInputProps) {
   const [filesInfo, setFilesInfo] = useState<FileData[]>([])
   const [messageId, setMessageId] = useState(getUUID())
