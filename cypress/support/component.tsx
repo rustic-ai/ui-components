@@ -29,8 +29,3 @@ Cypress.Commands.add('mount', (component, options) => {
     options
   )
 })
-
-Cypress.Commands.add('hoverAndDisplay', (element) => {
-  cy.get(element).realHover()
-  cy.get(element, { timeout: 2000 }).should('be.visible')
-})
