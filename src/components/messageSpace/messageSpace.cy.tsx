@@ -1,3 +1,5 @@
+import 'cypress-real-events'
+
 import { v4 as getUUID } from 'uuid'
 
 import { supportedViewports } from '../../../cypress/support/variables'
@@ -34,13 +36,11 @@ describe('MessageSpace Component', () => {
   const conversationId = '1'
 
   const agentMessageData = {
-    id: getUUID(),
     sender: 'Agent',
     conversationId,
   }
 
   const humanMessageData = {
-    id: getUUID(),
     sender: 'You',
     conversationId,
   }
@@ -48,6 +48,7 @@ describe('MessageSpace Component', () => {
   const messages = [
     {
       ...humanMessageData,
+      id: getUUID(),
       timestamp: '2024-01-02T00:00:00.000Z',
       format: 'streamingMarkdown',
       data: {
@@ -56,6 +57,7 @@ describe('MessageSpace Component', () => {
     },
     {
       ...agentMessageData,
+      id: getUUID(),
       timestamp: '2024-01-02T00:01:00.000Z',
       format: 'text',
       data: {
@@ -64,6 +66,7 @@ describe('MessageSpace Component', () => {
     },
     {
       ...humanMessageData,
+      id: getUUID(),
       timestamp: '2024-01-02T00:12:00.000Z',
       format: 'text',
       data: {
@@ -72,9 +75,11 @@ describe('MessageSpace Component', () => {
     },
   ]
 
+  const messageSpace = '[data-cy=message-space]'
+
   supportedViewports.forEach((viewport) => {
     it(`renders correctly with provided messages on ${viewport} screen`, () => {
-      cy.viewport
+      cy.viewport(viewport)
       cy.mount(
         <MessageSpace
           messages={messages}
@@ -109,6 +114,31 @@ describe('MessageSpace Component', () => {
               cy.get('span[data-cy="account-circle-icon"]').should('exist')
             })
         }
+      })
+    })
+
+    it(`scrolls to bottom when "Go to bottom" button is clicked on ${viewport} screen`, () => {
+      const waitTime = 500
+      cy.viewport(viewport)
+      cy.mount(
+        <div style={{ height: '200px' }}>
+          <MessageSpace
+            messages={messages}
+            supportedElements={supportedElements}
+          />
+        </div>
+      )
+
+      cy.get('p').contains('message 3').should('be.visible')
+      cy.get(messageSpace).contains('message 1').should('not.be.visible')
+      cy.get(messageSpace).scrollTo('top', { duration: 500 })
+      cy.wait(waitTime)
+      cy.get('[data-cy=scroll-down-button]').should('be.visible').realClick()
+
+      cy.get(messageSpace).then((messageList) => {
+        cy.wrap(messageList).within(() => {
+          cy.contains('message 3').should('be.visible')
+        })
       })
     })
   })
