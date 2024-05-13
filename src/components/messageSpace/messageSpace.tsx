@@ -24,7 +24,7 @@ export interface MessageSpaceProps extends MessageContainerProps {
  */
 export default function MessageSpace(props: MessageSpaceProps) {
   const scrollEndRef = useRef<HTMLDivElement>(null)
-  const messageContainerRef = useRef<HTMLDivElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
   const [isScrolledToBottom, setIsScrolledToBottom] = useState(true)
   const [isScrollButtonHidden, setIsScrollButtonHidden] = useState(false)
   const [areVideosLoaded, setAreVideosLoaded] = useState(false)
@@ -42,7 +42,7 @@ export default function MessageSpace(props: MessageSpaceProps) {
   }
 
   function getVideoStatus() {
-    const videos = messageContainerRef.current?.querySelectorAll('video')
+    const videos = containerRef.current?.querySelectorAll('video')
     if (!videos || videos.length === 0) {
       return true
     }
@@ -52,7 +52,7 @@ export default function MessageSpace(props: MessageSpaceProps) {
   useEffect(() => {
     function scrollDownIfNeeded() {
       if (getVideoStatus()) {
-        const container = messageContainerRef.current
+        const container = containerRef.current
         setAreVideosLoaded(true)
         if (container) {
           // Use setTimeout to delay smooth scrolling so that it can scroll to bottom
@@ -73,7 +73,7 @@ export default function MessageSpace(props: MessageSpaceProps) {
     }
 
     const options = {
-      root: messageContainerRef.current,
+      root: containerRef.current,
       rootMargin: '16px',
       threshold: 1.0,
     }
@@ -92,7 +92,7 @@ export default function MessageSpace(props: MessageSpaceProps) {
 
   return (
     <Box
-      ref={messageContainerRef}
+      ref={containerRef}
       data-cy="message-space"
       className="rustic-message-space"
     >
