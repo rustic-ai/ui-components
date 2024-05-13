@@ -11,12 +11,6 @@ const meta: Meta<React.ComponentProps<typeof MultimodalInput>> = {
   tags: ['autodocs'],
   parameters: {
     layout: 'centered',
-    docs: {
-      description: {
-        component:
-          'The `MultimodalInput` component is a versatile form element that facilitates various types of user input. In addition to supporting text input, it empowers users to upload files seamlessly and efficiently. Designed to be flexible and adaptable, the `MultimodalInput` component serves as a foundation for accommodating diverse input requirements.',
-      },
-    },
     mockData: [
       {
         url: 'http://localhost:8080/upload?message-id=:messageId',

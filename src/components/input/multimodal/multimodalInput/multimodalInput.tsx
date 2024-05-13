@@ -10,6 +10,15 @@ import type { FileData, Message, MultimodalInputProps } from '../../../types'
 import BaseInput from '../../baseInput/baseInput'
 import Uploader from '../uploader/uploader'
 
+/** The `MultimodalInput` component  is designed to serve as a foundation for accommodating diverse input modes in conversational apps. Currently, it supports sending text as well as files. The text messages, are directly sent via the WebSocket while for files, it uses a combination of HTTP APIs and the WebSocket.
+ 
+__How does file upload work?__
+
+1. Users can select files to send alongside text messages.
+2. Selected files are sent to a designated HTTP API.
+3. The HTTP API can update the upload progress for each file and is responsible for transforming and storing the files securely.
+4. Once uploaded, the file names are appended to the data sent over WebSocket. Files can also be deleted after being uploaded and an HTTP API is sent to delete the file from storage.
+5. The backend server of the application utilizes the uploaded files along with the text messages for message processing. */
 export default function MultimodalInput(props: MultimodalInputProps) {
   const [filesInfo, setFilesInfo] = useState<FileData[]>([])
   const [messageId, setMessageId] = useState(getUUID())
