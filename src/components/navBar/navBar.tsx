@@ -1,66 +1,101 @@
 import './navBar.css'
 
+import { useMediaQuery } from '@mui/material'
 import AppBar from '@mui/material/AppBar'
-import IconButton from '@mui/material/IconButton'
+import BottomNavigation from '@mui/material/BottomNavigation'
+import BottomNavigationAction from '@mui/material/BottomNavigationAction'
+import Box from '@mui/material/Box'
 import { useTheme } from '@mui/material/styles'
 import Toolbar from '@mui/material/Toolbar'
 import type { ReactNode } from 'react'
 import React from 'react'
 
-interface NavBarProps {
-  /** Desktop version: Logo is displayed in the top left corner. Tablet and mobile versions: position will be different if you add the drawer icons. */
-  logo: ReactNode
-  /** Icon for the button that opens/closes the left drawer. (Will only be shown in mobile and tablet versions.) */
-  leftDrawerIcon?: ReactNode
-  /** Icon for the button that opens/closes the right drawer. (Will only be shown in mobile and tablet versions.)*/
-  rightDrawerIcon?: ReactNode
-  /** Aria label for the left drawer button. */
-  leftDrawerAriaLabel?: string
-  /** Aria label for the right drawer button. */
-  rightDrawerAriaLabel?: string
-  /** Function for toggling the open/closed state of the left drawer. */
-  handleLeftDrawerToggle?: () => void
-  /** Function for toggling the open/closed state of the right drawer. */
-  handleRightDrawerToggle?: () => void
+export interface BottomNavBarItem {
+  label: string
+  onClick: () => void
+  icon: ReactNode
+}
+
+export interface TopNavBarItem {
+  node: ReactNode
+}
+
+export interface NavBarProps {
+  /**
+   * The logo to be displayed in the navigation bar.
+   */
+  logo?: ReactNode
+
+  /**
+   * An array of items to be displayed in the top navigation bar. We recommend at most 3 items.
+   */
+  topNavBarItems?: TopNavBarItem[]
+
+  /**
+   * An array of items to be displayed in the bottom navigation bar on mobile devices. We recommend at most 3 items.
+   */
+  bottomNavBarItems?: BottomNavBarItem[]
 }
 
 const NavBar = (props: NavBarProps) => {
   const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+
+  const topNavItems = props.topNavBarItems?.map((item, index) => (
+    <React.Fragment key={index}>{item.node}</React.Fragment>
+  ))
+
+  const bottomNavItems = props.bottomNavBarItems?.map((item) => (
+    <BottomNavigationAction
+      key={item.label}
+      label={item.label}
+      value={item.label}
+      icon={item.icon}
+    />
+  ))
+
   return (
-    <AppBar
-      position="fixed"
-      color="inherit"
-      sx={{ borderBottom: `1px solid ${theme.palette.divider}` }}
-      data-cy="nav-bar"
-    >
-      <Toolbar className="rustic-nav-bar">
-        {props.leftDrawerIcon && (
-          <IconButton
-            color="inherit"
-            aria-label={props.leftDrawerAriaLabel}
-            edge="start"
-            onClick={props.handleLeftDrawerToggle}
-            className="rustic-nav-bar-button"
-            data-cy="left-drawer-button"
+    <>
+      {(props.logo ||
+        (props.topNavBarItems && props.topNavBarItems.length > 0)) && (
+        <AppBar
+          position="fixed"
+          color="inherit"
+          sx={{ borderBottom: `1px solid ${theme.palette.divider}` }}
+          data-cy="nav-bar"
+        >
+          <Toolbar className="rustic-nav-bar-top" data-cy="nav-bar-top">
+            {props.logo}
+
+            {props.topNavBarItems && props.topNavBarItems.length > 0 && (
+              <Box
+                className="rustic-nav-bar-top-items"
+                data-cy="nav-bar-top-items"
+              >
+                {topNavItems}
+              </Box>
+            )}
+          </Toolbar>
+        </AppBar>
+      )}
+      {isMobile &&
+        props.bottomNavBarItems &&
+        props.bottomNavBarItems.length > 0 && (
+          <BottomNavigation
+            showLabels
+            className="rustic-nav-bar-bottom"
+            onChange={(event, newValue) => {
+              props.bottomNavBarItems
+                ?.find((item) => item.label === newValue)!
+                .onClick()
+            }}
+            sx={{ borderTop: `1px solid ${theme.palette.divider}` }}
+            data-cy="nav-bar-bottom"
           >
-            {props.leftDrawerIcon}
-          </IconButton>
+            {bottomNavItems}
+          </BottomNavigation>
         )}
-        {props.logo}
-        {props.rightDrawerIcon && (
-          <IconButton
-            color="inherit"
-            aria-label={props.rightDrawerAriaLabel}
-            edge="end"
-            onClick={props.handleRightDrawerToggle}
-            className="rustic-nav-bar-button"
-            data-cy="right-drawer-button"
-          >
-            {props.rightDrawerIcon}
-          </IconButton>
-        )}
-      </Toolbar>
-    </AppBar>
+    </>
   )
 }
 
