@@ -14,14 +14,6 @@ const meta: Meta<React.ComponentProps<typeof NavBar>> = {
   title: 'Rustic UI/Nav Bar/Nav Bar',
   component: NavBar,
   tags: ['autodocs'],
-  parameters: {
-    docs: {
-      description: {
-        component:
-          'The `NavBar` component provides a customizable navigation bar for web applications, offering both top and bottom navigation options. The top navigation bar can include a logo and various navigation items, while the bottom navigation bar is optimized for mobile devices.',
-      },
-    },
-  },
   decorators: [
     (Story: StoryFn) => {
       return (
@@ -126,14 +118,17 @@ const topNavItems = [
 const bottomNavItems = [
   {
     label: 'Conversations',
+    onClick: () => alert('Conversations clicked!'),
     icon: <Icon name="forum" />,
   },
   {
     label: 'New Conversation',
+    onClick: () => alert('New Conversation clicked!'),
     icon: <Icon name="add_circle_outline" />,
   },
   {
     label: 'Collections',
+    onClick: () => alert('Collections clicked!'),
     icon: <Icon name="bookmark" />,
   },
 ]

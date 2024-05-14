@@ -21,22 +21,19 @@ export interface TopNavBarItem {
 }
 
 export interface NavBarProps {
-  /**
-   * The logo to be displayed in the navigation bar.
-   */
+  /** The logo to be displayed in the navigation bar. */
   logo?: ReactNode
 
-  /**
-   * An array of items to be displayed in the top navigation bar. We recommend at most 3 items.
-   */
+  /** An array of items to be displayed in the top navigation bar. We recommend at most 3 items. */
   topNavBarItems?: TopNavBarItem[]
 
-  /**
-   * An array of items to be displayed in the bottom navigation bar on mobile devices. We recommend at most 3 items.
-   */
+  /** An array of items to be displayed in the bottom navigation bar on mobile devices. We recommend at most 3 items. */
   bottomNavBarItems?: BottomNavBarItem[]
 }
 
+/**
+The `NavBar` component provides a customizable navigation bar for web applications, offering both top and bottom navigation options. The top navigation bar can include a logo and various navigation items, while the bottom navigation bar is optimized for mobile devices.
+ */
 const NavBar = (props: NavBarProps) => {
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
@@ -53,6 +50,10 @@ const NavBar = (props: NavBarProps) => {
       icon={item.icon}
     />
   ))
+
+  function handleOnClick(event: React.SyntheticEvent, newValue: string) {
+    props.bottomNavBarItems?.find((item) => item.label === newValue)!.onClick()
+  }
 
   return (
     <>
@@ -84,11 +85,7 @@ const NavBar = (props: NavBarProps) => {
           <BottomNavigation
             showLabels
             className="rustic-nav-bar-bottom"
-            onChange={(event, newValue) => {
-              props.bottomNavBarItems
-                ?.find((item) => item.label === newValue)!
-                .onClick()
-            }}
+            onChange={handleOnClick}
             sx={{ borderTop: `1px solid ${theme.palette.divider}` }}
             data-cy="nav-bar-bottom"
           >
