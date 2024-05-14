@@ -6,7 +6,6 @@ import Video from './video'
 
 describe('Video', () => {
   const videoElement = '[data-cy=video-element]'
-  const controls = '[data-cy=controls]'
   const volumeSlider = '[data-cy=volume-slider]'
   const muteButton = '[data-cy=mute-button]'
   const progressSlider = '[data-cy=progress-slider]'
@@ -22,7 +21,7 @@ describe('Video', () => {
   const controlError = '[data-cy=control-error]'
   const loadingSpinner = '[data-cy=spinner]'
 
-  const src = '/videoExamples/videoStorybook.mp4'
+  const src = '/videoExamples/videoCypress.mp4'
   const title = 'Video Component'
   const captions = '/audioExamples/captions.vtt'
   const transcriptContent =
@@ -31,14 +30,12 @@ describe('Video', () => {
   context('Mobile and Desktop', () => {
     beforeEach(() => {
       cy.mount(
-        <div style={{ width: '200px' }}>
-          <Video
-            src={src}
-            title={title}
-            captions={captions}
-            transcript={transcriptContent}
-          />
-        </div>
+        <Video
+          src={src}
+          title={title}
+          captions={captions}
+          transcript={transcriptContent}
+        />
       )
     })
 
@@ -59,15 +56,9 @@ describe('Video', () => {
         cy.viewport(viewport)
         cy.get(playButton).should('exist')
         cy.get(videoElement).its('0.paused').should('equal', true)
-        if (viewport === 'macbook-13') {
-          cy.hoverAndDisplay(controls)
-        }
         cy.get(playButton).click()
         cy.get(pauseButton).should('exist')
         cy.get(videoElement).its('0.paused').should('equal', false)
-        if (viewport === 'macbook-13') {
-          cy.hoverAndDisplay(controls)
-        }
         cy.get(pauseButton).click()
         cy.get(playButton).should('exist')
       })
@@ -75,18 +66,12 @@ describe('Video', () => {
         cy.viewport(viewport)
         cy.get(loadingSpinner).should('not.exist')
         cy.get(fullScreenEnterButton).should('exist')
-        if (viewport === 'macbook-13') {
-          cy.hoverAndDisplay(controls)
-        }
         cy.get(fullScreenEnterButton).should('be.visible')
 
         cy.get(fullScreenEnterButton).realClick()
         cy.wait(1000)
-        cy.hoverAndDisplay(controls)
-        cy.get(fullScreenExitButton).should('exist')
         cy.document().its('fullscreenElement').should('exist')
 
-        cy.hoverAndDisplay(controls)
         cy.get(fullScreenExitButton).realClick()
         cy.wait(1000)
         cy.document().its('fullscreenElement').should('not.exist')
@@ -115,26 +100,6 @@ describe('Video', () => {
           })
         })
       })
-      it(`should display an error message if entering fullscreen fails on ${viewport} screen`, () => {
-        cy.viewport(viewport)
-        cy.get(loadingSpinner).should('not.exist')
-        cy.window().then((window) => {
-          cy.stub(window.HTMLElement.prototype, 'requestFullscreen').rejects(
-            new TypeError('some error')
-          )
-        })
-
-        if (viewport === 'macbook-13') {
-          cy.hoverAndDisplay(controls)
-        }
-        cy.get(fullScreenEnterButton).realClick()
-        cy.get(fullScreenExitButton).should('not.exist')
-        cy.get(fullScreenEnterButton).should('exist')
-        if (viewport === 'macbook-13') {
-          cy.hoverAndDisplay(controls)
-        }
-        cy.get(controlError).should('exist')
-      })
       it(`should display an error message if pressing play fails on ${viewport} screen`, () => {
         cy.viewport(viewport)
         cy.window().then((window) => {
@@ -143,15 +108,9 @@ describe('Video', () => {
           )
         })
 
-        if (viewport === 'macbook-13') {
-          cy.get(controls).realHover()
-        }
         cy.get(playButton).click()
         cy.get(playButton).should('exist')
         cy.get(pauseButton).should('not.exist')
-        if (viewport === 'macbook-13') {
-          cy.hoverAndDisplay(controls)
-        }
         cy.get(controlError).should('exist')
       })
     })
@@ -174,12 +133,27 @@ describe('Video', () => {
       cy.get(fullScreenEnterButton).should('exist')
       cy.get(fullScreenEnterButton).realClick()
       cy.wait(1000)
-      cy.get(controls).click()
       cy.get(playButton).should('exist')
       cy.get(transcriptToggle).should('exist')
       cy.get(fullScreenExitButton).should('exist')
       cy.get(miniPlayerButton).should('exist')
       cy.get(progressSlider).should('exist')
+    })
+
+    it('should display an error message if entering fullscreen fails', () => {
+      cy.get(loadingSpinner).should('not.exist')
+      cy.window()
+        .then((window) => {
+          cy.stub(window.HTMLElement.prototype, 'requestFullscreen').rejects(
+            new TypeError('some error')
+          )
+        })
+        .then(() => {
+          cy.get(fullScreenEnterButton).realClick()
+          cy.get(fullScreenExitButton).should('not.exist')
+          cy.get(fullScreenEnterButton).should('exist')
+          cy.get(controlError).should('exist')
+        })
     })
   })
 
@@ -200,14 +174,12 @@ describe('Video', () => {
     it(`should go forwards and backwards 10 seconds when clicking the forward/back buttons`, () => {
       const tenSeconds = 10
 
-      cy.hoverAndDisplay(controls)
       cy.get('[data-cy=forward-ten-seconds-button]').click()
       cy.get(videoElement).its('0.currentTime').should('equal', tenSeconds)
       cy.get('[data-cy=replay-ten-seconds-button]').click()
       cy.get(videoElement).its('0.currentTime').should('equal', 0)
     })
     it(`should mute and unmute the audio when clicking the mute button`, () => {
-      cy.hoverAndDisplay(controls)
       cy.get(playButton).click()
       cy.get(videoElement).its('0.muted').should('equal', false)
       cy.get(muteButton).click({ force: true })
@@ -215,7 +187,6 @@ describe('Video', () => {
     })
     it(`should change the volume when adjusting the volume slider on desktop`, () => {
       cy.get(videoElement).its('0.volume').should('equal', 1)
-      cy.hoverAndDisplay(controls)
       cy.get(muteButton).focus().get(volumeSlider).should('be.visible')
 
       const sliderAnimationWait = 1000
@@ -225,38 +196,46 @@ describe('Video', () => {
     })
     it(`should change the time when the video progress slider is adjusted`, () => {
       cy.get(videoElement).its('0.currentTime').should('equal', 0)
-      cy.hoverAndDisplay(controls)
       cy.get(progressSlider).type('{rightArrow}')
       cy.get(videoElement).its('0.currentTime').should('be.greaterThan', 0)
     })
     it('should show the correct view when going to fullscreen mode then changing the viewport size', () => {
       cy.get(fullScreenEnterButton).should('exist')
-      cy.hoverAndDisplay(controls)
       cy.get(fullScreenEnterButton).realClick()
-      cy.wait(1000)
-      cy.get(fullScreenExitButton).should('exist')
+      cy.get(fullScreenExitButton, { timeout: 2000 }).should('exist')
       cy.document().its('fullscreenElement').should('exist')
 
       cy.viewport('iphone-6')
-      cy.hoverAndDisplay(controls)
       cy.get(fullScreenExitButton).click()
-      cy.wait(1000)
-      cy.get(fullScreenEnterButton).should('exist')
+      cy.get(fullScreenEnterButton, { timeout: 2000 }).should('exist')
       cy.document().its('fullscreenElement').should('not.exist')
     })
     it('should toggle between mini player and normal mode when clicking the mini player button', () => {
       cy.get(miniPlayerButton).should('exist')
-      cy.hoverAndDisplay(controls)
       cy.get(miniPlayerButton).realClick()
       cy.wait(1000)
-      cy.get(miniPlayerExitButton).should('exist')
+      cy.get(miniPlayerExitButton, { timeout: 2000 }).should('exist')
       cy.document().its('pictureInPictureElement').should('exist')
 
-      cy.hoverAndDisplay(controls)
       cy.get(miniPlayerExitButton).click()
       cy.wait(1000)
-      cy.get(miniPlayerButton).should('exist')
+      cy.get(miniPlayerButton, { timeout: 2000 }).should('exist')
       cy.document().its('pictureInPictureElement').should('not.exist')
+    })
+    it('should display an error message if entering fullscreen fails', () => {
+      cy.get(loadingSpinner).should('not.exist')
+      cy.window()
+        .then((window) => {
+          cy.stub(window.HTMLElement.prototype, 'requestFullscreen').rejects(
+            new TypeError('some error')
+          )
+        })
+        .then(() => {
+          cy.get(fullScreenEnterButton).realClick()
+          cy.get(fullScreenExitButton).should('not.exist')
+          cy.get(fullScreenEnterButton).should('exist')
+          cy.get(controlError).should('exist')
+        })
     })
   })
 })
