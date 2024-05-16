@@ -1,0 +1,7 @@
+.rustic-question > p > *:first-child {
+  margin-top: 0;
+}
+
+.rustic-question-title {
+  margin-bottom: 16px;
+}

@@ -181,6 +181,25 @@ export interface MultipartFormat extends DataFormat {
 
 export type MultipartData = MultipartFormat & Updates<MultipartFormat>
 
+export interface Answer {
+  label: string
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  value: any
+}
+
+export interface QuestionFormat extends DataFormat {
+  answers: Answer[]
+  ws: WebSocketClient
+  /** Id of the current user. */
+  sender: string
+  /** Id of the current conversation. */
+  conversationId: string
+  /** Id of this message for answers to reply to. */
+  messageId: string
+}
+
+export type QuestionData = QuestionFormat & Updates<QuestionFormat>
+
 export interface BaseInputProps {
   /** Id of the current user. */
   sender: string
