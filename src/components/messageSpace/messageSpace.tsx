@@ -34,7 +34,6 @@ function usePrevious(value: number) {
 export default function MessageSpace(props: MessageSpaceProps) {
   const scrollEndRef = useRef<HTMLDivElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
-  const lastMessageRef = useRef<HTMLDivElement>(null)
   const timeoutRef = useRef<NodeJS.Timeout>()
 
   const [isScrolledToBottom, setIsScrolledToBottom] = useState(false)
@@ -114,14 +113,24 @@ export default function MessageSpace(props: MessageSpaceProps) {
   function scrollToLastMessage() {
     if (getVideoStatus()) {
       const container = containerRef.current
-      const lastMessage = lastMessageRef.current
+      const childrenComponent = container && container.children
+      // scroll end div is also accounted as children component
+      const minimumChildrenLength = 2
       const messageMargin = 32
-      if (lastMessage && container) {
-        // Use setTimeout to delay smooth scrolling
-        setTimeout(() => {
-          container.scrollTop =
-            container.scrollHeight - lastMessage.clientHeight - messageMargin
-        }, 0)
+      if (
+        childrenComponent &&
+        childrenComponent.length >= minimumChildrenLength
+      ) {
+        const lastMessage =
+          childrenComponent[childrenComponent.length - minimumChildrenLength]
+
+        if (lastMessage) {
+          // Use setTimeout to delay smooth scrolling
+          setTimeout(() => {
+            container.scrollTop =
+              container.scrollHeight - lastMessage.clientHeight - messageMargin
+          }, 0)
+        }
       }
     } else {
       setTimeout(scrollToLastMessage, 1)
@@ -147,23 +156,19 @@ export default function MessageSpace(props: MessageSpaceProps) {
     >
       {props.messages &&
         props.messages.length > 0 &&
-        props.messages.map((message, index) => {
+        props.messages.map((message) => {
           return (
-            <div
+            <MessageCanvas
               key={message.id}
-              ref={index === props.messages!.length - 1 ? lastMessageRef : null}
+              message={message}
+              getActionsComponent={props.getActionsComponent}
+              getProfileComponent={props.getProfileComponent}
             >
-              <MessageCanvas
+              <ElementRenderer
                 message={message}
-                getActionsComponent={props.getActionsComponent}
-                getProfileComponent={props.getProfileComponent}
-              >
-                <ElementRenderer
-                  message={message}
-                  supportedElements={props.supportedElements}
-                />
-              </MessageCanvas>
-            </div>
+                supportedElements={props.supportedElements}
+              />
+            </MessageCanvas>
           )
         })}
       <div ref={scrollEndRef}></div>
