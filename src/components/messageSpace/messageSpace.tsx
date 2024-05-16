@@ -19,6 +19,14 @@ export interface MessageSpaceProps extends MessageContainerProps {
   scrollDownLabel?: string
 }
 
+function usePrevious(value: number) {
+  const ref = useRef<number>(0)
+  useEffect(() => {
+    ref.current = value
+  })
+  return ref.current
+}
+
 /**
  The `MessageSpace` component uses `MessageCanvas` and `ElementRenderer` to render a list of messages. It serves as a container for individual message items, each encapsulated within a `MessageCanvas` for consistent styling and layout. \n\n Note: For more information about the `getActionsComponent` and `getProfileComponent` fields, refer to the [MessageCanvas' docs](http://localhost:6006/?path=/docs/rustic-ui-message-canvas-message-canvas--docs).
  */
@@ -27,16 +35,22 @@ export default function MessageSpace(props: MessageSpaceProps) {
   const scrollEndRef = useRef<HTMLDivElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const lastMessageRef = useRef<HTMLDivElement>(null)
+  const timeoutRef = useRef<NodeJS.Timeout>()
+
   const [isScrolledToBottom, setIsScrolledToBottom] = useState(false)
   const [isScrollButtonHidden, setIsScrollButtonHidden] = useState(true)
   const [areVideosLoaded, setAreVideosLoaded] = useState(false)
-  const messagesLength = props.messages?.length
-  const previousLength = usePrevious(messagesLength)
+
+  const currentMessagesLength = props.messages?.length || 0
+  const previousMessagesLength = usePrevious(currentMessagesLength)
   const hideScrollButtonDuration = 2000
 
   function hideScrollButton() {
     setIsScrollButtonHidden(true)
-    setTimeout(() => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current)
+    }
+    timeoutRef.current = setTimeout(() => {
       setIsScrollButtonHidden(false)
     }, hideScrollButtonDuration)
   }
@@ -57,6 +71,7 @@ export default function MessageSpace(props: MessageSpaceProps) {
     return Array.from(videos).every((video) => video.readyState >= 1)
   }
 
+  //show or hide scroll button
   useEffect(() => {
     const options = {
       root: containerRef.current,
@@ -92,44 +107,34 @@ export default function MessageSpace(props: MessageSpaceProps) {
     }
   }
 
-  function scrollToLastMessage() {
-    if (getVideoStatus()) {
-      const container = containerRef.current
-      const lastMessage = lastMessageRef.current
-      setAreVideosLoaded(true)
-      if (lastMessage && container) {
-        const marginTop = 16
-        // Use setTimeout to delay smooth scrolling so that it can scroll to bottom
-        setTimeout(() => {
-          // lastMessage.scrollTop = lastMessage.scrollHeight
-          container.scrollTop =
-            container.scrollHeight - lastMessage.clientHeight - marginTop
-          // lastMessage.scrollIntoView({
-          //   behavior: 'smooth',
-          //   block: 'nearest',
-          // })
-        }, 0)
-      }
-    } else {
-      setTimeout(scrollDownIfNeeded, 1)
-    }
-  }
-
   useEffect(() => {
     scrollDownIfNeeded()
   }, [areVideosLoaded])
 
+  function scrollToLastMessage() {
+    if (getVideoStatus()) {
+      const container = containerRef.current
+      const lastMessage = lastMessageRef.current
+      const messageMargin = 32
+      if (lastMessage && container) {
+        // Use setTimeout to delay smooth scrolling
+        setTimeout(() => {
+          container.scrollTop =
+            container.scrollHeight - lastMessage.clientHeight - messageMargin
+        }, 0)
+      }
+    } else {
+      setTimeout(scrollToLastMessage, 1)
+    }
+  }
+
   useEffect(() => {
-    if (
-      isScrolledToBottom &&
-      messagesLength !== undefined &&
-      previousLength !== undefined &&
-      messagesLength > previousLength
-    ) {
-      setIsScrollButtonHidden(true)
-      setTimeout(() => {
-        setIsScrollButtonHidden(false)
-      }, hideScrollButtonDuration)
+    const hasNewMessage =
+      previousMessagesLength !== 0 &&
+      currentMessagesLength > previousMessagesLength
+
+    if (isScrolledToBottom && hasNewMessage) {
+      hideScrollButton()
       scrollToLastMessage()
     }
   }, [isScrolledToBottom, props.messages?.length])
@@ -146,11 +151,7 @@ export default function MessageSpace(props: MessageSpaceProps) {
           return (
             <div
               key={message.id}
-              ref={
-                index === props.messages?.length || 0 - 1
-                  ? lastMessageRef
-                  : null
-              }
+              ref={index === props.messages!.length - 1 ? lastMessageRef : null}
             >
               <MessageCanvas
                 message={message}
@@ -180,14 +181,7 @@ export default function MessageSpace(props: MessageSpaceProps) {
     </Box>
   )
 }
+
 MessageSpace.defaultProps = {
   scrollDownLabel: 'scroll down',
-}
-
-function usePrevious(value: number | undefined) {
-  const ref = useRef<number | undefined>()
-  useEffect(() => {
-    ref.current = value
-  })
-  return ref.current
 }
