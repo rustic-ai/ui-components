@@ -49,7 +49,7 @@ function VegaLiteChart(props: VegaLiteChartData) {
     return <Typography variant="body2">Failed to load the chart.</Typography>
   } else {
     return (
-      <Stack direction="column" className="rustic-responsive-chart">
+      <Stack direction="column" className="rustic-chart">
         {props.title && (
           <Typography variant="subtitle2">{props.title}</Typography>
         )}
