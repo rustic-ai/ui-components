@@ -1,5 +1,6 @@
 import FCCalendar from './calendar/fCCalendar'
 import RechartsTimeSeries from './chart/rechartsTimeSeries'
+import VegaLiteChart from './chart/vegaLiteChart/vegaLiteChart'
 import CodeSnippet from './codeSnippet/codeSnippet'
 import ElementRenderer from './elementRenderer/elementRenderer'
 import Image from './image/image'
@@ -48,6 +49,7 @@ export {
   Text,
   TextInput,
   Timestamp,
+  VegaLiteChart,
   Video,
   YoutubeVideo,
 }

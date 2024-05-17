@@ -1,9 +1,8 @@
-import type { StoryFn } from '@storybook/react'
+import type { Meta, StoryFn } from '@storybook/react'
 import React from 'react'
 
 import VegaLiteChart from './vegaLiteChart'
-
-export default {
+const meta: Meta<React.ComponentProps<typeof VegaLiteChart>> = {
   title: 'Rustic UI/Chart/Vega-Lite Chart',
   component: VegaLiteChart,
   tags: ['autodocs'],
@@ -12,6 +11,26 @@ export default {
   },
 }
 
+export default meta
+meta.argTypes = {
+  ...meta.argTypes,
+  theme: {
+    table: {
+      type: {
+        summary: 'Theme object.\n',
+        detail:
+          'A theme object has the following fields:\n' +
+          '  light: A light theme string that is supported by vega-themes.\n' +
+          '  dark: A dark theme string that is supported by vega-themes.\n' +
+          'Refer to the [vega-themes](https://github.com/vega/vega-themes) documentation for more information.',
+      },
+    },
+  },
+  options: {
+    description:
+      'The options object is passed directly to the vega-lite chart. Refer to the [Vega-lite documentation](https://vega.github.io/vega-lite/) for more information.',
+  },
+}
 const decorators = [
   (Story: StoryFn) => {
     return (
@@ -87,62 +106,37 @@ export const PieChart = {
   decorators,
 }
 
-export const Scatterplot = {
+export const WithTitleAndDescription = {
   args: {
     spec: {
       $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
       width: 'container',
       height: 'container',
-      title: 'Horsepower and miles per gallons for various cars.',
-      data: { url: 'chartData/plot.json' },
-      mark: 'point',
+      data: {
+        values: [
+          { a: 'A', b: 28 },
+          { a: 'B', b: 55 },
+          { a: 'C', b: 43 },
+          { a: 'D', b: 91 },
+          { a: 'E', b: 81 },
+          { a: 'F', b: 53 },
+          { a: 'G', b: 19 },
+          { a: 'H', b: 87 },
+          { a: 'I', b: 52 },
+        ],
+      },
+      mark: 'bar',
       encoding: {
-        x: { field: 'Horsepower', type: 'quantitative' },
-        y: { field: 'Miles_per_Gallon', type: 'quantitative' },
+        x: { field: 'a', type: 'nominal', axis: { labelAngle: 0 } },
+        y: { field: 'b', type: 'quantitative' },
       },
     },
+    title: 'Bar Chart Title',
+    description: 'This chart shows the bar chart with title and description',
   },
   decorators,
 }
 
-export const ErrorBars = {
-  args: {
-    spec: {
-      $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
-      width: 'container',
-      height: 'container',
-      data: { url: 'chartData/errorBar.json' },
-      encoding: { y: { field: 'variety', type: 'ordinal' } },
-      autosize: {
-        type: 'fit',
-        contains: 'padding',
-        resize: true,
-      },
-      layer: [
-        {
-          mark: { type: 'point', filled: true },
-          encoding: {
-            x: {
-              aggregate: 'mean',
-              field: 'yield',
-              type: 'quantitative',
-              scale: { zero: false },
-              title: 'Barley Yield',
-            },
-            color: { value: 'black' },
-          },
-        },
-        {
-          mark: { type: 'errorbar', extent: 'ci' },
-          encoding: {
-            x: { field: 'yield', type: 'quantitative', title: 'Barley Yield' },
-          },
-        },
-      ],
-    },
-  },
-  decorators,
-}
 export const InvalidChart = {
   args: {
     spec: {
