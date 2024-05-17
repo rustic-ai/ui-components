@@ -116,7 +116,6 @@ export default function MessageSpace(props: MessageSpaceProps) {
       const childrenComponent = container && container.children
       // scroll end div is also accounted as children component
       const minimumChildrenLength = 2
-      const messageMargin = 32
       if (
         childrenComponent &&
         childrenComponent.length >= minimumChildrenLength
@@ -127,8 +126,7 @@ export default function MessageSpace(props: MessageSpaceProps) {
         if (lastMessage) {
           // Use setTimeout to delay smooth scrolling
           setTimeout(() => {
-            container.scrollTop =
-              container.scrollHeight - lastMessage.clientHeight - messageMargin
+            lastMessage.scrollIntoView({ block: 'start', inline: 'nearest' })
           }, 0)
         }
       }
