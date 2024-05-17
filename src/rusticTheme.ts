@@ -1,5 +1,5 @@
 /* eslint-disable no-magic-numbers */
-import type { Shadows } from '@mui/material/styles'
+import type { Components, Shadows } from '@mui/material/styles'
 import { createTheme, responsiveFontSizes } from '@mui/material/styles'
 
 const whiteColor = '#FFFFFF'
@@ -137,6 +137,16 @@ const baseTheme = createTheme({
   ] as Shadows,
 })
 
+const sharedComponents: Components = {
+  MuiButton: {
+    styleOverrides: {
+      root: {
+        textTransform: 'none',
+      },
+    },
+  },
+}
+
 const lightModePrimaryMainColor = '#3D3834'
 
 let rusticLightTheme = createTheme({
@@ -181,6 +191,7 @@ let rusticLightTheme = createTheme({
         },
       },
     },
+    ...sharedComponents,
   },
 })
 
@@ -228,6 +239,7 @@ let rusticDarkTheme = createTheme({
         },
       },
     },
+    ...sharedComponents,
   },
 })
 
