@@ -2,25 +2,28 @@ import './question.css'
 
 import { useMediaQuery, useTheme } from '@mui/material'
 import Box from '@mui/material/Box'
-import Button from '@mui/material/Button'
-import ButtonGroup from '@mui/material/ButtonGroup'
+import ToggleButton from '@mui/material/ToggleButton'
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup'
 import Typography from '@mui/material/Typography'
-import React from 'react'
+import React, { useState } from 'react'
 import { v4 as getUUID } from 'uuid'
 
 import MarkedMarkdown from '../markdown/markedMarkdown'
 import type { Message, QuestionData } from '../types'
 
 /**
-'The `Question` component provides a user interface for selecting an answer a list of choices. It is designed to facilitate interactive decision-making and response submission within a conversation or messaging context.
+'The `Question` component provides a user interface for selecting an answer from a list of choices. It is designed to facilitate interactive decision-making and response submission within a conversation or messaging context.
  */
 export default function Question(props: QuestionData) {
+  const [selectedAnswer, setSelectedAnswer] = useState('')
+
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
 
   const buttonGroupOrientation = isMobile ? 'vertical' : 'horizontal'
 
   function handleSubmitResponse(response: string) {
+    setSelectedAnswer(response)
     const currentTime = new Date().toISOString()
 
     const formattedMessage: Message = {
@@ -37,13 +40,22 @@ export default function Question(props: QuestionData) {
   }
 
   const buttonList = props.answers.map((answer) => {
+    const selectedStyles = {
+      backgroundColor: theme.palette.secondary.main,
+      color: theme.palette.common.white,
+    }
+
     return (
-      <Button
-        key={answer.value}
-        onClick={() => handleSubmitResponse(answer.label)}
+      <ToggleButton
+        key={answer.label}
+        value={answer.label}
+        sx={{
+          color: theme.palette.text.primary,
+          '&.Mui-selected': selectedStyles,
+        }}
       >
         {answer.label}
-      </Button>
+      </ToggleButton>
     )
   })
 
@@ -58,14 +70,20 @@ export default function Question(props: QuestionData) {
       {props.description && <MarkedMarkdown text={props.description} />}
 
       {props.answers.length > 0 ? (
-        <ButtonGroup
+        <ToggleButtonGroup
           fullWidth
           orientation={buttonGroupOrientation}
-          color="secondary"
           data-cy="button-group"
+          value={selectedAnswer}
+          onChange={(event, newValue) => {
+            setSelectedAnswer(newValue)
+            handleSubmitResponse(newValue)
+          }}
+          exclusive
+          disabled={!!selectedAnswer}
         >
           {buttonList}
-        </ButtonGroup>
+        </ToggleButtonGroup>
       ) : (
         <Typography variant="caption" data-cy="no-answers-message">
           No answers were provided.

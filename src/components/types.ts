@@ -183,8 +183,7 @@ export type MultipartData = MultipartFormat & Updates<MultipartFormat>
 
 export interface Answer {
   label: string
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  value: any
+  value: string | number | boolean | bigint
 }
 
 export interface QuestionFormat extends DataFormat {
