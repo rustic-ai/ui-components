@@ -52,7 +52,6 @@ export const BarChart = {
       $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
       width: 'container',
       height: 'container',
-      title: 'Bar Chart Title',
       data: {
         values: [
           { a: 'A', b: 28 },
@@ -112,27 +111,36 @@ export const WithTitleAndDescription = {
       $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
       width: 'container',
       height: 'container',
+      title: 'Number of Orders by Product',
+      description:
+        'This chart shows the number of orders by product in the last month.',
       data: {
         values: [
-          { a: 'A', b: 28 },
-          { a: 'B', b: 55 },
-          { a: 'C', b: 43 },
-          { a: 'D', b: 91 },
-          { a: 'E', b: 81 },
-          { a: 'F', b: 53 },
-          { a: 'G', b: 19 },
-          { a: 'H', b: 87 },
-          { a: 'I', b: 52 },
+          { product: 'a', orders: 40 },
+          { product: 'b', orders: 55 },
+          { product: 'c', orders: 43 },
+          { product: 'd', orders: 91 },
+          { product: 'e', orders: 81 },
+          { product: 'f', orders: 53 },
         ],
       },
       mark: 'bar',
       encoding: {
-        x: { field: 'a', type: 'nominal', axis: { labelAngle: 0 } },
-        y: { field: 'b', type: 'quantitative' },
+        x: {
+          field: 'product',
+          type: 'nominal',
+          axis: { labelAngle: 0 },
+        },
+        y: {
+          field: 'orders',
+          type: 'quantitative',
+          axis: { title: 'Orders(in thousands)' },
+        },
       },
     },
-    title: 'Bar Chart Title',
-    description: 'This chart shows the bar chart with title and description',
+    title: 'Product Order Volumes for X Company',
+    description:
+      "The chart below illustrates the distribution of orders across different products in the last month for X Company. Each product's order count is displayed in thousands, providing a clear comparison of product performance.",
   },
   decorators,
 }
