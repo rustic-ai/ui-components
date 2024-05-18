@@ -1,6 +1,7 @@
 /* eslint-disable no-magic-numbers */
 import type { Shadows } from '@mui/material/styles'
 import { createTheme, responsiveFontSizes } from '@mui/material/styles'
+import { deepmerge } from '@mui/utils'
 
 const whiteColor = '#FFFFFF'
 const SecondaryMainColor = '#FF6928'
@@ -135,101 +136,112 @@ const baseTheme = createTheme({
       }
     }),
   ] as Shadows,
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          textTransform: 'capitalize',
+        },
+      },
+    },
+  },
 })
 
 const lightModePrimaryMainColor = '#3D3834'
 
-let rusticLightTheme = createTheme({
-  ...baseTheme,
-  palette: {
-    mode: 'light',
-    divider: dividerColor,
-    text: {
-      primary: '#1E0C04',
-      secondary: '#4E443F',
-      disabled: '#9C9795',
+let rusticLightTheme = createTheme(
+  deepmerge(baseTheme, {
+    palette: {
+      mode: 'light',
+      divider: dividerColor,
+      text: {
+        primary: '#1E0C04',
+        secondary: '#4E443F',
+        disabled: '#9C9795',
+      },
+      primary: {
+        main: lightModePrimaryMainColor,
+        dark: '#2D2825',
+        light: '#716865',
+      },
+      secondary: {
+        main: SecondaryMainColor,
+        light: '#FFDBCC',
+        dark: SecondaryDarkColor,
+      },
+      background: {
+        default: '#F7F6F5',
+        paper: whiteColor,
+      },
+      action: {
+        active: actionActiveColor,
+        hover: '#EFEAEA',
+        selected: actionSelectedColor,
+        disabledBackground: actionDisabledBackgroundColor,
+        focus: actionFocusColor,
+        disabled: actionDisabledColor,
+      },
     },
-    primary: {
-      main: lightModePrimaryMainColor,
-      dark: '#2D2825',
-      light: '#716865',
-    },
-    secondary: {
-      main: SecondaryMainColor,
-      light: '#FFDBCC',
-      dark: SecondaryDarkColor,
-    },
-    background: {
-      default: '#F7F6F5',
-      paper: whiteColor,
-    },
-    action: {
-      active: actionActiveColor,
-      hover: '#EFEAEA',
-      selected: actionSelectedColor,
-      disabledBackground: actionDisabledBackgroundColor,
-      focus: actionFocusColor,
-      disabled: actionDisabledColor,
-    },
-  },
-  components: {
-    MuiTooltip: {
-      styleOverrides: {
-        tooltip: {
-          backgroundColor: lightModePrimaryMainColor,
-          color: whiteColor,
+    components: {
+      MuiTooltip: {
+        styleOverrides: {
+          tooltip: {
+            backgroundColor: lightModePrimaryMainColor,
+            color: whiteColor,
+          },
         },
       },
     },
-  },
-})
+  })
+)
 
 const darkModePaperColor = '#2F2F2F'
 const darkModePrimaryMainColor = '#FFFCFB'
-let rusticDarkTheme = createTheme({
-  ...baseTheme,
-  palette: {
-    mode: 'dark',
-    divider: dividerColor,
-    primary: {
-      main: darkModePrimaryMainColor,
-      dark: SecondaryDarkColor,
-      light: '#FFDBCC',
+let rusticDarkTheme = createTheme(
+  deepmerge(baseTheme, {
+    palette: {
+      mode: 'dark',
+      divider: dividerColor,
+      primary: {
+        main: darkModePrimaryMainColor,
+        dark: SecondaryDarkColor,
+        light: '#FFDBCC',
+      },
+      secondary: {
+        main: SecondaryMainColor,
+        light: '#FFA983',
+        dark: SecondaryDarkColor,
+      },
+      background: {
+        default: '#040404',
+        paper: darkModePaperColor,
+      },
+      text: {
+        primary: whiteColor,
+        secondary: '#EBEBEB',
+        disabled: '#C1C1C1',
+      },
+      action: {
+        active: actionActiveColor,
+        hover: '#9A9A9A',
+        selected: actionSelectedColor,
+        focus: actionFocusColor,
+        disabledBackground: actionDisabledBackgroundColor,
+        disabled: actionDisabledColor,
+      },
     },
-    secondary: {
-      main: SecondaryMainColor,
-      light: '#FFA983',
-      dark: SecondaryDarkColor,
-    },
-    background: {
-      default: '#040404',
-      paper: darkModePaperColor,
-    },
-    text: {
-      primary: whiteColor,
-      secondary: '#EBEBEB',
-      disabled: '#C1C1C1',
-    },
-    action: {
-      active: actionActiveColor,
-      hover: '#9A9A9A',
-      selected: actionSelectedColor,
-      focus: actionFocusColor,
-      disabledBackground: actionDisabledBackgroundColor,
-      disabled: actionDisabledColor,
-    },
-  },
-  components: {
-    MuiTooltip: {
-      styleOverrides: {
-        tooltip: {
-          backgroundColor: darkModePrimaryMainColor,
-          color: darkModePaperColor,
+    components: {
+      MuiTooltip: {
+        styleOverrides: {
+          tooltip: {
+            backgroundColor: darkModePrimaryMainColor,
+            color: darkModePaperColor,
+          },
         },
       },
     },
-  },
-})
+  })
+)
 
 rusticLightTheme = responsiveFontSizes(rusticLightTheme)
 rusticDarkTheme = responsiveFontSizes(rusticDarkTheme)
