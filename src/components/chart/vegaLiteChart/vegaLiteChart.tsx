@@ -58,8 +58,8 @@ function VegaLiteChart(props: VegaLiteChartData) {
         )}
         <div
           ref={chartRef}
-          className="rustic-vaga-lite-chart"
-          data-cy="vaga-lite-chart"
+          className="rustic-vega-lite-chart"
+          data-cy="vega-lite-chart"
         />
       </Stack>
     )

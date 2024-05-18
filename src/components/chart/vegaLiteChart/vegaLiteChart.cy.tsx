@@ -28,7 +28,7 @@ describe('VegaLite Chart', () => {
         />
       )
 
-      cy.get('[data-cy="vaga-lite-chart"]').should('exist')
+      cy.get('[data-cy="vega-lite-chart"]').should('exist')
     })
 
     const invalidSpec = {

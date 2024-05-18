@@ -15,14 +15,15 @@ export default meta
 meta.argTypes = {
   ...meta.argTypes,
   theme: {
+    description:
+      'Refer to the [vega-themes](https://github.com/vega/vega-themes) documentation for more information.',
     table: {
       type: {
         summary: 'Theme object.\n',
         detail:
           'A theme object has the following fields:\n' +
           '  light: A light theme string that is supported by vega-themes.\n' +
-          '  dark: A dark theme string that is supported by vega-themes.\n' +
-          'Refer to the [vega-themes](https://github.com/vega/vega-themes) documentation for more information.',
+          '  dark: A dark theme string that is supported by vega-themes.',
       },
     },
   },
