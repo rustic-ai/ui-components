@@ -1,3 +1,5 @@
+import type { Renderers } from 'vega'
+import type { EmbedOptions, VisualizationSpec } from 'vega-embed'
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type MessageData = { [key: string]: any }
 
@@ -135,6 +137,20 @@ export interface TableFormat extends DataFormat {
 }
 
 export type TableData = TableFormat & Updates<TableFormat>
+
+type VegaLiteOptions = EmbedOptions<string, Renderers>
+export interface VegaLiteChartFormat extends DataFormat {
+  /** Follow Vega-lite's [documentation](https://vega.github.io/vega-lite/) to provide a specification object. Schema should be included in the spec. Need to use 'container' for width or height for responsive chart. */
+  spec: VisualizationSpec
+  theme: {
+    light?: VegaLiteOptions['theme']
+    dark: VegaLiteOptions['theme']
+  }
+  options?: VegaLiteOptions
+}
+
+export type VegaLiteChartData = VegaLiteChartFormat &
+  Updates<VegaLiteChartFormat>
 
 export interface MediaFormat extends DataFormat {
   /** URL of the media file to be played. */
