@@ -148,7 +148,7 @@ export const WithCopyIcon = {
         code: `<MessageCanvas
   getProfileComponent={${profileString}}
   getActionsComponent={(message: ThreadableMessage) => {
-    const copyButton = message.format === 'text' && <Copy message={message} />
+    const copyButton = message.format === 'text' && <CopyText message={message} />
     if (copyButton) {
       return <>{copyButton}</>
     }
