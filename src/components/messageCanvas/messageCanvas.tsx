@@ -3,7 +3,7 @@ import './messageCanvas.css'
 import Card from '@mui/material/Card'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/system/Box'
-import React, { type ReactNode } from 'react'
+import React, { forwardRef, type ReactNode } from 'react'
 
 import Timestamp from '../timestamp/timestamp'
 import type { ThreadableMessage } from '../types'
@@ -32,12 +32,16 @@ export interface MessageCanvasProps extends MessageContainerProps {
  It provides a structured layout for rendering message content along with sender information and timestamp details.
  This component is designed to encapsulate individual message items and facilitate consistent rendering of messages within an application.
  */
-export default function MessageCanvas(props: MessageCanvasProps) {
+function MessageCanvasElement(
+  props: MessageCanvasProps,
+  ref: React.Ref<HTMLDivElement>
+) {
   return (
     <Box
       id={props.message.id}
       className="rustic-message-canvas"
       data-cy="message-canvas"
+      ref={ref}
     >
       <Box className="rustic-sender-info">
         {props.getProfileComponent && props.getProfileComponent(props.message)}
@@ -70,3 +74,6 @@ export default function MessageCanvas(props: MessageCanvasProps) {
     </Box>
   )
 }
+
+const MessageCanvas = forwardRef(MessageCanvasElement)
+export default MessageCanvas

@@ -36,7 +36,8 @@ export default function MessageSpace(props: MessageSpaceProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const timeoutRef = useRef<NodeJS.Timeout>()
 
-  const [isScrolledToBottom, setIsScrolledToBottom] = useState(false)
+  //set default value as true to avoid showing scroll down button when there's no message in the message space
+  const [isScrolledToBottom, setIsScrolledToBottom] = useState(true)
   const [isScrollButtonHidden, setIsScrollButtonHidden] = useState(true)
   const [areVideosLoaded, setAreVideosLoaded] = useState(false)
 
@@ -57,7 +58,7 @@ export default function MessageSpace(props: MessageSpaceProps) {
   function handleScrollDown() {
     scrollEndRef.current?.scrollIntoView({
       behavior: 'smooth',
-      block: 'nearest',
+      block: 'end',
     })
     hideScrollButton()
   }
@@ -70,23 +71,33 @@ export default function MessageSpace(props: MessageSpaceProps) {
     return Array.from(videos).every((video) => video.readyState >= 1)
   }
 
-  //show or hide scroll button
-  useEffect(() => {
-    const options = {
-      root: containerRef.current,
-      rootMargin: '16px',
-      threshold: 1.0,
+  function checkIntersection() {
+    const container = containerRef.current
+    const lastMessage = scrollEndRef.current
+    if (container && lastMessage) {
+      const containerBottom = container.getBoundingClientRect().bottom
+      const targetBottom = lastMessage.getBoundingClientRect().bottom
+      //targetBottom is slightly larger than containerBottom when it's scrolled to bottom. But the difference is always less than 1.
+      const bottomDistanceTolerance = 1
+      setIsScrolledToBottom(
+        targetBottom - bottomDistanceTolerance <= containerBottom
+      )
     }
+  }
 
-    const intersectionObserver = new IntersectionObserver(([entry]) => {
-      setIsScrolledToBottom(entry.isIntersecting)
-    }, options)
+  useEffect(() => {
+    const container = containerRef.current
 
-    const targetDiv = scrollEndRef.current
-    targetDiv && intersectionObserver.observe(targetDiv)
+    checkIntersection()
 
-    return () => {
-      targetDiv && intersectionObserver.unobserve(targetDiv)
+    if (container) {
+      container.addEventListener('scroll', checkIntersection)
+      window.addEventListener('resize', checkIntersection)
+
+      return () => {
+        container.removeEventListener('scroll', checkIntersection)
+        window.removeEventListener('resize', checkIntersection)
+      }
     }
   }, [isScrolledToBottom])
 
@@ -112,23 +123,13 @@ export default function MessageSpace(props: MessageSpaceProps) {
 
   function scrollToLastMessage() {
     if (getVideoStatus()) {
-      const container = containerRef.current
-      const childrenComponent = container && container.children
-      // scroll end div is also accounted as children component
-      const minimumChildrenLength = 2
-      if (
-        childrenComponent &&
-        childrenComponent.length >= minimumChildrenLength
-      ) {
-        const lastMessage =
-          childrenComponent[childrenComponent.length - minimumChildrenLength]
+      const lastMessage = scrollEndRef.current
 
-        if (lastMessage) {
-          // Use setTimeout to delay smooth scrolling
-          setTimeout(() => {
-            lastMessage.scrollIntoView({ block: 'start', inline: 'nearest' })
-          }, 0)
-        }
+      if (lastMessage) {
+        // Use setTimeout to delay smooth scrolling
+        setTimeout(() => {
+          lastMessage.scrollIntoView({ block: 'start', inline: 'nearest' })
+        }, 0)
       }
     } else {
       setTimeout(scrollToLastMessage, 1)
@@ -154,13 +155,14 @@ export default function MessageSpace(props: MessageSpaceProps) {
     >
       {props.messages &&
         props.messages.length > 0 &&
-        props.messages.map((message) => {
+        props.messages.map((message, index) => {
           return (
             <MessageCanvas
               key={message.id}
               message={message}
               getActionsComponent={props.getActionsComponent}
               getProfileComponent={props.getProfileComponent}
+              ref={index === currentMessagesLength - 1 ? scrollEndRef : null}
             >
               <ElementRenderer
                 message={message}
@@ -169,7 +171,6 @@ export default function MessageSpace(props: MessageSpaceProps) {
             </MessageCanvas>
           )
         })}
-      <div ref={scrollEndRef}></div>
       {!isScrolledToBottom && !isScrollButtonHidden && (
         <Button
           data-cy="scroll-down-button"
