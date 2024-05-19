@@ -17,7 +17,6 @@ import Action from './messageCanvas/actions/index'
 import MessageCanvas from './messageCanvas/messageCanvas'
 import MessageSpace from './messageSpace/messageSpace'
 import Multipart from './multipart/multipart'
-import NavBar from './navBar/navBar'
 import ParticipantsContainer from './participantsContainer/participantsContainer'
 import Table from './table/table'
 import StreamingText from './text/streamingText'
@@ -38,7 +37,6 @@ export {
   MessageSpace,
   MultimodalInput,
   Multipart,
-  NavBar,
   OpenLayersMap,
   ParticipantsContainer,
   PopoverMenu,
