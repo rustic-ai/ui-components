@@ -11,13 +11,31 @@ interface ElementRendererProps {
 const ElementRenderer = (props: ElementRendererProps) => {
   const MaybeElement = props.supportedElements[props.message.format]
 
+  function extractFormat(updateFormat: string) {
+    const lettersInUpdate = 'update'.length
+    const format = updateFormat
+      .substring(0, updateFormat.length - lettersInUpdate)
+      .trim()
+
+    return format
+  }
+
+  const updateMessages = props.message.threadMessages?.filter(
+    (threadMessage) =>
+      threadMessage.sender === props.message.sender &&
+      threadMessage.format.includes('Update') &&
+      extractFormat(threadMessage.format) === props.message.format
+  )
+
+  const updatedData = updateMessages?.map((threadMessage) => threadMessage.data)
+
   return (
     <>
       {MaybeElement ? (
         React.createElement(MaybeElement, {
           ...props.message.data,
-          ...(props.message.threadMessagesData && {
-            updatedData: props.message.threadMessagesData,
+          ...(props.message.threadMessages && {
+            updatedData: updatedData,
           }),
         })
       ) : (

@@ -19,7 +19,7 @@ export interface Message {
 
 export interface ThreadableMessage extends Message {
   lastThreadMessage?: Message
-  threadMessagesData?: MessageData[]
+  threadMessages?: Message[]
 }
 
 export interface ComponentMap {
