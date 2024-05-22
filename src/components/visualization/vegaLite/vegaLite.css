@@ -1,0 +1,8 @@
+.rustic-vega-lite-container {
+  width: 100%;
+  height: 100%;
+}
+
+.rustic-vega-lite {
+  flex: 1;
+}

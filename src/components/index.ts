@@ -1,6 +1,4 @@
 import FCCalendar from './calendar/fCCalendar'
-import RechartsTimeSeries from './chart/rechartsTimeSeries'
-import VegaLiteChart from './chart/vegaLiteChart/vegaLiteChart'
 import CodeSnippet from './codeSnippet/codeSnippet'
 import ElementRenderer from './elementRenderer/elementRenderer'
 import Image from './image/image'
@@ -23,6 +21,8 @@ import StreamingText from './text/streamingText'
 import Text from './text/text'
 import Timestamp from './timestamp/timestamp'
 import YoutubeVideo from './video/youtubeVideo'
+import RechartsTimeSeries from './visualization/chart/rechartsTimeSeries'
+import VegaLite from './visualization/vegaLite/vegaLite'
 
 export {
   Action,
@@ -47,7 +47,7 @@ export {
   Text,
   TextInput,
   Timestamp,
-  VegaLiteChart,
+  VegaLite,
   Video,
   YoutubeVideo,
 }

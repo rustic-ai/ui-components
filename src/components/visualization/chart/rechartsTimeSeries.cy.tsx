@@ -1,5 +1,6 @@
-import { supportedViewports } from '../../../cypress/support/variables'
+import { supportedViewports } from '../../../../cypress/support/variables'
 import RechartsTimeSeries from './rechartsTimeSeries'
+
 describe('TimeSeries', () => {
   const timeSeries = [
     {
