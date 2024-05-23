@@ -3,7 +3,7 @@ import Question from './question'
 
 describe('Question', () => {
   const question = '[data-cy=question]'
-  const buttonGroup = '[data-cy=button-group]'
+  const buttonsContainer = '[data-cy=buttons-container]'
   const noAnswersMessage = '[data-cy=no-answers-message]'
 
   const title = 'Sample title'
@@ -35,7 +35,7 @@ describe('Question', () => {
     it(`renders the component correctly on ${viewport} screen`, () => {
       cy.viewport(viewport)
       cy.get(question).should('be.visible')
-      cy.get(buttonGroup).children().should('have.length', answers.length)
+      cy.get(buttonsContainer).children().should('have.length', answers.length)
       cy.get(question).should('contain', title)
       cy.get(question).should('contain', description)
     })
@@ -43,7 +43,7 @@ describe('Question', () => {
     it(`sends a message when an answer has been chosen on ${viewport} screen`, () => {
       cy.viewport(viewport)
       cy.get(question).should('be.visible')
-      cy.get(buttonGroup).children().first().click()
+      cy.get(buttonsContainer).children().first().click()
       cy.get('@sendStub').should('be.calledOnce')
     })
 
@@ -55,7 +55,7 @@ describe('Question', () => {
       }
       cy.mount(<Question {...commonProps} ws={mockWsClient} answers={[]} />)
       cy.viewport(viewport)
-      cy.get(buttonGroup).should('not.exist')
+      cy.get(buttonsContainer).should('not.exist')
       cy.get(noAnswersMessage).should('contain', 'No answers were provided.')
     })
   })

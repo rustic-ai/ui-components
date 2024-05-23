@@ -5,3 +5,7 @@
 .rustic-question-title {
   margin-bottom: 16px;
 }
+
+.rustic-question-answer-button {
+  flex: 1;
+}

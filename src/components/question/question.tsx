@@ -2,12 +2,13 @@ import './question.css'
 
 import { useMediaQuery, useTheme } from '@mui/material'
 import Box from '@mui/material/Box'
-import ToggleButton from '@mui/material/ToggleButton'
-import ToggleButtonGroup from '@mui/material/ToggleButtonGroup'
+import Button from '@mui/material/Button'
+import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import React, { useState } from 'react'
 import { v4 as getUUID } from 'uuid'
 
+import Icon from '../icon'
 import MarkedMarkdown from '../markdown/markedMarkdown'
 import type { Message, QuestionData } from '../types'
 
@@ -18,9 +19,9 @@ export default function Question(props: QuestionData) {
   const [selectedAnswer, setSelectedAnswer] = useState('')
 
   const theme = useTheme()
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
 
-  const buttonGroupOrientation = isMobile ? 'vertical' : 'horizontal'
+  const buttonGroupOrientation = isMobile ? 'column' : 'row'
 
   function handleSubmitResponse(response: string) {
     setSelectedAnswer(response)
@@ -40,50 +41,58 @@ export default function Question(props: QuestionData) {
   }
 
   const buttonList = props.answers.map((answer) => {
+    let buttonStyles = {
+      borderColor: 'primary.main',
+      color: 'text.primary',
+    }
+
     const selectedStyles = {
-      backgroundColor: theme.palette.secondary.main,
-      color: theme.palette.common.white,
+      backgroundColor: 'secondary.main',
+    }
+
+    if (answer.label === selectedAnswer) {
+      buttonStyles = {
+        ...buttonStyles,
+        ...selectedStyles,
+      }
     }
 
     return (
-      <ToggleButton
+      <Button
         key={answer.label}
-        value={answer.label}
-        sx={{
-          color: theme.palette.text.primary,
-          '&.Mui-selected': selectedStyles,
-        }}
+        onClick={() => handleSubmitResponse(answer.label)}
+        variant="outlined"
+        sx={buttonStyles}
+        startIcon={selectedAnswer === answer.label && <Icon name="check" />}
+        className="rustic-question-answer-button"
       >
         {answer.label}
-      </ToggleButton>
+      </Button>
     )
   })
 
   return (
     <Box className="rustic-question" data-cy="question">
-      {props.title && (
-        <Typography variant="subtitle2" className="rustic-question-title">
-          {props.title}
-        </Typography>
+      {(props.title || props.description) && (
+        <Box className="rustic-question-text">
+          {props.title && (
+            <Typography variant="subtitle2" className="rustic-question-title">
+              {props.title}
+            </Typography>
+          )}
+
+          {props.description && <MarkedMarkdown text={props.description} />}
+        </Box>
       )}
 
-      {props.description && <MarkedMarkdown text={props.description} />}
-
       {props.answers.length > 0 ? (
-        <ToggleButtonGroup
-          fullWidth
-          orientation={buttonGroupOrientation}
-          data-cy="button-group"
-          value={selectedAnswer}
-          onChange={(event, newValue) => {
-            setSelectedAnswer(newValue)
-            handleSubmitResponse(newValue)
-          }}
-          exclusive
-          disabled={!!selectedAnswer}
+        <Stack
+          direction={buttonGroupOrientation}
+          spacing={1}
+          data-cy="buttons-container"
         >
           {buttonList}
-        </ToggleButtonGroup>
+        </Stack>
       ) : (
         <Typography variant="caption" data-cy="no-answers-message">
           No answers were provided.
