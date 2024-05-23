@@ -1,14 +1,14 @@
 import type { VisualizationSpec } from 'vega-embed'
 
 import { supportedViewports } from '../../../../cypress/support/variables'
-import VegaLite from './vegaLite'
+import VegaLiteViz from './vegaLiteViz'
 
-describe('VegaLite', () => {
+describe('VegaLiteViz', () => {
   supportedViewports.forEach((viewport) => {
     it(`should display the graphic on ${viewport} screen`, () => {
       cy.viewport(viewport)
       cy.mount(
-        <VegaLite
+        <VegaLiteViz
           spec={{
             $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
             width: 'container',
@@ -47,7 +47,7 @@ describe('VegaLite', () => {
 
     it(`displays an error message if the spec is wrong on ${viewport} screen`, () => {
       cy.viewport(viewport)
-      cy.mount(<VegaLite spec={invalidSpec} />)
+      cy.mount(<VegaLiteViz spec={invalidSpec} />)
       cy.get('p').contains('Failed to load the chart.')
     })
   })

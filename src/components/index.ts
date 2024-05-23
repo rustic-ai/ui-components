@@ -22,7 +22,7 @@ import Text from './text/text'
 import Timestamp from './timestamp/timestamp'
 import YoutubeVideo from './video/youtubeVideo'
 import RechartsTimeSeries from './visualization/chart/rechartsTimeSeries'
-import VegaLite from './visualization/vegaLite/vegaLite'
+import VegaLiteViz from './visualization/vegaLiteViz/vegaLiteViz'
 
 export {
   Action,
@@ -47,7 +47,7 @@ export {
   Text,
   TextInput,
   Timestamp,
-  VegaLite,
+  VegaLiteViz,
   Video,
   YoutubeVideo,
 }

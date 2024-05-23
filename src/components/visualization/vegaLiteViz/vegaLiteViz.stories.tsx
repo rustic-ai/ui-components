@@ -1,10 +1,10 @@
 import type { Meta, StoryFn } from '@storybook/react'
 import React from 'react'
 
-import VegaLite from './vegaLite'
-const meta: Meta<React.ComponentProps<typeof VegaLite>> = {
-  title: 'Rustic UI/Visualization/VegaLite',
-  component: VegaLite,
+import VegaLiteViz from './vegaLiteViz'
+const meta: Meta<React.ComponentProps<typeof VegaLiteViz>> = {
+  title: 'Rustic UI/Visualization/VegaLiteViz',
+  component: VegaLiteViz,
   tags: ['autodocs'],
   parameters: {
     layout: 'centered',
@@ -29,7 +29,7 @@ meta.argTypes = {
   },
   options: {
     description:
-      'The options object is passed directly to the vega-lite. Refer to the [Vega-lite documentation](https://vega.github.io/vega-lite/) for more information.',
+      'The options object is passed directly to Vega-Lite. Refer to the [Vega-lite documentation](https://vega.github.io/vega-lite/) for more information.',
   },
 }
 
