@@ -42,7 +42,7 @@ export default function Question(props: QuestionData) {
 
   const buttonList = props.answers.map((answer) => {
     let buttonStyles = {
-      borderColor: 'primary.main',
+      borderColor: 'secondary.dark',
       color: 'text.primary',
     }
 

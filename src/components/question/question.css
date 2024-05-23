@@ -8,4 +8,5 @@
 
 .rustic-question-answer-button {
   flex: 1;
+  min-width: fit-content;
 }
