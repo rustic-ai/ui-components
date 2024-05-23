@@ -6,10 +6,10 @@ import useTheme from '@mui/system/useTheme'
 import React, { useEffect, useRef, useState } from 'react'
 import { default as VegaEmbed } from 'vega-embed'
 
-import type { VegaLiteVizData } from '../../types'
+import type { VegaLiteData } from '../../types'
 
 /** The `VegaLite` component is a versatile tool for visualizing data using the Vega-Lite grammar. With support for various graphic types, it empowers users to create engaging and informative data visualizations effortlessly. */
-function VegaLite(props: VegaLiteVizData) {
+function VegaLite(props: VegaLiteData) {
   const chartRef = useRef<HTMLDivElement>(null)
   const [hasError, setHasError] = useState<boolean>(false)
   const isDarkTheme = useTheme().palette.mode === 'dark'
