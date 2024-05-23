@@ -47,6 +47,14 @@ describe('Question', () => {
       cy.get('@sendStub').should('be.calledOnce')
     })
 
+    it(`disabled the buttons when an answer has been chosen on ${viewport} screen`, () => {
+      cy.viewport(viewport)
+      cy.get(question).should('be.visible')
+      cy.get(buttonsContainer).children().first().click()
+      cy.get(buttonsContainer).children().first().should('be.disabled')
+      cy.get(buttonsContainer).children().last().should('be.disabled')
+    })
+
     it(`does not render buttons when the choices array is empty on ${viewport} screen`, () => {
       const mockWsClient = {
         send: cy.stub(),

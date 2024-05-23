@@ -2,11 +2,15 @@
   margin-top: 0;
 }
 
-.rustic-question-title {
+.rustic-question .rustic-title {
   margin-bottom: 16px;
 }
 
-.rustic-question-answer-button {
+.rustic-question .rustic-answer-button {
   flex: 1;
   min-width: fit-content;
+}
+
+.rustic-question .rustic-answer-buttons-container {
+  gap: 8px;
 }

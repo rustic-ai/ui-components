@@ -48,6 +48,7 @@ export default function Question(props: QuestionData) {
 
     const selectedStyles = {
       backgroundColor: 'secondary.main',
+      '&.Mui-disabled': { color: 'text.primary' },
     }
 
     if (answer.label === selectedAnswer) {
@@ -64,7 +65,8 @@ export default function Question(props: QuestionData) {
         variant="outlined"
         sx={buttonStyles}
         startIcon={selectedAnswer === answer.label && <Icon name="check" />}
-        className="rustic-question-answer-button"
+        className="rustic-answer-button"
+        disabled={!!selectedAnswer}
       >
         {answer.label}
       </Button>
@@ -76,7 +78,7 @@ export default function Question(props: QuestionData) {
       {(props.title || props.description) && (
         <Box className="rustic-question-text">
           {props.title && (
-            <Typography variant="subtitle2" className="rustic-question-title">
+            <Typography variant="subtitle2" className="rustic-title">
               {props.title}
             </Typography>
           )}
@@ -88,8 +90,8 @@ export default function Question(props: QuestionData) {
       {props.answers.length > 0 ? (
         <Stack
           direction={buttonGroupOrientation}
-          spacing={1}
           data-cy="buttons-container"
+          className="rustic-answer-buttons-container"
         >
           {buttonList}
         </Stack>
