@@ -139,7 +139,7 @@ export interface TableFormat extends DataFormat {
 export type TableData = TableFormat & Updates<TableFormat>
 
 type VegaLiteOptions = EmbedOptions<string, Renderers>
-export interface VegaLiteChartFormat extends DataFormat {
+export interface VegaLiteFormat extends DataFormat {
   /** Follow Vega-lite's [documentation](https://vega.github.io/vega-lite/) to provide a specification object. Schema should be included in the spec. Need to use 'container' for width or height for responsive chart. */
   spec: VisualizationSpec
   theme: {
@@ -149,8 +149,7 @@ export interface VegaLiteChartFormat extends DataFormat {
   options?: VegaLiteOptions
 }
 
-export type VegaLiteChartData = VegaLiteChartFormat &
-  Updates<VegaLiteChartFormat>
+export type VegaLiteData = VegaLiteFormat & Updates<VegaLiteFormat>
 
 export interface MediaFormat extends DataFormat {
   /** URL of the media file to be played. */

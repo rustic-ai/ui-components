@@ -24,8 +24,8 @@ import {
   YAxis,
 } from 'recharts'
 
-import { calculateTimeDiffInDays, formatTimestampLabel } from '../helper'
-import Icon from '../icon'
+import { calculateTimeDiffInDays, formatTimestampLabel } from '../../helper'
+import Icon from '../../icon'
 
 export interface TimeSeriesData {
   timestamp: number

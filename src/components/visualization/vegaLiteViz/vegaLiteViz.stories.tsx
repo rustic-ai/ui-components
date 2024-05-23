@@ -1,10 +1,10 @@
 import type { Meta, StoryFn } from '@storybook/react'
 import React from 'react'
 
-import VegaLiteChart from './vegaLiteChart'
-const meta: Meta<React.ComponentProps<typeof VegaLiteChart>> = {
-  title: 'Rustic UI/Chart/Vega-Lite Chart',
-  component: VegaLiteChart,
+import VegaLiteViz from './vegaLiteViz'
+const meta: Meta<React.ComponentProps<typeof VegaLiteViz>> = {
+  title: 'Rustic UI/Visualization/VegaLiteViz',
+  component: VegaLiteViz,
   tags: ['autodocs'],
   parameters: {
     layout: 'centered',
@@ -29,9 +29,10 @@ meta.argTypes = {
   },
   options: {
     description:
-      'The options object is passed directly to the vega-lite chart. Refer to the [Vega-lite documentation](https://vega.github.io/vega-lite/) for more information.',
+      'The options object is passed directly to Vega-Lite. Refer to the [Vega-lite documentation](https://vega.github.io/vega-lite/) for more information.',
   },
 }
+
 const decorators = [
   (Story: StoryFn) => {
     return (

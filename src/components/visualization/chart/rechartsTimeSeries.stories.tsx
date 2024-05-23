@@ -2,7 +2,7 @@
 import RechartsTimeSeries from './rechartsTimeSeries'
 
 export default {
-  title: 'Rustic UI/Chart/Recharts Time Series',
+  title: 'Rustic UI/Visualization/Chart/Recharts Time Series',
   component: RechartsTimeSeries,
   tags: ['autodocs'],
   argTypes: {
