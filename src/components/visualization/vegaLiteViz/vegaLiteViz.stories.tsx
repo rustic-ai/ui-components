@@ -166,7 +166,7 @@ export const InvalidChart = {
   },
 }
 
-export const Map = {
+export const InteractiveMap = {
   args: {
     spec: {
       $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
@@ -264,6 +264,224 @@ export const Map = {
   decorators,
 }
 
+export const Map = {
+  args: {
+    spec: {
+      $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
+      width: 700,
+      height: 700,
+      title: 'London Tube Lines',
+      view: {
+        stroke: 'transparent',
+      },
+      layer: [
+        {
+          data: {
+            url: 'vegaLiteData/londonBoroughs.json',
+            format: {
+              type: 'topojson',
+              feature: 'boroughs',
+            },
+          },
+          mark: {
+            type: 'geoshape',
+            stroke: 'white',
+            strokeWidth: 2,
+          },
+          encoding: {
+            color: {
+              value: '#eee',
+            },
+          },
+        },
+        {
+          data: {
+            url: 'vegaLiteData/londonCentroids.json',
+            format: {
+              type: 'json',
+            },
+          },
+          transform: [
+            {
+              calculate:
+                "indexof (datum.name,' ') > 0  ? substring(datum.name,0,indexof(datum.name, ' ')) : datum.name",
+              as: 'bLabel',
+            },
+          ],
+          mark: 'text',
+          encoding: {
+            longitude: {
+              field: 'cx',
+              type: 'quantitative',
+            },
+            latitude: {
+              field: 'cy',
+              type: 'quantitative',
+            },
+            text: {
+              field: 'bLabel',
+              type: 'nominal',
+            },
+            size: {
+              value: 8,
+            },
+            opacity: {
+              value: 0.6,
+            },
+          },
+        },
+        {
+          data: {
+            url: 'vegaLiteData/londonTubeLines.json',
+            format: {
+              type: 'topojson',
+              feature: 'line',
+            },
+          },
+          mark: {
+            type: 'geoshape',
+            filled: false,
+            strokeWidth: 2,
+          },
+          encoding: {
+            color: {
+              field: 'id',
+              type: 'nominal',
+              legend: {
+                title: null,
+                orient: 'bottom-right',
+                offset: 0,
+              },
+              scale: {
+                domain: [
+                  'Bakerloo',
+                  'Central',
+                  'Circle',
+                  'District',
+                  'DLR',
+                  'Hammersmith & City',
+                  'Jubilee',
+                  'Metropolitan',
+                  'Northern',
+                  'Piccadilly',
+                  'Victoria',
+                  'Waterloo & City',
+                ],
+                range: [
+                  'rgb(137,78,36)',
+                  'rgb(220,36,30)',
+                  'rgb(255,206,0)',
+                  'rgb(1,114,41)',
+                  'rgb(0,175,173)',
+                  'rgb(215,153,175)',
+                  'rgb(106,114,120)',
+                  'rgb(114,17,84)',
+                  'rgb(0,0,0)',
+                  'rgb(0,24,168)',
+                  'rgb(0,160,226)',
+                  'rgb(106,187,170)',
+                ],
+              },
+            },
+          },
+        },
+      ],
+    },
+  },
+  // decorators,
+}
+
+export const GlobeVisualization = {
+  args: {
+    spec: {
+      $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
+      title: ['Globe Visualization', 'of Earthquakes'],
+
+      width: 'container',
+      height: 300,
+      projection: {
+        type: 'orthographic',
+        rotate: { expr: '[rotate0, rotate1, 0]' },
+      },
+      params: [
+        {
+          name: 'rotate0',
+          value: 0,
+          bind: { input: 'range', min: -90, max: 90, step: 1 },
+        },
+        {
+          name: 'rotate1',
+          value: 0,
+          bind: { input: 'range', min: -90, max: 90, step: 1 },
+        },
+        {
+          name: 'earthquakeSize',
+          value: 6,
+          bind: { input: 'range', min: 0, max: 12, step: 0.1 },
+        },
+      ],
+      layer: [
+        {
+          data: { sphere: true },
+          mark: { type: 'geoshape', fill: 'aliceblue' },
+        },
+        {
+          data: {
+            name: 'world',
+            url: 'vegaLiteData/world110m.json',
+            format: { type: 'topojson', feature: 'countries' },
+          },
+          mark: { type: 'geoshape', fill: 'mintcream', stroke: 'black' },
+        },
+        {
+          data: {
+            name: 'earthquakes',
+            url: 'vegaLiteData/earthquakes.json',
+            format: { type: 'json', property: 'features' },
+          },
+          transform: [
+            { calculate: 'datum.geometry.coordinates[0]', as: 'longitude' },
+            { calculate: 'datum.geometry.coordinates[1]', as: 'latitude' },
+            {
+              filter:
+                '(rotate0 * -1) - 90 < datum.longitude && datum.longitude < (rotate0 * -1) + 90 && (rotate1 * -1) - 90 < datum.latitude && datum.latitude < (rotate1 * -1) + 90',
+            },
+            { calculate: 'datum.properties.mag', as: 'magnitude' },
+          ],
+          mark: { type: 'circle', color: 'red', opacity: 0.25 },
+          encoding: {
+            longitude: { field: 'longitude', type: 'quantitative' },
+            latitude: { field: 'latitude', type: 'quantitative' },
+            size: {
+              legend: null,
+              field: 'magnitude',
+              type: 'quantitative',
+              scale: {
+                type: 'sqrt',
+                domain: [0, 100],
+                range: [0, { expr: 'pow(earthquakeSize, 3)' }],
+              },
+            },
+            tooltip: [{ field: 'magnitude' }],
+          },
+        },
+      ],
+    },
+  },
+  decorators: [
+    (Story: StoryFn) => {
+      return (
+        <div
+          style={{
+            width: 'clamp(250px, 70vw, 1000px)',
+          }}
+        >
+          <Story />
+        </div>
+      )
+    },
+  ],
+}
 export const Heatmap = {
   args: {
     spec: {
