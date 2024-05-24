@@ -138,7 +138,13 @@ export interface TableFormat extends DataFormat {
 
 export type TableData = TableFormat & Updates<TableFormat>
 
-type VegaLiteOptions = EmbedOptions<string, Renderers>
+//VegaLite's typescript doesn't recognize font as a valid props
+type VegaLiteOptions = EmbedOptions<string, Renderers> & {
+  config?: EmbedOptions['config'] & {
+    font?: string
+  }
+}
+
 export interface VegaLiteFormat extends DataFormat {
   /** Follow Vega-lite's [documentation](https://vega.github.io/vega-lite/) to provide a specification object. Schema should be included in the spec. Need to use 'container' for width or height for responsive chart. */
   spec: VisualizationSpec
