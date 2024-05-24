@@ -108,7 +108,6 @@ export const webpackFinal = async (config) => {
     type: 'asset/resource',
   })
 
-  console.log(config)
   return config
 }
 

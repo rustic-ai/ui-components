@@ -19,30 +19,15 @@ function VegaLiteViz(props: VegaLiteData) {
 
   function renderChart() {
     if (chartRef.current && props.spec) {
-      const defaultConfig = {
-        font: defaultFont,
-      }
-
       const { config, ...restOptions } = props.options || {}
 
-      let combinedConfig
-      if (config) {
-        if (typeof config === 'string') {
-          combinedConfig = config
-        } else {
-          combinedConfig = {
-            ...defaultConfig,
-            ...config,
-            font: config.font || defaultConfig.font,
-          }
-        }
-      } else {
-        combinedConfig = defaultConfig
+      if (config && !config.font) {
+        config.font = defaultFont
       }
 
       const options = {
-        config: combinedConfig,
         ...restOptions,
+        config: config ? config : { font: defaultFont },
         theme: isDarkTheme ? props.theme?.dark : props.theme?.light,
       }
 
