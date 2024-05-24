@@ -1,5 +1,6 @@
 import './vegaLiteViz.css'
 
+import type { Theme } from '@mui/material/styles'
 import Typography from '@mui/material/Typography'
 import Stack from '@mui/system/Stack'
 import useTheme from '@mui/system/useTheme'
@@ -12,26 +13,33 @@ import type { VegaLiteData } from '../../types'
 function VegaLiteViz(props: VegaLiteData) {
   const chartRef = useRef<HTMLDivElement>(null)
   const [hasError, setHasError] = useState<boolean>(false)
-  const isDarkTheme = useTheme().palette.mode === 'dark'
+  const rusticTheme: Theme = useTheme()
+  const isDarkTheme = rusticTheme.palette.mode === 'dark'
+  const defaultFont = rusticTheme.typography.fontFamily
+
+  function renderChart() {
+    if (chartRef.current && props.spec) {
+      const options = {
+        config: { font: defaultFont },
+        ...props.options,
+        theme: isDarkTheme ? props.theme?.dark : props.theme?.light,
+      }
+
+      if (!props.options?.config?.font) {
+        options.config.font = defaultFont
+      }
+
+      VegaEmbed(chartRef.current, props.spec, options)
+        .then(() => {
+          setHasError(false)
+        })
+        .catch(() => {
+          setHasError(true)
+        })
+    }
+  }
 
   useEffect(() => {
-    function renderChart() {
-      if (chartRef.current && props.spec) {
-        const options = {
-          ...props.options,
-          theme: isDarkTheme ? props.theme?.dark : props.theme?.light,
-        }
-
-        VegaEmbed(chartRef.current, props.spec, options)
-          .then(() => {
-            setHasError(false)
-          })
-          .catch(() => {
-            setHasError(true)
-          })
-      }
-    }
-
     renderChart()
 
     function handleResize() {

@@ -75,10 +75,6 @@ export const withMuiTheme = (Story, context) => {
           }}
         >
           <link
-            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
-            rel="stylesheet"
-          />
-          <link
             rel="stylesheet"
             href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0"
           />
@@ -97,6 +93,19 @@ export const webpackFinal = async (config) => {
     test: /\.css$/,
     use: ['style-loader', 'css-loader'],
     include: path.resolve(__dirname, '../'),
+  })
+
+  config.module.rules.push({
+    test: /\.(woff|woff2|eot|ttf|otf)$/i,
+    use: [
+      {
+        loader: 'file-loader',
+        query: {
+          name: 'Inter-VariableFont_slnt,wght.ttf',
+        },
+      },
+    ],
+    type: 'asset/resource',
   })
 
   return config
