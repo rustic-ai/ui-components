@@ -15,7 +15,7 @@ function VegaLiteViz(props: VegaLiteData) {
   const [hasError, setHasError] = useState<boolean>(false)
   const rusticTheme: Theme = useTheme()
   const isDarkTheme = rusticTheme.palette.mode === 'dark'
-  const defaultFont = 'cursive'
+  const defaultFont = rusticTheme.typography.fontFamily
 
   function renderChart() {
     if (chartRef.current && props.spec) {
