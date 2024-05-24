@@ -15,20 +15,18 @@ function VegaLiteViz(props: VegaLiteData) {
   const [hasError, setHasError] = useState<boolean>(false)
   const rusticTheme: Theme = useTheme()
   const isDarkTheme = rusticTheme.palette.mode === 'dark'
-  const defaultFont = rusticTheme.typography.fontFamily
+  const defaultFont = 'cursive'
 
   function renderChart() {
     if (chartRef.current && props.spec) {
-      const { config, ...restOptions } = props.options || {}
-
-      if (config && !config.font) {
-        config.font = defaultFont
+      const options = {
+        config: { font: defaultFont },
+        ...props.options,
+        theme: isDarkTheme ? props.theme?.dark : props.theme?.light,
       }
 
-      const options = {
-        ...restOptions,
-        config: config ? config : { font: defaultFont },
-        theme: isDarkTheme ? props.theme?.dark : props.theme?.light,
+      if (!props.options?.config?.font) {
+        options.config.font = defaultFont
       }
 
       VegaEmbed(chartRef.current, props.spec, options)
