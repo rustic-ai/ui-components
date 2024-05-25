@@ -181,24 +181,6 @@ export interface MultipartFormat extends DataFormat {
 
 export type MultipartData = MultipartFormat & Updates<MultipartFormat>
 
-export interface Answer {
-  label: string
-  value: string | number | boolean | bigint
-}
-
-export interface QuestionFormat extends DataFormat {
-  answers: Answer[]
-  ws: WebSocketClient
-  /** Id of the current user. */
-  sender: string
-  /** Id of the current conversation. */
-  conversationId: string
-  /** Id of this message for answers to reply to. */
-  messageId: string
-}
-
-export type QuestionData = QuestionFormat & Updates<QuestionFormat>
-
 export interface BaseInputProps {
   /** Id of the current user. */
   sender: string
@@ -206,7 +188,7 @@ export interface BaseInputProps {
   conversationId: string
   /** Label text to be displayed in the input, which will then move to the top when the input is focused on. If both label and placeholder are provided, the placeholder will only be visible once the input is focused on. */
   label?: string
-  /** Placeholder text to be displayed in the input before user starts typing. */
+  /** Placeholder text to be displayed in the input before user start01s typing. */
   placeholder?: string
   /** Boolean that dictates whether `TextInput` can expand to be multiline. */
   multiline?: boolean
@@ -256,3 +238,14 @@ export type MultimodalInputProps = TextInputProps &
     | 'filePreviewsContainer'
     | 'errorMessagesContainer'
   >
+
+export interface QuestionFormat extends DataFormat {
+  options: (string | number)[]
+}
+
+export interface QuestionProps extends QuestionFormat {
+  ws: WebSocketClient
+  messageId: string
+  conversationId: string
+  currentUser: string
+}

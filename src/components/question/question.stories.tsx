@@ -14,7 +14,7 @@ const meta: Meta<React.ComponentProps<typeof Question>> = {
   decorators: [
     (Story: StoryFn) => {
       return (
-        <div style={{ maxWidth: '600px' }}>
+        <div style={{ maxWidth: '400px' }}>
           <Story />
         </div>
       )
@@ -34,11 +34,11 @@ meta.argTypes = {
       },
     },
   },
-  answers: {
-    description: 'Array of answers to choose from.',
+  options: {
+    description: 'Array of options to choose from.',
     table: {
       type: {
-        summary: 'Answer',
+        summary: 'Option',
         detail:
           'label: A string label.\nvalue: Some value associated with this answer of any type.',
       },
@@ -48,21 +48,12 @@ meta.argTypes = {
 
 export default meta
 
-const answers = [
-  { label: 'Accept', value: 0 },
-  { label: 'Ignore', value: 1 },
-]
+const options = ['Accept', 'Ignore']
 
-const manyAnswers = [
-  { label: 'Of course', value: 0 },
-  { label: 'Yes', value: 1 },
-  { label: 'Undecided', value: 2 },
-  { label: 'No', value: 3 },
-  { label: 'Definitely not', value: 4 },
-]
+const manyOptions = ['Of course', 'Yes', 'Maybe', 'No', 'Absolutely not']
 
 const conversationData = {
-  sender: 'You',
+  currentUser: 'You',
   conversationId: '1',
   messageId: '1',
   ws: {
@@ -76,7 +67,7 @@ export const Default = {
     title: 'What do you think?',
     description:
       'The description supports **markdown**! Choose either of the options *below*.',
-    answers,
+    options: options,
   },
 }
 
@@ -85,13 +76,6 @@ export const MultipleChoice = {
     ...conversationData,
     title: 'Do pineapples belong on pizza?',
     description: 'You can only choose one. Choose wisely.',
-    answers: manyAnswers,
-  },
-}
-
-export const EmptyArray = {
-  args: {
-    ...conversationData,
-    answers: [],
+    options: manyOptions,
   },
 }

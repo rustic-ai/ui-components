@@ -8,29 +8,28 @@ import Typography from '@mui/material/Typography'
 import React, { useState } from 'react'
 import { v4 as getUUID } from 'uuid'
 
-import Icon from '../icon'
 import MarkedMarkdown from '../markdown/markedMarkdown'
-import type { Message, QuestionData } from '../types'
+import type { Message, QuestionProps } from '../types'
 
 /**
 'The `Question` component provides a user interface for selecting an answer from a list of choices. It is designed to facilitate interactive decision-making and response submission within a conversation or messaging context.
  */
-export default function Question(props: QuestionData) {
-  const [selectedAnswer, setSelectedAnswer] = useState('')
+export default function Question(props: QuestionProps) {
+  const [selectedAnswer, setSelectedAnswer] = useState<string | number>('')
 
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
 
   const buttonGroupOrientation = isMobile ? 'column' : 'row'
 
-  function handleSubmitResponse(response: string) {
+  function handleSubmitResponse(response: string | number) {
     setSelectedAnswer(response)
     const currentTime = new Date().toISOString()
 
     const formattedMessage: Message = {
       id: getUUID(),
       timestamp: currentTime,
-      sender: props.sender,
+      sender: props.currentUser,
       conversationId: props.conversationId,
       format: 'text',
       data: { text: response },
@@ -40,35 +39,25 @@ export default function Question(props: QuestionData) {
     props.ws.send(formattedMessage)
   }
 
-  const buttonList = props.answers.map((answer) => {
-    let buttonStyles = {
-      borderColor: 'secondary.dark',
-      color: 'text.primary',
-    }
-
+  const buttonList = props.options.map((option, index) => {
     const selectedStyles = {
-      backgroundColor: 'secondary.main',
-      '&.Mui-disabled': { color: 'text.primary' },
-    }
-
-    if (answer.label === selectedAnswer) {
-      buttonStyles = {
-        ...buttonStyles,
-        ...selectedStyles,
-      }
+      '&.Mui-disabled': {
+        color: 'text.primary',
+        backgroundColor: 'secondary.main',
+      },
     }
 
     return (
       <Button
-        key={answer.label}
-        onClick={() => handleSubmitResponse(answer.label)}
+        key={index}
+        onClick={() => handleSubmitResponse(option)}
         variant="outlined"
-        sx={buttonStyles}
-        startIcon={selectedAnswer === answer.label && <Icon name="check" />}
+        sx={selectedAnswer === option ? selectedStyles : {}}
+        color="secondary"
         className="rustic-answer-button"
         disabled={!!selectedAnswer}
       >
-        {answer.label}
+        {option}
       </Button>
     )
   })
@@ -87,19 +76,13 @@ export default function Question(props: QuestionData) {
         </Box>
       )}
 
-      {props.answers.length > 0 ? (
-        <Stack
-          direction={buttonGroupOrientation}
-          data-cy="buttons-container"
-          className="rustic-answer-buttons-container"
-        >
-          {buttonList}
-        </Stack>
-      ) : (
-        <Typography variant="caption" data-cy="no-answers-message">
-          No answers were provided.
-        </Typography>
-      )}
+      <Stack
+        direction={buttonGroupOrientation}
+        data-cy="buttons-container"
+        className="rustic-answer-buttons-container"
+      >
+        {buttonList}
+      </Stack>
     </Box>
   )
 }

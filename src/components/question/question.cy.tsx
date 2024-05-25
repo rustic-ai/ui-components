@@ -4,20 +4,16 @@ import Question from './question'
 describe('Question', () => {
   const question = '[data-cy=question]'
   const buttonsContainer = '[data-cy=buttons-container]'
-  const noAnswersMessage = '[data-cy=no-answers-message]'
 
   const title = 'Sample title'
   const description = 'Sample description'
-  const answers = [
-    { label: 'Accept', value: 0 },
-    { label: 'Ignore', value: 1 },
-  ]
+  const options = ['Accept', 'Ignore']
 
   const commonProps = {
     title,
     description,
     conversationId: '1',
-    sender: 'You',
+    currentUser: 'You',
     messageId: '1',
   }
 
@@ -28,14 +24,14 @@ describe('Question', () => {
       reconnect: cy.stub(),
     }
 
-    cy.mount(<Question {...commonProps} ws={mockWsClient} answers={answers} />)
+    cy.mount(<Question {...commonProps} ws={mockWsClient} options={options} />)
   })
 
   supportedViewports.forEach((viewport) => {
     it(`renders the component correctly on ${viewport} screen`, () => {
       cy.viewport(viewport)
       cy.get(question).should('be.visible')
-      cy.get(buttonsContainer).children().should('have.length', answers.length)
+      cy.get(buttonsContainer).children().should('have.length', options.length)
       cy.get(question).should('contain', title)
       cy.get(question).should('contain', description)
     })
@@ -53,18 +49,6 @@ describe('Question', () => {
       cy.get(buttonsContainer).children().first().click()
       cy.get(buttonsContainer).children().first().should('be.disabled')
       cy.get(buttonsContainer).children().last().should('be.disabled')
-    })
-
-    it(`does not render buttons when the choices array is empty on ${viewport} screen`, () => {
-      const mockWsClient = {
-        send: cy.stub(),
-        close: cy.stub(),
-        reconnect: cy.stub(),
-      }
-      cy.mount(<Question {...commonProps} ws={mockWsClient} answers={[]} />)
-      cy.viewport(viewport)
-      cy.get(buttonsContainer).should('not.exist')
-      cy.get(noAnswersMessage).should('contain', 'No answers were provided.')
     })
   })
 })

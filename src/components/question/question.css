@@ -9,8 +9,10 @@
 .rustic-question .rustic-answer-button {
   flex: 1;
   min-width: fit-content;
+  text-transform: none;
 }
 
 .rustic-question .rustic-answer-buttons-container {
   gap: 8px;
+  flex-wrap: wrap;
 }
