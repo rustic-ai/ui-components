@@ -2,7 +2,7 @@ import Typography from '@mui/material/Typography'
 import Box from '@mui/system/Box'
 import React from 'react'
 
-import Icon from '../icon'
+import Icon from '../icon/icon'
 import PopoverMenu from './popoverMenu'
 
 export default {

@@ -9,7 +9,7 @@ import Typography from '@mui/material/Typography'
 import React, { useState } from 'react'
 
 import { formatDurationTime } from '../../helper'
-import Icon from '../../icon'
+import Icon from '../../icon/icon'
 import { MediaIconButton } from './mediaIconButton'
 
 export interface MediaControls {

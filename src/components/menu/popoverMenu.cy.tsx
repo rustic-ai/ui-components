@@ -2,7 +2,7 @@
 import React from 'react'
 
 import { supportedViewports } from '../../../cypress/support/variables'
-import Icon from '../icon'
+import Icon from '../icon/icon'
 import PopoverMenu from './popoverMenu'
 
 describe('PopOverMenu', () => {

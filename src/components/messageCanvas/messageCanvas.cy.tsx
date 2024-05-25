@@ -2,7 +2,7 @@
 import 'cypress-real-events'
 
 import { supportedViewports } from '../../../cypress/support/variables'
-import Icon from '../icon'
+import Icon from '../icon/icon'
 import type { ThreadableMessage } from '../types'
 import CopyText from './actions/copy/copyText'
 import MessageCanvas from './messageCanvas'

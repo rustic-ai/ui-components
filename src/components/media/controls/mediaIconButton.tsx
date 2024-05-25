@@ -2,7 +2,7 @@ import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import React from 'react'
 
-import Icon from '../../icon'
+import Icon from '../../icon/icon'
 
 interface MediaIconButtonProps {
   onClick: () => void
@@ -57,7 +57,10 @@ export function MediaIconButton(props: MediaIconButtonProps) {
         data-cy={`${dataCyPrefix}-button`}
         color="primary"
       >
-        <Icon name={controls[props.action].symbol} />
+        <Icon
+          name={controls[props.action].symbol}
+          className="rustic-icon-large"
+        />
       </IconButton>
     </Tooltip>
   )

@@ -7,7 +7,7 @@ import Box from '@mui/system/Box'
 import React from 'react'
 
 import FilePreview from '../filePreview/filePreview'
-import Icon from '../icon'
+import Icon from '../icon/icon'
 import Text from '../text/text'
 import type { MultipartData } from '../types'
 

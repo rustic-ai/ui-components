@@ -16,7 +16,7 @@ import {
   Text,
   YoutubeVideo,
 } from '..'
-import Icon from '../icon'
+import Icon from '../icon/icon'
 import MessageSpace from './messageSpace'
 
 describe('MessageSpace Component', () => {
