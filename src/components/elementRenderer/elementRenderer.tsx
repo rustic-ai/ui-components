@@ -1,9 +1,11 @@
 import Typography from '@mui/material/Typography'
 import React from 'react'
 
-import type { ComponentMap, ThreadableMessage } from '../types'
+import type { ComponentMap, ThreadableMessage, WebSocketClient } from '../types'
 
 interface ElementRendererProps {
+  currentUser: string
+  ws: WebSocketClient
   message: ThreadableMessage
   supportedElements: ComponentMap
 }
@@ -15,6 +17,10 @@ const ElementRenderer = (props: ElementRendererProps) => {
     <>
       {MaybeElement ? (
         React.createElement(MaybeElement, {
+          currentUser: props.currentUser,
+          ws: props.ws,
+          messageId: props.message.id,
+          conversationId: props.message.conversationId,
           ...props.message.data,
           ...(props.message.threadMessagesData && {
             updatedData: props.message.threadMessagesData,
