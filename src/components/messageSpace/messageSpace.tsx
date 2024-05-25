@@ -5,7 +5,7 @@ import Box from '@mui/system/Box'
 import React, { useEffect, useRef, useState } from 'react'
 
 import ElementRenderer from '../elementRenderer/elementRenderer'
-import Icon from '../icon'
+import Icon from '../icon/icon'
 import MessageCanvas, {
   type MessageContainerProps,
 } from '../messageCanvas/messageCanvas'

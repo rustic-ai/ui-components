@@ -21,7 +21,7 @@ import {
   YoutubeVideo,
 } from '..'
 import CodeSnippet from '../codeSnippet/codeSnippet'
-import Icon from '../icon'
+import Icon from '../icon/icon'
 import CopyText from '../messageCanvas/actions/copy/copyText'
 import MessageSpace from './messageSpace'
 

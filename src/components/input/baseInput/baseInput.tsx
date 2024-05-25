@@ -11,7 +11,7 @@ import { type ForwardedRef, forwardRef, useRef, useState } from 'react'
 import React from 'react'
 import { v4 as getUUID } from 'uuid'
 
-import Icon from '../../icon'
+import Icon from '../../icon/icon'
 import type { BaseInputProps, Message } from '../../types'
 
 function BaseInputElement(

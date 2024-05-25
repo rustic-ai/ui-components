@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { ElementRenderer, type ThreadableMessage } from '..'
-import Icon from '../icon'
+import Icon from '../icon/icon'
 import Text from '../text/text'
 import CopyText from './actions/copy/copyText'
 import MessageCanvas from './messageCanvas'

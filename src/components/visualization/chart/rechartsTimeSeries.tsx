@@ -25,7 +25,7 @@ import {
 } from 'recharts'
 
 import { calculateTimeDiffInDays, formatTimestampLabel } from '../../helper'
-import Icon from '../../icon'
+import Icon from '../../icon/icon'
 
 export interface TimeSeriesData {
   timestamp: number

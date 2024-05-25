@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-import Icon from '../../../icon'
+import Icon from '../../../icon/icon'
 import type { ThreadableMessage } from '../../../types'
 import Action from '../index'
 

@@ -13,7 +13,7 @@ import { Box } from '@mui/system'
 import type { ReactNode } from 'react'
 import React, { useRef, useState } from 'react'
 
-import Icon from '../icon'
+import Icon from '../icon/icon'
 
 export interface PopoverMenuItem {
   label: string
