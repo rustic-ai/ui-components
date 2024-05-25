@@ -2,21 +2,31 @@ import './vegaLiteViz.css'
 
 import type { Theme } from '@mui/material/styles'
 import Typography from '@mui/material/Typography'
+import Box from '@mui/system/Box'
 import Stack from '@mui/system/Stack'
 import useTheme from '@mui/system/useTheme'
 import React, { useEffect, useRef, useState } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { default as VegaEmbed } from 'vega-embed'
 
+import PopoverMenu from '../../menu/popoverMenu'
 import type { VegaLiteData } from '../../types'
+
+interface downloadUrls {
+  svg?: string
+  png?: string
+}
 
 /** The `VegaLiteViz` component is a versatile tool for visualizing data using the Vega-Lite grammar. With support for various graphic types, it empowers users to create engaging and informative data visualizations effortlessly. */
 function VegaLiteViz(props: VegaLiteData) {
   const chartRef = useRef<HTMLDivElement>(null)
   const [hasError, setHasError] = useState<boolean>(false)
+  const [downloadUrls, setDownloadUrls] = useState<downloadUrls>()
+
   const rusticTheme: Theme = useTheme()
   const isDarkTheme = rusticTheme.palette.mode === 'dark'
   const defaultFont = rusticTheme.typography.fontFamily
+
   const tooltipStyle = {
     backgroundColor: rusticTheme.palette.primary.main,
     color: rusticTheme.palette.background.paper,
@@ -55,6 +65,7 @@ function VegaLiteViz(props: VegaLiteData) {
         ...props.options,
         theme: isDarkTheme ? props.theme?.dark : props.theme?.light,
         tooltip: tooltipOptions,
+        actions: false,
       }
 
       if (!props.options?.config?.font) {
@@ -62,7 +73,16 @@ function VegaLiteViz(props: VegaLiteData) {
       }
 
       VegaEmbed(chartRef.current, props.spec, options)
-        .then(() => {
+        .then((result) => {
+          const urls: downloadUrls = {}
+          result.view.toImageURL('svg').then((url) => {
+            urls.svg = url
+          })
+
+          result.view.toImageURL('png').then((url) => {
+            urls.png = url
+          })
+          setDownloadUrls(urls)
           setHasError(false)
         })
         .catch(() => {
@@ -85,11 +105,39 @@ function VegaLiteViz(props: VegaLiteData) {
     }
   }, [props.spec, isDarkTheme])
 
+  const handleDownload = (format: 'svg' | 'png') => {
+    if (downloadUrls) {
+      // Create a temporary anchor element
+      const link = document.createElement('a')
+      link.href = downloadUrls[format] || ''
+      link.download = `Vega-Lite-Visualization.${format}`
+
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+    }
+  }
+
+  const menuItem = [
+    {
+      label: 'Save as SVG',
+      onClick: () => handleDownload('svg'),
+    },
+    {
+      label: 'Save as PNG',
+      onClick: () => handleDownload('png'),
+    },
+  ]
+
   if (hasError) {
     return <Typography variant="body2">Failed to load the chart.</Typography>
   } else {
     return (
       <Stack direction="column" className="rustic-vega-lite-container">
+        <Box justifyContent="end" display="flex">
+          <PopoverMenu menuItems={menuItem} ariaLabel="menu" />
+        </Box>
+
         {props.title && (
           <Typography variant="subtitle2">{props.title}</Typography>
         )}
