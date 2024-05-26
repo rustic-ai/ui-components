@@ -68,11 +68,11 @@ export function ProgressSlider(props: MediaControls) {
         variant="determinate"
         value={bufferedPercent}
         sx={{
-          backgroundColor: theme.palette.action.focus,
+          backgroundColor: 'action.focus',
           '& .MuiLinearProgress-bar': {
             backgroundColor: isDarkTheme
-              ? theme.palette.secondary.light
-              : theme.palette.action.selected,
+              ? 'secondary.light'
+              : 'action.selected',
           },
         }}
       />
@@ -96,7 +96,7 @@ export function ProgressSlider(props: MediaControls) {
         color="secondary"
         sx={{
           '& .MuiSlider-rail': {
-            opacity: 0,
+            color: 'action.focus',
           },
         }}
       />
