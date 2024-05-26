@@ -16,6 +16,28 @@ function VegaLiteViz(props: VegaLiteData) {
   const rusticTheme: Theme = useTheme()
   const isDarkTheme = rusticTheme.palette.mode === 'dark'
   const defaultFont = rusticTheme.typography.fontFamily
+  const tooltipBackgroundColor = rusticTheme.palette.primary.main
+  const tooltipTextColor = rusticTheme.palette.background.paper
+  const borderRadius = rusticTheme.shape.borderRadius
+  const tooltipFontSize = rusticTheme.typography.caption.fontSize
+  const tooltipFontWeight = rusticTheme.typography.caption.fontWeight
+  const tooltipOptions = {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    formatTooltip: (value: any, sanitize: (value: any) => string) => {
+      let tooltipContent = `<div class='rustic-vega-lite-tooltip-content' style="background-color: ${tooltipBackgroundColor}; color: ${tooltipTextColor};border-radius: ${borderRadius}px; padding: 4px 8px; font-size: ${tooltipFontSize}; font-family: ${defaultFont}; font-weight: ${tooltipFontWeight};">`
+
+      for (const key in value) {
+        if (Object.prototype.hasOwnProperty.call(value, key)) {
+          tooltipContent += `<strong>${sanitize(key)}:</strong> ${sanitize(value[key])}<br />`
+        }
+      }
+      tooltipContent += '</div>'
+      return tooltipContent
+    },
+    disableDefaultStyle: true,
+    //need this id to hide and show tooltip
+    id: 'rustic-vega-lite-tooltip',
+  }
 
   function renderChart() {
     if (chartRef.current && props.spec) {
@@ -23,6 +45,7 @@ function VegaLiteViz(props: VegaLiteData) {
         config: { font: defaultFont },
         ...props.options,
         theme: isDarkTheme ? props.theme?.dark : props.theme?.light,
+        tooltip: tooltipOptions,
       }
 
       if (!props.options?.config?.font) {

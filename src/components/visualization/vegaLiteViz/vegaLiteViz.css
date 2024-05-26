@@ -7,3 +7,12 @@
 .rustic-vega-lite {
   flex: 1;
 }
+
+#rustic-vega-lite-tooltip {
+  position: fixed;
+  visibility: hidden;
+}
+
+#rustic-vega-lite-tooltip.visible {
+  visibility: visible;
+}
