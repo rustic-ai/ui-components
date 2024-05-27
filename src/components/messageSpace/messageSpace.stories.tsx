@@ -70,8 +70,6 @@ meta.argTypes = {
     },
   },
   ws: {
-    description:
-      'WebSocket connection to send and receive messages to and from a backend. Some components in this library require this value in order to be functional, such as the `Question` component.',
     table: {
       type: {
         summary: 'WebSocketClient',
@@ -79,10 +77,6 @@ meta.argTypes = {
           'send: (message: Message) => void\nclose: () => void\nreconnect: () => void\n',
       },
     },
-  },
-  sender: {
-    description:
-      'ID of the current user. Some components in this library require this value in order to be functional, such as the `Question` component.',
   },
 }
 const conversationId = '1'
