@@ -1,5 +1,6 @@
 import './commonControls.css'
 
+import { useTheme } from '@mui/material'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import LinearProgress from '@mui/material/LinearProgress'
@@ -32,6 +33,9 @@ interface MoveTenSecondsButtonProps extends MediaControls {
 const percentMultiple = 100
 
 export function ProgressSlider(props: MediaControls) {
+  const theme = useTheme()
+  const isDarkTheme = theme.palette.mode === 'dark'
+
   const formattedElapsedTime = formatDurationTime(
     props.mediaElement.currentTime
   )
@@ -63,6 +67,14 @@ export function ProgressSlider(props: MediaControls) {
         className="rustic-progress-buffered"
         variant="determinate"
         value={bufferedPercent}
+        sx={{
+          backgroundColor: 'action.focus',
+          '& .MuiLinearProgress-bar': {
+            backgroundColor: isDarkTheme
+              ? 'secondary.light'
+              : 'action.selected',
+          },
+        }}
       />
     )
   }
@@ -82,6 +94,11 @@ export function ProgressSlider(props: MediaControls) {
         valueLabelDisplay="auto"
         valueLabelFormat={(value) => formatDurationTime(value)}
         color="secondary"
+        sx={{
+          '& .MuiSlider-rail': {
+            color: 'action.focus',
+          },
+        }}
       />
     </Box>
   )
