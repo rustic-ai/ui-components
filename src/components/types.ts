@@ -246,7 +246,7 @@ export interface ConversationProps {
   sender: string
   /** Id of the current conversation. This value will be set automatically if the component is rendered with `ElementRenderer` or `MessageSpace`. */
   conversationId: string
-  /** ID of the message. This value will be set automatically if the component is rendered with `ElementRenderer` or `MessageSpace`. */
+  /** Id of the message. This value will be set automatically if the component is rendered with `ElementRenderer` or `MessageSpace`. */
   messageId: string
 }
 
