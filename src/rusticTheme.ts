@@ -104,6 +104,9 @@ const baseTheme = createTheme({
       letterSpacing: '0.4px',
       lineHeight: 1.66,
     },
+    button: {
+      textTransform: 'capitalize',
+    },
   },
   palette: {
     common: {
@@ -136,15 +139,6 @@ const baseTheme = createTheme({
       }
     }),
   ] as Shadows,
-  components: {
-    MuiButton: {
-      styleOverrides: {
-        root: {
-          textTransform: 'capitalize',
-        },
-      },
-    },
-  },
 })
 
 const lightModePrimaryMainColor = '#3D3834'
