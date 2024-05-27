@@ -5,6 +5,7 @@ import Typography from '@mui/material/Typography'
 import Stack from '@mui/system/Stack'
 import useTheme from '@mui/system/useTheme'
 import React, { useEffect, useRef, useState } from 'react'
+import { renderToStaticMarkup } from 'react-dom/server'
 import { default as VegaEmbed } from 'vega-embed'
 
 import type { VegaLiteData } from '../../types'
@@ -16,6 +17,36 @@ function VegaLiteViz(props: VegaLiteData) {
   const rusticTheme: Theme = useTheme()
   const isDarkTheme = rusticTheme.palette.mode === 'dark'
   const defaultFont = rusticTheme.typography.fontFamily
+  const tooltipStyle = {
+    backgroundColor: rusticTheme.palette.primary.main,
+    color: rusticTheme.palette.background.paper,
+    borderRadius: rusticTheme.shape.borderRadius + 'px',
+    padding: '4px 8px',
+    fontSize: rusticTheme.typography.caption.fontSize,
+    fontFamily: defaultFont,
+    fontWeight: rusticTheme.typography.caption.fontWeight,
+  }
+
+  const tooltipOptions = {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    formatTooltip: (value: any, sanitize: (value: any) => string) =>
+      renderToStaticMarkup(
+        <div
+          role="tooltip"
+          className="rustic-vega-lite-tooltip-content"
+          style={tooltipStyle}
+        >
+          {Object.entries(value).map(([key, val]) => (
+            <div key={key}>
+              <strong>{sanitize(key)}:</strong> {sanitize(val)}
+            </div>
+          ))}
+        </div>
+      ),
+    disableDefaultStyle: true,
+    //need this id to hide and show tooltip
+    id: 'rustic-vega-lite-tooltip',
+  }
 
   function renderChart() {
     if (chartRef.current && props.spec) {
@@ -23,6 +54,7 @@ function VegaLiteViz(props: VegaLiteData) {
         config: { font: defaultFont },
         ...props.options,
         theme: isDarkTheme ? props.theme?.dark : props.theme?.light,
+        tooltip: tooltipOptions,
       }
 
       if (!props.options?.config?.font) {
