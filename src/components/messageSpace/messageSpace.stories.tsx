@@ -80,7 +80,7 @@ meta.argTypes = {
       },
     },
   },
-  currentUser: {
+  sender: {
     description:
       'ID of the current user. Some components in this library require this value in order to be functional, such as the `Question` component.',
   },
@@ -178,7 +178,7 @@ const chartColors = ['#648FFF', '#785EF0', '#DC267F', '#FE6100', '#FFB000']
 export const Default = {
   args: {
     ws: { send: () => {} },
-    currentUser: 'You',
+    sender: 'You',
     messages: [
       {
         ...humanMessageData,

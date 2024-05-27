@@ -1,8 +1,4 @@
-.rustic-question > p > *:first-child {
-  margin-top: 0;
-}
-
-.rustic-question .rustic-title {
+.rustic-question .rustic-question-text {
   margin-bottom: 16px;
 }
 

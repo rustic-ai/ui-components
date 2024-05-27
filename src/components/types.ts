@@ -239,15 +239,20 @@ export type MultimodalInputProps = TextInputProps &
     | 'errorMessagesContainer'
   >
 
-export interface SendMessageProps {
+export interface ConversationProps {
+  /** WebSocket connection to send and receive messages to and from a backend. This value will be set automatically if the component is rendered with `ElementRenderer` or `MessageSpace`. */
   ws: WebSocketClient
-  currentUser: string
+  /** Id of the current user. This value will be set automatically if the component is rendered with `ElementRenderer` or `MessageSpace`. */
+  sender: string
+  /** Id of the current conversation. This value will be set automatically if the component is rendered with `ElementRenderer` or `MessageSpace`. */
   conversationId: string
+  /** ID of the message. This value will be set automatically if the component is rendered with `ElementRenderer` or `MessageSpace`. */
   messageId: string
 }
 
 export interface QuestionFormat extends DataFormat {
+  /** Array of options to choose from. */
   options: (string | number)[]
 }
 
-export interface QuestionProps extends QuestionFormat, SendMessageProps {}
+export interface QuestionProps extends QuestionFormat, ConversationProps {}

@@ -4,7 +4,7 @@ import React from 'react'
 import type { ComponentMap, ThreadableMessage, WebSocketClient } from '../types'
 
 interface ElementRendererProps {
-  currentUser: string
+  sender: string
   ws: WebSocketClient
   message: ThreadableMessage
   supportedElements: ComponentMap
@@ -17,7 +17,7 @@ const ElementRenderer = (props: ElementRendererProps) => {
     <>
       {MaybeElement ? (
         React.createElement(MaybeElement, {
-          currentUser: props.currentUser,
+          sender: props.sender,
           ws: props.ws,
           messageId: props.message.id,
           conversationId: props.message.conversationId,

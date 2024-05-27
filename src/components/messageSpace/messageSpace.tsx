@@ -13,7 +13,7 @@ import type { ComponentMap, ThreadableMessage, WebSocketClient } from '../types'
 
 export interface MessageSpaceProps extends MessageContainerProps {
   ws: WebSocketClient
-  currentUser: string
+  sender: string
   /** A component map contains message formats as keys and their corresponding React components as values. */
   supportedElements: ComponentMap
   messages?: ThreadableMessage[]
@@ -168,7 +168,7 @@ export default function MessageSpace(props: MessageSpaceProps) {
             >
               <ElementRenderer
                 ws={props.ws}
-                currentUser={props.currentUser}
+                sender={props.sender}
                 message={message}
                 supportedElements={props.supportedElements}
               />

@@ -26,8 +26,6 @@ const meta: Meta<React.ComponentProps<typeof Question>> = {
 
 meta.argTypes = {
   ws: {
-    description:
-      'WebSocket connection to send and receive messages to and from a backend. Used for sending answer replies to this question. If this component is rendered with `ElementRenderer` or `MessageSpace`, this value will be set automatically.',
     table: {
       type: {
         summary: 'WebSocketClient',
@@ -36,58 +34,24 @@ meta.argTypes = {
       },
     },
   },
-  options: {
-    description: 'Array of options to choose from.',
-    table: {
-      type: {
-        summary: 'Option',
-        detail:
-          'label: A string label.\nvalue: Some value associated with this answer of any type.',
-      },
-    },
-  },
-  currentUser: {
-    description:
-      'ID of the current user. This will be used to set the user that is replying to this question. If this component is rendered with `ElementRenderer` or `MessageSpace`, this value will be set automatically.',
-  },
-  conversationId: {
-    description:
-      'ID of the current conversation. If this component is rendered with `ElementRenderer` or `MessageSpace`, this value will be set automatically.',
-  },
-  messageId: {
-    description:
-      'ID of the message of this question. If this component is rendered with `ElementRenderer` or `MessageSpace`, this value will be set automatically.',
-  },
 }
 
 export default meta
 
 const options = ['Yes', 'Maybe', 'No']
 
-const conversationData = {
-  currentUser: 'You',
-  conversationId: '1',
-  messageId: '1',
-}
-
 export const Default = {
   args: {
-    ...conversationData,
+    currentUser: 'You',
+    conversationId: '1',
+    messageId: '1',
     title: 'What do you think?',
-    description:
-      'The description supports **markdown**! Choose either of the options *below*.',
-    options: options,
+    description: 'Choose either of the options below.',
+    options,
   },
 }
 
 export const InMessageSpace = {
-  args: {
-    ...conversationData,
-    title: 'What do you think?',
-    description:
-      'The description supports **markdown**! Choose either of the options *below*.',
-    options: options,
-  },
   decorators: [
     (Story: StoryFn) => {
       const [selectedOption, setSelectedOption] = useState('')
@@ -106,10 +70,7 @@ export const InMessageSpace = {
           >
             <Story
               args={{
-                description:
-                  'Choose an option to see how it works in `MessageSpace`.',
-                options,
-                ...conversationData,
+                ...Default.args,
                 ws: {
                   send: (selection: Message) =>
                     setSelectedOption(selection.data.text),

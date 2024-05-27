@@ -8,7 +8,6 @@ import Typography from '@mui/material/Typography'
 import React, { useState } from 'react'
 import { v4 as getUUID } from 'uuid'
 
-import MarkedMarkdown from '../markdown/markedMarkdown'
 import type { Message, QuestionProps } from '../types'
 
 /**
@@ -29,7 +28,7 @@ export default function Question(props: QuestionProps) {
     const formattedMessage: Message = {
       id: getUUID(),
       timestamp: currentTime,
-      sender: props.currentUser,
+      sender: props.sender,
       conversationId: props.conversationId,
       format: 'text',
       data: { text: response },
@@ -72,7 +71,9 @@ export default function Question(props: QuestionProps) {
             </Typography>
           )}
 
-          {props.description && <MarkedMarkdown text={props.description} />}
+          {props.description && (
+            <Typography variant="caption">{props.description}</Typography>
+          )}
         </Box>
       )}
 
