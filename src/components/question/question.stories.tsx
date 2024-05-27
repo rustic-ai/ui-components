@@ -2,6 +2,7 @@ import type { Meta, StoryFn } from '@storybook/react'
 import React, { useState } from 'react'
 
 import MessageCanvas from '../messageCanvas/messageCanvas'
+import Text from '../text/text'
 import type { Message } from '../types'
 import Question from './question'
 
@@ -130,7 +131,7 @@ export const InMessageSpace = {
                   },
                 }}
               >
-                {selectedOption}
+                <Text text={selectedOption} />
               </MessageCanvas>
             </div>
           )}
