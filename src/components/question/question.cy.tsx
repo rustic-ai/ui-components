@@ -13,7 +13,7 @@ describe('Question', () => {
     title,
     description,
     conversationId: '1',
-    currentUser: 'You',
+    sender: 'You',
     messageId: '1',
   }
 

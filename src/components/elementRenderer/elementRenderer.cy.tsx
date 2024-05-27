@@ -16,14 +16,10 @@ const sampleMessage = {
   sender: 'Some Sender',
   conversationId: 'lkd9vc',
   topicId: 'default',
-  currentUser: 'You',
-  ws: {
-    send: () => {},
-  },
 }
 
 const commonProps = {
-  currentUser: 'You',
+  sender: 'You',
   supportedElements: supportedElements,
 }
 

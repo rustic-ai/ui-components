@@ -23,7 +23,7 @@ const mockWsClient = {
 
 const commonElementRendererProps = {
   ws: mockWsClient,
-  currentUser: 'You',
+  sender: 'You',
   conversationId: '1',
 }
 

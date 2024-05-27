@@ -79,9 +79,17 @@ describe('MessageSpace Component', () => {
 
   supportedViewports.forEach((viewport) => {
     it(`renders correctly with provided messages on ${viewport} screen`, () => {
+      const mockWsClient = {
+        send: cy.stub(),
+        close: cy.stub(),
+        reconnect: cy.stub(),
+      }
+
       cy.viewport(viewport)
       cy.mount(
         <MessageSpace
+          ws={mockWsClient}
+          sender="You"
           messages={messages}
           supportedElements={supportedElements}
           getProfileComponent={(message: Message) => {
@@ -119,10 +127,19 @@ describe('MessageSpace Component', () => {
 
     it(`scrolls to bottom when "Go to bottom" button is clicked on ${viewport} screen`, () => {
       const waitTime = 500
+
+      const mockWsClient = {
+        send: cy.stub(),
+        close: cy.stub(),
+        reconnect: cy.stub(),
+      }
+
       cy.viewport(viewport)
       cy.mount(
         <div style={{ height: '200px' }}>
           <MessageSpace
+            ws={mockWsClient}
+            sender="You"
             messages={messages}
             supportedElements={supportedElements}
           />
