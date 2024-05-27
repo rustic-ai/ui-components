@@ -16,6 +16,7 @@ import MessageCanvas from './messageCanvas/messageCanvas'
 import MessageSpace from './messageSpace/messageSpace'
 import Multipart from './multipart/multipart'
 import ParticipantsContainer from './participantsContainer/participantsContainer'
+import Question from './question/question'
 import Table from './table/table'
 import StreamingText from './text/streamingText'
 import Text from './text/text'
@@ -40,6 +41,7 @@ export {
   OpenLayersMap,
   ParticipantsContainer,
   PopoverMenu,
+  Question,
   RechartsTimeSeries,
   Sound,
   StreamingText,

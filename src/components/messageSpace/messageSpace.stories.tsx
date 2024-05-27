@@ -69,6 +69,15 @@ meta.argTypes = {
       },
     },
   },
+  ws: {
+    table: {
+      type: {
+        summary: 'WebSocketClient',
+        detail:
+          'send: (message: Message) => void\nclose: () => void\nreconnect: () => void\n',
+      },
+    },
+  },
 }
 const conversationId = '1'
 
@@ -162,6 +171,8 @@ const chartColors = ['#648FFF', '#785EF0', '#DC267F', '#FE6100', '#FFB000']
 
 export const Default = {
   args: {
+    ws: { send: () => {} },
+    sender: 'You',
     messages: [
       {
         ...humanMessageData,

@@ -18,9 +18,20 @@ const sampleMessage = {
   topicId: 'default',
 }
 
+const commonProps = {
+  sender: 'You',
+  supportedElements: supportedElements,
+}
+
 describe('ElementRenderer', () => {
   supportedViewports.forEach((viewport) => {
     it(`renders the correct element for a supported format on ${viewport} screen`, () => {
+      const mockWsClient = {
+        send: cy.stub(),
+        close: cy.stub(),
+        reconnect: cy.stub(),
+      }
+
       cy.viewport(viewport)
       cy.mount(
         <ElementRenderer
@@ -29,7 +40,8 @@ describe('ElementRenderer', () => {
             data: { text: 'Test Text' },
             format: 'text',
           }}
-          supportedElements={supportedElements}
+          {...commonProps}
+          ws={mockWsClient}
         />
       )
       cy.get('p').should('contain.text', 'Test Text')
@@ -40,7 +52,8 @@ describe('ElementRenderer', () => {
             data: { youtubeVideoId: 'MtN1YnoL46Q' },
             format: 'video',
           }}
-          supportedElements={supportedElements}
+          {...commonProps}
+          ws={mockWsClient}
         />
       )
 
@@ -56,6 +69,12 @@ describe('ElementRenderer', () => {
     })
 
     it(`renders a message for an unsupported format on ${viewport} screen`, () => {
+      const mockWsClient = {
+        send: cy.stub(),
+        close: cy.stub(),
+        reconnect: cy.stub(),
+      }
+
       cy.viewport(viewport)
       cy.mount(
         <ElementRenderer
@@ -64,7 +83,8 @@ describe('ElementRenderer', () => {
             data: { text: 'Test Text' },
             format: 'unsupported',
           }}
-          supportedElements={supportedElements}
+          {...commonProps}
+          ws={mockWsClient}
         />
       )
 

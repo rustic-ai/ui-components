@@ -1,0 +1,13 @@
+.rustic-question .rustic-question-text {
+  margin-bottom: 16px;
+}
+
+.rustic-question .rustic-option {
+  flex: 1;
+  min-width: fit-content;
+}
+
+.rustic-question .rustic-options-container {
+  gap: 8px;
+  flex-wrap: wrap;
+}

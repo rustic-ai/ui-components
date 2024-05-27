@@ -15,6 +15,18 @@ export default {
   },
 }
 
+const mockWsClient = {
+  send: () => {},
+  close: () => {},
+  reconnect: () => {},
+}
+
+const commonElementRendererProps = {
+  ws: mockWsClient,
+  sender: 'You',
+  conversationId: '1',
+}
+
 const baseMessage = {
   id: '1',
   timestamp: '2020-01-02T00:00:00.000Z',
@@ -81,6 +93,7 @@ export const WithProfileIcon = {
       <ElementRenderer
         message={messageFromHuman}
         supportedElements={{ text: Text }}
+        {...commonElementRendererProps}
       />
     ),
     message: messageFromHuman,
@@ -106,6 +119,7 @@ export const NoIcon = {
       <ElementRenderer
         message={messageFromAgent}
         supportedElements={{ text: Text }}
+        {...commonElementRendererProps}
       />
     ),
     message: messageFromAgent,
@@ -129,6 +143,7 @@ export const WithCopyIcon = {
       <ElementRenderer
         message={messageFromHuman}
         supportedElements={{ text: Text }}
+        {...commonElementRendererProps}
       />
     ),
     message: messageFromHuman,
