@@ -12,10 +12,10 @@ import MarkedMarkdown from '../markdown/markedMarkdown'
 import type { Message, QuestionProps } from '../types'
 
 /**
-'The `Question` component provides a user interface for selecting an answer from a list of choices. It is designed to facilitate interactive decision-making and response submission within a conversation or messaging context.
+The `Question` component provides a user interface for selecting an option from a list. It is designed to facilitate interactive decision-making and response submission within a conversation or messaging context.
  */
 export default function Question(props: QuestionProps) {
-  const [selectedAnswer, setSelectedAnswer] = useState<string | number>('')
+  const [selectedOption, setSelectedOption] = useState<string | number>('')
 
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
@@ -23,7 +23,7 @@ export default function Question(props: QuestionProps) {
   const buttonGroupOrientation = isMobile ? 'column' : 'row'
 
   function handleSubmitResponse(response: string | number) {
-    setSelectedAnswer(response)
+    setSelectedOption(response)
     const currentTime = new Date().toISOString()
 
     const formattedMessage: Message = {
@@ -52,10 +52,10 @@ export default function Question(props: QuestionProps) {
         key={index}
         onClick={() => handleSubmitResponse(option)}
         variant="outlined"
-        sx={selectedAnswer === option ? selectedStyles : {}}
+        sx={selectedOption === option ? selectedStyles : {}}
         color="secondary"
-        className="rustic-answer-button"
-        disabled={!!selectedAnswer}
+        className="rustic-option"
+        disabled={!!selectedOption}
       >
         {option}
       </Button>
@@ -79,7 +79,7 @@ export default function Question(props: QuestionProps) {
       <Stack
         direction={buttonGroupOrientation}
         data-cy="buttons-container"
-        className="rustic-answer-buttons-container"
+        className="rustic-options-container"
       >
         {buttonList}
       </Stack>

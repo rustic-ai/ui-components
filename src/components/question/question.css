@@ -6,13 +6,12 @@
   margin-bottom: 16px;
 }
 
-.rustic-question .rustic-answer-button {
+.rustic-question .rustic-option {
   flex: 1;
   min-width: fit-content;
-  text-transform: none;
 }
 
-.rustic-question .rustic-answer-buttons-container {
+.rustic-question .rustic-options-container {
   gap: 8px;
   flex-wrap: wrap;
 }

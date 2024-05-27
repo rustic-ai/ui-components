@@ -188,7 +188,7 @@ export interface BaseInputProps {
   conversationId: string
   /** Label text to be displayed in the input, which will then move to the top when the input is focused on. If both label and placeholder are provided, the placeholder will only be visible once the input is focused on. */
   label?: string
-  /** Placeholder text to be displayed in the input before user start01s typing. */
+  /** Placeholder text to be displayed in the input before user starts typing. */
   placeholder?: string
   /** Boolean that dictates whether `TextInput` can expand to be multiline. */
   multiline?: boolean
@@ -239,13 +239,15 @@ export type MultimodalInputProps = TextInputProps &
     | 'errorMessagesContainer'
   >
 
+export interface SendMessageProps {
+  ws: WebSocketClient
+  currentUser: string
+  conversationId: string
+  messageId: string
+}
+
 export interface QuestionFormat extends DataFormat {
   options: (string | number)[]
 }
 
-export interface QuestionProps extends QuestionFormat {
-  ws: WebSocketClient
-  messageId: string
-  conversationId: string
-  currentUser: string
-}
+export interface QuestionProps extends QuestionFormat, SendMessageProps {}

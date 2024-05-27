@@ -1,6 +1,7 @@
 import type { Meta, StoryFn } from '@storybook/react'
-import React from 'react'
+import React, { useState } from 'react'
 
+import MessageCanvas from '../messageCanvas/messageCanvas'
 import type { Message } from '../types'
 import Question from './question'
 
@@ -25,7 +26,7 @@ const meta: Meta<React.ComponentProps<typeof Question>> = {
 meta.argTypes = {
   ws: {
     description:
-      'WebSocket connection to send and receive messages to and from a backend. Used for sending answer replies to this question.',
+      'WebSocket connection to send and receive messages to and from a backend. Used for sending answer replies to this question. If this component is rendered with `ElementRenderer` or `MessageSpace`, this value will be set automatically.',
     table: {
       type: {
         summary: 'WebSocketClient',
@@ -44,21 +45,28 @@ meta.argTypes = {
       },
     },
   },
+  currentUser: {
+    description:
+      'ID of the current user. This will be used to set the user that is replying to this question. If this component is rendered with `ElementRenderer` or `MessageSpace`, this value will be set automatically.',
+  },
+  conversationId: {
+    description:
+      'ID of the current conversation. If this component is rendered with `ElementRenderer` or `MessageSpace`, this value will be set automatically.',
+  },
+  messageId: {
+    description:
+      'ID of the message of this question. If this component is rendered with `ElementRenderer` or `MessageSpace`, this value will be set automatically.',
+  },
 }
 
 export default meta
 
-const options = ['Accept', 'Ignore']
-
-const manyOptions = ['Of course', 'Yes', 'Maybe', 'No', 'Absolutely not']
+const options = ['Yes', 'Maybe', 'No']
 
 const conversationData = {
   currentUser: 'You',
   conversationId: '1',
   messageId: '1',
-  ws: {
-    send: (message: Message) => alert(`Message sent: ${message.data.text}`),
-  },
 }
 
 export const Default = {
@@ -71,11 +79,63 @@ export const Default = {
   },
 }
 
-export const MultipleChoice = {
+export const InMessageSpace = {
   args: {
     ...conversationData,
-    title: 'Do pineapples belong on pizza?',
-    description: 'You can only choose one. Choose wisely.',
-    options: manyOptions,
+    title: 'What do you think?',
+    description:
+      'The description supports **markdown**! Choose either of the options *below*.',
+    options: options,
   },
+  decorators: [
+    (Story: StoryFn) => {
+      const [selectedOption, setSelectedOption] = useState('')
+
+      return (
+        <div style={{ maxWidth: '400px' }}>
+          <MessageCanvas
+            message={{
+              id: '1',
+              sender: 'Agent',
+              timestamp: new Date().toISOString(),
+              conversationId: '1',
+              format: 'question',
+              data: {},
+            }}
+          >
+            <Story
+              args={{
+                description:
+                  'Choose an option to see how it works in `MessageSpace`.',
+                options,
+                ...conversationData,
+                ws: {
+                  send: (selection: Message) =>
+                    setSelectedOption(selection.data.text),
+                },
+              }}
+            />
+          </MessageCanvas>
+          {selectedOption.length > 0 && (
+            <div style={{ marginTop: '1rem' }}>
+              <MessageCanvas
+                message={{
+                  id: '2',
+                  sender: 'You',
+                  timestamp: new Date().toISOString(),
+                  conversationId: '1',
+                  format: 'text',
+                  data: {
+                    text: selectedOption,
+                  },
+                }}
+              >
+                {selectedOption}
+              </MessageCanvas>
+            </div>
+          )}
+        </div>
+      )
+    },
+  ],
 }

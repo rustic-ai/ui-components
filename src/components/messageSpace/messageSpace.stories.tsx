@@ -69,6 +69,21 @@ meta.argTypes = {
       },
     },
   },
+  ws: {
+    description:
+      'WebSocket connection to send and receive messages to and from a backend. Some components in this library require this value in order to be functional, such as the `Question` component.',
+    table: {
+      type: {
+        summary: 'WebSocketClient',
+        detail:
+          'send: (message: Message) => void\nclose: () => void\nreconnect: () => void\n',
+      },
+    },
+  },
+  currentUser: {
+    description:
+      'ID of the current user. Some components in this library require this value in order to be functional, such as the `Question` component.',
+  },
 }
 const conversationId = '1'
 
@@ -162,6 +177,8 @@ const chartColors = ['#648FFF', '#785EF0', '#DC267F', '#FE6100', '#FFB000']
 
 export const Default = {
   args: {
+    ws: { send: () => {} },
+    currentUser: 'You',
     messages: [
       {
         ...humanMessageData,
