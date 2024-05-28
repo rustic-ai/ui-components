@@ -121,6 +121,11 @@ export interface ImageFormat extends DataFormat {
   alt?: string
 }
 
+export interface SvgFormat extends DataFormat {
+  /** SVG code that will be rendered. */
+  code: string
+}
+
 export interface TableHeader {
   /** Field in table data for this header. */
   dataKey: string
