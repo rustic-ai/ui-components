@@ -46,7 +46,7 @@ function MessageCanvasElement(
       data-cy="message-canvas"
       ref={ref}
     >
-      <Stack className="rustic-sender-info">
+      <Stack direction="row" alignItems="center" spacing={1}>
         {props.getProfileComponent && props.getProfileComponent(props.message)}
         <Typography variant="body1" color="text.secondary" data-cy="sender">
           {props.message.sender}

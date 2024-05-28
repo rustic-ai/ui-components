@@ -7,12 +7,6 @@
   padding: 16px;
 }
 
-.rustic-message-canvas .rustic-sender-info {
-  flex-direction: row;
-  align-items: center;
-  gap: 8px;
-}
-
 .rustic-message-canvas .rustic-message-actions-container {
   opacity: 0;
   position: absolute;
@@ -23,7 +17,7 @@
 }
 
 .rustic-message-canvas .rustic-timestamp {
-  margin-left: 8px;
+  margin-left: 16px;
   align-self: flex-end;
 }
 
