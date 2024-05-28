@@ -181,6 +181,7 @@ export default function MessageSpace(props: MessageSpaceProps) {
         <Button
           data-cy="scroll-down-button"
           variant="contained"
+          color="secondary"
           className="rustic-scroll-down-button"
           onClick={handleScrollDown}
           endIcon={<Icon name="arrow_downward" className="rustic-end-icon" />}
