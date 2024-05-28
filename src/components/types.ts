@@ -1,3 +1,4 @@
+import type { MermaidConfig } from 'mermaid'
 import type { Renderers } from 'vega'
 import type { EmbedOptions, VisualizationSpec } from 'vega-embed'
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -156,6 +157,15 @@ export interface VegaLiteFormat extends DataFormat {
 }
 
 export type VegaLiteData = VegaLiteFormat & Updates<VegaLiteFormat>
+
+export interface MermaidFormat extends DataFormat {
+  /** Follow mermaid's [documentation](https://mermaid.js.org/intro/) to provide a code string.  */
+  code: string
+  /** Follow mermaid's [documentation](https://mermaid.js.org/config/setup/README.html) to provide a config object. It's used for additional customizations. */
+  config?: MermaidConfig
+}
+
+export type MermaidData = MermaidFormat & Updates<MermaidFormat>
 
 export interface MediaFormat extends DataFormat {
   /** URL of the media file to be played. */
