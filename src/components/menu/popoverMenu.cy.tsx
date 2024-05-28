@@ -109,6 +109,28 @@ describe('PopOverMenu', () => {
       cy.get('@consoleLogSpy').should('be.calledWith', 'click')
     })
 
+    it(`should render menu item with correct href and download attributes on ${viewport} screen`, () => {
+      cy.viewport(viewport)
+      cy.mount(
+        <PopoverMenu
+          menuItems={[
+            {
+              label: 'Download SVG',
+              href: 'https://example.com/file.svg',
+              downloadFileName: 'file.svg',
+            },
+          ]}
+          ariaLabel={ariaLabel}
+        />
+      )
+
+      cy.get(openMenu).click()
+
+      cy.get('a')
+        .should('have.attr', 'href', 'https://example.com/file.svg')
+        .and('have.attr', 'download', 'file.svg')
+    })
+
     it(`renders the correct button if the buttonText prop is provided on ${viewport} screen`, () => {
       const button = '[data-cy=menu-button]'
       const iconButton = '[data-cy=menu-icon-button]'
