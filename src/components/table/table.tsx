@@ -1,6 +1,6 @@
 import './table.css'
 
-import Box from '@mui/material/Box'
+import Stack from '@mui/material/Stack'
 import { default as MuiTable } from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
@@ -45,10 +45,10 @@ export default function Table(props: TableData) {
   }
 
   return (
-    <Box className="rustic-table">
+    <Stack className="rustic-table" spacing={1}>
       {props.title && (
         <Typography
-          variant="body1"
+          variant="h6"
           data-cy="table-title"
           className="rustic-table-title"
         >
@@ -56,7 +56,7 @@ export default function Table(props: TableData) {
         </Typography>
       )}
       {props.description && (
-        <Typography variant="subtitle2" data-cy="table-description">
+        <Typography variant="body1" data-cy="table-description">
           {props.description}
         </Typography>
       )}
@@ -104,6 +104,6 @@ export default function Table(props: TableData) {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       )}
-    </Box>
+    </Stack>
   )
 }

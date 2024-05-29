@@ -2,10 +2,6 @@
   max-width: calc(100vw - 100px);
 }
 
-.rustic-table .rustic-table-title {
-  text-align: center;
-}
-
 .rustic-table .rustic-table-container {
   max-height: 40vh;
 }
