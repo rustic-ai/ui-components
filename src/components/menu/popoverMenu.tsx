@@ -19,7 +19,8 @@ export interface PopoverMenuItem {
   label: string
   onClick?: (event?: React.MouseEvent<HTMLElement>) => void
   href?: string
-  download?: string | boolean
+  isFiledownload?: boolean
+  downloadFileName?: string
   startDecorator?: ReactNode
   endDecorator?: ReactNode
 }
@@ -87,8 +88,8 @@ export default function PopoverMenu(props: PopoverMenuProps) {
     function handleOnClick(event: React.MouseEvent<HTMLElement>) {
       if (menuItem.onClick) {
         menuItem.onClick(event)
-        setIsMenuOpen(false)
       }
+      setIsMenuOpen(false)
     }
 
     if (menuItem.href) {
@@ -98,7 +99,7 @@ export default function PopoverMenu(props: PopoverMenuProps) {
           key={menuItem.label}
           onClick={() => setIsMenuOpen(false)}
           href={menuItem.href}
-          download={menuItem.download}
+          download={menuItem.downloadFileName || menuItem.isFiledownload}
         >
           {renderMenuItemContent(menuItem)}
         </MenuItem>
