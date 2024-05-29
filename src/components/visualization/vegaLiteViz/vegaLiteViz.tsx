@@ -9,14 +9,13 @@ import React, { useEffect, useRef, useState } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { default as VegaEmbed } from 'vega-embed'
 
-import PopoverMenu from '../../menu/popoverMenu'
+import PopoverMenu, { type PopoverMenuItem } from '../../menu/popoverMenu'
 import type { VegaLiteData } from '../../types'
 
 /** The `VegaLiteViz` component is a versatile tool for visualizing data using the Vega-Lite grammar. With support for various graphic types, it empowers users to create engaging and informative data visualizations effortlessly. */
 function VegaLiteViz(props: VegaLiteData) {
   const chartRef = useRef<HTMLDivElement>(null)
   const [hasError, setHasError] = useState<boolean>(false)
-  const [downloadUrls, setDownloadUrls] = useState<downloadUrls>()
 
   const rusticTheme: Theme = useTheme()
   const isDarkTheme = rusticTheme.palette.mode === 'dark'
@@ -53,38 +52,19 @@ function VegaLiteViz(props: VegaLiteData) {
     id: 'rustic-vega-lite-tooltip',
   }
 
-  function handleDownload(
-    format: 'svg' | 'png',
-    url?: string,
-    fileName?: string
-  ) {
-    if (url) {
-      // Create a temporary anchor element
-      const link = document.createElement('a')
-      const downloadFileName = fileName || 'visualization'
-
-      link.href = url
-      link.download = `${downloadFileName}.${format}`
-
-      document.body.appendChild(link)
-      link.click()
-      document.body.removeChild(link)
-    }
-  }
-
-  const menuItem = [
+  const menuItems: PopoverMenuItem[] = [
     {
       label: 'Save as SVG',
-      onClick: () => handleDownload('svg'),
     },
     {
       label: 'Save as PNG',
-      onClick: () => handleDownload('png'),
     },
   ]
 
-  function getScaleFactor(format: 'svg' | 'png') {
-    const scaleFactor = props.options?.scaleFactor
+  function getScaleFactor(
+    format: 'svg' | 'png',
+    scaleFactor: number | { svg?: number; png?: number } | undefined
+  ) {
     if (scaleFactor) {
       if (typeof scaleFactor === 'number') {
         return scaleFactor
@@ -110,15 +90,24 @@ function VegaLiteViz(props: VegaLiteData) {
 
       VegaEmbed(chartRef.current, props.spec, options)
         .then((result) => {
-          result.view.toImageURL('svg', getScaleFactor('svg')).then((url) => {
-            menuItem[0].onClick = () =>
-              handleDownload('svg', url, options.downloadFileName)
+          const scaleFactor = result.embedOptions.scaleFactor
+          typeof scaleFactor === 'number' ? scaleFactor : scaleFactor?.svg
+          const fileName =
+            result.embedOptions.downloadFileName || 'visualization'
+          const formats = ['svg', 'png']
+
+          formats.map((format, index) => {
+            result.view
+              .toImageURL(
+                format,
+                getScaleFactor(format as 'svg' | 'png', scaleFactor)
+              )
+              .then((url) => {
+                menuItems[index].href = url
+                menuItems[index].downloadFileName = fileName
+              })
           })
 
-          result.view.toImageURL('png', getScaleFactor('png')).then((url) => {
-            menuItem[1].onClick = () =>
-              handleDownload('png', url, options.downloadFileName)
-          })
           setHasError(false)
         })
         .catch(() => {
@@ -147,7 +136,7 @@ function VegaLiteViz(props: VegaLiteData) {
     return (
       <Stack direction="column" className="rustic-vega-lite-container">
         <Box justifyContent="end" display="flex">
-          <PopoverMenu menuItems={menuItem} ariaLabel="menu" />
+          <PopoverMenu menuItems={menuItems} ariaLabel="menu" />
         </Box>
 
         {props.title && (
