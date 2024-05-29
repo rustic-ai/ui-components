@@ -42,6 +42,13 @@ export const EncodedImage = {
   },
 }
 
+export const InlineSVG = {
+  args: {
+    alt: 'A small image of a canopy of trees',
+    src: `data:image/svg+xml;charset=UTF-8,%3Csvg%20viewBox%3D%270%200%20400%20400%27%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20height%3D%27300%27%20width%3D%27300%27%3E%0A%20%20%3Crect%20x%3D%270%27%20y%3D%270%27%20width%3D%2750%25%27%20height%3D%2750%25%27%20fill%3D%27tomato%27%20opacity%3D%270.75%27%20%2F%3E%0A%20%20%3Crect%20x%3D%2725%25%27%20y%3D%2725%25%27%20width%3D%2750%25%27%20height%3D%2750%25%27%20fill%3D%27slategrey%27%20opacity%3D%270.75%27%20%2F%3E%0A%20%20%3Crect%20x%3D%2750%25%27%20y%3D%2750%25%27%20width%3D%2750%25%27%20height%3D%2750%25%27%20fill%3D%27olive%27%20opacity%3D%270.75%27%20%2F%3E%0A%20%20%3Crect%20x%3D%270%27%20y%3D%270%27%20width%3D%27100%25%27%20height%3D%27100%25%27%20stroke%3D%27cadetblue%27%20stroke-width%3D%270.5%25%27%20fill%3D%27none%27%20%2F%3E%0A%3C%2Fsvg%3E`,
+  },
+}
+
 export const InsideSmallerParentContainer = {
   args: {
     alt: 'A curved facade covered in white latticework',
