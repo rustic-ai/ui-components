@@ -18,7 +18,6 @@
 
 .rustic-message-canvas .rustic-timestamp {
   margin-left: 16px;
-  align-self: flex-end;
 }
 
 .rustic-message-canvas:hover .rustic-message-actions-container {
