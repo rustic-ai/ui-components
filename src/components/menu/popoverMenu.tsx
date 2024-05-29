@@ -17,7 +17,10 @@ import Icon from '../icon/icon'
 
 export interface PopoverMenuItem {
   label: string
-  onClick: (event?: React.MouseEvent<HTMLElement>) => void
+  onClick?: (event?: React.MouseEvent<HTMLElement>) => void
+  href?: string
+  isFiledownload?: boolean
+  downloadFileName?: string
   startDecorator?: ReactNode
   endDecorator?: ReactNode
 }
@@ -55,14 +58,9 @@ export default function PopoverMenu(props: PopoverMenuProps) {
     }
   }
 
-  const menuItems = props.menuItems.map((menuItem) => {
-    function handleOnClick(event: React.MouseEvent<HTMLElement>) {
-      menuItem.onClick(event)
-      setIsMenuOpen(false)
-    }
-
+  function renderMenuItemContent(menuItem: PopoverMenuItem) {
     return (
-      <MenuItem key={menuItem.label} onClick={handleOnClick}>
+      <>
         {menuItem.startDecorator && (
           <Box
             sx={{ color: 'primary.main' }}
@@ -82,8 +80,41 @@ export default function PopoverMenu(props: PopoverMenuProps) {
             {menuItem.endDecorator}
           </Box>
         )}
-      </MenuItem>
+      </>
     )
+  }
+
+  const menuItems = props.menuItems.map((menuItem) => {
+    function handleOnClick(event: React.MouseEvent<HTMLElement>) {
+      if (menuItem.onClick) {
+        menuItem.onClick(event)
+      }
+      setIsMenuOpen(false)
+    }
+
+    if (menuItem.href) {
+      return (
+        <MenuItem
+          component="a"
+          key={menuItem.label}
+          onClick={() => setIsMenuOpen(false)}
+          href={menuItem.href}
+          download={menuItem.downloadFileName || menuItem.isFiledownload}
+        >
+          {renderMenuItemContent(menuItem)}
+        </MenuItem>
+      )
+    } else {
+      return (
+        <MenuItem
+          key={menuItem.label}
+          onClick={handleOnClick}
+          disabled={!menuItem.onClick}
+        >
+          {renderMenuItemContent(menuItem)}
+        </MenuItem>
+      )
+    }
   })
 
   function handleOpenMenu(event: React.MouseEvent<HTMLElement>) {

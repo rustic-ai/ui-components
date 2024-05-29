@@ -1,11 +1,12 @@
 import Typography from '@mui/material/Typography'
 import Box from '@mui/system/Box'
+import type { Meta } from '@storybook/react'
 import React from 'react'
 
 import Icon from '../icon/icon'
 import PopoverMenu from './popoverMenu'
 
-export default {
+const meta: Meta<React.ComponentProps<typeof PopoverMenu>> = {
   title: 'Rustic UI/Menu/Popover Menu',
   component: PopoverMenu,
   tags: ['autodocs'],
@@ -18,10 +19,25 @@ export default {
       },
     },
   },
-  argTypes: {
-    menuItems: {
-      description:
-        'An array of menu items to be displayed in the menu. \n<pre>```interface PopoverMenuItem {\n  label: string\n  onClick: (event?: React.MouseEvent<HTMLElement>) => void\n  startDecorator?: ReactNode\n  endDecorator: ReactNode\n}```</pre>',
+}
+export default meta
+
+meta.argTypes = {
+  ...meta.argTypes,
+  menuItems: {
+    table: {
+      type: {
+        summary: 'An array of PopoverMenuItem.\n',
+        detail:
+          'Each PopoverMenuItem has the following fields:\n' +
+          '  label: Text label displayed for the menu item..\n' +
+          '  onClick: An optional function that gets called when the menu item is clicked. It receives an optional MouseEvent object as an argument.\n' +
+          '  startDecorator: An optional React node that will be rendered at the beginning of the menu item. This can be used for icons or other decorative elements.\n' +
+          '  endDecorator: An optional React node that will be rendered at the end of the menu item. This is typically used for icons or other decorative elements.\n' +
+          '  href: An optional URL that, if provided, makes the menu item behave like a link. When the menu item is clicked, the browser will navigate to this URL.\n' +
+          '  isFiledownload: An optional boolean that, when true, prompts the browser to download the linked URL as a file.' +
+          '  downloadFileName: An optional string that specifies a custom file name for the downloaded file, overriding the original name.',
+      },
     },
   },
 }
@@ -188,5 +204,30 @@ export const WithCustomButtonIconAndText = {
     ariaLabel: 'open menu showing custom button icon and text',
     icon: listIcon,
     buttonText: 'Menu',
+  },
+}
+
+export const WithLink = {
+  args: {
+    menuItems: [
+      {
+        label: 'Go To Rustic AI',
+        href: 'https://www.rustic.ai',
+      },
+    ],
+    ariaLabel: 'open default menu',
+  },
+}
+
+export const WithDownloadLink = {
+  args: {
+    menuItems: [
+      {
+        label: 'Download Logo',
+        href: 'images/rustic-ui-logo.svg',
+        isFiledownload: true,
+      },
+    ],
+    ariaLabel: 'open default menu',
   },
 }
