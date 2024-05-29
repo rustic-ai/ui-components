@@ -107,7 +107,6 @@ describe('Table', () => {
       const rowsPerPage = 2
 
       cy.viewport(viewport)
-      // eslint-disable-next-line no-magic-numbers
       cy.mount(
         <Table
           rowsPerPageOptions={[rowsPerPage]}
