@@ -12,7 +12,7 @@ const Timestamp = (props: TimestampProps) => {
   return (
     <Typography
       variant="caption"
-      color="textSecondary"
+      color="text.secondary"
       className="rustic-timestamp"
     >
       {formatMessageTimestamp(props.timestamp)}
