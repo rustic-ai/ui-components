@@ -159,9 +159,9 @@ export interface VegaLiteFormat extends DataFormat {
 export type VegaLiteData = VegaLiteFormat & Updates<VegaLiteFormat>
 
 export interface MermaidFormat extends DataFormat {
-  /** Follow mermaid's [documentation](https://mermaid.js.org/intro/) to provide a code string.  */
+  /** Follow Mermaid's [documentation](https://mermaid.js.org/intro/) to provide a code string.  */
   code: string
-  /** Follow mermaid's [documentation](https://mermaid.js.org/config/setup/README.html) to provide a config object. It's used for additional customizations. */
+  /** Follow Mermaid's [documentation](https://mermaid.js.org/config/setup/README.html) to provide a config object. It's used for additional customizations. */
   config?: MermaidConfig
 }
 

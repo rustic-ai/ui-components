@@ -23,8 +23,8 @@ describe('MermaidViz', () => {
       )
 
       cy.get(mermaidContainer).should('exist')
-      cy.get(mermaidContainer).contains('Christmas Shopping')
-      cy.get(mermaidContainer).contains('A flow chart')
+      cy.get(mermaidContainer).should('contain', 'Christmas Shopping')
+      cy.get(mermaidContainer).should('contain', 'A flow chart')
     })
   })
 })

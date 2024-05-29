@@ -10,6 +10,19 @@ const meta: Meta<React.ComponentProps<typeof MermaidViz>> = {
   parameters: {
     layout: 'centered',
   },
+  decorators: [
+    (Story: StoryFn) => {
+      return (
+        <div
+          style={{
+            width: 'clamp(250px, 70vw, 1000px)',
+          }}
+        >
+          <Story />
+        </div>
+      )
+    },
+  ],
 }
 
 export default meta
@@ -17,21 +30,7 @@ meta.argTypes = {
   ...meta.argTypes,
 }
 
-const decorators = [
-  (Story: StoryFn) => {
-    return (
-      <div
-        style={{
-          width: 'clamp(250px, 70vw, 1000px)',
-        }}
-      >
-        <Story />
-      </div>
-    )
-  },
-]
-
-export const classDiagram = {
+export const ClassDiagram = {
   args: {
     code: `classDiagram
     Animal <|-- Duck
@@ -55,7 +54,6 @@ export const classDiagram = {
       +run()
     }`,
   },
-  decorators,
 }
 
 export const Flow = {
@@ -68,7 +66,6 @@ export const Flow = {
     C -->|Two| E[iPhone]
     C -->|Three| F[fa:fa-car Car]`,
   },
-  decorators,
 }
 
 export const ERDiagram = {
@@ -87,12 +84,10 @@ export const ERDiagram = {
     PRODUCT-CATEGORY ||--|{ PRODUCT : contains
     PRODUCT ||--o{ ORDER-ITEM : "ordered in"`,
   },
-  decorators,
 }
 
-export const error = {
+export const Error = {
   args: {
     code: '',
   },
-  decorators,
 }

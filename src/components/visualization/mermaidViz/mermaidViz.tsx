@@ -12,29 +12,19 @@ import type { MermaidData } from '../../types'
 function MermaidViz(props: MermaidData) {
   const chartRef = useRef(null)
   const rusticTheme = useTheme()
-  const isDarkTheme = rusticTheme.palette.mode === 'dark'
+  const mermaidTheme = rusticTheme.palette.mode === 'dark' ? 'dark' : 'neutral'
 
   useEffect(() => {
     if (chartRef.current) {
       mermaid.initialize({
-        theme: 'base',
-        themeVariables: {
-          primaryColor: rusticTheme.palette.primary.main,
-          primaryTextColor: rusticTheme.palette.background.paper,
-          primaryBorderColor: rusticTheme.palette.divider,
-          lineColor: rusticTheme.palette.divider,
-          secondaryColor: rusticTheme.palette.secondary.main,
-          background: rusticTheme.palette.background.paper,
-          errorTextColor: rusticTheme.palette.error.main,
-          errorBkgColor: rusticTheme.palette.error.main,
-          fontFamily: 'Inter',
-        },
+        theme: mermaidTheme,
+        themeVariables: { fontFamily: 'Inter' },
         ...props.config,
       })
 
       mermaid.contentLoaded()
     }
-  }, [isDarkTheme])
+  }, [mermaidTheme])
 
   return (
     <Stack
@@ -48,7 +38,7 @@ function MermaidViz(props: MermaidData) {
       {props.description && (
         <Typography variant="caption">{props.description}</Typography>
       )}
-      <div ref={chartRef} className="mermaid">
+      <div ref={chartRef} className="mermaid" key={mermaidTheme}>
         {props.code}
       </div>
     </Stack>
