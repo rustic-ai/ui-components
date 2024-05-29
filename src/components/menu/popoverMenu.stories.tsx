@@ -35,7 +35,7 @@ meta.argTypes = {
           '  startDecorator: An optional React node that will be rendered at the beginning of the menu item. This can be used for icons or other decorative elements.\n' +
           '  endDecorator: An optional React node that will be rendered at the end of the menu item. This is typically used for icons or other decorative elements.\n' +
           '  href: An optional URL that, if provided, makes the menu item behave like a link. When the menu item is clicked, the browser will navigate to this URL.\n' +
-          '  downloadFileName: An optional string specifying the filename for downloading content. This works in conjunction with the href property to allow users to download a file when the menu item is clicked.',
+          '  download: An optional boolean or string attribute that prompts the browser to download the linked URL. If a string is provided, it will be used as the filename for the downloaded file.',
       },
     },
   },
@@ -224,7 +224,7 @@ export const WithDownloadLink = {
       {
         label: 'Download Logo',
         href: 'images/rustic-ui-logo.svg',
-        downloadFileName: 'rustic-logo',
+        download: true,
       },
     ],
     ariaLabel: 'open default menu',

@@ -117,7 +117,7 @@ describe('PopOverMenu', () => {
             {
               label: 'Download SVG',
               href: 'https://example.com/file.svg',
-              downloadFileName: 'file.svg',
+              download: 'file.svg',
             },
           ]}
           ariaLabel={ariaLabel}
