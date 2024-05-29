@@ -134,6 +134,8 @@ export interface TableFormat extends DataFormat {
   /** Optional array to set the order of columns and assign labels.
    * This can also be used to limit which columns are shown. */
   headers?: TableHeader[]
+  /** Options to display in a rows per page dropdown. Provide a value to enable pagination. The first index number will be initially shown. */
+  rowsPerPageOptions?: number[]
 }
 
 export type TableData = TableFormat & Updates<TableFormat>

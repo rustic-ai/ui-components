@@ -6,6 +6,7 @@ describe('Table', () => {
     { col1: 'abc', col2: 123 },
     { col1: 'def', col2: 456 },
   ]
+
   const firstRowIndex = 0
 
   supportedViewports.forEach((viewport) => {
@@ -99,6 +100,25 @@ describe('Table', () => {
             expect(cell.text().trim()).to.equal(value.toString())
           })
       })
+    })
+
+    it(`has pagination if rowsPerPageOptions prop is provided on ${viewport} screen`, () => {
+      const tablePagination = '[data-cy="table-pagination"]'
+      const rowsPerPage = 2
+
+      cy.viewport(viewport)
+      // eslint-disable-next-line no-magic-numbers
+      cy.mount(
+        <Table
+          rowsPerPageOptions={[rowsPerPage]}
+          data={[...testData, { col1: 'ghi', col2: 789 }]}
+        />
+      )
+      cy.get('tbody tr').should('have.length', rowsPerPage)
+      cy.get(tablePagination).should('contain', '1–2 of 3')
+      cy.get(`${tablePagination} button`).last().click()
+      cy.get('tbody tr').should('have.length', 1)
+      cy.get(tablePagination).should('contain', '3–3 of 3')
     })
   })
 })
