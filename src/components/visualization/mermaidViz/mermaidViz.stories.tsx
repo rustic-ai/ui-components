@@ -32,7 +32,7 @@ meta.argTypes = {
 
 export const ClassDiagram = {
   args: {
-    code: `classDiagram
+    diagram: `classDiagram
     Animal <|-- Duck
     Animal <|-- Fish
     Animal <|-- Zebra
@@ -58,7 +58,7 @@ export const ClassDiagram = {
 
 export const Flow = {
   args: {
-    code: `
+    diagram: `
     flowchart TD
     A[Christmas] -->|Get money| B(Go shopping)
     B --> C{Let me think}
@@ -73,7 +73,7 @@ export const ERDiagram = {
     title: 'Customer Order Management System ER Diagram',
     description:
       'This ER diagram illustrates the relationships in an ordering system where a customer has a delivery address, places orders, and is liable for invoices; delivery addresses receive orders, invoices cover orders, orders include order items, product categories contain products, and products are ordered in order items.',
-    code: `
+    diagram: `
       erDiagram
     CUSTOMER }|..|{ DELIVERY-ADDRESS : has
     CUSTOMER ||--o{ ORDER : places
@@ -88,6 +88,6 @@ export const ERDiagram = {
 
 export const Error = {
   args: {
-    code: '',
+    diagram: '',
   },
 }

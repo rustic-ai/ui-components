@@ -16,7 +16,7 @@ describe('MermaidViz', () => {
       cy.viewport(viewport)
       cy.mount(
         <MermaidViz
-          code={codeExample}
+          diagram={codeExample}
           title="Christmas Shopping"
           description="A flow chart"
         />

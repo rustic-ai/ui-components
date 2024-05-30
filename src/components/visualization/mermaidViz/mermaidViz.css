@@ -3,14 +3,18 @@
   width: 100%;
 }
 
-.rustic-mermaid-container div:last-of-type {
+.rustic-mermaid-container .rustic-mermaid {
   flex: 1;
   min-height: 0;
   display: flex;
   justify-content: center;
 }
 
-.rustic-mermaid-container div:last-of-type svg {
+.rustic-mermaid-container .rustic-mermaid svg {
   height: 100%;
   width: 100%;
+}
+
+.rustic-invisible {
+  visibility: hidden;
 }

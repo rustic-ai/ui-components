@@ -159,9 +159,9 @@ export interface VegaLiteFormat extends DataFormat {
 export type VegaLiteData = VegaLiteFormat & Updates<VegaLiteFormat>
 
 export interface MermaidFormat extends DataFormat {
-  /** Follow Mermaid's [documentation](https://mermaid.js.org/intro/) to provide a code string.  */
-  code: string
-  /** Follow Mermaid's [documentation](https://mermaid.js.org/config/setup/README.html) to provide a config object. It's used for additional customizations. */
+  /** Diagram definition following [Mermaid's syntax](https://mermaid.js.org/intro/syntax-reference.html#syntax-structure). The use of [these](https://mermaid.js.org/intro/syntax-reference.html#diagram-breaking) words or symbols can break diagrams. */
+  diagram: string
+  /** Configuration for altering and customizing Mermaid Diagrams. Refer [Mermaid docs](https://mermaid.js.org/config/schema-docs/config.html) for details. */
   config?: MermaidConfig
 }
 
