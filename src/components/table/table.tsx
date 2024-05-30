@@ -1,5 +1,6 @@
 import './table.css'
 
+import { useMediaQuery, useTheme } from '@mui/material'
 import Stack from '@mui/material/Stack'
 import { default as MuiTable } from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
@@ -17,14 +18,19 @@ import type { TableData, TableHeader } from '../types'
 const paginationThreshold = 10
 
 export default function Table(props: TableData) {
-  const [page, setPage] = useState(0)
+  const isDataGreaterThanThreshold = props.data.length > paginationThreshold
+
   const [rowsPerPage, setRowsPerPage] = useState(
-    props.data.length <= paginationThreshold ? -1 : paginationThreshold
+    isDataGreaterThanThreshold ? paginationThreshold : -1
   )
+  const [currentPage, setCurrentPage] = useState(0)
 
   if (props.data.length === 0) {
     return <Typography variant="body2">No data available</Typography>
   }
+
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
 
   const dataKeys = Array.from(
     new Set(props.data.flatMap((rowData) => Object.keys(rowData)))
@@ -34,16 +40,22 @@ export default function Table(props: TableData) {
 
   const dataToDisplay =
     rowsPerPage > 0
-      ? props.data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+      ? props.data.slice(
+          currentPage * rowsPerPage,
+          currentPage * rowsPerPage + rowsPerPage
+        )
       : props.data
 
-  function handleChangePage(event: unknown, newPage: number) {
-    setPage(newPage)
+  function handleChangePage(
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent> | null,
+    newPage: number
+  ) {
+    setCurrentPage(newPage)
   }
 
   function handleChangeRowsPerPage(event: React.ChangeEvent<HTMLInputElement>) {
     setRowsPerPage(+event.target.value)
-    setPage(0)
+    setCurrentPage(0)
   }
 
   return (
@@ -93,16 +105,35 @@ export default function Table(props: TableData) {
           </TableBody>
         </MuiTable>
       </TableContainer>
-      {props.data.length > paginationThreshold && (
+      {isDataGreaterThanThreshold && (
         <TablePagination
           className="rustic-table-pagination"
           data-cy="table-pagination"
           component="div"
           count={props.data.length}
           rowsPerPage={rowsPerPage}
-          page={page}
+          labelRowsPerPage="Rows:"
+          page={currentPage}
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
+          sx={{
+            '& .MuiTablePagination-selectLabel': {
+              color: theme.palette.text.disabled,
+            },
+            ...(isMobile && {
+              '& .MuiTablePagination-spacer': {
+                position: 'absolute',
+              },
+              '& .MuiToolbar-root': {
+                padding: 0,
+              },
+              '& .MuiTablePagination-displayedRows': {
+                flex: 1,
+                display: 'flex',
+                justifyContent: 'flex-end',
+              },
+            }),
+          }}
         />
       )}
     </Stack>
