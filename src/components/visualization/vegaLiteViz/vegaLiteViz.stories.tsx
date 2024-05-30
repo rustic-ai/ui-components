@@ -40,7 +40,7 @@ const decorators = [
       <div
         style={{
           width: 'clamp(250px, 70vw, 1000px)',
-          height: 'clamp(150px, 30vh, 400px)',
+          height: 'clamp(150px, 40vh, 400px)',
         }}
       >
         <Story />
