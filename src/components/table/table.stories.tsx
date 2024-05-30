@@ -208,8 +208,6 @@ export const WithPagination = {
   args: {
     ...textData,
     data: manyDataRows,
-    // eslint-disable-next-line no-magic-numbers
-    rowsPerPageOptions: [5, 10, 15],
   },
 }
 

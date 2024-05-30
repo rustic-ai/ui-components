@@ -14,10 +14,12 @@ import React, { useState } from 'react'
 import { capitalizeFirstLetter } from '../helper'
 import type { TableData, TableHeader } from '../types'
 
+const paginationThreshold = 10
+
 export default function Table(props: TableData) {
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(
-    props.rowsPerPageOptions ? props.rowsPerPageOptions[0] : -1
+    props.data.length <= paginationThreshold ? -1 : paginationThreshold
   )
 
   if (props.data.length === 0) {
@@ -91,14 +93,13 @@ export default function Table(props: TableData) {
           </TableBody>
         </MuiTable>
       </TableContainer>
-      {props.rowsPerPageOptions && (
+      {props.data.length > paginationThreshold && (
         <TablePagination
           className="rustic-table-pagination"
           data-cy="table-pagination"
           component="div"
           count={props.data.length}
           rowsPerPage={rowsPerPage}
-          rowsPerPageOptions={props.rowsPerPageOptions}
           page={page}
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
