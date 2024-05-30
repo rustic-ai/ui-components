@@ -11,7 +11,7 @@ const meta: Meta<React.ComponentProps<typeof Table>> = {
     docs: {
       description: {
         component:
-          'The `Table` component provides a simple and customizable table display for presenting structured data. It supports rendering data rows with associated headers and allows for easy customization of table title, description, and column headers.',
+          'The `Table` component provides a simple and customizable table display for presenting structured data. It supports rendering data rows with associated headers and allows for easy customization of table title, description, and column headers. Pagination is enabled when the number of rows exceeds 10.',
       },
     },
   },
@@ -204,7 +204,7 @@ export const CustomizeHeaders = {
   },
 }
 
-export const WithPagination = {
+export const MoreThanTenRows = {
   args: {
     ...textData,
     data: manyDataRows,
