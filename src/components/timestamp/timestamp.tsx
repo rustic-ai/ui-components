@@ -10,7 +10,11 @@ export interface TimestampProps {
 
 const Timestamp = (props: TimestampProps) => {
   return (
-    <Typography variant="caption" color="textSecondary">
+    <Typography
+      variant="caption"
+      color="text.secondary"
+      className="rustic-timestamp"
+    >
       {formatMessageTimestamp(props.timestamp)}
     </Typography>
   )

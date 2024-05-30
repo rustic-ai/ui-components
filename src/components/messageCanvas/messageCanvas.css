@@ -1,29 +1,38 @@
 .rustic-message-canvas {
-  display: flex;
-  flex-direction: column;
   gap: 4px;
+  position: relative;
 }
 
-.rustic-message-canvas .rustic-message-actions-container {
+.rustic-message-canvas .rustic-message-container {
   padding: 16px;
 }
 
-.rustic-message-canvas .rustic-sender-info {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.rustic-message-canvas .rustic-message-footer {
+.rustic-message-canvas .rustic-message-actions-container {
   opacity: 0;
+  position: absolute;
+  top: 4px;
+  right: 16px;
   display: flex;
   align-items: center;
-}
-
-.rustic-message-canvas:hover .rustic-message-footer {
-  opacity: 1;
 }
 
 .rustic-message-canvas .rustic-timestamp {
-  margin-left: auto;
+  margin-left: 16px;
+}
+
+.rustic-message-canvas:hover .rustic-message-actions-container {
+  opacity: 1;
+}
+
+@media (max-width: 900px) {
+  .rustic-message-canvas .rustic-message-actions-container {
+    bottom: -20px;
+    top: unset;
+  }
+
+  .rustic-message-canvas .rustic-timestamp {
+    display: flex;
+    flex: 1;
+    justify-content: flex-end;
+  }
 }

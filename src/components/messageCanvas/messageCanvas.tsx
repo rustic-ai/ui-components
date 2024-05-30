@@ -1,8 +1,9 @@
 import './messageCanvas.css'
 
+import { useTheme } from '@mui/material'
 import Card from '@mui/material/Card'
+import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
-import Box from '@mui/system/Box'
 import React, { forwardRef, type ReactNode } from 'react'
 
 import Timestamp from '../timestamp/timestamp'
@@ -36,42 +37,36 @@ function MessageCanvasElement(
   props: MessageCanvasProps,
   ref: React.Ref<HTMLDivElement>
 ) {
+  const theme = useTheme()
+
   return (
-    <Box
+    <Stack
       id={props.message.id}
       className="rustic-message-canvas"
       data-cy="message-canvas"
       ref={ref}
     >
-      <Box className="rustic-sender-info">
+      <Stack direction="row" alignItems="center" spacing={1}>
         {props.getProfileComponent && props.getProfileComponent(props.message)}
-        <Typography variant="body2" color="text.secondary" data-cy="sender">
-          {props.message.sender}:
+        <Typography variant="body1" color="text.secondary" data-cy="sender">
+          {props.message.sender}
         </Typography>
-      </Box>
-      <Card variant="outlined" className="rustic-message-actions-container">
+        <Timestamp timestamp={props.message.timestamp} />
+      </Stack>
+      {props.getActionsComponent &&
+        props.getActionsComponent(props.message) && (
+          <Card
+            variant="outlined"
+            className="rustic-message-actions-container"
+            sx={{ boxShadow: theme.shadows[1] }}
+          >
+            {props.getActionsComponent(props.message)}
+          </Card>
+        )}
+      <Card variant="outlined" className="rustic-message-container">
         {props.children}
       </Card>
-      <Box className="rustic-message-footer">
-        {props.getActionsComponent &&
-          props.getActionsComponent(props.message) && (
-            <Card variant="outlined">
-              {props.getActionsComponent(props.message)}
-            </Card>
-          )}
-        <Box className="rustic-timestamp">
-          {props.message.lastThreadMessage && (
-            <Typography variant="caption">last updated: </Typography>
-          )}
-          <Timestamp
-            timestamp={
-              props.message.lastThreadMessage?.timestamp ||
-              props.message.timestamp
-            }
-          />
-        </Box>
-      </Box>
-    </Box>
+    </Stack>
   )
 }
 
