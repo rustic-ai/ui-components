@@ -61,19 +61,6 @@ function VegaLiteViz(props: VegaLiteData) {
     },
   ]
 
-  function getScaleFactor(
-    format: 'svg' | 'png',
-    scaleFactor: number | { svg?: number; png?: number } | undefined
-  ) {
-    if (scaleFactor) {
-      if (typeof scaleFactor === 'number') {
-        return scaleFactor
-      } else {
-        return scaleFactor[format]
-      }
-    }
-  }
-
   function renderChart() {
     if (chartRef.current && props.spec) {
       const options = {
@@ -90,22 +77,21 @@ function VegaLiteViz(props: VegaLiteData) {
 
       VegaEmbed(chartRef.current, props.spec, options)
         .then((result) => {
-          const scaleFactor = result.embedOptions.scaleFactor
-          typeof scaleFactor === 'number' ? scaleFactor : scaleFactor?.svg
+          const opts = result.embedOptions
           const fileName =
             result.embedOptions.downloadFileName || 'visualization'
-          const formats = ['svg', 'png']
+          const formats: Array<'svg' | 'png'> = ['svg', 'png']
 
           formats.map((format, index) => {
-            result.view
-              .toImageURL(
-                format,
-                getScaleFactor(format as 'svg' | 'png', scaleFactor)
-              )
-              .then((url) => {
-                menuItems[index].href = url
-                menuItems[index].downloadFileName = fileName
-              })
+            const scaleFactor =
+              typeof opts.scaleFactor === 'object'
+                ? opts.scaleFactor[format]
+                : opts.scaleFactor
+
+            result.view.toImageURL(format, scaleFactor).then((url) => {
+              menuItems[index].href = url
+              menuItems[index].downloadFileName = fileName
+            })
           })
 
           setHasError(false)
