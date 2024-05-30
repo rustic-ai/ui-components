@@ -120,12 +120,18 @@ export default function Table(props: TableData) {
             '& .MuiTablePagination-selectLabel': {
               color: theme.palette.text.disabled,
             },
+            '& .MuiTablePagination-input': {
+              marginLeft: 0,
+            },
             ...(isMobile && {
               '& .MuiTablePagination-spacer': {
                 position: 'absolute',
               },
               '& .MuiToolbar-root': {
                 padding: 0,
+                '& .MuiTablePagination-actions': {
+                  marginLeft: 1,
+                },
               },
               '& .MuiTablePagination-displayedRows': {
                 flex: 1,
