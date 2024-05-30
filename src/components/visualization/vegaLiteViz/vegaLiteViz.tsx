@@ -90,7 +90,7 @@ function VegaLiteViz(props: VegaLiteData) {
 
             result.view.toImageURL(format, scaleFactor).then((url) => {
               menuItems[index].href = url
-              menuItems[index].downloadFileName = fileName
+              menuItems[index].downloadFileName = `${fileName}.${format}`
             })
           })
 
