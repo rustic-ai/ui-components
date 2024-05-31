@@ -200,5 +200,16 @@ describe('Table', () => {
         `11–11 of ${manyDataRows.length}`
       )
     })
+
+    it(`can sort by the headers on ${viewport} screen`, () => {
+      cy.viewport(viewport)
+      cy.mount(<Table data={manyDataRows} />)
+
+      cy.get('tbody tr').first().should('contain', 'almond milk')
+
+      // sort by food
+      cy.get('th span').first().click()
+      cy.get('tbody tr').first().should('contain', 'soy milk')
+    })
   })
 })
