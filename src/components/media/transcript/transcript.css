@@ -1,23 +1,14 @@
 .rustic-transcript-container {
-  padding-top: 16px;
-  overflow-y: scroll;
-}
-
-.rustic-transcript-header {
   display: flex;
-  padding-bottom: 10px;
+  gap: 16px;
+  margin-top: 16px;
 }
 
-.rustic-transcript-header hr {
+.rustic-transcript-container hr {
   border-right-width: medium;
-  height: 21px;
-}
-
-.rustic-transcript-header span {
-  padding-left: 14px;
-  line-height: 1.5;
 }
 
 .rustic-transcript-content {
   max-height: 25vh;
+  overflow-y: scroll;
 }

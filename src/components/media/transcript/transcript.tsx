@@ -14,14 +14,7 @@ export default function Transcript(props: TranscriptProps) {
 
   return (
     <Box className="rustic-transcript-container">
-      {!isFullscreen && (
-        <Box className="rustic-transcript-header">
-          <Divider orientation="vertical" flexItem />
-          <Typography variant="overline" color="text.secondary">
-            Transcript
-          </Typography>
-        </Box>
-      )}
+      {!isFullscreen && <Divider orientation="vertical" flexItem />}
       <Typography
         className="rustic-transcript-content"
         data-cy="transcript"
