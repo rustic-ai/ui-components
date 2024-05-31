@@ -128,9 +128,11 @@ export interface TableHeader {
   label?: string
 }
 
+export type DataRow = Record<string, string | number>
+
 export interface TableFormat extends DataFormat {
   /** Data to be displayed in the table. */
-  data: Array<Record<string, string | number>>
+  data: DataRow[]
   /** Optional array to set the order of columns and assign labels.
    * This can also be used to limit which columns are shown. */
   headers?: TableHeader[]
