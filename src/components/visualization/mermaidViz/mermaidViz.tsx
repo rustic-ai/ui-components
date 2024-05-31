@@ -1,6 +1,7 @@
 import './mermaidViz.css'
 
 import Stack from '@mui/material/Stack'
+import type { Theme } from '@mui/material/styles'
 import Typography from '@mui/material/Typography'
 import useTheme from '@mui/system/useTheme'
 import mermaid from 'mermaid'
@@ -11,16 +12,17 @@ import type { MermaidData } from '../../types'
 /** The `MermaidViz` component leverages [Mermaid.js](https://mermaid.js.org/) to create dynamic and interactive diagrams, including flowcharts, sequence diagrams, class diagrams, and more. It is ideal for visualizing complex data and processes in a clear and structured manner. */
 function MermaidViz(props: MermaidData) {
   const mermaidRef = useRef<HTMLDivElement>(null)
-  const rusticTheme = useTheme()
-  const mermaidTheme = rusticTheme.palette.mode === 'dark' ? 'dark' : 'neutral'
   const [errorMessage, setErrorMessage] = useState<string>()
   const [isProcessed, setIsProcessed] = useState<boolean>(false)
+  const rusticTheme: Theme = useTheme()
+  const mermaidTheme = rusticTheme.palette.mode === 'dark' ? 'dark' : 'neutral'
+  const defaultFont = rusticTheme.typography.fontFamily
 
   useEffect(() => {
     if (mermaidRef.current) {
       mermaid.initialize({
         theme: mermaidTheme,
-        themeVariables: { fontFamily: 'Inter' },
+        themeVariables: { fontFamily: defaultFont },
         ...props.config,
       })
 
@@ -39,7 +41,7 @@ function MermaidViz(props: MermaidData) {
           )
         })
     }
-  }, [mermaidTheme])
+  }, [rusticTheme])
 
   if (errorMessage) {
     return <Typography variant="body2">{errorMessage}</Typography>
