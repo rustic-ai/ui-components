@@ -137,6 +137,7 @@ export default function Table(props: TableData) {
                 flex: 1,
                 display: 'flex',
                 justifyContent: 'flex-end',
+                whiteSpace: 'nowrap',
               },
             }),
           }}
