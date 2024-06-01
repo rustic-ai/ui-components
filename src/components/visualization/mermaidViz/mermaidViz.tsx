@@ -14,7 +14,6 @@ import type { MermaidData } from '../../types'
 function MermaidViz(props: MermaidData) {
   const mermaidRef = useRef<HTMLDivElement>(null)
   const [errorMessage, setErrorMessage] = useState<string>()
-  const [isProcessed, setIsProcessed] = useState<boolean>(false)
   const rusticTheme: Theme = useTheme()
   const mermaidId = getUUID()
 
@@ -35,35 +34,27 @@ function MermaidViz(props: MermaidData) {
           if (mermaidRef.current) {
             mermaidRef.current.innerHTML = result.svg
           }
-          setIsProcessed(true)
           setErrorMessage('')
         })
         .catch(() => {
-          setIsProcessed(true)
+          mermaidRef.current?.replaceChildren()
           setErrorMessage('Failed to render the diagram.')
         })
     }
   })
 
-  if (errorMessage) {
-    return <Typography variant="body2">{errorMessage}</Typography>
-  } else {
-    return (
-      <Stack
-        direction="column"
-        className={`${!isProcessed ? 'rustic-invisible ' : ''}rustic-mermaid-container`}
-        data-cy="mermaid-container"
-      >
-        {props.title && (
-          <Typography variant="subtitle2">{props.title}</Typography>
-        )}
-        {props.description && (
-          <Typography variant="caption">{props.description}</Typography>
-        )}
-        <div className="rustic-mermaid" ref={mermaidRef}></div>
-      </Stack>
-    )
-  }
+  return (
+    <Stack className={`rustic-mermaid-container`} data-cy="mermaid-container">
+      {props.title && (
+        <Typography variant="subtitle2">{props.title}</Typography>
+      )}
+      {props.description && (
+        <Typography variant="caption">{props.description}</Typography>
+      )}
+      <div className="rustic-mermaid" ref={mermaidRef}></div>
+      {errorMessage && <Typography variant="body2">{errorMessage}</Typography>}
+    </Stack>
+  )
 }
 
 export default MermaidViz

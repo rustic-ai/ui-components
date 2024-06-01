@@ -15,7 +15,7 @@ const meta: Meta<React.ComponentProps<typeof MermaidViz>> = {
       return (
         <div
           style={{
-            width: 'clamp(250px, 70vw, 1000px)',
+            width: 'clamp(250px, 70vw, 800px)',
           }}
         >
           <Story />
