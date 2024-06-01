@@ -6,6 +6,7 @@ import Typography from '@mui/material/Typography'
 import useTheme from '@mui/system/useTheme'
 import mermaid from 'mermaid'
 import React, { useEffect, useRef, useState } from 'react'
+import { v4 as getUUID } from 'uuid'
 
 import type { MermaidData } from '../../types'
 
@@ -15,10 +16,12 @@ function MermaidViz(props: MermaidData) {
   const [errorMessage, setErrorMessage] = useState<string>()
   const [isProcessed, setIsProcessed] = useState<boolean>(false)
   const rusticTheme: Theme = useTheme()
-  const mermaidTheme = rusticTheme.palette.mode === 'dark' ? 'dark' : 'neutral'
-  const defaultFont = rusticTheme.typography.fontFamily
+  const mermaidId = getUUID()
 
   useEffect(() => {
+    const mermaidTheme =
+      rusticTheme.palette.mode === 'dark' ? 'dark' : 'neutral'
+    const defaultFont = rusticTheme.typography.fontFamily
     if (mermaidRef.current) {
       mermaid.initialize({
         theme: mermaidTheme,
@@ -27,21 +30,20 @@ function MermaidViz(props: MermaidData) {
       })
 
       mermaid
-        .run({
-          querySelector: '.rustic-mermaid',
-        })
-        .then(() => {
+        .render(`mermaid-svg-${mermaidId}`, props.diagram, mermaidRef.current)
+        .then((result) => {
+          if (mermaidRef.current) {
+            mermaidRef.current.innerHTML = result.svg
+          }
           setIsProcessed(true)
           setErrorMessage('')
         })
         .catch(() => {
           setIsProcessed(true)
-          setErrorMessage(
-            'An error occurred while rendering the diagram. Please check the syntax.'
-          )
+          setErrorMessage('Failed to render the diagram.')
         })
     }
-  }, [rusticTheme])
+  })
 
   if (errorMessage) {
     return <Typography variant="body2">{errorMessage}</Typography>
@@ -58,9 +60,7 @@ function MermaidViz(props: MermaidData) {
         {props.description && (
           <Typography variant="caption">{props.description}</Typography>
         )}
-        <div className="rustic-mermaid" ref={mermaidRef} key={mermaidTheme}>
-          {props.diagram}
-        </div>
+        <div className="rustic-mermaid" ref={mermaidRef}></div>
       </Stack>
     )
   }
