@@ -6,27 +6,27 @@
   max-height: 40vh;
 }
 
-.rustic-table .rustic-table-pagination .rustic-toolbar {
+.rustic-table .rustic-table-pagination .rustic-table-toolbar {
   padding: 0;
 }
 
-.rustic-table .rustic-table-pagination .rustic-input {
+.rustic-table .rustic-table-pagination .rustic-table-input {
   margin-left: 0;
 }
 
 @media (max-width: 900px) {
-  .rustic-table .rustic-table-pagination .rustic-spacer {
+  .rustic-table .rustic-table-pagination .rustic-table-spacer {
     position: absolute;
   }
 
-  .rustic-table .rustic-table-pagination .rustic-displayed-rows {
+  .rustic-table .rustic-table-pagination .rustic-table-displayed-rows {
     flex: 1;
     display: flex;
     justify-content: flex-end;
     white-space: nowrap;
   }
 
-  .rustic-table .rustic-table-pagination .rustic-actions {
+  .rustic-table .rustic-table-pagination .rustic-table-actions {
     margin-left: 8px;
   }
 }

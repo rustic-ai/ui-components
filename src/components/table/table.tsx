@@ -116,11 +116,11 @@ export default function Table(props: TableData) {
             },
           }}
           classes={{
-            toolbar: 'rustic-toolbar',
-            input: 'rustic-input',
-            spacer: 'rustic-spacer',
-            displayedRows: 'rustic-displayed-rows',
-            actions: 'rustic-actions',
+            toolbar: 'rustic-table-toolbar',
+            input: 'rustic-table-input',
+            spacer: 'rustic-table-spacer',
+            displayedRows: 'rustic-table-displayed-rows',
+            actions: 'rustic-table-actions',
           }}
         />
       )}
