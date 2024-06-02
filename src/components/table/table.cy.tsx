@@ -6,6 +6,87 @@ describe('Table', () => {
     { col1: 'abc', col2: 123 },
     { col1: 'def', col2: 456 },
   ]
+
+  const manyDataRows = [
+    {
+      food: 'almond milk',
+      calories: 30,
+      carbs: 1.0,
+      protein: 1.0,
+      fat: 2.5,
+    },
+    {
+      food: 'soy milk',
+      calories: 80,
+      carbs: 4.0,
+      protein: 7.0,
+      fat: 4.0,
+    },
+    {
+      food: 'rice milk',
+      calories: 120,
+      carbs: 22.0,
+      protein: 1.0,
+      fat: 2.5,
+    },
+    {
+      food: 'coconut milk',
+      calories: 45,
+      carbs: 2.0,
+      protein: 0.5,
+      fat: 4.5,
+    },
+    {
+      food: 'oat milk',
+      calories: 120,
+      carbs: 16.0,
+      protein: 3.0,
+      fat: 5.0,
+    },
+    {
+      food: 'hemp milk',
+      calories: 70,
+      carbs: 1.0,
+      protein: 3.0,
+      fat: 6.0,
+    },
+    {
+      food: 'cashew milk',
+      calories: 25,
+      carbs: 1.0,
+      protein: 1.0,
+      fat: 2.0,
+    },
+    {
+      food: 'pea milk',
+      calories: 70,
+      carbs: 0.0,
+      protein: 8.0,
+      fat: 4.5,
+    },
+    {
+      food: 'goat milk',
+      calories: 168,
+      carbs: 11.0,
+      protein: 9.0,
+      fat: 10.0,
+    },
+    {
+      food: 'camel milk',
+      calories: 107,
+      carbs: 5.8,
+      protein: 5.2,
+      fat: 4.5,
+    },
+    {
+      food: 'buffalo milk',
+      calories: 237,
+      carbs: 12.0,
+      protein: 9.0,
+      fat: 16.0,
+    },
+  ]
+
   const firstRowIndex = 0
 
   supportedViewports.forEach((viewport) => {
@@ -99,6 +180,25 @@ describe('Table', () => {
             expect(cell.text().trim()).to.equal(value.toString())
           })
       })
+    })
+
+    it(`has pagination if there are more than 10 data rows on ${viewport} screen`, () => {
+      const tablePagination = '[data-cy="table-pagination"]'
+      const initialRowsPerPage = 10
+
+      cy.viewport(viewport)
+      cy.mount(<Table data={manyDataRows} />)
+      cy.get('tbody tr').should('have.length', initialRowsPerPage)
+      cy.get(tablePagination).should(
+        'contain',
+        `1–${initialRowsPerPage} of ${manyDataRows.length}`
+      )
+      cy.get(`${tablePagination} button`).last().click()
+      cy.get('tbody tr').should('have.length', 1)
+      cy.get(tablePagination).should(
+        'contain',
+        `11–11 of ${manyDataRows.length}`
+      )
     })
   })
 })

@@ -2,6 +2,31 @@
   max-width: calc(100vw - 100px);
 }
 
-.rustic-table .rustic-table-title {
-  text-align: center;
+.rustic-table .rustic-table-container {
+  max-height: 40vh;
+}
+
+.rustic-table .rustic-table-pagination .rustic-table-toolbar {
+  padding: 0;
+}
+
+.rustic-table .rustic-table-pagination .rustic-table-input {
+  margin-left: 0;
+}
+
+@media (max-width: 900px) {
+  .rustic-table .rustic-table-pagination .rustic-table-spacer {
+    position: absolute;
+  }
+
+  .rustic-table .rustic-table-pagination .rustic-table-displayed-rows {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    white-space: nowrap;
+  }
+
+  .rustic-table .rustic-table-pagination .rustic-table-actions {
+    margin-left: 8px;
+  }
 }

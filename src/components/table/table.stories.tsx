@@ -11,7 +11,7 @@ const meta: Meta<React.ComponentProps<typeof Table>> = {
     docs: {
       description: {
         component:
-          'The `Table` component provides a simple and customizable table display for presenting structured data. It supports rendering data rows with associated headers and allows for easy customization of table title, description, and column headers.',
+          'The `Table` component provides a simple and customizable table display for presenting structured data. It supports rendering data rows with associated headers and allows for easy customization of table title, description, and column headers. Pagination is enabled when the number of rows exceeds 10.',
       },
     },
   },
@@ -38,6 +38,12 @@ meta.argTypes = {
 }
 
 export default meta
+
+const textData = {
+  title: 'Nutrient Data Comparison Across Various Types of Milk',
+  description:
+    'This table illustrates the variations in calories and nutrients for different types of milk, with measurements based on a serving size of 250 ml. Caloric values are expressed in kCal, and nutrient quantities are measured in grams. The data is sourced from the Canadian Nutrient File.',
+}
 
 const sampleData = [
   {
@@ -77,6 +83,87 @@ const sampleData = [
   },
 ]
 
+const manyDataRows = [
+  ...sampleData,
+  {
+    food: 'almond milk',
+    calories: 30,
+    carbs: 1.0,
+    protein: 1.0,
+    fat: 2.5,
+  },
+  {
+    food: 'soy milk',
+    calories: 80,
+    carbs: 4.0,
+    protein: 7.0,
+    fat: 4.0,
+  },
+  {
+    food: 'rice milk',
+    calories: 120,
+    carbs: 22.0,
+    protein: 1.0,
+    fat: 2.5,
+  },
+  {
+    food: 'coconut milk',
+    calories: 45,
+    carbs: 2.0,
+    protein: 0.5,
+    fat: 4.5,
+  },
+  {
+    food: 'oat milk',
+    calories: 120,
+    carbs: 16.0,
+    protein: 3.0,
+    fat: 5.0,
+  },
+  {
+    food: 'hemp milk',
+    calories: 70,
+    carbs: 1.0,
+    protein: 3.0,
+    fat: 6.0,
+  },
+  {
+    food: 'cashew milk',
+    calories: 25,
+    carbs: 1.0,
+    protein: 1.0,
+    fat: 2.0,
+  },
+  {
+    food: 'pea milk',
+    calories: 70,
+    carbs: 0.0,
+    protein: 8.0,
+    fat: 4.5,
+  },
+  {
+    food: 'goat milk',
+    calories: 168,
+    carbs: 11.0,
+    protein: 9.0,
+    fat: 10.0,
+  },
+  {
+    food: 'camel milk',
+    calories: 107,
+    carbs: 5.8,
+    protein: 5.2,
+    fat: 4.5,
+  },
+  {
+    food: 'buffalo milk',
+    calories: 237,
+    carbs: 12.0,
+    protein: 9.0,
+    fat: 16.0,
+  },
+]
+
 export const Default = {
   args: {
     data: sampleData,
@@ -98,16 +185,14 @@ export const ChangeOrderUsingHeader = {
 
 export const HasTitleAndDescription = {
   args: {
-    title: 'Nutrient Data Comparison Across Various Types of Milk',
-    description:
-      'This table illustrates the variations in calories and nutrients for different types of milk, with measurements based on a serving size of 250 ml. Caloric values are expressed in kCal, and nutrient quantities are measured in grams. The data is sourced from the Canadian Nutrient File.',
+    ...textData,
     data: sampleData,
   },
 }
 
 export const CustomizeHeaders = {
   args: {
-    title: 'Nutrient Data Comparison Across Various Types of Milk',
+    ...textData,
     headers: [
       { dataKey: 'food', label: 'type (per 250ml)' },
       { dataKey: 'calories', label: 'calories (kCal)' },
@@ -115,9 +200,14 @@ export const CustomizeHeaders = {
       { dataKey: 'protein', label: 'protein (g)' },
       { dataKey: 'fat', label: 'fat (g)' },
     ],
-    description:
-      'This table illustrates the variations in calories and nutrients for different types of milk, with measurements based on a serving size of 250 ml. Caloric values are expressed in kCal, and nutrient quantities are measured in grams. The data is sourced from the Canadian Nutrient File.',
     data: sampleData,
+  },
+}
+
+export const MoreThanTenRows = {
+  args: {
+    ...textData,
+    data: manyDataRows,
   },
 }
 
