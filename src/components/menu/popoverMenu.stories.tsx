@@ -150,42 +150,42 @@ const noDecoratorsMenuItems = [
 export const Default = {
   args: {
     menuItems: defaultMenuItems,
-    ariaLabel: 'open default menu',
+    ariaLabel: 'Open menu',
   },
 }
 
 export const EndDecorator = {
   args: {
     menuItems: endDecoratorMenuItems,
-    ariaLabel: 'open menu showing end decorators',
+    ariaLabel: 'Open menu',
   },
 }
 
 export const StartAndEndDecorators = {
   args: {
     menuItems: startAndEndDecoratorMenuItems,
-    ariaLabel: 'open menu showing start and end decorators',
+    ariaLabel: 'Open menu',
   },
 }
 
 export const TextDecorator = {
   args: {
     menuItems: textDecorator,
-    ariaLabel: 'open menu showing text decorators',
+    ariaLabel: 'Open menu',
   },
 }
 
 export const NoDecorators = {
   args: {
     menuItems: noDecoratorsMenuItems,
-    ariaLabel: 'open menu showing no decorators',
+    ariaLabel: 'Open menu',
   },
 }
 
 export const WithCustomButtonIcon = {
   args: {
     menuItems: defaultMenuItems,
-    ariaLabel: 'open menu showing custom button icon',
+    ariaLabel: 'Open menu',
     icon: listIcon,
   },
 }
@@ -193,7 +193,7 @@ export const WithCustomButtonIcon = {
 export const WithCustomButtonText = {
   args: {
     menuItems: defaultMenuItems,
-    ariaLabel: 'open menu showing custom button text',
+    ariaLabel: 'Open menu',
     buttonText: 'Menu',
   },
 }
@@ -201,7 +201,7 @@ export const WithCustomButtonText = {
 export const WithCustomButtonIconAndText = {
   args: {
     menuItems: defaultMenuItems,
-    ariaLabel: 'open menu showing custom button icon and text',
+    ariaLabel: 'Open menu',
     icon: listIcon,
     buttonText: 'Menu',
   },
@@ -215,7 +215,7 @@ export const WithLink = {
         href: 'https://www.rustic.ai',
       },
     ],
-    ariaLabel: 'open default menu',
+    ariaLabel: 'Open menu',
   },
 }
 
@@ -228,6 +228,6 @@ export const WithDownloadLink = {
         isFiledownload: true,
       },
     ],
-    ariaLabel: 'open default menu',
+    ariaLabel: 'Open menu',
   },
 }
