@@ -40,6 +40,14 @@ meta.argTypes = {
       },
     },
   },
+  iconPosition: {
+    table: {
+      type: {
+        summary: 'IconPosition.\n',
+        detail: 'Choose between `start` and `end` for positioning the icon.\n',
+      },
+    },
+  },
 }
 
 const pinIcon = <Icon name="keep" />
@@ -198,12 +206,22 @@ export const WithCustomButtonText = {
   },
 }
 
-export const WithCustomButtonIconAndText = {
+export const WithTextAndStartIcon = {
   args: {
     menuItems: defaultMenuItems,
     ariaLabel: 'Open menu',
     icon: listIcon,
     buttonText: 'Menu',
+  },
+}
+
+export const WithTextAndEndIcon = {
+  args: {
+    menuItems: defaultMenuItems,
+    ariaLabel: 'Open menu',
+    icon: listIcon,
+    buttonText: 'Menu',
+    iconPosition: 'end',
   },
 }
 

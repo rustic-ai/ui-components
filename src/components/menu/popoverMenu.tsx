@@ -26,12 +26,16 @@ export interface PopoverMenuItem {
   endDecorator?: ReactNode
 }
 
+type IconPosition = 'start' | 'end'
+
 export interface PopoverMenuProps {
   menuItems: PopoverMenuItem[]
   /** Aria-label to describe the button for assistive technology. */
   ariaLabel: string
   /** Provide your own customized icon. */
   icon?: ReactNode
+  /** Specify the position of the icon. */
+  iconPosition?: IconPosition
   /** Text to display on the button. */
   buttonText?: string
 }
@@ -133,11 +137,13 @@ export default function PopoverMenu(props: PopoverMenuProps) {
 
     const defaultIcon = <Icon name="more_vert" />
 
+    const menuIcon = props.icon ? props.icon : null
     if (props.buttonText) {
       return (
         <Button
           {...buttonAttributes}
-          startIcon={props.icon ? props.icon : null}
+          startIcon={props.iconPosition === 'start' && menuIcon}
+          endIcon={props.iconPosition === 'end' && menuIcon}
           data-cy="menu-button"
         >
           {props.buttonText}
@@ -178,4 +184,8 @@ export default function PopoverMenu(props: PopoverMenuProps) {
       </PopoverMenuElement>
     </>
   )
+}
+
+PopoverMenu.defaultProps = {
+  iconPosition: 'start' as IconPosition,
 }
