@@ -146,9 +146,13 @@ type VegaLiteOptions = EmbedOptions<string, Renderers> & {
   }
 }
 
+export type VegaLiteSpec = VisualizationSpec & {
+  width?: 'container' | number
+}
+
 export interface VegaLiteFormat extends DataFormat {
   /** Follow Vega-lite's [documentation](https://vega.github.io/vega-lite/) to provide a specification object. Schema should be included in the spec. Need to use 'container' for width or height for responsive chart. */
-  spec: VisualizationSpec
+  spec: VegaLiteSpec
   theme: {
     light?: VegaLiteOptions['theme']
     dark: VegaLiteOptions['theme']

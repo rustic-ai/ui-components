@@ -1,8 +1,6 @@
-import type { VisualizationSpec } from 'vega-embed'
-
 import { supportedViewports } from '../../../../cypress/support/variables'
+import type { VegaLiteSpec } from '../../types'
 import VegaLiteViz from './vegaLiteViz'
-
 describe('VegaLiteViz', () => {
   beforeEach(() => {
     cy.mount(
@@ -56,7 +54,7 @@ describe('VegaLiteViz', () => {
         x: { field: 'a', type: 'nominal', axis: { labelAngle: 0 } },
         y: { field: 'b', type: 'quantitative' },
       },
-    } as VisualizationSpec
+    } as VegaLiteSpec
 
     it(`displays an error message if the spec is wrong on ${viewport} screen`, () => {
       cy.viewport(viewport)

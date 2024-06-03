@@ -10,7 +10,7 @@ import { renderToStaticMarkup } from 'react-dom/server'
 import { default as VegaEmbed } from 'vega-embed'
 
 import PopoverMenu, { type PopoverMenuItem } from '../../menu/popoverMenu'
-import type { VegaLiteData } from '../../types'
+import type { VegaLiteData, VegaLiteSpec } from '../../types'
 
 /** The `VegaLiteViz` component is a versatile tool for visualizing data using the Vega-Lite grammar. With support for various graphic types, it empowers users to create engaging and informative data visualizations effortlessly. */
 function VegaLiteViz(props: VegaLiteData) {
@@ -61,6 +61,69 @@ function VegaLiteViz(props: VegaLiteData) {
     },
   ]
 
+  function splitTextIntoLines(
+    text: string,
+    maxWidth: number,
+    context: CanvasRenderingContext2D
+  ) {
+    if (context.measureText(text).width <= maxWidth) {
+      return text
+    }
+
+    const words = text.split(' ')
+    const splitedText = []
+    let currentLine = words[0]
+
+    for (let i = 1; i < words.length; i++) {
+      const word = words[i]
+      const width = context.measureText(currentLine + ' ' + word).width
+
+      if (width < maxWidth) {
+        currentLine += ' ' + word
+      } else {
+        splitedText.push(currentLine)
+        currentLine = word
+      }
+    }
+    splitedText.push(currentLine)
+
+    return splitedText
+  }
+
+  function processTitle(spec: VegaLiteSpec) {
+    if (spec.title) {
+      const defaultTitleFontSize = 13
+      const chartWidth = chartRef.current ? chartRef.current.offsetWidth : 0
+      const maxWidth = typeof spec.width === 'number' ? spec.width : chartWidth
+
+      const canvas = document.createElement('canvas')
+      const context = canvas.getContext('2d')
+
+      if (context) {
+        context.letterSpacing = '1px'
+        if (typeof spec.title === 'string') {
+          const defaultFontStyle = `bold ${defaultTitleFontSize}px ${defaultFont}`
+          context.font = defaultFontStyle
+          spec.title = splitTextIntoLines(spec.title, maxWidth, context)
+        } else if (!Array.isArray(spec.title)) {
+          if (typeof spec.title.text === 'string') {
+            const font = spec.title.font || defaultFont
+            const fontSize = spec.title.fontSize || defaultTitleFontSize
+            const fontWeight = spec.title.fontWeight || 'bold'
+            const fontStyle = `${fontWeight} ${fontSize}px ${font}`
+            context.font = fontStyle
+
+            spec.title.text = splitTextIntoLines(
+              spec.title.text,
+              maxWidth,
+              context
+            )
+          }
+        }
+      }
+    }
+  }
+
   function renderChart() {
     if (chartRef.current && props.spec) {
       const options = {
@@ -75,7 +138,11 @@ function VegaLiteViz(props: VegaLiteData) {
         options.config.font = defaultFont
       }
 
-      VegaEmbed(chartRef.current, props.spec, options)
+      const spec = { ...props.spec }
+
+      processTitle(spec)
+
+      VegaEmbed(chartRef.current, spec, options)
         .then((result) => {
           const opts = result.embedOptions
           const fileName =

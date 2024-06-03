@@ -388,7 +388,6 @@ export const Map = {
       ],
     },
   },
-  // decorators,
 }
 
 export const GlobeVisualization = {
@@ -396,7 +395,6 @@ export const GlobeVisualization = {
     spec: {
       $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
       title: ['Globe Visualization', 'of Earthquakes'],
-
       width: 'container',
       height: 300,
       projection: {
