@@ -23,6 +23,7 @@ import Text from './text/text'
 import Timestamp from './timestamp/timestamp'
 import YoutubeVideo from './video/youtubeVideo'
 import RechartsTimeSeries from './visualization/chart/rechartsTimeSeries'
+import MermaidViz from './visualization/mermaidViz/mermaidViz'
 import VegaLiteViz from './visualization/vegaLiteViz/vegaLiteViz'
 
 export {
@@ -34,6 +35,7 @@ export {
   Image,
   MarkedMarkdown,
   MarkedStreamingMarkdown,
+  MermaidViz,
   MessageCanvas,
   MessageSpace,
   MultimodalInput,

@@ -1,3 +1,4 @@
+import type { MermaidConfig } from 'mermaid'
 import type { Renderers } from 'vega'
 import type { EmbedOptions, VisualizationSpec } from 'vega-embed'
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -156,6 +157,15 @@ export interface VegaLiteFormat extends DataFormat {
 }
 
 export type VegaLiteData = VegaLiteFormat & Updates<VegaLiteFormat>
+
+export interface MermaidFormat extends DataFormat {
+  /** Diagram definition following [Mermaid's syntax](https://mermaid.js.org/intro/syntax-reference.html#syntax-structure). The use of [these](https://mermaid.js.org/intro/syntax-reference.html#diagram-breaking) words or symbols can break diagrams. */
+  diagram: string
+  /** Configuration for altering and customizing Mermaid Diagrams. Refer [Mermaid docs](https://mermaid.js.org/config/schema-docs/config.html) for details. */
+  config?: MermaidConfig
+}
+
+export type MermaidData = MermaidFormat & Updates<MermaidFormat>
 
 export interface MediaFormat extends DataFormat {
   /** URL of the media file to be played. */
