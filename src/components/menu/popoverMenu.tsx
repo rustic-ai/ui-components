@@ -8,6 +8,7 @@ import ListItemText from '@mui/material/ListItemText'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { useTheme } from '@mui/material/styles'
+import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
 import { Box } from '@mui/system'
 import type { ReactNode } from 'react'
@@ -144,9 +145,11 @@ export default function PopoverMenu(props: PopoverMenuProps) {
       )
     } else {
       return (
-        <IconButton {...buttonAttributes} data-cy="menu-icon-button">
-          {props.icon ? props.icon : defaultIcon}
-        </IconButton>
+        <Tooltip title={props.ariaLabel}>
+          <IconButton {...buttonAttributes} data-cy="menu-icon-button">
+            {props.icon ? props.icon : defaultIcon}
+          </IconButton>
+        </Tooltip>
       )
     }
   }

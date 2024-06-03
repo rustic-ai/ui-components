@@ -122,7 +122,7 @@ function VegaLiteViz(props: VegaLiteData) {
     return (
       <Stack direction="column" className="rustic-vega-lite-container">
         <Box justifyContent="end" display="flex">
-          <PopoverMenu menuItems={menuItems} ariaLabel="menu" />
+          <PopoverMenu menuItems={menuItems} ariaLabel="Download options" />
         </Box>
 
         {props.title && (

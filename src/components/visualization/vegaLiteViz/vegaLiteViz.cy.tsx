@@ -39,7 +39,7 @@ describe('VegaLiteViz', () => {
 
       cy.get('[data-cy="vega-lite"]').should('exist')
       cy.get('.rustic-vega-lite').should('exist')
-      cy.get('[aria-label="menu"]').click()
+      cy.get('[data-cy="menu-icon-button"]').click()
       cy.contains('Save as SVG').should('exist')
       cy.contains('Save as PNG').should('exist')
     })
