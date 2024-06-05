@@ -42,7 +42,7 @@ meta.argTypes = {
 }
 
 const pinIcon = <Icon name="keep" />
-const addBoxIcon = <Icon name="add_box" />
+const addCircleIcon = <Icon name="add_circle" />
 const deleteIcon = <Icon name="delete" />
 const thermostatIcon = <Icon name="device_thermostat" />
 const listIcon = <Icon name="list" />
@@ -103,13 +103,13 @@ const startAndEndDecoratorMenuItems = [
     label: 'Celsius',
     onClick: () => {},
     startDecorator: thermostatIcon,
-    endDecorator: addBoxIcon,
+    endDecorator: addCircleIcon,
   },
   {
     label: 'Fahrenheit',
     onClick: () => {},
     startDecorator: thermostatIcon,
-    endDecorator: addBoxIcon,
+    endDecorator: addCircleIcon,
   },
 ]
 
