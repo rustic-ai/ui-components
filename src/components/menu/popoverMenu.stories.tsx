@@ -1,5 +1,4 @@
 import Typography from '@mui/material/Typography'
-import Box from '@mui/system/Box'
 import type { Meta } from '@storybook/react'
 import React from 'react'
 
@@ -43,11 +42,7 @@ meta.argTypes = {
 }
 
 const pinIcon = <Icon name="keep" />
-const addBoxIcon = (
-  <Box sx={{ color: 'secondary.main' }}>
-    <Icon name="add_box" />
-  </Box>
-)
+const addCircleIcon = <Icon name="add_circle" />
 const deleteIcon = <Icon name="delete" />
 const thermostatIcon = <Icon name="device_thermostat" />
 const listIcon = <Icon name="list" />
@@ -85,24 +80,21 @@ const defaultMenuItems = [
   },
 ]
 
-const renderPinIconWithColor = (
-  <Box sx={{ color: 'secondary.main' }}>{pinIcon}</Box>
-)
 const endDecoratorMenuItems = [
   {
     label: 'Charts',
     onClick: () => {},
-    endDecorator: renderPinIconWithColor,
+    endDecorator: pinIcon,
   },
   {
     label: 'Graphs',
     onClick: () => {},
-    endDecorator: renderPinIconWithColor,
+    endDecorator: pinIcon,
   },
   {
     label: 'Marketing',
     onClick: () => {},
-    endDecorator: renderPinIconWithColor,
+    endDecorator: pinIcon,
   },
 ]
 
@@ -111,13 +103,13 @@ const startAndEndDecoratorMenuItems = [
     label: 'Celsius',
     onClick: () => {},
     startDecorator: thermostatIcon,
-    endDecorator: addBoxIcon,
+    endDecorator: addCircleIcon,
   },
   {
     label: 'Fahrenheit',
     onClick: () => {},
     startDecorator: thermostatIcon,
-    endDecorator: addBoxIcon,
+    endDecorator: addCircleIcon,
   },
 ]
 

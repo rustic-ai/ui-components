@@ -76,7 +76,7 @@ export default function PopoverMenu(props: PopoverMenuProps) {
         {menuItem.endDecorator && (
           <Box
             sx={{ color: 'secondary.main' }}
-            className="rustic-popover-menu-item-icon"
+            className="rustic-popover-menu-item-icon  rustic-popover-menu-item-end-icon"
           >
             {menuItem.endDecorator}
           </Box>

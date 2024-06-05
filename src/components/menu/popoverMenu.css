@@ -1,6 +1,7 @@
 .rustic-popover-menu ul {
   padding: 0;
   min-width: 100px;
+  max-width: 240px;
 }
 
 .rustic-popover-menu li {
@@ -13,4 +14,8 @@
 
 .rustic-popover-menu-item-start-icon {
   margin-right: 8px;
+}
+
+.rustic-popover-menu-item-end-icon {
+  margin-left: 80px;
 }
