@@ -9,6 +9,13 @@ describe('Table', () => {
 
   const manyDataRows = [
     {
+      food: 'rice milk',
+      calories: 120,
+      carbs: 22.0,
+      protein: 1.0,
+      fat: 2.5,
+    },
+    {
       food: 'almond milk',
       calories: 30,
       carbs: 1.0,
@@ -21,13 +28,6 @@ describe('Table', () => {
       carbs: 4.0,
       protein: 7.0,
       fat: 4.0,
-    },
-    {
-      food: 'rice milk',
-      calories: 120,
-      carbs: 22.0,
-      protein: 1.0,
-      fat: 2.5,
     },
     {
       food: 'coconut milk',
@@ -205,11 +205,11 @@ describe('Table', () => {
       cy.viewport(viewport)
       cy.mount(<Table data={manyDataRows} />)
 
-      cy.get('tbody tr').first().should('contain', 'almond milk')
+      cy.get('tbody tr').first().should('contain', 'rice milk')
 
       // sort by food
-      cy.get('th span').first().click()
-      cy.get('tbody tr').first().should('contain', 'soy milk')
+      cy.get('tr th').first().click()
+      cy.get('tbody tr').first().should('contain', 'almond milk')
     })
   })
 })

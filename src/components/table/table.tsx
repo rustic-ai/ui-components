@@ -1,6 +1,7 @@
 import './table.css'
 
 import { useTheme } from '@mui/material'
+import Button from '@mui/material/Button'
 import Stack from '@mui/material/Stack'
 import { default as MuiTable } from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
@@ -10,15 +11,19 @@ import TableHead from '@mui/material/TableHead'
 import TablePagination from '@mui/material/TablePagination'
 import TableRow from '@mui/material/TableRow'
 import TableSortLabel from '@mui/material/TableSortLabel'
+import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
 import React, { useState } from 'react'
 
 import { capitalizeFirstLetter } from '../helper'
+import Icon from '../icon/icon'
 import type { DataRow, TableData, TableHeader } from '../types'
 
 const paginationThreshold = 10
 
 type Order = 'asc' | 'desc'
+
+type SortingCriteria = { [dataKey: string]: Order }
 
 export default function Table(props: TableData) {
   if (props.data.length === 0) {
@@ -26,7 +31,11 @@ export default function Table(props: TableData) {
   }
 
   const isPaginationEnabled = props.data.length > paginationThreshold
-
+  const [sortingCriteria, setSortingCriteria] = useState<SortingCriteria>({})
+  const [rowsPerPage, setRowsPerPage] = useState(
+    isPaginationEnabled ? paginationThreshold : -1
+  )
+  const [currentPage, setCurrentPage] = useState(0)
   const theme = useTheme()
 
   const dataKeys = Array.from(
@@ -35,61 +44,60 @@ export default function Table(props: TableData) {
   const headers: TableHeader[] =
     props.headers || dataKeys.map((key) => ({ dataKey: key }))
 
-  const [orderBy, setOrderBy] = useState<string>(dataKeys[0])
-  const [order, setOrder] = useState<Order>('asc')
-  const [rowsPerPage, setRowsPerPage] = useState(
-    isPaginationEnabled ? paginationThreshold : -1
-  )
-  const [currentPage, setCurrentPage] = useState(0)
+  function handleSortRequest(dataKey: string) {
+    setSortingCriteria((prevCriteria) => {
+      const currentOrder = prevCriteria[dataKey]
+
+      if (currentOrder === 'asc') {
+        return { [dataKey]: 'desc' }
+      } else if (currentOrder === 'desc') {
+        return {}
+      } else {
+        return { [dataKey]: 'asc' }
+      }
+    })
+  }
 
   function handleChangeRowsPerPage(event: React.ChangeEvent<HTMLInputElement>) {
     setRowsPerPage(+event.target.value)
     setCurrentPage(0)
   }
 
-  function handleRequestSort(dataKey: string) {
-    const newOrder = order === 'asc' ? 'desc' : 'asc'
+  function sortComparator(a: DataRow, b: DataRow) {
+    const sortingKey = Object.keys(sortingCriteria)[0]
+    const sortingOrder = sortingCriteria[sortingKey]
 
-    setOrderBy(dataKey)
-    setOrder(newOrder)
-  }
-
-  function descendingComparator(a: DataRow, b: DataRow, orderBy: string) {
-    if (b[orderBy] < a[orderBy]) {
-      return -1
+    if (a[sortingKey] < b[sortingKey]) {
+      return sortingOrder === 'desc' ? 1 : -1
     }
-    if (b[orderBy] > a[orderBy]) {
-      return 1
+    if (a[sortingKey] > b[sortingKey]) {
+      return sortingOrder === 'desc' ? -1 : 1
     }
     return 0
   }
 
-  function getComparator(order: Order, orderBy: string) {
-    return order === 'desc'
-      ? (a: DataRow, b: DataRow) => descendingComparator(a, b, orderBy)
-      : (a: DataRow, b: DataRow) => -descendingComparator(a, b, orderBy)
-  }
-
-  function sortData(
-    array: DataRow[],
-    comparator: (a: DataRow, b: DataRow) => number
-  ) {
-    const stabilizedArray: [DataRow, number][] = array.map((el, index) => [
-      el,
+  function sortData(array: DataRow[]) {
+    // Pair each element with its original index to stabilize the sort
+    const stabalizedArray: [DataRow, number][] = array.map((element, index) => [
+      element,
       index,
     ])
-    stabilizedArray.sort((a, b) => {
-      const order = comparator(a[0], b[0])
-      if (order !== 0) {
-        return order
+
+    stabalizedArray.sort(([a, aIndex], [b, bIndex]) => {
+      const comparisonResult = sortComparator(a, b)
+      if (comparisonResult !== 0) {
+        return comparisonResult
       } else {
-        return a[1] - b[1]
+        // Use original index to maintain stable sort order
+        return aIndex - bIndex
       }
     })
-    return stabilizedArray.map((el) => el[0])
+
+    // Extract and return the sorted data without the indices
+    return stabalizedArray.map(([element]) => element)
   }
 
-  const sortedData = sortData(props.data, getComparator(order, orderBy))
+  const sortedData = sortData(props.data)
 
   const dataOfCurrentPage = sortedData.slice(
     currentPage * rowsPerPage,
@@ -97,6 +105,35 @@ export default function Table(props: TableData) {
   )
 
   const dataToDisplay = rowsPerPage > 0 ? dataOfCurrentPage : sortedData
+
+  function getHeaderIcon(dataKey: string) {
+    if (sortingCriteria[dataKey]) {
+      return (
+        <TableSortLabel
+          active={true}
+          direction={sortingCriteria[dataKey] || 'asc'}
+          className="rustic-table-header-icon"
+        />
+      )
+    } else {
+      return (
+        <Tooltip title="Notifications">
+          <Icon name="expand_all" className="rustic-table-header-icon" />
+        </Tooltip>
+      )
+    }
+  }
+
+  function getTooltipTitle(dataKey: string): string {
+    const sortDirection = sortingCriteria[dataKey]
+    if (sortDirection) {
+      const capitalizedSortDirection =
+        sortDirection.charAt(0).toUpperCase() + sortDirection.slice(1)
+      return capitalizedSortDirection + 'ending'
+    } else {
+      return 'Sort'
+    }
+  }
 
   return (
     <Stack className="rustic-table" spacing={1}>
@@ -126,15 +163,18 @@ export default function Table(props: TableData) {
                 {headers.map((header, index) => (
                   <TableCell
                     key={`header-${index}`}
-                    sortDirection={orderBy === header.dataKey ? order : 'asc'}
+                    //for adding aria label
+                    sortDirection={sortingCriteria[header.dataKey] || 'unset'}
+                    onClick={() => handleSortRequest(header.dataKey)}
                   >
-                    <TableSortLabel
-                      active={orderBy === header.dataKey}
-                      direction={orderBy === header.dataKey ? order : 'asc'}
-                      onClick={() => handleRequestSort(header.dataKey)}
-                    >
-                      {header.label || capitalizeFirstLetter(header.dataKey)}
-                    </TableSortLabel>
+                    <Tooltip title={getTooltipTitle(header.dataKey)}>
+                      <Button
+                        endIcon={getHeaderIcon(header.dataKey)}
+                        className="rustic-table-header-button"
+                      >
+                        {header.label || capitalizeFirstLetter(header.dataKey)}
+                      </Button>
+                    </Tooltip>
                   </TableCell>
                 ))}
               </TableRow>
