@@ -34,13 +34,6 @@ meta.argTypes = {
           'In such cases, the header label defaults to the capitalized key.',
       },
     },
-    data: {
-      table: {
-        type: {
-          summary: 'Array<Record<string, string | number>>',
-        },
-      },
-    },
   },
 }
 

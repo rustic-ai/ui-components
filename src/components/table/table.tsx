@@ -17,11 +17,14 @@ import React, { useState } from 'react'
 
 import { capitalizeFirstLetter } from '../helper'
 import Icon from '../icon/icon'
-import type { DataRow, TableData, TableHeader } from '../types'
+import type { TableData, TableHeader } from '../types'
 
 const paginationThreshold = 10
 
-type Order = 'asc' | 'desc'
+enum Order {
+  Ascending = 'asc',
+  Descending = 'desc',
+}
 
 type SortingCriteria = { [dataKey: string]: Order }
 
@@ -48,12 +51,12 @@ export default function Table(props: TableData) {
     setSortingCriteria((prevCriteria) => {
       const currentOrder = prevCriteria[dataKey]
 
-      if (currentOrder === 'asc') {
-        return { [dataKey]: 'desc' }
-      } else if (currentOrder === 'desc') {
+      if (currentOrder === Order.Ascending) {
+        return { [dataKey]: Order.Descending }
+      } else if (currentOrder === Order.Descending) {
         return {}
       } else {
-        return { [dataKey]: 'asc' }
+        return { [dataKey]: Order.Ascending }
       }
     })
   }
@@ -63,38 +66,25 @@ export default function Table(props: TableData) {
     setCurrentPage(0)
   }
 
-  function sortComparator(a: DataRow, b: DataRow) {
+  function sortData(array: Record<string, string | number>[]) {
     const sortingKey = Object.keys(sortingCriteria)[0]
     const sortingOrder = sortingCriteria[sortingKey]
 
-    if (a[sortingKey] < b[sortingKey]) {
-      return sortingOrder === 'desc' ? 1 : -1
+    if (!sortingKey || !sortingOrder) {
+      return array
     }
-    if (a[sortingKey] > b[sortingKey]) {
-      return sortingOrder === 'desc' ? -1 : 1
-    }
-    return 0
-  }
 
-  function sortData(array: DataRow[]) {
-    // Pair each element with its original index to stabilize the sort
-    const stabalizedArray: [DataRow, number][] = array.map((element, index) => [
-      element,
-      index,
-    ])
-
-    stabalizedArray.sort(([a, aIndex], [b, bIndex]) => {
-      const comparisonResult = sortComparator(a, b)
-      if (comparisonResult !== 0) {
-        return comparisonResult
-      } else {
-        // Use original index to maintain stable sort order
-        return aIndex - bIndex
+    return array.slice().sort((a, b) => {
+      const sortingKey = Object.keys(sortingCriteria)[0]
+      const sortingOrder = sortingCriteria[sortingKey]
+      if (a[sortingKey] < b[sortingKey]) {
+        return sortingOrder === Order.Descending ? 1 : -1
       }
+      if (a[sortingKey] > b[sortingKey]) {
+        return sortingOrder === Order.Descending ? -1 : 1
+      }
+      return 0
     })
-
-    // Extract and return the sorted data without the indices
-    return stabalizedArray.map(([element]) => element)
   }
 
   const sortedData = sortData(props.data)
@@ -111,25 +101,21 @@ export default function Table(props: TableData) {
       return (
         <TableSortLabel
           active={true}
-          direction={sortingCriteria[dataKey] || 'asc'}
+          direction={sortingCriteria[dataKey]}
           className="rustic-table-header-icon"
         />
       )
     } else {
-      return (
-        <Tooltip title="Notifications">
-          <Icon name="expand_all" className="rustic-table-header-icon" />
-        </Tooltip>
-      )
+      return <Icon name="expand_all" className="rustic-table-header-icon" />
     }
   }
 
   function getTooltipTitle(dataKey: string): string {
     const sortDirection = sortingCriteria[dataKey]
+
     if (sortDirection) {
-      const capitalizedSortDirection =
-        sortDirection.charAt(0).toUpperCase() + sortDirection.slice(1)
-      return capitalizedSortDirection + 'ending'
+      //get Enum name
+      return Object.keys(Order)[Object.values(Order).indexOf(sortDirection)]
     } else {
       return 'Sort'
     }
