@@ -1,7 +1,9 @@
 import './pDFViewer.css'
 
 import Box from '@mui/material/Box'
+import Card from '@mui/material/Card'
 import IconButton from '@mui/material/IconButton'
+import useTheme from '@mui/material/styles/useTheme'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import * as pdfjsLib from 'pdfjs-dist'
@@ -14,11 +16,13 @@ type PDFViewerProps = {
 }
 
 function PDFViewer(props: PDFViewerProps) {
-  const canvasRef = useRef<HTMLCanvasElement | null>(null)
+  const pdfRef = useRef<HTMLCanvasElement | null>(null)
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPages, setTotalPages] = useState(0)
   const [pageInput, setPageInput] = useState('1')
   const [isOpen, setIsOpen] = useState(true)
+  const theme = useTheme()
+
   useEffect(() => {
     pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.mjs`
 
@@ -29,7 +33,7 @@ function PDFViewer(props: PDFViewerProps) {
       .promise.then((pdf) => {
         setTotalPages(pdf.numPages)
 
-        const canvas = canvasRef.current
+        const canvas = pdfRef.current
         if (!canvas) {
           return
         }
@@ -84,9 +88,17 @@ function PDFViewer(props: PDFViewerProps) {
 
   if (isOpen) {
     return (
-      <Box className="rustic-pdf-viewer">
+      <Card
+        className="rustic-pdf-viewer"
+        variant="outlined"
+        sx={{ boxShadow: theme.shadows[1] }}
+      >
         <Box className="rustic-pdf-viewer-header">
-          <Typography variant="body1" className="rustic-page-indicator">
+          <Typography
+            variant="body1"
+            className="rustic-page-indicator"
+            data-cy="rustic-pdf-page-indicator"
+          >
             Page
             <TextField
               type="text"
@@ -94,15 +106,21 @@ function PDFViewer(props: PDFViewerProps) {
               onChange={handlePageInputChange}
               size="small"
               className="rustic-pdf-page-input"
+              data-cy="rustic-pdf-page-input"
             />
             of {totalPages}
           </Typography>
-          <IconButton onClick={goToPreviousPage} disabled={currentPage === 1}>
+          <IconButton
+            onClick={goToPreviousPage}
+            disabled={currentPage === 1}
+            data-cy="rustic-previous-page-button"
+          >
             <Icon name="arrow_back" />
           </IconButton>
           <IconButton
             onClick={goToNextPage}
             disabled={currentPage === totalPages}
+            data-cy="rustic-next-page-button"
           >
             <Icon name="arrow_forward" />
           </IconButton>
@@ -113,10 +131,11 @@ function PDFViewer(props: PDFViewerProps) {
             <Icon name="close" />
           </IconButton>
         </Box>
+
         <Box className="rustic-pdf-viewer-body">
-          <canvas ref={canvasRef} />
+          <canvas ref={pdfRef} data-cy="rustic-pdf-canvas" />
         </Box>
-      </Box>
+      </Card>
     )
   }
 }

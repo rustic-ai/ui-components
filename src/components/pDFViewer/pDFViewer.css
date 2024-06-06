@@ -3,6 +3,7 @@
   height: 70vh;
   display: flex;
   flex-direction: column;
+  padding: 16px;
 }
 
 .rustic-pdf-viewer .rustic-pdf-viewer-header {
@@ -16,8 +17,9 @@
   flex: 1;
 }
 
-.rustic-pdf-viewer .rustic-pdf-page-input {
-  width: 64px;
+.rustic-pdf-viewer .rustic-pdf-page-input > div {
+  height: 24px;
+  width: 56px;
 }
 
 .rustic-pdf-viewer .rustic-pdf-page-input input {
