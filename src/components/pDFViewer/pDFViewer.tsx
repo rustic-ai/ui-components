@@ -3,7 +3,7 @@ import './pDFViewer.css'
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
 import IconButton from '@mui/material/IconButton'
-import useTheme from '@mui/material/styles/useTheme'
+import Modal from '@mui/material/Modal'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import * as pdfjsLib from 'pdfjs-dist'
@@ -13,6 +13,8 @@ import Icon from '../icon/icon'
 
 type PDFViewerProps = {
   url: string
+  isOpen: boolean
+  onClose: () => void
 }
 
 function PDFViewer(props: PDFViewerProps) {
@@ -20,9 +22,8 @@ function PDFViewer(props: PDFViewerProps) {
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPages, setTotalPages] = useState(0)
   const [pageInput, setPageInput] = useState('1')
-  const [isOpen, setIsOpen] = useState(true)
+
   const [hasError, setHasError] = useState<boolean>(false)
-  const theme = useTheme()
 
   useEffect(() => {
     pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.mjs`
@@ -85,61 +86,72 @@ function PDFViewer(props: PDFViewerProps) {
     }
   }
 
-  if (isOpen) {
+  if (props.isOpen) {
     if (hasError) {
       return (
-        <Typography variant="body2">Failed to load the PDF file.</Typography>
+        <Modal
+          open={props.isOpen}
+          onClose={props.onClose}
+          className="rustic-pdf-viewer-modal"
+        >
+          <Card variant="outlined" className="rustic-pdf-error">
+            <Typography variant="body2">
+              Failed to load the PDF file.
+            </Typography>
+          </Card>
+        </Modal>
       )
     }
     return (
-      <Card
-        className="rustic-pdf-viewer"
-        variant="outlined"
-        sx={{ boxShadow: theme.shadows[1] }}
+      <Modal
+        open={props.isOpen}
+        onClose={props.onClose}
+        className="rustic-pdf-viewer-modal"
       >
-        <Box className="rustic-pdf-viewer-header">
-          <Typography
-            variant="body1"
-            className="rustic-page-indicator"
-            data-cy="rustic-pdf-page-indicator"
-          >
-            Page
-            <TextField
-              type="text"
-              value={pageInput}
-              onChange={handlePageInputChange}
-              size="small"
-              className="rustic-pdf-page-input"
-              data-cy="rustic-pdf-page-input"
-            />
-            of {totalPages}
-          </Typography>
-          <IconButton
-            onClick={goToPreviousPage}
-            disabled={currentPage === 1}
-            data-cy="rustic-previous-page-button"
-          >
-            <Icon name="arrow_back" />
-          </IconButton>
-          <IconButton
-            onClick={goToNextPage}
-            disabled={currentPage === totalPages}
-            data-cy="rustic-next-page-button"
-          >
-            <Icon name="arrow_forward" />
-          </IconButton>
-          <IconButton
-            onClick={() => setIsOpen(false)}
-            className="rustic-close-button"
-          >
-            <Icon name="close" />
-          </IconButton>
-        </Box>
+        <Card variant="outlined" className="rustic-pdf-viewer">
+          <Box className="rustic-pdf-viewer-header">
+            {totalPages && (
+              <Typography
+                variant="body1"
+                className="rustic-page-indicator"
+                data-cy="rustic-pdf-page-indicator"
+              >
+                Page
+                <TextField
+                  type="text"
+                  value={pageInput}
+                  onChange={handlePageInputChange}
+                  size="small"
+                  className="rustic-pdf-page-input"
+                  data-cy="rustic-pdf-page-input"
+                />
+                of {totalPages}
+              </Typography>
+            )}
+            <IconButton
+              onClick={goToPreviousPage}
+              disabled={currentPage === 1}
+              data-cy="rustic-previous-page-button"
+            >
+              <Icon name="arrow_back" />
+            </IconButton>
+            <IconButton
+              onClick={goToNextPage}
+              disabled={currentPage === totalPages}
+              data-cy="rustic-next-page-button"
+            >
+              <Icon name="arrow_forward" />
+            </IconButton>
+            <IconButton onClick={props.onClose} className="rustic-close-button">
+              <Icon name="close" />
+            </IconButton>
+          </Box>
 
-        <Box className="rustic-pdf-viewer-body">
-          <canvas ref={pdfRef} data-cy="rustic-pdf-canvas" />
-        </Box>
-      </Card>
+          <Box className="rustic-pdf-viewer-body">
+            <canvas ref={pdfRef} data-cy="rustic-pdf-canvas" />
+          </Box>
+        </Card>
+      </Modal>
     )
   }
 }

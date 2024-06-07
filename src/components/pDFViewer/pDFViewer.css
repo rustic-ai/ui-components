@@ -1,8 +1,18 @@
+.rustic-pdf-viewer-modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .rustic-pdf-viewer {
-  width: 80vw;
-  height: 70vh;
+  width: 90vw;
+  height: 90vh;
   display: flex;
   flex-direction: column;
+  padding: 16px;
+}
+
+.rustic-pdf-error {
   padding: 16px;
 }
 

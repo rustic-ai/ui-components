@@ -11,7 +11,7 @@ describe('Table', () => {
   supportedViewports.forEach((viewport) => {
     it(`can flip page and show the correct page number on ${viewport} screen`, () => {
       cy.viewport(viewport)
-      cy.mount(<PDFViewer url={pdfUrl} />)
+      cy.mount(<PDFViewer url={pdfUrl} isOpen={true} onClose={() => {}} />)
 
       cy.get(canvasSelector).should('exist')
       cy.get(pageInputSelector).should('have.value', '1')
@@ -26,7 +26,7 @@ describe('Table', () => {
 
     it(`can jump to another page by changing the page number on ${viewport} screen`, () => {
       cy.viewport(viewport)
-      cy.mount(<PDFViewer url={pdfUrl} />)
+      cy.mount(<PDFViewer url={pdfUrl} isOpen={true} onClose={() => {}} />)
 
       cy.get(canvasSelector).should('exist')
       cy.get(pageInputSelector).should('have.value', '1')
