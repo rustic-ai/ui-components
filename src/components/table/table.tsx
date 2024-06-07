@@ -1,7 +1,6 @@
 import './table.css'
 
 import { useTheme } from '@mui/material'
-import Button from '@mui/material/Button'
 import Stack from '@mui/material/Stack'
 import { default as MuiTable } from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
@@ -28,6 +27,10 @@ enum Order {
 
 type SortingCriteria = { [dataKey: string]: Order }
 
+function SortIcon() {
+  return <Icon name="expand_all" />
+}
+
 export default function Table(props: TableData) {
   if (props.data.length === 0) {
     return <Typography variant="body2">No data available</Typography>
@@ -50,14 +53,21 @@ export default function Table(props: TableData) {
   function handleSortRequest(dataKey: string) {
     setSortingCriteria((prevCriteria) => {
       const currentOrder = prevCriteria[dataKey]
+      let newSortingCriteria = {}
 
-      if (currentOrder === Order.Ascending) {
-        return { [dataKey]: Order.Descending }
-      } else if (currentOrder === Order.Descending) {
-        return {}
-      } else {
-        return { [dataKey]: Order.Ascending }
+      switch (currentOrder) {
+        case Order.Ascending:
+          newSortingCriteria = { [dataKey]: Order.Descending }
+          break
+        case Order.Descending:
+          newSortingCriteria = {}
+          break
+        default:
+          newSortingCriteria = { [dataKey]: Order.Ascending }
+          break
       }
+
+      return newSortingCriteria
     })
   }
 
@@ -74,13 +84,13 @@ export default function Table(props: TableData) {
       return array
     }
 
-    return array.slice().sort((a, b) => {
+    return array.slice().sort((firstItem, secondItem) => {
       const sortingKey = Object.keys(sortingCriteria)[0]
       const sortingOrder = sortingCriteria[sortingKey]
-      if (a[sortingKey] < b[sortingKey]) {
+      if (firstItem[sortingKey] < secondItem[sortingKey]) {
         return sortingOrder === Order.Descending ? 1 : -1
       }
-      if (a[sortingKey] > b[sortingKey]) {
+      if (firstItem[sortingKey] > secondItem[sortingKey]) {
         return sortingOrder === Order.Descending ? -1 : 1
       }
       return 0
@@ -97,16 +107,8 @@ export default function Table(props: TableData) {
   const dataToDisplay = rowsPerPage > 0 ? dataOfCurrentPage : sortedData
 
   function getHeaderIcon(dataKey: string) {
-    if (sortingCriteria[dataKey]) {
-      return (
-        <TableSortLabel
-          active={true}
-          direction={sortingCriteria[dataKey]}
-          className="rustic-table-header-icon"
-        />
-      )
-    } else {
-      return <Icon name="expand_all" className="rustic-table-header-icon" />
+    if (!sortingCriteria[dataKey]) {
+      return SortIcon
     }
   }
 
@@ -150,16 +152,18 @@ export default function Table(props: TableData) {
                   <TableCell
                     key={`header-${index}`}
                     //for adding aria label
-                    sortDirection={sortingCriteria[header.dataKey] || 'unset'}
-                    onClick={() => handleSortRequest(header.dataKey)}
+                    sortDirection={sortingCriteria[header.dataKey] || false}
                   >
                     <Tooltip title={getTooltipTitle(header.dataKey)}>
-                      <Button
-                        endIcon={getHeaderIcon(header.dataKey)}
-                        className="rustic-table-header-button"
+                      <TableSortLabel
+                        active={true}
+                        direction={sortingCriteria[header.dataKey]}
+                        onClick={() => handleSortRequest(header.dataKey)}
+                        className="rustic-table-header"
+                        IconComponent={getHeaderIcon(header.dataKey)}
                       >
                         {header.label || capitalizeFirstLetter(header.dataKey)}
-                      </Button>
+                      </TableSortLabel>
                     </Tooltip>
                   </TableCell>
                 ))}

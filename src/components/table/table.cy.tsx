@@ -204,12 +204,11 @@ describe('Table', () => {
     it(`can sort by the headers on ${viewport} screen`, () => {
       cy.viewport(viewport)
       cy.mount(<Table data={manyDataRows} />)
-
       cy.get('tbody tr').first().should('contain', 'rice milk')
 
       // sort by food
-      cy.get('tr th').first().click()
-      cy.get('tbody tr').first().should('contain', 'almond milk')
+      cy.get('tr th span').first().click()
+      cy.get('tbody td').first().should('contain', 'almond milk')
     })
   })
 })
