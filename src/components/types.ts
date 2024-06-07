@@ -6,7 +6,7 @@ export type MessageData = { [key: string]: any }
 
 export interface Sender {
   id: string
-  name: string
+  name?: string
 }
 
 export interface Message {
