@@ -131,7 +131,7 @@ export interface TableHeader {
 
 export interface TableFormat extends DataFormat {
   /** Data to be displayed in the table. */
-  data: Record<string, string | number>[]
+  data: Array<Record<string, string | number>>
   /** Optional array to set the order of columns and assign labels.
    * This can also be used to limit which columns are shown. */
   headers?: TableHeader[]
