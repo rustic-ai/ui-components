@@ -4,10 +4,15 @@ import type { EmbedOptions, VisualizationSpec } from 'vega-embed'
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type MessageData = { [key: string]: any }
 
+export interface Sender {
+  id: string
+  name: string
+}
+
 export interface Message {
   id: string
   timestamp: string
-  sender: string
+  sender: Sender
   conversationId: string
   format: string
   data: MessageData
@@ -15,7 +20,7 @@ export interface Message {
   threadId?: string
   priority?: string
   taggedParticipants?: string[]
-  topicId?: string
+  topic?: string
 }
 
 export interface ThreadableMessage extends Message {
@@ -198,8 +203,8 @@ export interface MultipartFormat extends DataFormat {
 export type MultipartData = MultipartFormat & Updates<MultipartFormat>
 
 export interface BaseInputProps {
-  /** Id of the current user. */
-  sender: string
+  /** Current user. */
+  sender: Sender
   /** Id of the current conversation. */
   conversationId: string
   /** Label text to be displayed in the input, which will then move to the top when the input is focused on. If both label and placeholder are provided, the placeholder will only be visible once the input is focused on. */
@@ -258,8 +263,8 @@ export type MultimodalInputProps = TextInputProps &
 export interface ConversationProps {
   /** WebSocket connection to send and receive messages to and from a backend. This value will be set automatically if the component is rendered with `ElementRenderer` or `MessageSpace`. */
   ws: WebSocketClient
-  /** Id of the current user. This value will be set automatically if the component is rendered with `ElementRenderer` or `MessageSpace`. */
-  sender: string
+  /** Current user. This value will be set automatically if the component is rendered with `ElementRenderer` or `MessageSpace`. */
+  sender: Sender
   /** Id of the current conversation. This value will be set automatically if the component is rendered with `ElementRenderer` or `MessageSpace`. */
   conversationId: string
   /** Id of the message. This value will be set automatically if the component is rendered with `ElementRenderer` or `MessageSpace`. */

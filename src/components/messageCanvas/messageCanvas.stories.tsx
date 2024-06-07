@@ -23,7 +23,7 @@ const mockWsClient = {
 
 const commonElementRendererProps = {
   ws: mockWsClient,
-  sender: 'You',
+  sender: { name: 'You', id: '16usbj' },
   conversationId: '1',
 }
 
@@ -40,38 +40,21 @@ const baseMessage = {
 
 const messageFromAgent = {
   ...baseMessage,
-  sender: 'Scheduling agent',
+  sender: { name: 'Scheduling agent', id: 'bh1hbjkidjn' },
 }
 
 const messageFromHuman = {
   ...baseMessage,
-  sender: 'Some sender',
+  sender: { name: 'Some sender', id: '1562ajosn' },
 }
 
-const messageString = `{
-    conversationId: 'lkd9vc',
-    data: {
-      text: 'Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing industries for previewing layouts and visual mockups.'
-    },
-    format: 'text',
-    id: '1',
-    sender: 'Scheduling agent',
-    timestamp: '2020-01-02T00:00:00.000Z',
-    topicId: 'default'
-  }`
+const messageString = JSON.stringify({
+  ...baseMessage,
+  sender: messageFromAgent.sender,
+})
 
 const elementRendererString = `<ElementRenderer
-      message={{
-        conversationId: 'lkd9vc',
-        data: {
-          text: 'Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing industries for previewing layouts and visual mockups.'
-        },
-        format: 'text',
-        id: '1',
-        sender: 'Scheduling agent',
-        timestamp: '2020-01-02T00:00:00.000Z',
-        topicId: 'default'
-      }}
+      message={messageFromAgent}
       supportedElements={{ text: Text }}
     />`
 
@@ -81,7 +64,7 @@ const profileString = `(message: ThreadableMessage) => {
   }`
 
 const getProfileComponent = (message: ThreadableMessage) => {
-  if (message.sender.includes('agent')) {
+  if (message.sender.name.includes('agent')) {
     return <Icon name="smart_toy" />
   } else {
     return <Icon name="account_circle" />

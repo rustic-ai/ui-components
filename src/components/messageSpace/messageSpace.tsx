@@ -9,13 +9,18 @@ import Icon from '../icon/icon'
 import MessageCanvas, {
   type MessageContainerProps,
 } from '../messageCanvas/messageCanvas'
-import type { ComponentMap, ThreadableMessage, WebSocketClient } from '../types'
+import type {
+  ComponentMap,
+  Sender,
+  ThreadableMessage,
+  WebSocketClient,
+} from '../types'
 
 export interface MessageSpaceProps extends MessageContainerProps {
   /** WebSocket connection to send and receive messages to and from a backend. This can be useful for component interactions, for example, to send filter conditions, user location, etc. */
   ws: WebSocketClient
-  /** Id of the current user. This can be useful for component interactions, where current user id may be required. */
-  sender: string
+  /** Current user. This can be useful for component interactions, where current user id may be required. */
+  sender: Sender
   /** A component map contains message formats as keys and their corresponding React components as values. */
   supportedElements: ComponentMap
   messages?: ThreadableMessage[]

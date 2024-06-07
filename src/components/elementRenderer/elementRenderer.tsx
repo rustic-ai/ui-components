@@ -1,10 +1,15 @@
 import Typography from '@mui/material/Typography'
 import React from 'react'
 
-import type { ComponentMap, ThreadableMessage, WebSocketClient } from '../types'
+import type {
+  ComponentMap,
+  Sender,
+  ThreadableMessage,
+  WebSocketClient,
+} from '../types'
 
 interface ElementRendererProps {
-  sender: string
+  sender: Sender
   ws: WebSocketClient
   message: ThreadableMessage
   supportedElements: ComponentMap

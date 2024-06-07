@@ -1,6 +1,9 @@
 import 'cypress-real-events'
 
-import { supportedViewports } from '../../../../../cypress/support/variables'
+import {
+  supportedViewports,
+  testUser,
+} from '../../../../../cypress/support/variables'
 import CopyText from './copyText'
 describe('Copy component', () => {
   const copyButton = '[data-cy=copy-text-button]'
@@ -8,7 +11,7 @@ describe('Copy component', () => {
   const message = {
     id: '1',
     timestamp: '2020-01-02T00:00:00.000Z',
-    sender: 'senderId',
+    sender: testUser,
     conversationId: 'lkd9vc',
     topicId: 'default',
     format: 'text',

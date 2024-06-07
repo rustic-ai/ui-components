@@ -49,7 +49,7 @@ function MessageCanvasElement(
       <Stack direction="row" alignItems="center" spacing={1}>
         {props.getProfileComponent && props.getProfileComponent(props.message)}
         <Typography variant="body1" color="text.secondary" data-cy="sender">
-          {props.message.sender}
+          {props.message.sender.name}
         </Typography>
         <Timestamp timestamp={props.message.timestamp} />
       </Stack>

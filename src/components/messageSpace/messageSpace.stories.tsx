@@ -82,12 +82,12 @@ meta.argTypes = {
 const conversationId = '1'
 
 const agentMessageData = {
-  sender: 'Agent',
+  sender: { name: 'Some Agent', id: '187w981' },
   conversationId,
 }
 
 const humanMessageData = {
-  sender: 'You',
+  sender: { name: 'Some User', id: '16817ywb' },
   conversationId,
 }
 
@@ -172,7 +172,7 @@ const chartColors = ['#648FFF', '#785EF0', '#DC267F', '#FE6100', '#FFB000']
 export const Default = {
   args: {
     ws: { send: () => {} },
-    sender: 'You',
+    sender: humanMessageData.sender,
     messages: [
       {
         ...humanMessageData,
@@ -438,7 +438,7 @@ export const Default = {
       multipart: Multipart,
     },
     getProfileComponent: (message: Message) => {
-      if (message.sender.includes('Agent')) {
+      if (message.sender.name.includes('Agent')) {
         return <Icon name="smart_toy" />
       } else {
         return <Icon name="account_circle" />

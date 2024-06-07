@@ -1,4 +1,7 @@
-import { supportedViewports } from '../../../cypress/support/variables'
+import {
+  supportedViewports,
+  testUser,
+} from '../../../cypress/support/variables'
 import Question from './question'
 
 describe('Question', () => {
@@ -13,7 +16,7 @@ describe('Question', () => {
     title,
     description,
     conversationId: '1',
-    sender: 'You',
+    sender: testUser,
     messageId: '1',
   }
 

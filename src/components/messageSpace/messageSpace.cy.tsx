@@ -2,7 +2,11 @@ import 'cypress-real-events'
 
 import { v4 as getUUID } from 'uuid'
 
-import { supportedViewports } from '../../../cypress/support/variables'
+import {
+  botUser,
+  supportedViewports,
+  testUser,
+} from '../../../cypress/support/variables'
 import {
   FCCalendar,
   Image,
@@ -36,12 +40,12 @@ describe('MessageSpace Component', () => {
   const conversationId = '1'
 
   const agentMessageData = {
-    sender: 'Agent',
+    sender: botUser,
     conversationId,
   }
 
   const humanMessageData = {
-    sender: 'You',
+    sender: testUser,
     conversationId,
   }
 
@@ -89,11 +93,11 @@ describe('MessageSpace Component', () => {
       cy.mount(
         <MessageSpace
           ws={mockWsClient}
-          sender="You"
+          sender={testUser}
           messages={messages}
           supportedElements={supportedElements}
           getProfileComponent={(message: Message) => {
-            if (message.sender.includes('Agent')) {
+            if (message.sender.name.includes('Agent')) {
               return <Icon name="smart_toy" />
             } else {
               return <Icon name="account_circle" />
@@ -107,9 +111,9 @@ describe('MessageSpace Component', () => {
 
       messages.forEach((message, index) => {
         cy.get(messageSpace)
-          .should('contain', message.sender)
+          .should('contain', message.sender.name)
           .and('contain', message.data.text)
-        if (message.sender === 'Agent') {
+        if (message.sender.name.includes('Agent')) {
           cy.get(messageCanvas)
             .eq(index)
             .within(() => {
@@ -139,7 +143,7 @@ describe('MessageSpace Component', () => {
         <div style={{ height: '200px' }}>
           <MessageSpace
             ws={mockWsClient}
-            sender="You"
+            sender={testUser}
             messages={messages}
             supportedElements={supportedElements}
           />
