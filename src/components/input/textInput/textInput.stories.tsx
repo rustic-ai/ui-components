@@ -1,19 +1,45 @@
 import type { Meta, StoryFn } from '@storybook/react'
 import React from 'react'
 
+import type { BaseInputProps, WebSocketClient } from '../../types'
 import type { Message } from '../../types'
+import BaseInput from '../baseInput/baseInput'
 import TextInput from './textInput'
 
-const meta: Meta<React.ComponentProps<typeof TextInput>> = {
+interface InputProps extends BaseInputProps {
+  ws: WebSocketClient
+}
+
+const meta: Meta<React.FC<InputProps>> = {
   title: 'Rustic UI/Input/Text Input',
-  component: TextInput,
+  component: BaseInput,
   tags: ['autodocs'],
   parameters: {
     layout: 'centered',
     docs: {
       description: {
         component:
-          'The `TextInput` component enables users to input text messages and send them over a WebSocket connection. It provides functionality for sending messages with a sender name, timestamp, and conversation ID.',
+          'The `TextInput` component enables users to input text messages ' +
+          'and send them over a WebSocket connection. It provides functionality ' +
+          'for sending messages with a sender, timestamp, and conversation ID.',
+      },
+      argTypes: {
+        exclude: ['send', 'isSendEnabled'],
+        sort: 'requiredFirst',
+      },
+      source: {
+        transform: (code: string) => {
+          let textInputCode = code.replaceAll('BaseInput', 'TextInput')
+          textInputCode = textInputCode.replaceAll(
+            '  component={() => {}}\n',
+            ''
+          )
+          textInputCode = textInputCode.replaceAll(
+            'send={() => {}}',
+            'ws:{send: (message: Message) => alert(`Message sent: ${message.data.text}`)}'
+          )
+          return textInputCode
+        },
       },
     },
   },
@@ -29,80 +55,42 @@ const meta: Meta<React.ComponentProps<typeof TextInput>> = {
 meta.argTypes = {
   ...meta.argTypes,
   ws: {
+    type: { name: 'string', required: true },
     description:
       'WebSocket connection to send and receive messages to and from a backend.',
     table: {
       type: {
-        summary: 'WebSocketClient.\n',
+        summary: 'WebSocketClient\n',
         detail:
-          'send: (message: Message) => void\nclose: () => void\nreconnect: () => void\n',
+          'A websocket client with supports the following methods:\n' +
+          'send: (msg: Message) => void\n' +
+          'close: () => void\n' +
+          'reconnect: () => void',
       },
     },
   },
   sender: {
     description: 'The sender of the message.',
     table: {
-      type: { summary: 'string' },
-    },
-  },
-  conversationId: {
-    description: 'Id of the current conversation.',
-    table: {
-      type: { summary: 'string' },
-    },
-  },
-  label: {
-    description:
-      'Optional label text to be displayed in the input, which will then move to the top when the input is focused on. If both label and placeholder are provided, the placeholder will only be visible once the input is focused on.',
-    table: {
-      type: { summary: 'string' },
-    },
-  },
-  placeholder: {
-    description:
-      'Optional placeholder text to be displayed in the input before user starts typing.',
-    table: {
-      type: { summary: 'string' },
-    },
-  },
-  multiline: {
-    description:
-      'Optional boolean that dictates whether `TextInput` can expand to be multiline.',
-    table: {
-      type: { summary: 'boolean' },
-    },
-  },
-  maxRows: {
-    description: 'Optional maximum number of rows to be displayed.',
-    table: {
-      type: { summary: 'number' },
-    },
-  },
-  fullWidth: {
-    description:
-      'Optional boolean that dictates whether `TextInput` takes up 100% width of the parent container.',
-    table: {
-      type: { summary: 'boolean' },
-    },
-  },
-  enableSpeechToText: {
-    description:
-      'Optional boolean to enable speech-to-text. See which browsers are supported [here](https://developer.mozilla.org/en-US/docs/Web/API/SpeechRecognition#browser_compatibility).',
-    table: {
-      type: { summary: 'boolean' },
+      type: {
+        summary: 'Sender',
+        detail:
+          'id: string representing sender id\n' +
+          'name: Optional string of sender name',
+      },
     },
   },
 }
+
 export default meta
 
 export const Default = {
   args: {
-    sender: 'You',
+    component: TextInput,
+    sender: { id: '169snlk9n', name: 'Some User' },
     conversationId: '1',
     placeholder: 'Type your message',
-    ws: {
-      send: (message: Message) => alert(`Message sent: ${message.data.text}`),
-    },
+    send: (message: Message) => alert(`Message sent: ${message.data.text}`),
   },
 }
 

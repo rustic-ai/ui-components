@@ -4,8 +4,11 @@ import type { EmbedOptions, VisualizationSpec } from 'vega-embed'
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type MessageData = { [key: string]: any }
 
+/** Represents a user or agent responsible for sending given message */
 export interface Sender {
+  /** id of the sender*/
   id: string
+  /** name of the sender if available */
   name?: string
 }
 
@@ -227,6 +230,7 @@ export interface BaseInputProps {
 
 export interface TextInputProps
   extends Omit<BaseInputProps, 'send' | 'isSendEnabled'> {
+  /** WebSocket connection to send and receive messages to and from a backend.*/
   ws: WebSocketClient
 }
 
