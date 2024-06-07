@@ -21,15 +21,14 @@ function PDFViewer(props: PDFViewerProps) {
   const [totalPages, setTotalPages] = useState(0)
   const [pageInput, setPageInput] = useState('1')
   const [isOpen, setIsOpen] = useState(true)
+  const [hasError, setHasError] = useState<boolean>(false)
   const theme = useTheme()
 
   useEffect(() => {
     pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.mjs`
 
     pdfjsLib
-      .getDocument({
-        url: `${props.url}`,
-      })
+      .getDocument({ url: `${props.url}` })
       .promise.then((pdf) => {
         setTotalPages(pdf.numPages)
 
@@ -49,16 +48,16 @@ function PDFViewer(props: PDFViewerProps) {
           // Set the canvas size to the scaled viewport dimensions
           canvas.height = viewport.height
           canvas.width = viewport.width
-
           const renderContext = {
             canvasContext: context,
-            viewport: viewport,
+            // transform,
+            viewport,
           }
           page.render(renderContext)
         })
       })
-      .catch((error) => {
-        console.error('Error loading PDF:', error)
+      .catch(() => {
+        setHasError(true)
       })
   }, [props.url, currentPage])
 
@@ -87,6 +86,11 @@ function PDFViewer(props: PDFViewerProps) {
   }
 
   if (isOpen) {
+    if (hasError) {
+      return (
+        <Typography variant="body2">Failed to load the PDF file.</Typography>
+      )
+    }
     return (
       <Card
         className="rustic-pdf-viewer"
