@@ -35,6 +35,12 @@
   text-align: center;
 }
 
+.rustic-pdf-viewer
+  .rustic-pdf-page-input
+  input[type='number']::-webkit-inner-spin-button {
+  display: none;
+}
+
 .rustic-pdf-viewer .rustic-page-indicator {
   display: flex;
   align-items: center;

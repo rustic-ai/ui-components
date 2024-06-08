@@ -18,7 +18,7 @@ function PDFViewer(props: PDFViewerProps) {
   const pdfRef = useRef<HTMLCanvasElement | null>(null)
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
-  const [pageInput, setPageInput] = useState('1')
+  const [pageInput, setPageInput] = useState(1)
   const [hasError, setHasError] = useState<boolean>(false)
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
@@ -86,24 +86,23 @@ function PDFViewer(props: PDFViewerProps) {
   function goToPreviousPage() {
     if (currentPage > 1) {
       setCurrentPage(currentPage - 1)
-      setPageInput((currentPage - 1).toString())
+      setPageInput(currentPage - 1)
     }
   }
 
   function goToNextPage() {
     if (currentPage < totalPages) {
       setCurrentPage(currentPage + 1)
-      setPageInput((currentPage + 1).toString())
+      setPageInput(currentPage + 1)
     }
   }
 
   function handlePageInputChange(event: React.ChangeEvent<HTMLInputElement>) {
-    const value = event.target.value
+    const value = parseInt(event.target.value)
     setPageInput(value)
 
-    const pageNumber = parseInt(value, 10)
-    if (!isNaN(pageNumber) && pageNumber >= 1 && pageNumber <= totalPages) {
-      setCurrentPage(pageNumber)
+    if (!isNaN(value) && value >= 1 && value <= totalPages) {
+      setCurrentPage(value)
     }
   }
 
@@ -169,7 +168,7 @@ function PDFViewer(props: PDFViewerProps) {
             >
               Page
               <TextField
-                type="text"
+                type="number"
                 value={pageInput}
                 onChange={handlePageInputChange}
                 size="small"
