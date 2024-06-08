@@ -1,13 +1,28 @@
+import { useState } from 'react'
+
 import { supportedViewports } from '../../../cypress/support/variables'
 import PDFViewer from './pDFViewer'
 
 describe('Table', () => {
   const pdfUrl = '/files/pdfExample.pdf'
-  const canvasSelector = '[data-cy=rustic-pdf-canvas]'
-  const pageInputSelector = '[data-cy=rustic-pdf-page-input] input'
-  const pageIndicatorSelector = '[data-cy=rustic-pdf-page-indicator]'
+  const canvasSelector = '[data-cy=pdf-canvas]'
+  const pageInputSelector = '[data-cy=pdf-page-input] input'
+  const pageIndicatorSelector = '[data-cy=pdf-page-indicator]'
   const nextPageButtonSelector = '[data-cy=next-page-button]'
+  const zoomOutButton = '[data-cy=zoom-out-button]'
+  const zoomInButton = '[data-cy=zoom-in-button]'
   const previousPageButtonSelector = '[data-cy=previous-page-button]'
+
+  function ParentComponent() {
+    const [isOpen, setIsOpen] = useState(true)
+
+    function handleClose() {
+      setIsOpen(false)
+    }
+
+    return <PDFViewer url={pdfUrl} isOpen={isOpen} onClose={handleClose} />
+  }
+
   supportedViewports.forEach((viewport) => {
     it(`can flip page and show the correct page number on ${viewport} screen`, () => {
       cy.viewport(viewport)
@@ -36,6 +51,58 @@ describe('Table', () => {
       cy.get(pageInputSelector).clear()
       cy.get(pageInputSelector).type('3')
       cy.get(pageInputSelector).should('have.value', '3')
+    })
+
+    it(`can be closed by clicking the close button on ${viewport} screen`, () => {
+      cy.mount(<ParentComponent />)
+      cy.get('[data-cy="close-button"]').click()
+      cy.get('[data-cy="pdf-viewer-modal]').should('not.exist')
+    })
+  })
+
+  context('Desktop', () => {
+    const desktopInitialCanvasWidth = 918
+
+    it('should zoom in and out', () => {
+      cy.viewport('macbook-15')
+      cy.mount(<PDFViewer url={pdfUrl} isOpen={true} onClose={() => {}} />)
+
+      cy.get(canvasSelector)
+        .invoke('outerWidth')
+        .should('be.eq', desktopInitialCanvasWidth)
+
+      cy.get(zoomInButton).click()
+      cy.get(canvasSelector)
+        .invoke('outerWidth')
+        .should('be.gt', desktopInitialCanvasWidth)
+
+      cy.get(zoomOutButton).click()
+      cy.get(canvasSelector)
+        .invoke('outerWidth')
+        .should('be.eq', desktopInitialCanvasWidth)
+    })
+  })
+
+  context('Mobile', () => {
+    const mobileInitialCanvasWidth = 306
+
+    it('should zoom in and out', () => {
+      cy.viewport('iphone-6')
+      cy.mount(<PDFViewer url={pdfUrl} isOpen={true} onClose={() => {}} />)
+
+      cy.get(canvasSelector)
+        .invoke('outerWidth')
+        .should('be.eq', mobileInitialCanvasWidth)
+
+      cy.get(zoomInButton).click()
+      cy.get(canvasSelector)
+        .invoke('outerWidth')
+        .should('be.gt', mobileInitialCanvasWidth)
+
+      cy.get(zoomOutButton).click()
+      cy.get(canvasSelector)
+        .invoke('outerWidth')
+        .should('be.eq', mobileInitialCanvasWidth)
     })
   })
 })

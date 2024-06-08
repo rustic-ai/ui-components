@@ -4,14 +4,14 @@ import React from 'react'
 
 import Icon from '../../icon/icon'
 
-interface PDFViewerButtonsProps {
+interface ViewerControlButtonProps {
   action: 'zoomIn' | 'zoomOut' | 'close' | 'previousPage' | 'nextPage'
   onClick: () => void
   className?: string
   isDisabled?: boolean
 }
 
-function ViewerControlButton(props: PDFViewerButtonsProps) {
+function ViewerControlButton(props: ViewerControlButtonProps) {
   const controls = {
     zoomIn: { symbol: 'zoom_in', label: 'Zoom in' },
     zoomOut: { symbol: 'zoom_out', label: 'Zoom out' },

@@ -140,6 +140,7 @@ function PDFViewer(props: PDFViewerProps) {
         open={props.isOpen}
         onClose={props.onClose}
         className="rustic-pdf-viewer-modal"
+        data-cy="pdf-viewer-modal"
       >
         <Card variant="outlined" className="rustic-pdf-viewer">
           <Box className="rustic-pdf-viewer-header">
@@ -153,7 +154,7 @@ function PDFViewer(props: PDFViewerProps) {
           </Box>
 
           <Box className="rustic-pdf-viewer-body">
-            <canvas ref={pdfRef} data-cy="rustic-pdf-canvas" />
+            <canvas ref={pdfRef} data-cy="pdf-canvas" />
           </Box>
           <Stack direction="row" justifyContent="center" alignItems="center">
             <ViewerControlButton
@@ -164,7 +165,7 @@ function PDFViewer(props: PDFViewerProps) {
             <Typography
               variant="body1"
               className="rustic-page-indicator"
-              data-cy="rustic-pdf-page-indicator"
+              data-cy="pdf-page-indicator"
             >
               Page
               <TextField
@@ -173,7 +174,7 @@ function PDFViewer(props: PDFViewerProps) {
                 onChange={handlePageInputChange}
                 size="small"
                 className="rustic-pdf-page-input"
-                data-cy="rustic-pdf-page-input"
+                data-cy="pdf-page-input"
               />
               of {totalPages}
             </Typography>
