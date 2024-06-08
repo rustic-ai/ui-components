@@ -9,26 +9,39 @@ import TableContainer from '@mui/material/TableContainer'
 import TableHead from '@mui/material/TableHead'
 import TablePagination from '@mui/material/TablePagination'
 import TableRow from '@mui/material/TableRow'
+import TableSortLabel from '@mui/material/TableSortLabel'
+import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
 import React, { useState } from 'react'
 
 import { capitalizeFirstLetter } from '../helper'
+import Icon from '../icon/icon'
 import type { TableData, TableHeader } from '../types'
 
 const paginationThreshold = 10
 
+enum Order {
+  Ascending = 'asc',
+  Descending = 'desc',
+}
+
+type SortingCriteria = { [dataKey: string]: Order }
+
+function SortIcon() {
+  return <Icon name="expand_all" />
+}
+
 export default function Table(props: TableData) {
-  const isPaginationEnabled = props.data.length > paginationThreshold
-
-  const [rowsPerPage, setRowsPerPage] = useState(
-    isPaginationEnabled ? paginationThreshold : -1
-  )
-  const [currentPage, setCurrentPage] = useState(0)
-
   if (props.data.length === 0) {
     return <Typography variant="body2">No data available</Typography>
   }
 
+  const isPaginationEnabled = props.data.length > paginationThreshold
+  const [sortingCriteria, setSortingCriteria] = useState<SortingCriteria>({})
+  const [rowsPerPage, setRowsPerPage] = useState(
+    isPaginationEnabled ? paginationThreshold : -1
+  )
+  const [currentPage, setCurrentPage] = useState(0)
   const theme = useTheme()
 
   const dataKeys = Array.from(
@@ -37,16 +50,77 @@ export default function Table(props: TableData) {
   const headers: TableHeader[] =
     props.headers || dataKeys.map((key) => ({ dataKey: key }))
 
-  const dataOfCurrentPage = props.data.slice(
-    currentPage * rowsPerPage,
-    currentPage * rowsPerPage + rowsPerPage
-  )
+  function handleSortRequest(dataKey: string) {
+    setSortingCriteria((prevCriteria) => {
+      const currentOrder = prevCriteria[dataKey]
+      let newSortingCriteria = {}
 
-  const dataToDisplay = rowsPerPage > 0 ? dataOfCurrentPage : props.data
+      switch (currentOrder) {
+        case Order.Ascending:
+          newSortingCriteria = { [dataKey]: Order.Descending }
+          break
+        case Order.Descending:
+          newSortingCriteria = {}
+          break
+        default:
+          newSortingCriteria = { [dataKey]: Order.Ascending }
+          break
+      }
+
+      return newSortingCriteria
+    })
+  }
 
   function handleChangeRowsPerPage(event: React.ChangeEvent<HTMLInputElement>) {
     setRowsPerPage(+event.target.value)
     setCurrentPage(0)
+  }
+
+  function sortData(array: Record<string, string | number>[]) {
+    const sortingKey = Object.keys(sortingCriteria)[0]
+    const sortingOrder = sortingCriteria[sortingKey]
+
+    if (!sortingKey || !sortingOrder) {
+      return array
+    }
+
+    return array.slice().sort((firstItem, secondItem) => {
+      const sortingKey = Object.keys(sortingCriteria)[0]
+      const sortingOrder = sortingCriteria[sortingKey]
+      if (firstItem[sortingKey] < secondItem[sortingKey]) {
+        return sortingOrder === Order.Descending ? 1 : -1
+      }
+      if (firstItem[sortingKey] > secondItem[sortingKey]) {
+        return sortingOrder === Order.Descending ? -1 : 1
+      }
+      return 0
+    })
+  }
+
+  const sortedData = sortData(props.data)
+
+  const dataOfCurrentPage = sortedData.slice(
+    currentPage * rowsPerPage,
+    currentPage * rowsPerPage + rowsPerPage
+  )
+
+  const dataToDisplay = rowsPerPage > 0 ? dataOfCurrentPage : sortedData
+
+  function getHeaderIcon(dataKey: string) {
+    if (!sortingCriteria[dataKey]) {
+      return SortIcon
+    }
+  }
+
+  function getTooltipTitle(dataKey: string): string {
+    const sortDirection = sortingCriteria[dataKey]
+
+    if (sortDirection) {
+      //get Enum name
+      return Object.keys(Order)[Object.values(Order).indexOf(sortDirection)]
+    } else {
+      return 'Sort'
+    }
   }
 
   return (
@@ -75,8 +149,22 @@ export default function Table(props: TableData) {
             <TableHead>
               <TableRow>
                 {headers.map((header, index) => (
-                  <TableCell key={`header-${index}`}>
-                    {header.label || capitalizeFirstLetter(header.dataKey)}
+                  <TableCell
+                    key={`header-${index}`}
+                    //for adding aria label
+                    sortDirection={sortingCriteria[header.dataKey] || false}
+                  >
+                    <Tooltip title={getTooltipTitle(header.dataKey)}>
+                      <TableSortLabel
+                        active={true}
+                        direction={sortingCriteria[header.dataKey]}
+                        onClick={() => handleSortRequest(header.dataKey)}
+                        className="rustic-table-header"
+                        IconComponent={getHeaderIcon(header.dataKey)}
+                      >
+                        {header.label || capitalizeFirstLetter(header.dataKey)}
+                      </TableSortLabel>
+                    </Tooltip>
                   </TableCell>
                 ))}
               </TableRow>
