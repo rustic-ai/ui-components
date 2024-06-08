@@ -11,7 +11,7 @@ export default {
     docs: {
       description: {
         component:
-          'The PDFViewer component is designed to display PDF documents seamlessly within a web application. It offers an intuitive user interface for navigating through pages',
+          'The PDFViewer component is designed to display PDF documents seamlessly within a web application. It offers an intuitive user interface for navigating through pages.',
       },
     },
   },

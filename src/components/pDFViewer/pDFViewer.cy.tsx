@@ -6,8 +6,8 @@ describe('Table', () => {
   const canvasSelector = '[data-cy=rustic-pdf-canvas]'
   const pageInputSelector = '[data-cy=rustic-pdf-page-input] input'
   const pageIndicatorSelector = '[data-cy=rustic-pdf-page-indicator]'
-  const nextPageButtonSelector = '[data-cy=rustic-next-page-button]'
-  const previousPageButtonSelector = '[data-cy=rustic-previous-page-button]'
+  const nextPageButtonSelector = '[data-cy=next-page-button]'
+  const previousPageButtonSelector = '[data-cy=previous-page-button]'
   supportedViewports.forEach((viewport) => {
     it(`can flip page and show the correct page number on ${viewport} screen`, () => {
       cy.viewport(viewport)

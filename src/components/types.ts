@@ -274,7 +274,10 @@ export interface QuestionFormat extends DataFormat {
 export interface QuestionProps extends QuestionFormat, ConversationProps {}
 
 export interface PDFViewerProps {
+  /** The url of the PDF file to be displayed. */
   url: string
+  /** Used to decide if the PDF viewer should be displayed. */
   isOpen: boolean
+  /** Function to handle closing the PDF viewer. */
   onClose: () => void
 }

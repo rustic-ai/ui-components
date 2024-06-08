@@ -2,17 +2,17 @@ import './pDFViewer.css'
 
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
-import IconButton from '@mui/material/IconButton'
 import Modal from '@mui/material/Modal'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import useMediaQuery from '@mui/material/useMediaQuery'
+import Stack from '@mui/system/Stack'
 import useTheme from '@mui/system/useTheme'
 import * as pdfjsLib from 'pdfjs-dist'
 import React, { useEffect, useRef, useState } from 'react'
 
-import Icon from '../icon/icon'
 import type { PDFViewerProps } from '../types'
+import ViewerControlButton from './controlButton/controlButton'
 
 function PDFViewer(props: PDFViewerProps) {
   const pdfRef = useRef<HTMLCanvasElement | null>(null)
@@ -143,6 +143,24 @@ function PDFViewer(props: PDFViewerProps) {
       >
         <Card variant="outlined" className="rustic-pdf-viewer">
           <Box className="rustic-pdf-viewer-header">
+            <ViewerControlButton action="zoomOut" onClick={zoomOut} />
+            <ViewerControlButton action="zoomIn" onClick={zoomIn} />
+            <ViewerControlButton
+              action="close"
+              onClick={props.onClose}
+              className="rustic-close-button"
+            />
+          </Box>
+
+          <Box className="rustic-pdf-viewer-body">
+            <canvas ref={pdfRef} data-cy="rustic-pdf-canvas" />
+          </Box>
+          <Stack direction="row" justifyContent="center" alignItems="center">
+            <ViewerControlButton
+              action="previousPage"
+              onClick={goToPreviousPage}
+              isDisabled={currentPage === 1}
+            />
             <Typography
               variant="body1"
               className="rustic-page-indicator"
@@ -159,35 +177,12 @@ function PDFViewer(props: PDFViewerProps) {
               />
               of {totalPages}
             </Typography>
-
-            <IconButton
-              onClick={goToPreviousPage}
-              disabled={currentPage === 1}
-              data-cy="rustic-previous-page-button"
-            >
-              <Icon name="arrow_back" />
-            </IconButton>
-            <IconButton
+            <ViewerControlButton
+              action="nextPage"
               onClick={goToNextPage}
-              disabled={currentPage === totalPages}
-              data-cy="rustic-next-page-button"
-            >
-              <Icon name="arrow_forward" />
-            </IconButton>
-            <IconButton onClick={zoomOut} className="rustic-zoom-out-button">
-              <Icon name="zoom_out" />
-            </IconButton>
-            <IconButton onClick={zoomIn} className="rustic-zoom-in-button">
-              <Icon name="zoom_in" />
-            </IconButton>
-            <IconButton onClick={props.onClose} className="rustic-close-button">
-              <Icon name="close" />
-            </IconButton>
-          </Box>
-
-          <Box className="rustic-pdf-viewer-body">
-            <canvas ref={pdfRef} data-cy="rustic-pdf-canvas" />
-          </Box>
+              isDisabled={currentPage === totalPages}
+            />
+          </Stack>
         </Card>
       </Modal>
     )
