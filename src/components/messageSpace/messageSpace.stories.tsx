@@ -62,7 +62,7 @@ meta.argTypes = {
           '  threadId: An optional string representing the identifier of the thread to which this message belongs.\n' +
           '  priority: An optional string representing the priority of the message.\n' +
           '  taggedParticipants: An optional array of strings representing the participants tagged in the message.\n' +
-          '  topicId: An optional string representing the identifier of the topic associated with the message.\n' +
+          '  topic: An optional string representing the identifier of the topic associated with the message.\n' +
           'Other than the fields described above, ThreadableMessage also has the following fields:\n' +
           '  lastThreadMessage: An optional object of Message interface representing the last message in the thread.\n' +
           '  threadMessagesData: An optional array of objects of type MessageData, which can contain any key-value pairs.',
@@ -438,7 +438,7 @@ export const Default = {
       multipart: Multipart,
     },
     getProfileComponent: (message: Message) => {
-      if (message.sender.name.includes('Agent')) {
+      if (message.sender.name?.includes('Agent')) {
         return <Icon name="smart_toy" />
       } else {
         return <Icon name="account_circle" />

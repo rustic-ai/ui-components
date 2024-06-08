@@ -13,7 +13,7 @@ describe('Copy component', () => {
     timestamp: '2020-01-02T00:00:00.000Z',
     sender: testUser,
     conversationId: 'lkd9vc',
-    topicId: 'default',
+    topic: 'default',
     format: 'text',
     data: { text: 'Hello World' },
   }

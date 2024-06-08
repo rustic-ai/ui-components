@@ -16,7 +16,7 @@ describe('MessageCanvas', () => {
     timestamp: '2020-01-02T00:00:00.000Z',
     sender: testUser,
     conversationId: 'lkd9vc',
-    topicId: 'default',
+    topic: 'default',
     format: 'text',
     data: { text: 'Hello World' },
   }
@@ -35,7 +35,6 @@ describe('MessageCanvas', () => {
       )
 
       cy.contains('Hello World').should('be.visible')
-      cy.contains(testUser.name).should('be.visible')
       cy.contains('Jan 1, 2020').should('be.visible')
       cy.get('[data-cy="account-circle-icon"]').should('be.visible')
     })

@@ -71,6 +71,7 @@ meta.argTypes = {
   },
   sender: {
     description: 'The sender of the message.',
+    type: { name: 'object', required: true, value: {} },
     table: {
       type: {
         summary: 'Sender',

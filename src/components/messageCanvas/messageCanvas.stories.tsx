@@ -31,7 +31,7 @@ const baseMessage = {
   id: '1',
   timestamp: '2020-01-02T00:00:00.000Z',
   conversationId: 'lkd9vc',
-  topicId: 'default',
+  topic: 'default',
   format: 'text',
   data: {
     text: 'Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing industries for previewing layouts and visual mockups.',
@@ -64,7 +64,7 @@ const profileString = `(message: ThreadableMessage) => {
   }`
 
 const getProfileComponent = (message: ThreadableMessage) => {
-  if (message.sender.name.includes('agent')) {
+  if (message.sender.name?.includes('agent')) {
     return <Icon name="smart_toy" />
   } else {
     return <Icon name="account_circle" />

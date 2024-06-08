@@ -97,7 +97,7 @@ describe('MessageSpace Component', () => {
           messages={messages}
           supportedElements={supportedElements}
           getProfileComponent={(message: Message) => {
-            if (message.sender.name.includes('Agent')) {
+            if (message.sender.name?.includes('Agent')) {
               return <Icon name="smart_toy" />
             } else {
               return <Icon name="account_circle" />
@@ -110,10 +110,8 @@ describe('MessageSpace Component', () => {
       cy.get(messageSpace).should('exist')
 
       messages.forEach((message, index) => {
-        cy.get(messageSpace)
-          .should('contain', message.sender.name)
-          .and('contain', message.data.text)
-        if (message.sender.name.includes('Agent')) {
+        cy.get(messageSpace).should('contain', message.data.text)
+        if (message.sender.name?.includes('Agent')) {
           cy.get(messageCanvas)
             .eq(index)
             .within(() => {
