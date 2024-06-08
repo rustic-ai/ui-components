@@ -24,27 +24,29 @@ interface MediaIconButtonProps {
 
 export function MediaIconButton(props: MediaIconButtonProps) {
   const controls = {
-    play: { symbol: 'play_circle', label: 'play' },
-    pause: { symbol: 'pause_circle', label: 'pause' },
-    forward: { symbol: 'forward_10', label: 'forward ten seconds' },
-    replay: { symbol: 'replay_10', label: 'replay ten seconds' },
-    volumeUp: { symbol: 'volume_up', label: 'mute' },
-    volumeOff: { symbol: 'volume_off', label: 'unmute' },
+    play: { symbol: 'play_circle', label: 'Play' },
+    pause: { symbol: 'pause_circle', label: 'Pause' },
+    forward: { symbol: 'forward_10', label: 'Forward ten seconds' },
+    replay: { symbol: 'replay_10', label: 'Replay ten seconds' },
+    volumeUp: { symbol: 'volume_up', label: 'Mute' },
+    volumeOff: { symbol: 'volume_off', label: 'Unmute' },
     miniPlayer: {
       symbol: 'picture_in_picture',
-      label: 'mini player',
+      label: 'Mini player',
     },
     miniPlayerExit: {
       symbol: 'picture_in_picture_off',
-      label: 'exit mini player',
+      label: 'Exit mini player',
     },
-    fullscreen: { symbol: 'fullscreen', label: 'fullscreen' },
-    fullscreenExit: { symbol: 'fullscreen_exit', label: 'exit fullscreen' },
-    captionsOn: { symbol: 'closed_caption', label: 'show captions' },
-    captionsOff: { symbol: 'closed_caption_disabled', label: 'hide captions' },
+    fullscreen: { symbol: 'fullscreen', label: 'Fullscreen' },
+    fullscreenExit: { symbol: 'fullscreen_exit', label: 'Exit fullscreen' },
+    captionsOn: { symbol: 'closed_caption', label: 'Show captions' },
+    captionsOff: { symbol: 'closed_caption_disabled', label: 'Hide captions' },
   }
 
-  const dataCyPrefix = controls[props.action].label.replaceAll(' ', '-')
+  const dataCyPrefix = controls[props.action].label
+    .replaceAll(' ', '-')
+    .toLowerCase()
 
   return (
     <Tooltip
