@@ -3,6 +3,7 @@ import type { Shadows } from '@mui/material/styles'
 import { createTheme, responsiveFontSizes } from '@mui/material/styles'
 import { deepmerge } from '@mui/utils'
 
+const blackColor = '#000000'
 const whiteColor = '#FFFFFF'
 const SecondaryMainColor = '#FF6928'
 const SecondaryDarkColor = '#E54500'
@@ -110,7 +111,7 @@ const baseTheme = createTheme({
   },
   palette: {
     common: {
-      black: '#000000',
+      black: blackColor,
       white: whiteColor,
     },
     error: {
@@ -139,6 +140,31 @@ const baseTheme = createTheme({
       }
     }),
   ] as Shadows,
+  components: {
+    MuiTableCell: {
+      styleOverrides: {
+        head: {
+          backgroundColor: actionFocusColor,
+        },
+        root: {
+          borderBottom: `1px solid ${dividerColor}`,
+          padding: '8px 16px',
+        },
+      },
+    },
+    MuiTableSortLabel: {
+      styleOverrides: {
+        root: {
+          '&.Mui-active': {
+            color: blackColor,
+            '& .MuiTableSortLabel-icon': {
+              color: blackColor,
+            },
+          },
+        },
+      },
+    },
+  },
 })
 
 const lightModePrimaryMainColor = '#3D3834'
