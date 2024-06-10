@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
 import { supportedViewports } from '../../../cypress/support/variables'
-import PDFViewer from './pDFViewer'
+import PDFViewer from './pdfViewers'
 
 describe('Table', () => {
   const pdfUrl = '/files/pdfExample.pdf'

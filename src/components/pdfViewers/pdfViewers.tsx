@@ -1,4 +1,4 @@
-import './pDFViewer.css'
+import './pdfViewers.css'
 
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
@@ -14,6 +14,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import type { PDFViewerProps } from '../types'
 import ViewerControlButton from './controlButton/controlButton'
 
+/** The PDFViewer component is designed to display PDF documents seamlessly within a web application. It offers an intuitive user interface for navigating through pages. */
 function PDFViewer(props: PDFViewerProps) {
   const pdfRef = useRef<HTMLCanvasElement | null>(null)
   const [currentPage, setCurrentPage] = useState(1)
