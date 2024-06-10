@@ -8,6 +8,7 @@
 
 .rustic-pdf-error {
   padding: 16px;
+  width: fit-content;
 }
 
 .rustic-pdf-viewer .rustic-pdf-viewer-header {

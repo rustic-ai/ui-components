@@ -9,6 +9,12 @@ export default {
   parameters: {
     layout: 'centered',
   },
+}
+
+export const Default = {
+  args: {
+    url: 'files/pdfExample.pdf',
+  },
   decorators: [
     (Story: StoryFn) => {
       return (
@@ -23,12 +29,6 @@ export default {
       )
     },
   ],
-}
-
-export const Default = {
-  args: {
-    url: 'files/pdfExample.pdf',
-  },
 }
 
 export const Error = {
