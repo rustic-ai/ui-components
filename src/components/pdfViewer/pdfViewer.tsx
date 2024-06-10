@@ -13,11 +13,16 @@ import React, { useEffect, useRef, useState } from 'react'
 import type { PDFViewerProps } from '../types'
 import ViewerControlButton from './controlButton/controlButton'
 
+pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
+  'pdfjs-dist/build/pdf.worker.min.mjs',
+  import.meta.url
+).toString()
+
 function isPDFUrl(url: string) {
-  const pdfExtension = '.pdf'
-  return url.endsWith(pdfExtension)
+  const pdfFileNamePattern = /\/[^/]+\.pdf$/
+  return pdfFileNamePattern.test(url)
 }
-/** The PDFViewer component is designed to display PDF documents seamlessly within a web application. It offers an intuitive user interface for navigating through pages. */
+/** The PDFViewer component can be used to display PDF documents. It supports zoom and navigating through pages. */
 function PDFViewer(props: PDFViewerProps) {
   const pdfRef = useRef<HTMLCanvasElement | null>(null)
   const [currentPage, setCurrentPage] = useState(1)
@@ -84,8 +89,6 @@ function PDFViewer(props: PDFViewerProps) {
   }
 
   useEffect(() => {
-    pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.mjs`
-
     pdfjsLib
       .getDocument({ url: `${props.url}` })
       .promise.then((pdf) => {
