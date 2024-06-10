@@ -3,60 +3,51 @@ import React from 'react'
 import { v4 as getUUID } from 'uuid'
 
 import type { FileData, Message } from '../../../types'
+import meta from '../../textInput/textInput.stories'
 import MultimodalInput from './multimodalInput'
 
-const meta: Meta<React.ComponentProps<typeof MultimodalInput>> = {
-  title: 'Rustic UI/Input/Multimodal Input',
-  component: MultimodalInput,
-  tags: ['autodocs'],
-  parameters: {
-    layout: 'centered',
-    mockData: [
-      {
-        url: 'http://localhost:8080/upload?message-id=:messageId',
-        method: 'POST',
-        status: 200,
-        response: { fileId: getUUID() },
-        delay: 1000,
+const multiModalInputMeta: Meta<React.ComponentProps<typeof MultimodalInput>> =
+  {
+    title: 'Rustic UI/Input/Multimodal Input',
+    component: MultimodalInput,
+    tags: ['autodocs'],
+    parameters: {
+      docs: {
+        argTypes: {
+          sort: 'requiredFirst',
+        },
       },
-      {
-        url: 'http://localhost:8080/files?message-id=:messageId&file-id=:fileId',
-        method: 'DELETE',
-        status: 200,
-        response: { message: 'Delete successfully!' },
-        delay: 200,
+      layout: 'centered',
+      mockData: [
+        {
+          url: 'http://localhost:8080/upload?message-id=:messageId',
+          method: 'POST',
+          status: 200,
+          response: { fileId: getUUID() },
+          delay: 1000,
+        },
+        {
+          url: 'http://localhost:8080/files?message-id=:messageId&file-id=:fileId',
+          method: 'DELETE',
+          status: 200,
+          response: { message: 'Delete successfully!' },
+          delay: 200,
+        },
+      ],
+    },
+    decorators: [
+      (Story: StoryFn) => {
+        return (
+          <div style={{ width: '600px' }}>
+            <Story />
+          </div>
+        )
       },
     ],
-  },
-  decorators: [
-    (Story: StoryFn) => {
-      return (
-        <div style={{ width: '600px' }}>
-          <Story />
-        </div>
-      )
-    },
-  ],
-}
+  }
 
-meta.argTypes = {
-  ws: {
-    description:
-      'WebSocket connection to send and receive messages to and from a backend.',
-    table: {
-      type: {
-        summary: 'WebSocketClient.\n',
-        detail:
-          'send: (message: Message) => void\nclose: () => void\nreconnect: () => void\n',
-      },
-    },
-  },
-  sender: {
-    description: 'The sender of the message.',
-    table: {
-      type: { summary: 'string' },
-    },
-  },
+multiModalInputMeta.argTypes = {
+  ...meta.argTypes,
   conversationId: {
     description: 'Id of the current conversation.',
     table: {
@@ -141,11 +132,11 @@ meta.argTypes = {
   },
 }
 
-export default meta
+export default multiModalInputMeta
 
 export const Default = {
   args: {
-    sender: 'You',
+    sender: { id: '17shblx8nxk', name: 'Some User' },
     conversationId: '1',
     placeholder: 'Type your message',
     ws: {

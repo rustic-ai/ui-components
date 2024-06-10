@@ -1,4 +1,7 @@
-import { supportedViewports } from '../../../../cypress/support/variables'
+import {
+  supportedViewports,
+  testUser,
+} from '../../../../cypress/support/variables'
 import TextInput from './textInput'
 
 describe('TextInput', () => {
@@ -19,7 +22,7 @@ describe('TextInput', () => {
 
       cy.mount(
         <TextInput
-          sender="client"
+          sender={testUser}
           conversationId="1"
           ws={mockWsClient}
           label="Type your message"
@@ -98,7 +101,7 @@ describe('TextInput', () => {
 
       cy.mount(
         <TextInput
-          sender="client"
+          sender={testUser}
           conversationId="1"
           ws={mockWsClient}
           label="Type your message"

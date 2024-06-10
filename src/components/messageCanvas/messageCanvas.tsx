@@ -3,7 +3,6 @@ import './messageCanvas.css'
 import { useTheme } from '@mui/material'
 import Card from '@mui/material/Card'
 import Stack from '@mui/material/Stack'
-import Typography from '@mui/material/Typography'
 import React, { forwardRef, type ReactNode } from 'react'
 
 import Timestamp from '../timestamp/timestamp'
@@ -48,9 +47,6 @@ function MessageCanvasElement(
     >
       <Stack direction="row" alignItems="center" spacing={1}>
         {props.getProfileComponent && props.getProfileComponent(props.message)}
-        <Typography variant="body1" color="text.secondary" data-cy="sender">
-          {props.message.sender}
-        </Typography>
         <Timestamp timestamp={props.message.timestamp} />
       </Stack>
       {props.getActionsComponent &&

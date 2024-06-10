@@ -1,6 +1,9 @@
 import 'cypress-real-events'
 
-import { supportedViewports } from '../../../../../cypress/support/variables'
+import {
+  supportedViewports,
+  testUser,
+} from '../../../../../cypress/support/variables'
 import MultimodalInput from './multimodalInput'
 
 describe('Input', () => {
@@ -26,7 +29,7 @@ describe('Input', () => {
 
     cy.mount(
       <MultimodalInput
-        sender="client"
+        sender={testUser}
         conversationId="1"
         ws={mockWsClient}
         label="Type you message"
@@ -157,7 +160,7 @@ describe('Input', () => {
       cy.viewport(viewport)
       cy.mount(
         <MultimodalInput
-          sender="client"
+          sender={testUser}
           conversationId="1"
           ws={{
             send: cy.stub(),
@@ -220,7 +223,7 @@ describe('Input', () => {
       cy.viewport(viewport)
       cy.mount(
         <MultimodalInput
-          sender="client"
+          sender={testUser}
           conversationId="1"
           ws={{
             send: cy.stub(),
@@ -242,7 +245,7 @@ describe('Input', () => {
       cy.viewport(viewport)
       cy.mount(
         <MultimodalInput
-          sender="client"
+          sender={testUser}
           conversationId="1"
           ws={{
             send: cy.stub(),
@@ -274,7 +277,7 @@ describe('Input', () => {
       cy.viewport(viewport)
       cy.mount(
         <MultimodalInput
-          sender="client"
+          sender={testUser}
           conversationId="1"
           ws={{
             send: cy.stub(),

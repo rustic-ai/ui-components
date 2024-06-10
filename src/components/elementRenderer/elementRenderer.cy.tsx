@@ -1,6 +1,9 @@
 import React from 'react'
 
-import { supportedViewports } from '../../../cypress/support/variables'
+import {
+  supportedViewports,
+  testUser,
+} from '../../../cypress/support/variables'
 import { YoutubeVideo } from '..'
 import Text from '../text/text'
 import ElementRenderer from './elementRenderer'
@@ -13,13 +16,13 @@ const supportedElements = {
 const sampleMessage = {
   id: '1',
   timestamp: '2020-01-02T00:00:00.000Z',
-  sender: 'Some Sender',
+  sender: testUser,
   conversationId: 'lkd9vc',
-  topicId: 'default',
+  topic: 'default',
 }
 
 const commonProps = {
-  sender: 'You',
+  sender: testUser,
   supportedElements: supportedElements,
 }
 

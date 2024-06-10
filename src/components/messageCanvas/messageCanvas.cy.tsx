@@ -1,7 +1,10 @@
 /* eslint-disable no-magic-numbers */
 import 'cypress-real-events'
 
-import { supportedViewports } from '../../../cypress/support/variables'
+import {
+  supportedViewports,
+  testUser,
+} from '../../../cypress/support/variables'
 import Icon from '../icon/icon'
 import type { ThreadableMessage } from '../types'
 import CopyText from './actions/copy/copyText'
@@ -11,9 +14,9 @@ describe('MessageCanvas', () => {
   const testMessage = {
     id: '1',
     timestamp: '2020-01-02T00:00:00.000Z',
-    sender: 'senderId',
+    sender: testUser,
     conversationId: 'lkd9vc',
-    topicId: 'default',
+    topic: 'default',
     format: 'text',
     data: { text: 'Hello World' },
   }
@@ -32,7 +35,6 @@ describe('MessageCanvas', () => {
       )
 
       cy.contains('Hello World').should('be.visible')
-      cy.contains('senderId').should('be.visible')
       cy.contains('Jan 1, 2020').should('be.visible')
       cy.get('[data-cy="account-circle-icon"]').should('be.visible')
     })

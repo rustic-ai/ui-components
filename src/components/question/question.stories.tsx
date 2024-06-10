@@ -40,9 +40,11 @@ export default meta
 
 const options = ['Yes', 'Maybe', 'No']
 
+const agent = { name: 'Some Agent', id: 't671hjlk' }
+
 export const Default = {
   args: {
-    currentUser: 'You',
+    sender: agent,
     conversationId: '1',
     messageId: '1',
     title: 'What do you think?',
@@ -61,7 +63,7 @@ export const InMessageSpace = {
           <MessageCanvas
             message={{
               id: '1',
-              sender: 'Agent',
+              sender: agent,
               timestamp: new Date().toISOString(),
               conversationId: '1',
               format: 'question',
@@ -83,7 +85,7 @@ export const InMessageSpace = {
               <MessageCanvas
                 message={{
                   id: '2',
-                  sender: 'You',
+                  sender: { name: 'Some User', id: 'gahjqj19' },
                   timestamp: new Date().toISOString(),
                   conversationId: '1',
                   format: 'text',
