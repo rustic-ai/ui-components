@@ -16,6 +16,7 @@ import MessageCanvas from './messageCanvas/messageCanvas'
 import MessageSpace from './messageSpace/messageSpace'
 import Multipart from './multipart/multipart'
 import ParticipantsContainer from './participantsContainer/participantsContainer'
+import PDFViewer from './pdfViewer/pdfViewer'
 import Question from './question/question'
 import Table from './table/table'
 import StreamingText from './text/streamingText'
@@ -42,6 +43,7 @@ export {
   Multipart,
   OpenLayersMap,
   ParticipantsContainer,
+  PDFViewer,
   PopoverMenu,
   Question,
   RechartsTimeSeries,

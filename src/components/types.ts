@@ -281,3 +281,8 @@ export interface QuestionFormat extends DataFormat {
 }
 
 export interface QuestionProps extends QuestionFormat, ConversationProps {}
+
+export interface PDFViewerProps {
+  /** The url of the PDF file to be displayed. */
+  url: string
+}
