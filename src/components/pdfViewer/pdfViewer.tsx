@@ -1,8 +1,7 @@
-import './pdfViewers.css'
+import './pdfViewer.css'
 
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
-import Modal from '@mui/material/Modal'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import useMediaQuery from '@mui/material/useMediaQuery'
@@ -14,6 +13,10 @@ import React, { useEffect, useRef, useState } from 'react'
 import type { PDFViewerProps } from '../types'
 import ViewerControlButton from './controlButton/controlButton'
 
+function isPDFUrl(url: string) {
+  const pdfExtension = '.pdf'
+  return url.endsWith(pdfExtension)
+}
 /** The PDFViewer component is designed to display PDF documents seamlessly within a web application. It offers an intuitive user interface for navigating through pages. */
 function PDFViewer(props: PDFViewerProps) {
   const pdfRef = useRef<HTMLCanvasElement | null>(null)
@@ -24,6 +27,16 @@ function PDFViewer(props: PDFViewerProps) {
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
   const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'))
+
+  if (!isPDFUrl(props.url)) {
+    return (
+      <Card variant="outlined" className="rustic-pdf-error">
+        <Typography variant="body2">
+          The provided URL does not point to a PDF file.
+        </Typography>
+      </Card>
+    )
+  }
 
   function getDefaultScale() {
     const mobileDefaultScale = 0.5
@@ -118,76 +131,56 @@ function PDFViewer(props: PDFViewerProps) {
     )
   }
 
-  if (props.isOpen) {
-    if (hasError) {
-      return (
-        <Modal
-          open={props.isOpen}
-          onClose={props.onClose}
-          className="rustic-pdf-viewer-modal"
-        >
-          <Card variant="outlined" className="rustic-pdf-error">
-            <Typography variant="body2">
-              Failed to load the PDF file.
-            </Typography>
-          </Card>
-        </Modal>
-      )
-    }
-
+  if (hasError) {
     return (
-      <Modal
-        open={props.isOpen}
-        onClose={props.onClose}
-        className="rustic-pdf-viewer-modal"
-        data-cy="pdf-viewer-modal"
-      >
-        <Card variant="outlined" className="rustic-pdf-viewer">
-          <Box className="rustic-pdf-viewer-header">
-            <ViewerControlButton action="zoomOut" onClick={zoomOut} />
-            <ViewerControlButton action="zoomIn" onClick={zoomIn} />
-            <ViewerControlButton
-              action="close"
-              onClick={props.onClose}
-              className="rustic-close-button"
-            />
-          </Box>
-
-          <Box className="rustic-pdf-viewer-body">
-            <canvas ref={pdfRef} data-cy="pdf-canvas" />
-          </Box>
-          <Stack direction="row" justifyContent="center" alignItems="center">
-            <ViewerControlButton
-              action="previousPage"
-              onClick={goToPreviousPage}
-              isDisabled={currentPage === 1}
-            />
-            <Typography
-              variant="body1"
-              className="rustic-page-indicator"
-              data-cy="pdf-page-indicator"
-            >
-              Page
-              <TextField
-                type="number"
-                value={pageInput}
-                onChange={handlePageInputChange}
-                size="small"
-                className="rustic-pdf-page-input"
-                data-cy="pdf-page-input"
-              />
-              of {totalPages}
-            </Typography>
-            <ViewerControlButton
-              action="nextPage"
-              onClick={goToNextPage}
-              isDisabled={currentPage === totalPages}
-            />
-          </Stack>
-        </Card>
-      </Modal>
+      <Card variant="outlined" className="rustic-pdf-error">
+        <Typography variant="body2">Failed to load the PDF file.</Typography>
+      </Card>
     )
   }
+
+  return (
+    <Card variant="outlined" className="rustic-pdf-viewer">
+      <Box className="rustic-pdf-viewer-header">
+        <ViewerControlButton action="zoomOut" onClick={zoomOut} />
+        <ViewerControlButton action="zoomIn" onClick={zoomIn} />
+      </Box>
+
+      <Box className="rustic-pdf-viewer-body">
+        <Box className="rustic-pdf-viewer-body-inner">
+          <canvas ref={pdfRef} data-cy="pdf-canvas" />
+        </Box>
+      </Box>
+      <Stack direction="row" justifyContent="center" alignItems="center">
+        <ViewerControlButton
+          action="previousPage"
+          onClick={goToPreviousPage}
+          isDisabled={currentPage === 1}
+        />
+        <Typography
+          variant="body1"
+          className="rustic-page-indicator"
+          data-cy="pdf-page-indicator"
+        >
+          Page
+          <TextField
+            type="number"
+            value={pageInput}
+            onChange={handlePageInputChange}
+            size="small"
+            className="rustic-pdf-page-input"
+            data-cy="pdf-page-input"
+          />
+          of {totalPages}
+        </Typography>
+        <ViewerControlButton
+          action="nextPage"
+          onClick={goToNextPage}
+          isDisabled={currentPage === totalPages}
+        />
+      </Stack>
+    </Card>
+  )
 }
 
 export default PDFViewer

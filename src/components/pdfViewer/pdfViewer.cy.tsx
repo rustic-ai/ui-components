@@ -1,9 +1,7 @@
-import { useState } from 'react'
-
 import { supportedViewports } from '../../../cypress/support/variables'
-import PDFViewer from './pdfViewers'
+import PDFViewer from './pdfViewer'
 
-describe('Table', () => {
+describe('PDF Viewer', () => {
   const pdfUrl = '/files/pdfExample.pdf'
   const canvasSelector = '[data-cy=pdf-canvas]'
   const pageInputSelector = '[data-cy=pdf-page-input] input'
@@ -13,20 +11,10 @@ describe('Table', () => {
   const zoomInButton = '[data-cy=zoom-in-button]'
   const previousPageButtonSelector = '[data-cy=previous-page-button]'
 
-  function ParentComponent() {
-    const [isOpen, setIsOpen] = useState(true)
-
-    function handleClose() {
-      setIsOpen(false)
-    }
-
-    return <PDFViewer url={pdfUrl} isOpen={isOpen} onClose={handleClose} />
-  }
-
   supportedViewports.forEach((viewport) => {
     it(`can flip page and show the correct page number on ${viewport} screen`, () => {
       cy.viewport(viewport)
-      cy.mount(<PDFViewer url={pdfUrl} isOpen={true} onClose={() => {}} />)
+      cy.mount(<PDFViewer url={pdfUrl} />)
 
       cy.get(canvasSelector).should('exist')
       cy.get(pageInputSelector).should('have.value', '1')
@@ -41,7 +29,7 @@ describe('Table', () => {
 
     it(`can jump to another page by changing the page number on ${viewport} screen`, () => {
       cy.viewport(viewport)
-      cy.mount(<PDFViewer url={pdfUrl} isOpen={true} onClose={() => {}} />)
+      cy.mount(<PDFViewer url={pdfUrl} />)
 
       cy.get(canvasSelector).should('exist')
       cy.get(pageInputSelector).should('have.value', '1')
@@ -52,12 +40,6 @@ describe('Table', () => {
       cy.get(pageInputSelector).type('3')
       cy.get(pageInputSelector).should('have.value', '3')
     })
-
-    it(`can be closed by clicking the close button on ${viewport} screen`, () => {
-      cy.mount(<ParentComponent />)
-      cy.get('[data-cy="close-button"]').click()
-      cy.get('[data-cy="pdf-viewer-modal]').should('not.exist')
-    })
   })
 
   context('Desktop', () => {
@@ -65,7 +47,7 @@ describe('Table', () => {
 
     it('should zoom in and out', () => {
       cy.viewport('macbook-15')
-      cy.mount(<PDFViewer url={pdfUrl} isOpen={true} onClose={() => {}} />)
+      cy.mount(<PDFViewer url={pdfUrl} />)
 
       cy.get(canvasSelector)
         .invoke('outerWidth')
@@ -88,7 +70,7 @@ describe('Table', () => {
 
     it('should zoom in and out', () => {
       cy.viewport('iphone-6')
-      cy.mount(<PDFViewer url={pdfUrl} isOpen={true} onClose={() => {}} />)
+      cy.mount(<PDFViewer url={pdfUrl} />)
 
       cy.get(canvasSelector)
         .invoke('outerWidth')
