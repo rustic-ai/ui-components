@@ -1,3 +1,4 @@
+import Typography from '@mui/material/Typography'
 import type { Meta } from '@storybook/react'
 import type { StoryFn } from '@storybook/react'
 import React from 'react'
@@ -8,7 +9,6 @@ import {
   Image,
   MarkedMarkdown,
   MarkedStreamingMarkdown,
-  type Message,
   Multipart,
   OpenLayersMap,
   RechartsTimeSeries,
@@ -44,6 +44,25 @@ const meta: Meta<React.ComponentProps<typeof MessageSpace>> = {
 }
 
 export default meta
+
+function getProfileIcon(message: ThreadableMessage) {
+  if (message.sender.name?.includes('agent')) {
+    return <Icon name="smart_toy" />
+  } else {
+    return <Icon name="account_circle" />
+  }
+}
+
+function getProfileIconAndName(message: ThreadableMessage) {
+  return (
+    <>
+      {getProfileIcon(message)}
+      <Typography variant="body1" color="text.secondary">
+        {message.sender.name}
+      </Typography>
+    </>
+  )
+}
 
 meta.argTypes = {
   messages: {
@@ -437,13 +456,7 @@ export const Default = {
       video: Video,
       multipart: Multipart,
     },
-    getProfileComponent: (message: Message) => {
-      if (message.sender.name?.includes('Agent')) {
-        return <Icon name="smart_toy" />
-      } else {
-        return <Icon name="account_circle" />
-      }
-    },
+    getProfileComponent: getProfileIconAndName,
     getActionsComponent: (message: ThreadableMessage) => {
       const copyButton = message.format === 'text' && (
         <CopyText message={message} />

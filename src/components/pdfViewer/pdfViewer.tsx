@@ -22,7 +22,7 @@ function isPDFUrl(url: string) {
   const pdfFileNamePattern = /\/[^/]+\.pdf$/
   return pdfFileNamePattern.test(url)
 }
-/** The PDFViewer component can be used to display PDF documents. It supports zoom and navigating through pages. */
+/** The PDFViewer component, built using [PDF.js](https://mozilla.github.io/pdf.js/), can be used to display PDF documents. It supports zoom and navigating through pages. */
 function PDFViewer(props: PDFViewerProps) {
   const pdfRef = useRef<HTMLCanvasElement | null>(null)
   const [currentPage, setCurrentPage] = useState(1)

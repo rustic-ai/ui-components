@@ -1,3 +1,4 @@
+import Typography from '@mui/material/Typography'
 import React from 'react'
 
 import { ElementRenderer, type ThreadableMessage } from '..'
@@ -59,17 +60,39 @@ const elementRendererString = `<ElementRenderer
     />`
 
 const profileString = `(message: ThreadableMessage) => {
-    if (message.sender.includes('agent')) return <SmartToyIcon />
-    else return <AccountCircleIcon />
+    <>
+      {getProfileIcon(message)}
+      <Typography variant="body1" color="text.secondary">
+        {message.sender.name}
+      </Typography>
+    </>
   }`
 
-const getProfileComponent = (message: ThreadableMessage) => {
+function getProfileIcon(message: ThreadableMessage) {
   if (message.sender.name?.includes('agent')) {
     return <Icon name="smart_toy" />
   } else {
     return <Icon name="account_circle" />
   }
 }
+
+function getProfileName(message: ThreadableMessage) {
+  return (
+    <Typography variant="body1" color="text.secondary">
+      {message.sender.name}
+    </Typography>
+  )
+}
+
+function getProfileIconAndName(message: ThreadableMessage) {
+  return (
+    <>
+      {getProfileIcon(message)}
+      {getProfileName(message)}
+    </>
+  )
+}
+
 export const WithProfileIcon = {
   args: {
     children: (
@@ -80,7 +103,7 @@ export const WithProfileIcon = {
       />
     ),
     message: messageFromHuman,
-    getProfileComponent,
+    getProfileComponent: getProfileIconAndName,
   },
   parameters: {
     docs: {
@@ -105,6 +128,7 @@ export const NoIcon = {
         {...commonElementRendererProps}
       />
     ),
+    getProfileComponent: getProfileName,
     message: messageFromAgent,
   },
   parameters: {
@@ -112,6 +136,7 @@ export const NoIcon = {
       source: {
         code: `<MessageCanvas
   message={${messageString}}
+  getProfileComponent={${profileString}}
   >
     ${elementRendererString}
 </MessageCanvas>`,
@@ -130,7 +155,7 @@ export const WithCopyIcon = {
       />
     ),
     message: messageFromHuman,
-    getProfileComponent,
+    getProfileComponent: getProfileIconAndName,
     getActionsComponent: (message: ThreadableMessage) => {
       const copyButton = message.format === 'text' && (
         <CopyText message={message} />
