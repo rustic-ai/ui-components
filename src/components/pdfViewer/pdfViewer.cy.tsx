@@ -1,5 +1,7 @@
 import { supportedViewports } from '../../../cypress/support/variables'
-import PDFViewer from './pdfViewer'
+import PDFViewer, {setPdfWorkerSrc} from './pdfViewer'
+
+setPdfWorkerSrc('/files/pdf.worker.mjs')
 
 describe('PDF Viewer', () => {
   const pdfUrl = '/files/pdfExample.pdf'

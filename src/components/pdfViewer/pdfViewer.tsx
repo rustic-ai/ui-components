@@ -13,16 +13,27 @@ import React, { useEffect, useRef, useState } from 'react'
 import type { PDFViewerProps } from '../types'
 import ViewerControlButton from './controlButton/controlButton'
 
-pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
-  'pdfjs-dist/build/pdf.worker.min.mjs',
-  import.meta.url
-).toString()
+
+export function setPdfWorkerSrc(workerSrc: string) {
+  pdfjsLib.GlobalWorkerOptions.workerSrc = workerSrc;
+}
 
 function isPDFUrl(url: string) {
   const pdfFileNamePattern = /\/[^/]+\.pdf$/
   return pdfFileNamePattern.test(url)
 }
-/** The PDFViewer component, built using [PDF.js](https://mozilla.github.io/pdf.js/), can be used to display PDF documents. It supports zoom and navigating through pages. */
+/** The PDFViewer component, built using [PDF.js](https://mozilla.github.io/pdf.js/), to display PDF documents.
+ * It supports zoom and navigating through pages.
+ *
+ * The component defaults to using CDN resource for the pdf worker.
+ * Use `setPdfWorkerSrc` once during initialization of the application to provide a custom file path.
+ *
+ * ```typescript
+ * setPdfWorkerSrc('files/pdf.worker.mjs')
+ * ```
+ *
+ * Note: [PDF.js](https://mozilla.github.io/pdf.js/) is not bundled, so it must be included in the application's build process.
+ */
 function PDFViewer(props: PDFViewerProps) {
   const pdfRef = useRef<HTMLCanvasElement | null>(null)
   const [currentPage, setCurrentPage] = useState(1)
@@ -89,6 +100,10 @@ function PDFViewer(props: PDFViewerProps) {
   }
 
   useEffect(() => {
+    if (!pdfjsLib.GlobalWorkerOptions.workerSrc) {
+      // Use a fallback if not configured
+      pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.mjs`
+    }
     pdfjsLib
       .getDocument({ url: `${props.url}` })
       .promise.then((pdf) => {
