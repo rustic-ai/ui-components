@@ -31,7 +31,7 @@
     "marked": "10.0.0",
     "mermaid": "10.9.1",
     "ol": "9.0.0",
-    "pdfjs-dist": "4.2.67",
+    "pdfjs-dist": "4.3.136",
     "pluralize": "8.0.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
@@ -103,6 +103,7 @@
     "@mui/system": "^5.15.8",
     "@types/react": "^18.2.37",
     "@types/react-dom": "^18.2.15",
+    "pdfjs-dist": "^4.3.136",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },

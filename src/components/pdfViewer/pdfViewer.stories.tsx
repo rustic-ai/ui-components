@@ -1,7 +1,10 @@
 import type { StoryFn } from '@storybook/react'
 import React from 'react'
 
-import PDFViewer from './pdfViewer'
+import PDFViewer, {setPdfWorkerSrc} from './pdfViewer'
+
+setPdfWorkerSrc('files/pdf.worker.mjs')
+
 export default {
   title: 'Rustic UI/PDF Viewer/PDF Viewer',
   component: PDFViewer,
