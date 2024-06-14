@@ -1,3 +1,5 @@
+import { type TableData as PerspectiveData } from '@finos/perspective'
+import type { PerspectiveViewerConfig } from '@finos/perspective-viewer'
 import type { MermaidConfig } from 'mermaid'
 import type { Renderers } from 'vega'
 import type { EmbedOptions, VisualizationSpec } from 'vega-embed'

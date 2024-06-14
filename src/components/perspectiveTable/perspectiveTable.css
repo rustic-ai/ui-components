@@ -1,0 +1,9 @@
+.rustic-perspective-viewer-container {
+  width: 100%;
+  height: 100%;
+}
+
+.rustic-perspective-viewer-container perspective-viewer {
+  flex: 1;
+  min-height: 200px;
+}
