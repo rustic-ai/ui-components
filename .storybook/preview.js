@@ -27,35 +27,7 @@ export const globalTypes = {
   },
 }
 
-const preview = {
-  globalTypes,
-  parameters: {
-    options: {
-      storySort: {
-        method: 'alphabetical',
-      },
-    },
-    actions: { argTypesRegex: '^on[A-Z].*' },
-    viewport: {
-      viewports: INITIAL_VIEWPORTS,
-    },
-    controls: { expanded: true },
-    docs: {
-      page: () => (
-        <>
-          <Title />
-          <Subtitle />
-          <Description />
-          <Primary />
-          <ArgTypes />
-          <Stories />
-        </>
-      ),
-    },
-  },
-}
-
-export const withMuiTheme = (Story, context) => {
+const withMuiTheme = (Story, context) => {
   const theme =
     context.globals.theme === 'light' ? rusticLightTheme : rusticDarkTheme
 
@@ -86,7 +58,34 @@ export const withMuiTheme = (Story, context) => {
   )
 }
 
-export const decorators = [withMuiTheme]
+const preview = {
+  globalTypes,
+  decorators: [withMuiTheme],
+  parameters: {
+    options: {
+      storySort: {
+        method: 'alphabetical',
+      },
+    },
+    actions: { argTypesRegex: '^on[A-Z].*' },
+    viewport: {
+      viewports: INITIAL_VIEWPORTS,
+    },
+    controls: { expanded: true },
+    docs: {
+      page: () => (
+        <>
+          <Title />
+          <Subtitle />
+          <Description />
+          <Primary />
+          <ArgTypes />
+          <Stories />
+        </>
+      ),
+    },
+  },
+}
 
 export const webpackFinal = async (config) => {
   config.module.rules.push({
