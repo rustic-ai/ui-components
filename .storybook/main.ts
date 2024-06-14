@@ -1,7 +1,7 @@
 import type { StorybookConfig } from '@storybook/react-webpack5'
 
 const config: StorybookConfig = {
-  stories: ['../src/**/*.stories.@(tsx)', '../docs/*.stories.mdx'],
+  stories: ['../src/**/*.stories.@(tsx)', '../docs/*.mdx'],
   addons: [
     '@storybook/addon-toolbars',
     '@storybook/addon-viewport',
@@ -10,14 +10,11 @@ const config: StorybookConfig = {
       name: '@storybook/addon-docs',
       options: { transcludeMarkdown: true },
     },
+    '@storybook/addon-webpack5-compiler-swc',
   ],
   framework: {
     name: '@storybook/react-webpack5',
-    options: {
-      builder: {
-        useSWC: true,
-      },
-    },
+    options: {},
   },
   docs: {
     autodocs: 'tag',
