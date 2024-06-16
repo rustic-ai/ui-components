@@ -1,6 +1,8 @@
+import Typography from '@mui/material/Typography'
 import type { Meta, StoryFn } from '@storybook/react'
 import React, { useState } from 'react'
 
+import Icon from '../icon/icon'
 import MessageCanvas from '../messageCanvas/messageCanvas'
 import Text from '../text/text'
 import type { Message } from '../types'
@@ -41,6 +43,22 @@ export default meta
 const options = ['Yes', 'Maybe', 'No']
 
 const agent = { name: 'Some Agent', id: 't671hjlk' }
+const user = { name: 'Some User', id: 'gahjqj19' }
+
+function getProfileIconAndName(name: string) {
+  return (
+    <>
+      {name.toLowerCase().includes('agent') ? (
+        <Icon name="smart_toy" />
+      ) : (
+        <Icon name="account_circle" />
+      )}
+      <Typography variant="body1" color="text.secondary">
+        {name}
+      </Typography>
+    </>
+  )
+}
 
 export const Default = {
   args: {
@@ -50,6 +68,9 @@ export const Default = {
     title: 'What do you think?',
     description: 'Choose either of the options below.',
     options,
+    ws: {
+      send: () => {},
+    },
   },
 }
 
@@ -69,6 +90,7 @@ export const InMessageSpace = {
               format: 'question',
               data: {},
             }}
+            getProfileComponent={() => getProfileIconAndName(agent.name)}
           >
             <Story
               args={{
@@ -85,7 +107,7 @@ export const InMessageSpace = {
               <MessageCanvas
                 message={{
                   id: '2',
-                  sender: { name: 'Some User', id: 'gahjqj19' },
+                  sender: user,
                   timestamp: new Date().toISOString(),
                   conversationId: '1',
                   format: 'text',
@@ -93,6 +115,7 @@ export const InMessageSpace = {
                     text: selectedOption,
                   },
                 }}
+                getProfileComponent={() => getProfileIconAndName(user.name)}
               >
                 <Text text={selectedOption} />
               </MessageCanvas>
