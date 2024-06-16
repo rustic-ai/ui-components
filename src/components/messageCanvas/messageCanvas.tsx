@@ -9,7 +9,7 @@ import Timestamp from '../timestamp/timestamp'
 import type { ThreadableMessage } from '../types'
 
 export interface MessageContainerProps {
-  /** Profile icon to be shown before sender's name. */
+  /** A function that returns a React element to display sender details, like names and/or avatars. */
   getProfileComponent?: (message: ThreadableMessage) => ReactNode
   /** A function that returns a single React element which may be composed of several actions supported for the message, such as editing, copying, and deleting, etc.
    * In case no actions are applicable or available for a particular message, the function may return `undefined`.
