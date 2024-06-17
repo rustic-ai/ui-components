@@ -13,9 +13,26 @@ import Stack from '@mui/system/Stack'
 import useTheme from '@mui/system/useTheme'
 import React, { useEffect, useRef, useState } from 'react'
 
-import type { PerspectiveTableData } from '../types'
+import type { TableData } from '../types'
 
-function PerspectiveTable(props: PerspectiveTableData) {
+function transformData(inputArray: Array<Record<string, string | number>>) {
+  const result: { [key: string]: Array<string | boolean | Date | number> } = {}
+  for (const record of inputArray) {
+    for (const [key, value] of Object.entries(record)) {
+      result[key] = result[key] || []
+      result[key].push(value)
+    }
+  }
+  return result
+}
+/**
+The PerspectiveTable component is designed to display and process large datasets efficiently. It integrates with the [Perspective](https://perspective.finos.org/) library, enabling advanced features such as filtering, sorting, and aggregating data for enhanced data analysis and visualization.
+ */
+function PerspectiveTable(props: TableData) {
+  if (props.data.length === 0) {
+    return <Typography variant="body2">No data available.</Typography>
+  }
+
   const viewerRef = useRef<HTMLPerspectiveViewerElement | null>(null)
   const rusticTheme: Theme = useTheme()
   const [hasError, setHasError] = useState<boolean>(false)
@@ -26,7 +43,7 @@ function PerspectiveTable(props: PerspectiveTableData) {
     const worker = perspective.worker()
 
     worker
-      .table(props.data)
+      .table(transformData(props.data))
       .then((table) => {
         const viewer = viewerRef.current
         if (viewer) {
@@ -78,11 +95,7 @@ function PerspectiveTable(props: PerspectiveTableData) {
 
   if (hasError) {
     return (
-      <div className="rustic-perspective-viewer">
-        <Typography variant="body2">
-          Failed to create table from data.
-        </Typography>
-      </div>
+      <Typography variant="body2">Failed to create table from data.</Typography>
     )
   } else {
     return (

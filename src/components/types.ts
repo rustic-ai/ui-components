@@ -1,5 +1,10 @@
-import { type TableData as PerspectiveData } from '@finos/perspective'
-import type { PerspectiveViewerConfig } from '@finos/perspective-viewer'
+import {
+  type Aggregate,
+  type ColumnName,
+  type Expressions,
+  type Filter,
+  type Sort,
+} from '@finos/perspective'
 import type { MermaidConfig } from 'mermaid'
 import type { Renderers } from 'vega'
 import type { EmbedOptions, VisualizationSpec } from 'vega-embed'
@@ -139,12 +144,23 @@ export interface TableHeader {
   label?: string
 }
 
+export type TableConfig = {
+  columns?: Array<ColumnName>
+  groupBy?: Array<ColumnName>
+  splitBy?: Array<ColumnName>
+  aggregates?: { [columnName: string]: Aggregate }
+  sort?: Array<Sort>
+  filter?: Array<Filter>
+  expressions?: Expressions
+}
+
 export interface TableFormat extends DataFormat {
   /** Data to be displayed in the table. */
   data: Array<Record<string, string | number>>
   /** Optional array to set the order of columns and assign labels.
    * This can also be used to limit which columns are shown. */
   headers?: TableHeader[]
+  config?: TableConfig
 }
 
 export type TableData = TableFormat & Updates<TableFormat>

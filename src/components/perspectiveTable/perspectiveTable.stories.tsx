@@ -1,13 +1,8 @@
-import type { TableData } from '@finos/perspective'
-import React, { useEffect, useState } from 'react'
+/* eslint-disable no-magic-numbers */
+import type { StoryFn } from '@storybook/react'
+import React from 'react'
 
 import PerspectiveTable from './perspectiveTable'
-
-function fetchArrowData() {
-  return fetch('files/superstore.lz4.arrow').then((response) =>
-    response.arrayBuffer()
-  )
-}
 
 export default {
   title: 'Rustic UI/Perspective Table/Perspective Table',
@@ -18,66 +13,118 @@ export default {
   },
 }
 
-const parentContainerStyle = {
-  width: 'clamp(250px, 80vw, 900px)',
-  height: 'clamp(150px, 80vh, 800px)',
+const regions: ('East' | 'West' | 'South' | 'Midwest')[] = [
+  'East',
+  'West',
+  'South',
+  'Midwest',
+]
+const regionsAndStates: Record<
+  'East' | 'West' | 'South' | 'Midwest',
+  string[]
+> = {
+  East: ['New York', 'Pennsylvania'],
+  West: ['California', 'Washington'],
+  South: ['Texas', 'Florida'],
+  Midwest: ['Illinois'],
+}
+const categories: (
+  | 'Technology'
+  | 'Furniture'
+  | 'Office Supplies'
+  | 'Apparel'
+  | 'Food and Beverage'
+)[] = [
+  'Technology',
+  'Furniture',
+  'Office Supplies',
+  'Apparel',
+  'Food and Beverage',
+]
+const subCategories: Record<
+  | 'Technology'
+  | 'Furniture'
+  | 'Office Supplies'
+  | 'Apparel'
+  | 'Food and Beverage',
+  string[]
+> = {
+  Technology: ['Phones', 'Computers', 'Tablets'],
+  Furniture: ['Chairs', 'Desks', 'Tables'],
+  'Office Supplies': ['Pens', 'Paper', 'Binders'],
+  Apparel: ['Shirts', 'Pants', 'Shoes'],
+  'Food and Beverage': ['Snacks', 'Drinks', 'Candy'],
 }
 
-export const PivotTable = () => {
-  const [arrowData, setArrowData] = useState<TableData>()
+function generateFakeData(numEntries: number) {
+  const newData = []
+  for (let i = 0; i < numEntries; i++) {
+    const region = regions[Math.floor(Math.random() * regions.length)]
+    const validStates = regionsAndStates[region]
+    const state = validStates[Math.floor(Math.random() * validStates.length)]
+    const category = categories[Math.floor(Math.random() * categories.length)]
+    const subCategory =
+      subCategories[category][
+        Math.floor(Math.random() * subCategories[category].length)
+      ]
+    const sales = Math.floor(Math.random() * 20000) + 1000
+    const profit =
+      Math.floor(Math.random() * (sales * 0.4)) * (Math.random() < 0.5 ? -1 : 1)
+    const orderDate = `${2021 + Math.floor(Math.random() * 3)}/${Math.floor(Math.random() * 12) + 1}/${Math.floor(Math.random() * 28) + 1}`
 
-  useEffect(() => {
-    fetchArrowData()
-      .then((data) => {
-        setArrowData(data)
-      })
-      .catch((error) => {
-        console.error('Failed to fetch data', error)
-      })
-  }, [])
-
-  if (arrowData) {
-    return (
-      <div style={parentContainerStyle}>
-        <PerspectiveTable
-          data={arrowData}
-          config={{
-            group_by: ['Region', 'State'],
-            split_by: ['Category', 'Sub-Category'],
-            columns: ['Sales', 'Profit'],
-          }}
-          title="Superstore Table"
-          description="This table displays data for sales and profit under each category. It's also grouped based on regions and states, making it useful for comparison purposes."
-        />
-      </div>
-    )
+    newData.push({
+      Region: region,
+      State: state,
+      Category: category,
+      'Sub-Category': subCategory,
+      Sales: sales,
+      Profit: profit,
+      'Order Date': orderDate,
+    })
   }
+  return newData
 }
 
-export const NormalTable = () => {
-  const [arrowData, setArrowData] = useState<TableData>()
-
-  useEffect(() => {
-    fetchArrowData()
-      .then((data) => {
-        setArrowData(data)
-      })
-      .catch((error) => {
-        console.error('Failed to fetch data', error)
-      })
-  }, [])
-
-  if (arrowData) {
+const decorators = [
+  (Story: StoryFn) => {
     return (
-      <div style={parentContainerStyle}>
-        <PerspectiveTable data={arrowData} title="Superstore Table" />
+      <div
+        style={{
+          width: 'clamp(250px, 70vw, 1000px)',
+          height: 'clamp(150px, 40vh, 600px)',
+        }}
+      >
+        <Story />
       </div>
     )
-  }
+  },
+]
+
+export const PivotTable = {
+  args: {
+    data: generateFakeData(100),
+    config: {
+      group_by: ['Region', 'State'],
+      split_by: ['Category', 'Sub-Category'],
+      columns: ['Sales', 'Profit'],
+    },
+    title: 'Superstore Table',
+    description:
+      "This table displays data for sales and profit under each category. It's also grouped based on regions and states, making it useful for comparison purposes.",
+  },
+  decorators,
+}
+
+export const NormalTable = {
+  args: {
+    data: generateFakeData(100),
+    title: 'Superstore Table',
+  },
+  decorators,
 }
 
 export const Error = {
   args: {
-    data: 'wrongData',
+    data: [],
   },
 }
