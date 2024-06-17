@@ -1,7 +1,6 @@
 .rustic-weather {
   display: flex;
   flex-direction: column;
-  gap: 24px;
   padding: 16px;
   max-width: calc(100vw - 100px);
 }
@@ -23,6 +22,7 @@
   display: flex;
   gap: 8px;
   overflow-x: scroll;
+  margin-block: 24px;
 }
 
 .rustic-weather .rustic-daily-weather-card {
@@ -44,4 +44,8 @@
 
 .rustic-weather .rustic-weather-attribution {
   text-align: center;
+}
+
+.rustic-weather .rustic-popover-menu-button {
+  align-self: flex-end;
 }

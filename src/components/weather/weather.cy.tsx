@@ -101,42 +101,38 @@ describe('Weather', () => {
     weatherProvider: 'Your Weather Provider',
   }
 
+  beforeEach(() => {
+    cy.mount(
+      <Weather
+        weather={weatherData.weather}
+        location={weatherData.location}
+        units="metric"
+      />
+    )
+  })
+
   supportedViewports.forEach((viewport) => {
     it(`renders the weather component on ${viewport} screen`, () => {
-      cy.mount(
-        <Weather
-          weather={weatherData.weather}
-          location={weatherData.location}
-          units="metric"
-        />
-      )
-
       cy.get('[data-cy=location]').should('be.visible')
       cy.get('[data-cy=current-temp]').should('be.visible')
       cy.get('[data-cy=current-weather-description]').should('be.visible')
       cy.get('[data-cy=daily-weather-card]').should('have.length.above', 0)
     })
 
-    it(`renders the correct units on ${viewport} screen`, () => {
-      cy.mount(
-        <Weather
-          weather={weatherData.weather}
-          location={weatherData.location}
-          units="imperial"
-        />
+    it(`switches between the units properly on ${viewport} screen`, () => {
+      const imperialTemp = Math.round(
+        // celsius to fahrenheit -> °F = °C * (9/5) + 32
+        // eslint-disable-next-line no-magic-numbers
+        weatherData.weather[0].temp.current! * (9 / 5) + 32
       )
 
-      cy.get(currentTemp).should('contain', '°F')
-
-      cy.mount(
-        <Weather
-          weather={weatherData.weather}
-          location={weatherData.location}
-          units="metric"
-        />
+      cy.get('[data-cy=current-temp]').should(
+        'contain',
+        Math.round(weatherData.weather[0].temp.current!)
       )
-
-      cy.get(currentTemp).should('contain', '°C')
+      cy.get('[data-cy=menu-icon-button]').click()
+      cy.get('li').last().should('contain', 'Fahrenheit').click()
+      cy.get(currentTemp).should('contain', imperialTemp)
     })
   })
 })

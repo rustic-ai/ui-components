@@ -4,10 +4,11 @@ import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
-import React from 'react'
+import React, { useState } from 'react'
 
 import { getDayFromUnixTime } from '../helper'
 import Icon from '../icon/icon'
+import PopoverMenu from '../menu/popoverMenu'
 import type { WeatherProps } from '../types'
 
 /** The `Weather` component provides a detailed daily weather forecast for a given location, displaying the current temperature, weather description, today's date with high and low temperatures, and a card for each day's forecast showing the day of the week, weather icon, and high and low temperatures, all while attributing the weather data provider.
@@ -15,7 +16,9 @@ import type { WeatherProps } from '../types'
 Note: The first item in the `Weather` array is presumed to be the current day's weather.
  */
 export default function Weather(props: WeatherProps) {
-  const getTempSymbol = (units: string) => {
+  const [units, setUnits] = useState(props.units)
+
+  function getTempSymbol(units: string) {
     switch (units) {
       case 'imperial':
         return 'F'
@@ -24,7 +27,18 @@ export default function Weather(props: WeatherProps) {
     }
   }
 
-  const formatTemperature = (temp: number) => {
+  function formatTemperature(temp: number) {
+    if (props.units === 'metric' && units === 'imperial') {
+      // celsius to fahrenheit -> °F = °C * (9/5) + 32
+      // eslint-disable-next-line no-magic-numbers
+      return Math.round(temp * (9 / 5) + 32)
+    }
+    if (props.units === 'imperial' && units === 'metric') {
+      // fahrenheit to celsius -> °C = °F * (5/9) - 32
+      // eslint-disable-next-line no-magic-numbers
+      return Math.round(temp * (5 / 9) - 32)
+    }
+
     return Math.round(temp)
   }
 
@@ -45,6 +59,21 @@ export default function Weather(props: WeatherProps) {
 
   return (
     <Card variant="outlined" className="rustic-weather">
+      <PopoverMenu
+        ariaLabel="Temperature units"
+        menuItems={[
+          {
+            label: 'Celsius',
+            endDecorator: '°C',
+            onClick: () => setUnits('metric'),
+          },
+          {
+            label: 'Fahrenheit',
+            endDecorator: '°F',
+            onClick: () => setUnits('imperial'),
+          },
+        ]}
+      />
       <Stack alignItems="center">
         <Typography variant="h4" component="span" data-cy="location">
           {props.location}
@@ -69,7 +98,7 @@ export default function Weather(props: WeatherProps) {
             className="rustic-current-temp"
           >
             {formatTemperature(props.weather[0].temp.current)}°
-            {getTempSymbol(props.units)}
+            {getTempSymbol(units)}
           </Typography>
         )}
         <Stack direction="row" spacing={2}>
