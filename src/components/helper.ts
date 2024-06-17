@@ -168,3 +168,27 @@ export function shortenString(str: string, maxLength: number) {
   }
   return str.substring(0, maxLength - 3) + '...'
 }
+
+export const getDayFromUnixTime = (
+  unixTime: number
+): { shortName: string; fullName: string } => {
+  const daysOfWeek: { [short: string]: string } = {
+    Sun: 'Sunday',
+    Mon: 'Monday',
+    Tues: 'Tuesday',
+    Wed: 'Wednesday',
+    Thurs: 'Thursday',
+    Fri: 'Friday',
+    Sat: 'Saturday',
+  }
+
+  const shortDays = ['Sun', 'Mon', 'Tues', 'Wed', 'Thurs', 'Fri', 'Sat']
+
+  const unixTimeInMilliseconds = unixTime * 1000
+  const date = new Date(unixTimeInMilliseconds)
+
+  const dayOfWeekShort = shortDays[date.getDay()]
+  const dayOfWeekFull = daysOfWeek[dayOfWeekShort]
+
+  return { shortName: dayOfWeekShort, fullName: dayOfWeekFull }
+}

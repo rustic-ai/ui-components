@@ -1,0 +1,47 @@
+.rustic-weather {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 16px;
+  max-width: calc(100vw - 100px);
+}
+
+.rustic-weather .rustic-current-weather-description {
+  text-transform: capitalize;
+  margin-top: 8px;
+}
+
+.rustic-weather .rustic-current-weather-description img {
+  width: 24px;
+}
+
+.rustic-weather .rustic-current-temp {
+  margin-block: 16px;
+}
+
+.rustic-weather .rustic-daily-weather-container {
+  display: flex;
+  gap: 8px;
+  overflow-x: scroll;
+}
+
+.rustic-weather .rustic-daily-weather-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px 24px;
+  gap: 8px;
+  min-width: fit-content;
+}
+
+.rustic-weather .rustic-daily-weather-card span {
+  white-space: nowrap;
+}
+
+.rustic-weather .rustic-daily-weather-card img {
+  width: 40px;
+}
+
+.rustic-weather .rustic-weather-attribution {
+  text-align: center;
+}

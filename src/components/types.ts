@@ -286,3 +286,33 @@ export interface PDFViewerProps {
   /** The url of the PDF file to be displayed. */
   url: string
 }
+
+export interface WeatherIcon {
+  icon: string
+  description: string
+}
+
+export interface Weather {
+  timestamp: number
+  temp: {
+    low: number
+    high: number
+    current?: number
+  }
+  weatherIcon: WeatherIcon
+}
+
+export interface WeatherFormat extends DataFormat {
+  /** Array of daily weather data. */
+  weather: Weather[]
+  /** The timezone from which the weather data is from. */
+  location: string
+  /** The temperature units of the weather data. */
+  units: 'metric' | 'imperial'
+}
+
+export type WeatherData = WeatherFormat & Updates<WeatherFormat>
+
+export interface WeatherProps extends WeatherData {
+  weatherProvider?: string
+}
