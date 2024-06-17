@@ -19,48 +19,62 @@ function PerspectiveTable(props: PerspectiveTableData) {
   const viewerRef = useRef<HTMLPerspectiveViewerElement | null>(null)
   const rusticTheme: Theme = useTheme()
   const [hasError, setHasError] = useState<boolean>(false)
+  const perspectiveTheme =
+    rusticTheme.palette.mode === 'dark' ? 'Pro Dark' : 'Pro Light'
 
   useEffect(() => {
     const worker = perspective.worker()
-    const perspectiveTheme =
-      rusticTheme.palette.mode === 'dark' ? 'Pro Dark' : 'Pro Light'
 
-    function load() {
-      worker
-        .table(props.data)
+    worker
+      .table(props.data)
+      .then((table) => {
+        const viewer = viewerRef.current
+        if (viewer) {
+          viewer
+            .load(table)
+            .then(() => {
+              return viewer.restore({
+                settings: false,
+                ...props.config,
+                theme: perspectiveTheme,
+              })
+            })
+            .catch(() => {
+              setHasError(true)
+            })
+
+          // Hide the settings button for now
+          const shadowRoot = viewer.shadowRoot
+          const settingsButton = shadowRoot?.querySelector(
+            'div#settings_button'
+          ) as HTMLElement
+          if (settingsButton) {
+            settingsButton.style.display = 'none'
+          }
+        }
+      })
+      .catch(() => {
+        setHasError(true)
+      })
+  }, [props.data])
+
+  useEffect(() => {
+    const viewer = viewerRef.current
+    if (viewer) {
+      viewer
+        .getTable(true)
         .then((table) => {
-          const viewer = viewerRef.current
-          if (viewer) {
-            viewer
-              .load(table)
-              .then(() => {
-                return viewer.restore({
-                  settings: false,
-                  ...props.config,
-                  theme: perspectiveTheme,
-                })
-              })
-              .catch(() => {
-                setHasError(true)
-              })
-
-            // Hide the settings button for now
-            const shadowRoot = viewer.shadowRoot
-            const settingsButton = shadowRoot?.querySelector(
-              'div#settings_button'
-            ) as HTMLElement
-            if (settingsButton) {
-              settingsButton.style.display = 'none'
-            }
+          if (table) {
+            return viewer.restore({
+              theme: perspectiveTheme,
+            })
           }
         })
         .catch(() => {
           setHasError(true)
         })
     }
-
-    load()
-  }, [props.data])
+  }, [perspectiveTheme])
 
   if (hasError) {
     return (
