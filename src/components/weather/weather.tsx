@@ -54,7 +54,7 @@ export default function Weather(props: WeatherProps) {
     .toString()
     .slice(lastTwoDigits)
 
-  const formattedDateToday = `${day} ${date}/${year}`
+  const formattedDateToday = `${day} ${date}/${year} TODAY`
   const formattedWeatherToday = `HIGH: ${formatTemperature(props.weather[0].temp.high)} / LOW: ${formatTemperature(props.weather[0].temp.high)}`
 
   return (
