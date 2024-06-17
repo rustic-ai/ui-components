@@ -1,6 +1,8 @@
+import type { Meta } from '@storybook/react/*'
+
 import Weather from './weather'
 
-export default {
+const meta: Meta<React.ComponentProps<typeof Weather>> = {
   title: 'Rustic UI/Weather/Weather',
   component: Weather,
   tags: ['autodocs'],
@@ -8,6 +10,27 @@ export default {
     layout: 'centered',
   },
 }
+
+meta.argTypes = {
+  weather: {
+    table: {
+      type: {
+        summary: 'Weather[]',
+        detail:
+          "timestamp: A unix timestamp in seconds. \ntemp: An object containing low, high, and current temperatures for a given day. The current temperature is only used on today's weather.\nweatherIcon: An object containing an icon URL and description of the weather.",
+      },
+    },
+  },
+  units: {
+    table: {
+      type: {
+        summary: `'metric' | 'imperial'`,
+      },
+    },
+  },
+}
+
+export default meta
 
 const weatherData = {
   weather: [

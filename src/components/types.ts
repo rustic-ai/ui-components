@@ -287,11 +287,6 @@ export interface PDFViewerProps {
   url: string
 }
 
-export interface WeatherIcon {
-  icon: string
-  description: string
-}
-
 export interface Weather {
   timestamp: number
   temp: {
@@ -299,7 +294,10 @@ export interface Weather {
     high: number
     current?: number
   }
-  weatherIcon: WeatherIcon
+  weatherIcon: {
+    icon: string
+    description: string
+  }
 }
 
 export interface WeatherFormat extends DataFormat {

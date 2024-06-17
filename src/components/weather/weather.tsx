@@ -86,7 +86,7 @@ export default function Weather(props: WeatherProps) {
           data-cy="current-weather-description"
         >
           <img src={props.weather[0].weatherIcon.icon} alt="" />
-          <Typography variant="caption">
+          <Typography variant="body2">
             {props.weather[0].weatherIcon.description}
           </Typography>
         </Stack>
@@ -131,10 +131,10 @@ export default function Weather(props: WeatherProps) {
                   src={weatherPreview.weatherIcon.icon}
                   alt={weatherPreview.weatherIcon.description}
                 />
-                <Typography variant="caption" color="text.secondary">
+                <Typography variant="body2" color="text.secondary">
                   High: {formatTemperature(weatherPreview.temp.high)}°
                 </Typography>
-                <Typography variant="caption" color="text.secondary">
+                <Typography variant="body2" color="text.secondary">
                   Low: {formatTemperature(weatherPreview.temp.low)}°
                 </Typography>
               </Card>
@@ -152,7 +152,7 @@ export default function Weather(props: WeatherProps) {
           className="rustic-weather-attribution"
         >
           <Icon name="cloud" />
-          <Typography variant="caption">
+          <Typography variant="body2">
             {`Weather data provided by ${props.weatherProvider}`}
           </Typography>
         </Stack>
