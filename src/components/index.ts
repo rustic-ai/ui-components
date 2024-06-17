@@ -26,6 +26,7 @@ import YoutubeVideo from './video/youtubeVideo'
 import RechartsTimeSeries from './visualization/chart/rechartsTimeSeries'
 import MermaidViz from './visualization/mermaidViz/mermaidViz'
 import VegaLiteViz from './visualization/vegaLiteViz/vegaLiteViz'
+import Weather from './weather/weather'
 
 export {
   Action,
@@ -55,6 +56,7 @@ export {
   Timestamp,
   VegaLiteViz,
   Video,
+  Weather,
   YoutubeVideo,
 }
 
