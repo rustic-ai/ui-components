@@ -2,7 +2,6 @@
   display: flex;
   flex-direction: column;
   padding: 16px;
-  max-width: calc(100vw - 100px);
 }
 
 .rustic-weather .rustic-current-weather-description {

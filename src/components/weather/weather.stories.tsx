@@ -1,4 +1,5 @@
 import type { Meta } from '@storybook/react/*'
+import React from 'react'
 
 import Weather from './weather'
 
@@ -9,6 +10,13 @@ const meta: Meta<React.ComponentProps<typeof Weather>> = {
   parameters: {
     layout: 'centered',
   },
+  decorators: [
+    (Story) => (
+      <div style={{ width: 'clamp(250px, 80vw, 800px)' }}>
+        <Story />
+      </div>
+    ),
+  ],
 }
 
 meta.argTypes = {
