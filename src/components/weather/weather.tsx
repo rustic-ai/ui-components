@@ -11,7 +11,7 @@ import Icon from '../icon/icon'
 import PopoverMenu from '../menu/popoverMenu'
 import type { WeatherProps } from '../types'
 
-/** The `Weather` component provides a detailed daily weather forecast for a given location, displaying the current temperature, weather description, today's date with high and low temperatures, and a card for each day's forecast showing the day of the week, weather icon, and high and low temperatures, all while attributing the weather data provider.
+/** The `Weather` component provides a detailed daily weather forecast for a given location, displaying the current temperature, weather description, today's date with high and low temperatures, and a card for each day's forecast showing the day of the week, weather icon, and high and low temperatures, all while attributing the weather data provider. Hourly breakdowns are not currently supported.
 
 Note: The first item in the `Weather` array is presumed to be the current day's weather.
  */
