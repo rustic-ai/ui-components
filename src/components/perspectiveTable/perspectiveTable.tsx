@@ -13,15 +13,39 @@ import Stack from '@mui/system/Stack'
 import useTheme from '@mui/system/useTheme'
 import React, { useEffect, useRef, useState } from 'react'
 
-import type { TableConfig, TableData } from '../types'
+import type {
+  TableConfig,
+  TableData,
+  TableFilter,
+  TableHeader,
+  TableSort,
+} from '../types'
+
+function createHeaderMap(headers?: Array<TableHeader>): Record<string, string> {
+  if (!headers) {
+    return {}
+  }
+
+  return headers.reduce(
+    (map, header) => {
+      const { dataKey, label } = header
+      map[dataKey] = label || dataKey
+      return map
+    },
+    {} as Record<string, string>
+  )
+}
 
 export function transformTableData(
-  originalData: Array<Record<string, string | number>>
+  originalData: Array<Record<string, string | number>>,
+  headers?: TableHeader[]
 ) {
+  const headerMap = createHeaderMap(headers)
   return originalData.map((record) => {
     const newData: Record<string, Array<string | number>> = {}
     for (const [key, value] of Object.entries(record)) {
-      newData[key] = [value]
+      const newKey = headerMap[key] || key
+      newData[newKey] = [value]
     }
     return newData
   })
@@ -41,23 +65,55 @@ function PerspectiveTable(props: TableData) {
   const perspectiveTheme =
     rusticTheme.palette.mode === 'dark' ? 'Pro Dark' : 'Pro Light'
 
-  function transformTableConfig(config: TableConfig): ViewConfig {
-    const { groupBy, splitBy, ...rest } = config
+  function formatFilterConfig(
+    filter: Array<TableFilter>,
+    headerMap: Record<string, string>
+  ): Array<TableFilter> {
+    return filter.map((filterItem) => {
+      const filterColumn = headerMap[filterItem[0]] || filterItem[0]
+      const filterOperation = filterItem[1]
 
+      const filterValue = filterItem[filterItem.length - 1]
+      return [filterColumn, filterOperation, filterValue]
+    })
+  }
+
+  function transformTableConfig(config: TableConfig): ViewConfig {
+    const { groupBy, splitBy, aggregates, sort, filter, columns } = config
+    const headerMap = createHeaderMap(props.headers)
+
+    const formattedSortConfig = sort?.map((sortItem) => {
+      const sortColumn = headerMap[sortItem[0]] || sortItem[0]
+      const sortDirection = sortItem[1]
+      return [sortColumn, sortDirection] as TableSort
+    })
+
+    const formattedAggregates =
+      aggregates &&
+      Object.fromEntries(
+        Object.entries(aggregates).map(([dataKey, aggregateOption]) => [
+          headerMap[dataKey] || dataKey,
+          aggregateOption,
+        ])
+      )
     const transformedConfig = {
-      ...rest,
-      group_by: groupBy,
-      split_by: splitBy,
+      group_by: groupBy?.map((dataKey) => headerMap[dataKey] || dataKey),
+      split_by: splitBy?.map((dataKey) => headerMap[dataKey] || dataKey),
+      aggregates: formattedAggregates,
+      sort: formattedSortConfig,
+      filter: filter && formatFilterConfig(filter, headerMap),
+      columns: columns?.map((dataKey) => headerMap[dataKey] || dataKey),
     }
 
     return transformedConfig
   }
+
   const transformedConfig = props.config && transformTableConfig(props.config)
 
   useEffect(() => {
     const worker = perspective.worker()
     worker
-      .table(transformTableData(props.data))
+      .table(transformTableData(props.data, props.headers))
       .then((table) => {
         const viewer = viewerRef.current
         if (viewer) {
@@ -66,22 +122,12 @@ function PerspectiveTable(props: TableData) {
             .then(() => {
               return viewer.restore({
                 ...transformedConfig,
-                settings: false,
                 theme: perspectiveTheme,
               })
             })
             .catch(() => {
               setHasError(true)
             })
-
-          // Hide the settings button for now
-          const shadowRoot = viewer.shadowRoot
-          const settingsButton = shadowRoot?.querySelector(
-            'div#settings_button'
-          ) as HTMLElement
-          if (settingsButton) {
-            settingsButton.style.display = 'none'
-          }
         }
       })
       .catch(() => {

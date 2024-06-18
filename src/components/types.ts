@@ -1,10 +1,3 @@
-import {
-  type Aggregate,
-  type ColumnName,
-  type Expressions,
-  type Filter,
-  type Sort,
-} from '@finos/perspective'
 import type { MermaidConfig } from 'mermaid'
 import type { Renderers } from 'vega'
 import type { EmbedOptions, VisualizationSpec } from 'vega-embed'
@@ -144,14 +137,70 @@ export interface TableHeader {
   label?: string
 }
 
+export type TableSortOption =
+  | 'asc'
+  | 'asc abs'
+  | 'desc'
+  | 'desc abs'
+  | 'col asc'
+  | 'col asc abs'
+  | 'col desc'
+  | 'col desc abs'
+
+export type TableAggregate =
+  | 'abs sum'
+  | 'and'
+  | 'any'
+  | 'avg'
+  | 'count'
+  | 'distinct count'
+  | 'distinct leaf'
+  | 'dominant'
+  | 'first'
+  | 'high'
+  | 'last'
+  | 'low'
+  | 'or'
+  | 'median'
+  | 'pct sum parent'
+  | 'pct sum grand total'
+  | 'stddev'
+  | 'sum'
+  | 'sum abs'
+  | 'sum not null'
+  | 'unique'
+  | 'var'
+  | ['weighted mean', string]
+
+export type TableSort = [string, TableSortOption]
+
+export type FilterOperation =
+  | '<'
+  | '>'
+  | '<='
+  | '>='
+  | '=='
+  | '!='
+  | 'is null'
+  | 'is not null'
+  | 'in'
+  | 'not in'
+  | 'begins with'
+  | 'contains'
+
+export type TableFilter = [
+  string,
+  FilterOperation,
+  string | number | Date | boolean | Array<string | number | Date | boolean>,
+]
+
 export type TableConfig = {
-  columns?: Array<ColumnName>
-  groupBy?: Array<ColumnName>
-  splitBy?: Array<ColumnName>
-  aggregates?: { [columnName: string]: Aggregate }
-  sort?: Array<Sort>
-  filter?: Array<Filter>
-  expressions?: Expressions
+  columns?: string[]
+  groupBy?: string[]
+  splitBy?: string[]
+  aggregates?: { [columnName: string]: TableAggregate }
+  sort?: TableSort[]
+  filter?: TableFilter[]
 }
 
 export interface TableFormat extends DataFormat {

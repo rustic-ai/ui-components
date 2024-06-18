@@ -73,13 +73,13 @@ function generateFakeData(numEntries: number) {
     const orderDate = `${2021 + Math.floor(Math.random() * 3)}/${Math.floor(Math.random() * 12) + 1}/${Math.floor(Math.random() * 28) + 1}`
 
     newData.push({
-      Region: region,
-      State: state,
-      Category: category,
-      'Sub-Category': subCategory,
-      Sales: sales,
-      Profit: profit,
-      'Order Date': orderDate,
+      region: region,
+      state: state,
+      category: category,
+      subCategory: subCategory,
+      sales: sales,
+      profit: profit,
+      orderDate: orderDate,
     })
   }
   return newData
@@ -90,7 +90,7 @@ const decorators = [
     return (
       <div
         style={{
-          width: 'clamp(250px, 70vw, 1000px)',
+          width: 'clamp(250px, 70vw, 900px)',
           height: 'clamp(150px, 40vh, 600px)',
         }}
       >
@@ -100,15 +100,26 @@ const decorators = [
   },
 ]
 
+const tableHeaders = [
+  { dataKey: 'region', label: 'Region' },
+  { dataKey: 'state', label: 'State' },
+  { dataKey: 'category', label: 'Category' },
+  { dataKey: 'subCategory', label: 'Sub-Category' },
+  { dataKey: 'sales', label: 'Sales' },
+  { dataKey: 'profit', label: 'Profit' },
+  { dataKey: 'orderDate', label: 'Order Date' },
+]
+
 export const PivotTable = {
   args: {
     data: generateFakeData(100),
     config: {
-      groupBy: ['Region', 'State'],
-      splitBy: ['Category', 'Sub-Category'],
-      aggregates: { Sales: 'any', Profit: 'any' },
-      columns: ['Sales', 'Profit'],
+      groupBy: ['region', 'state'],
+      splitBy: ['category', 'subCategory'],
+      aggregates: { sales: 'any', profit: 'any' },
+      columns: ['sales', 'profit'],
     },
+    headers: tableHeaders,
     title: 'Superstore Table',
     description:
       "This table displays data for sales and profit under each category. It's also grouped based on regions and states, making it useful for comparison purposes.",
@@ -119,6 +130,7 @@ export const PivotTable = {
 export const NormalTable = {
   args: {
     data: generateFakeData(100),
+    headers: tableHeaders,
     title: 'Superstore Table',
   },
   decorators,
