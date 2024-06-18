@@ -57,6 +57,38 @@ export default function Weather(props: WeatherProps) {
   const formattedDateToday = `${day} ${date}/${year} TODAY`
   const formattedWeatherToday = `HIGH: ${formatTemperature(props.weather[0].temp.high)} / LOW: ${formatTemperature(props.weather[0].temp.high)}`
 
+  const dailyWeatherCards = props.weather.map((weatherPreview, i) => {
+    if (i !== 0) {
+      return (
+        <Card
+          variant="outlined"
+          key={i}
+          className="rustic-daily-weather-card"
+          data-cy="daily-weather-card"
+        >
+          <Typography
+            variant="h5"
+            component="span"
+            color="text.secondary"
+            aria-label={getDayFromUnixTime(weatherPreview.timestamp).fullName}
+          >
+            {getDayFromUnixTime(weatherPreview.timestamp).shortName}
+          </Typography>
+          <img
+            src={weatherPreview.weatherIcon.icon}
+            alt={weatherPreview.weatherIcon.description}
+          />
+          <Typography variant="body2" color="text.secondary">
+            High: {formatTemperature(weatherPreview.temp.high)}°
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            Low: {formatTemperature(weatherPreview.temp.low)}°
+          </Typography>
+        </Card>
+      )
+    }
+  })
+
   return (
     <Card variant="outlined" className="rustic-weather">
       <PopoverMenu
@@ -107,41 +139,7 @@ export default function Weather(props: WeatherProps) {
         </Stack>
       </Stack>
 
-      <Box className="rustic-daily-weather-container">
-        {props.weather.map((weatherPreview, i) => {
-          if (i !== 0) {
-            return (
-              <Card
-                variant="outlined"
-                key={i}
-                className="rustic-daily-weather-card"
-                data-cy="daily-weather-card"
-              >
-                <Typography
-                  variant="h5"
-                  component="span"
-                  color="text.secondary"
-                  aria-label={
-                    getDayFromUnixTime(weatherPreview.timestamp).fullName
-                  }
-                >
-                  {getDayFromUnixTime(weatherPreview.timestamp).shortName}
-                </Typography>
-                <img
-                  src={weatherPreview.weatherIcon.icon}
-                  alt={weatherPreview.weatherIcon.description}
-                />
-                <Typography variant="body2" color="text.secondary">
-                  High: {formatTemperature(weatherPreview.temp.high)}°
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Low: {formatTemperature(weatherPreview.temp.low)}°
-                </Typography>
-              </Card>
-            )
-          }
-        })}
-      </Box>
+      <Box className="rustic-daily-weather-container">{dailyWeatherCards}</Box>
 
       {props.weatherProvider && (
         <Stack

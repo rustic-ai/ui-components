@@ -303,7 +303,7 @@ export interface Weather {
 export interface WeatherFormat extends DataFormat {
   /** Array of daily weather data. */
   weather: Weather[]
-  /** The timezone from which the weather data is from. */
+  /** The location from which the weather data is from. */
   location: string
   /** The temperature units of the weather data. */
   units: 'metric' | 'imperial'
