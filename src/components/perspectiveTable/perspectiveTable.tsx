@@ -5,7 +5,7 @@ import '@finos/perspective-viewer-d3fc'
 import '@finos/perspective-viewer/dist/css/pro.css'
 import '@finos/perspective-viewer/dist/css/pro-dark.css'
 
-import perspective from '@finos/perspective'
+import perspective, { type ViewConfig } from '@finos/perspective'
 import type { HTMLPerspectiveViewerElement } from '@finos/perspective-viewer'
 import type { Theme } from '@mui/material/styles'
 import Typography from '@mui/material/Typography'
@@ -13,18 +13,20 @@ import Stack from '@mui/system/Stack'
 import useTheme from '@mui/system/useTheme'
 import React, { useEffect, useRef, useState } from 'react'
 
-import type { TableData } from '../types'
+import type { TableConfig, TableData } from '../types'
 
-function transformData(inputArray: Array<Record<string, string | number>>) {
-  const result: { [key: string]: Array<string | boolean | Date | number> } = {}
-  for (const record of inputArray) {
+export function transformTableData(
+  originalData: Array<Record<string, string | number>>
+) {
+  return originalData.map((record) => {
+    const newData: Record<string, Array<string | number>> = {}
     for (const [key, value] of Object.entries(record)) {
-      result[key] = result[key] || []
-      result[key].push(value)
+      newData[key] = [value]
     }
-  }
-  return result
+    return newData
+  })
 }
+
 /**
 The PerspectiveTable component is designed to display and process large datasets efficiently. It integrates with the [Perspective](https://perspective.finos.org/) library, enabling advanced features such as filtering, sorting, and aggregating data for enhanced data analysis and visualization.
  */
@@ -39,11 +41,23 @@ function PerspectiveTable(props: TableData) {
   const perspectiveTheme =
     rusticTheme.palette.mode === 'dark' ? 'Pro Dark' : 'Pro Light'
 
+  function transformTableConfig(config: TableConfig): ViewConfig {
+    const { groupBy, splitBy, ...rest } = config
+
+    const transformedConfig = {
+      ...rest,
+      group_by: groupBy,
+      split_by: splitBy,
+    }
+
+    return transformedConfig
+  }
+  const transformedConfig = props.config && transformTableConfig(props.config)
+
   useEffect(() => {
     const worker = perspective.worker()
-
     worker
-      .table(transformData(props.data))
+      .table(transformTableData(props.data))
       .then((table) => {
         const viewer = viewerRef.current
         if (viewer) {
@@ -51,8 +65,8 @@ function PerspectiveTable(props: TableData) {
             .load(table)
             .then(() => {
               return viewer.restore({
+                ...transformedConfig,
                 settings: false,
-                ...props.config,
                 theme: perspectiveTheme,
               })
             })

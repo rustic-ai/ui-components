@@ -104,8 +104,9 @@ export const PivotTable = {
   args: {
     data: generateFakeData(100),
     config: {
-      group_by: ['Region', 'State'],
-      split_by: ['Category', 'Sub-Category'],
+      groupBy: ['Region', 'State'],
+      splitBy: ['Category', 'Sub-Category'],
+      aggregates: { Sales: 'any', Profit: 'any' },
       columns: ['Sales', 'Profit'],
     },
     title: 'Superstore Table',
@@ -123,7 +124,7 @@ export const NormalTable = {
   decorators,
 }
 
-export const Error = {
+export const NoData = {
   args: {
     data: [],
   },
