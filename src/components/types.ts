@@ -137,17 +137,9 @@ export interface TableHeader {
   label?: string
 }
 
-export type TableSortOption =
-  | 'asc'
-  | 'asc abs'
-  | 'desc'
-  | 'desc abs'
-  | 'col asc'
-  | 'col asc abs'
-  | 'col desc'
-  | 'col desc abs'
+export type TableSortOption = 'asc' | 'desc' | 'col asc' | 'col desc'
 
-export type TableAggregate =
+export type TableAggregateOption =
   | 'abs sum'
   | 'and'
   | 'any'
@@ -198,7 +190,7 @@ export type TableConfig = {
   columns?: string[]
   groupBy?: string[]
   splitBy?: string[]
-  aggregates?: { [columnName: string]: TableAggregate }
+  aggregates?: { [columnName: string]: TableAggregateOption }
   sort?: TableSort[]
   filter?: TableFilter[]
 }
@@ -209,6 +201,8 @@ export interface TableFormat extends DataFormat {
   /** Optional array to set the order of columns and assign labels.
    * This can also be used to limit which columns are shown. */
   headers?: TableHeader[]
+  /** Optional object to define how the data should be displayed, grouped, sorted, filtered,
+   * and aggregated within the table. */
   config?: TableConfig
 }
 

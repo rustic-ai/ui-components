@@ -65,10 +65,9 @@ function PerspectiveTable(props: TableData) {
   const perspectiveTheme =
     rusticTheme.palette.mode === 'dark' ? 'Pro Dark' : 'Pro Light'
 
-  function formatFilterConfig(
-    filter: Array<TableFilter>,
-    headerMap: Record<string, string>
-  ): Array<TableFilter> {
+  const headerMap = createHeaderMap(props.headers)
+
+  function formatFilterConfig(filter: Array<TableFilter>): Array<TableFilter> {
     return filter.map((filterItem) => {
       const filterColumn = headerMap[filterItem[0]] || filterItem[0]
       const filterOperation = filterItem[1]
@@ -80,7 +79,6 @@ function PerspectiveTable(props: TableData) {
 
   function transformTableConfig(config: TableConfig): ViewConfig {
     const { groupBy, splitBy, aggregates, sort, filter, columns } = config
-    const headerMap = createHeaderMap(props.headers)
 
     const formattedSortConfig = sort?.map((sortItem) => {
       const sortColumn = headerMap[sortItem[0]] || sortItem[0]
@@ -96,12 +94,13 @@ function PerspectiveTable(props: TableData) {
           aggregateOption,
         ])
       )
+
     const transformedConfig = {
       group_by: groupBy?.map((dataKey) => headerMap[dataKey] || dataKey),
       split_by: splitBy?.map((dataKey) => headerMap[dataKey] || dataKey),
       aggregates: formattedAggregates,
       sort: formattedSortConfig,
-      filter: filter && formatFilterConfig(filter, headerMap),
+      filter: filter && formatFilterConfig(filter),
       columns: columns?.map((dataKey) => headerMap[dataKey] || dataKey),
     }
 
@@ -123,6 +122,7 @@ function PerspectiveTable(props: TableData) {
               return viewer.restore({
                 ...transformedConfig,
                 theme: perspectiveTheme,
+                title: props.title,
               })
             })
             .catch(() => {
