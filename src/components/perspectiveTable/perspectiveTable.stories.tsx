@@ -17,6 +17,7 @@ export default meta
 meta.argTypes = {
   ...meta.argTypes,
   headers: {
+    description: 'Optional array to assign labels',
     table: {
       type: {
         summary: 'Array of TableHeader.',
