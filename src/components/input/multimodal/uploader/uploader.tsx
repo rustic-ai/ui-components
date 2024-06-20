@@ -53,7 +53,7 @@ export function getFileSizeAbbrev(bytes: number): string {
   return `${formattedString} ${units[unitIndex]}`
 }
 
-export function Uploader(props: UploaderProps) {
+function Uploader(props: UploaderProps) {
   const [addedFiles, setAddedFiles] = useState<FileInfo[]>([])
   const [errorMessages, setErrorMessages] = useState<string[]>([])
   const fileNamesRef = useRef<{ [key: string]: number }>({})
