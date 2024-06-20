@@ -137,12 +137,72 @@ export interface TableHeader {
   label?: string
 }
 
+export type TableSortOption = 'asc' | 'desc' | 'col asc' | 'col desc'
+
+export type TableAggregateOption =
+  | 'abs sum'
+  | 'and'
+  | 'any'
+  | 'avg'
+  | 'count'
+  | 'distinct count'
+  | 'distinct leaf'
+  | 'dominant'
+  | 'first'
+  | 'high'
+  | 'last'
+  | 'low'
+  | 'or'
+  | 'median'
+  | 'pct sum parent'
+  | 'pct sum grand total'
+  | 'stddev'
+  | 'sum'
+  | 'sum abs'
+  | 'sum not null'
+  | 'unique'
+  | 'var'
+  | ['weighted mean', string]
+
+export type TableSort = [string, TableSortOption]
+
+export type FilterOperation =
+  | '<'
+  | '>'
+  | '<='
+  | '>='
+  | '=='
+  | '!='
+  | 'is null'
+  | 'is not null'
+  | 'in'
+  | 'not in'
+  | 'begins with'
+  | 'contains'
+
+export type TableFilter = [
+  string,
+  FilterOperation,
+  string | number | Date | boolean | Array<string | number | Date | boolean>,
+]
+
+export type TableConfig = {
+  columns?: string[]
+  groupBy?: string[]
+  splitBy?: string[]
+  aggregates?: { [columnName: string]: TableAggregateOption }
+  sort?: TableSort[]
+  filter?: TableFilter[]
+}
+
 export interface TableFormat extends DataFormat {
   /** Data to be displayed in the table. */
   data: Array<Record<string, string | number>>
   /** Optional array to set the order of columns and assign labels.
    * This can also be used to limit which columns are shown. */
   headers?: TableHeader[]
+  /** Optional object to define how the data should be displayed, grouped, sorted, filtered, and aggregated within the table. */
+  config?: TableConfig
 }
 
 export type TableData = TableFormat & Updates<TableFormat>

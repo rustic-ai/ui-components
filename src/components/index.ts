@@ -25,6 +25,7 @@ import Timestamp from './timestamp/timestamp'
 import YoutubeVideo from './video/youtubeVideo'
 import RechartsTimeSeries from './visualization/chart/rechartsTimeSeries'
 import MermaidViz from './visualization/mermaidViz/mermaidViz'
+import PerspectiveViz from './visualization/perspectiveViz/perspectiveViz'
 import VegaLiteViz from './visualization/vegaLiteViz/vegaLiteViz'
 import Weather from './weather/weather'
 
@@ -45,6 +46,7 @@ export {
   OpenLayersMap,
   ParticipantsContainer,
   PDFViewer,
+  PerspectiveViz,
   PopoverMenu,
   Question,
   RechartsTimeSeries,
