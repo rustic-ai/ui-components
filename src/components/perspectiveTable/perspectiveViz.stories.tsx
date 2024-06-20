@@ -2,11 +2,11 @@
 import type { Meta, StoryFn } from '@storybook/react'
 import React from 'react'
 
-import PerspectiveTable from './perspectiveTable'
+import PerspectiveViz from './perspectiveViz'
 
-const meta: Meta<React.ComponentProps<typeof PerspectiveTable>> = {
-  title: 'Rustic UI/Perspective Table/Perspective Table',
-  component: PerspectiveTable,
+const meta: Meta<React.ComponentProps<typeof PerspectiveViz>> = {
+  title: 'Rustic UI/PerspectiveViz/PerspectiveViz',
+  component: PerspectiveViz,
   tags: ['autodocs'],
   parameters: {
     layout: 'centered',

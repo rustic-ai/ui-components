@@ -1,5 +1,5 @@
 /* eslint-disable no-magic-numbers */
-import PerspectiveTable from './perspectiveTable'
+import PerspectiveViz from './perspectiveViz'
 const sampleData = [
   {
     Region: 'East',
@@ -29,7 +29,7 @@ const sampleData = [
     'Order Date': '2021/1/15',
   },
 ]
-describe('PerspectiveTable Component', () => {
+describe('PerspectiveViz Component', () => {
   const data = {
     data: sampleData,
     config: {
@@ -43,7 +43,7 @@ describe('PerspectiveTable Component', () => {
   }
 
   it('renders title and description', () => {
-    cy.mount(<PerspectiveTable {...data} />)
+    cy.mount(<PerspectiveViz {...data} />)
 
     cy.get('[data-cy=table-title]').should('contain', 'Superstore Sales Data')
     cy.get('[data-cy=table-description]').should(
@@ -58,7 +58,7 @@ describe('PerspectiveTable Component', () => {
       data: [],
     }
 
-    cy.mount(<PerspectiveTable {...invalidData} />)
+    cy.mount(<PerspectiveViz {...invalidData} />)
 
     cy.get('p').should('contain', 'No data available.')
   })

@@ -1,4 +1,4 @@
-import './perspectiveTable.css'
+import './perspectiveViz.css'
 import '@finos/perspective-viewer'
 import '@finos/perspective-viewer-datagrid'
 import '@finos/perspective-viewer-d3fc'
@@ -52,9 +52,9 @@ export function transformTableData(
 }
 
 /**
-The PerspectiveTable component is designed to display and process large datasets efficiently. It integrates with the [Perspective](https://perspective.finos.org/) library, enabling advanced features such as filtering, sorting, and aggregating data for enhanced data analysis and visualization.
+The PerspectiveViz component is designed to efficiently display and process large datasets, supporting interactive features such as filtering, sorting, and aggregating data for enhanced analysis and visualization. It integrates with the [Perspective library](https://perspective.finos.org/) to render data in various formats, including datagrids and charts.
  */
-function PerspectiveTable(props: TableData) {
+function PerspectiveViz(props: TableData) {
   if (props.data.length === 0) {
     return <Typography variant="body2">No data available.</Typography>
   }
@@ -119,11 +119,21 @@ function PerspectiveTable(props: TableData) {
           viewer
             .load(table)
             .then(() => {
-              return viewer.restore({
+              viewer.restore({
                 ...transformedConfig,
                 theme: perspectiveTheme,
                 title: props.title,
+                settings: false,
               })
+              if (viewer.shadowRoot) {
+                const sheet = new CSSStyleSheet()
+                sheet.replaceSync(
+                  '#settings_panel { background: none}' +
+                    '#plugin_selector_container.open { overflow: scroll!important;}' +
+                    '#debug_open_button.sidebar_close_button { display: none; }'
+                )
+                viewer.shadowRoot.adoptedStyleSheets.push(sheet)
+              }
             })
             .catch(() => {
               setHasError(true)
@@ -133,25 +143,7 @@ function PerspectiveTable(props: TableData) {
       .catch(() => {
         setHasError(true)
       })
-  }, [props.data])
-
-  useEffect(() => {
-    const viewer = viewerRef.current
-    if (viewer) {
-      viewer
-        .getTable(true)
-        .then((table) => {
-          if (table) {
-            return viewer.restore({
-              theme: perspectiveTheme,
-            })
-          }
-        })
-        .catch(() => {
-          setHasError(true)
-        })
-    }
-  }, [perspectiveTheme])
+  }, [props.data, perspectiveTheme])
 
   if (hasError) {
     return (
@@ -159,7 +151,7 @@ function PerspectiveTable(props: TableData) {
     )
   } else {
     return (
-      <Stack direction="column" className="rustic-perspective-viewer-container">
+      <Stack direction="column" className="rustic-perspective-viz">
         {props.title && (
           <Typography variant="h6" data-cy="table-title">
             {props.title}
@@ -181,4 +173,4 @@ function PerspectiveTable(props: TableData) {
   }
 }
 
-export default PerspectiveTable
+export default PerspectiveViz

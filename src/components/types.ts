@@ -201,7 +201,7 @@ export interface TableFormat extends DataFormat {
   /** Optional array to set the order of columns and assign labels.
    * This can also be used to limit which columns are shown. */
   headers?: TableHeader[]
-  /** Optional object to define how the data should be displayed, grouped, sorted, filtered, and aggregated within the table. This feature is currently only supported in the PerspectiveTable component. */
+  /** Optional object to define how the data should be displayed, grouped, sorted, filtered, and aggregated within the table. */
   config?: TableConfig
 }
 
