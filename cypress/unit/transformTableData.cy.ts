@@ -1,4 +1,4 @@
-import { transformTableData } from '../../src/components/perspectiveViz/perspectiveViz'
+import { transformTableData } from '../../src/components/visualization/perspectiveViz/perspectiveViz'
 
 describe('transformData function', () => {
   it('should transform the input array of records correctly', () => {

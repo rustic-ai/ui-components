@@ -19,7 +19,7 @@ import type {
   TableFilter,
   TableHeader,
   TableSort,
-} from '../types'
+} from '../../types'
 
 function createHeaderMap(headers?: Array<TableHeader>): Record<string, string> {
   if (!headers) {
@@ -52,7 +52,9 @@ export function transformTableData(
 }
 
 /**
-The PerspectiveViz component is designed to efficiently display and process large datasets, supporting interactive features such as filtering, sorting, and aggregating data for enhanced analysis and visualization. It integrates with the [Perspective library](https://perspective.finos.org/) to render data in various formats, including datagrids and charts.
+The PerspectiveViz component is designed to efficiently display and process large datasets, supporting interactive features such as filtering, sorting, and aggregating data for enhanced analysis and visualization. It integrates with the [Perspective library](https://perspective.finos.org/) to render data in various formats, including datagrids(pivot tables) and charts.
+
+Note: [Perspective](https://perspective.finos.org/) is not bundled, so it must be included in the application's build process.
  */
 function PerspectiveViz(props: TableData) {
   if (props.data.length === 0) {

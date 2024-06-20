@@ -5,7 +5,7 @@ import React from 'react'
 import PerspectiveViz from './perspectiveViz'
 
 const meta: Meta<React.ComponentProps<typeof PerspectiveViz>> = {
-  title: 'Rustic UI/PerspectiveViz/PerspectiveViz',
+  title: 'Rustic UI/Visualization/PerspectiveViz',
   component: PerspectiveViz,
   tags: ['autodocs'],
   parameters: {
