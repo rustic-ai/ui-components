@@ -3,6 +3,7 @@ import CodeSnippet from './codeSnippet/codeSnippet'
 import ElementRenderer from './elementRenderer/elementRenderer'
 import Image from './image/image'
 import MultimodalInput from './input/multimodal/multimodalInput/multimodalInput'
+import Uploader from './input/multimodal/uploader/uploader'
 import TextInput from './input/textInput/textInput'
 import OpenLayersMap from './map/openLayersMap'
 import MarkedMarkdown from './markdown/markedMarkdown'
@@ -54,6 +55,7 @@ export {
   Text,
   TextInput,
   Timestamp,
+  Uploader,
   VegaLiteViz,
   Video,
   Weather,
