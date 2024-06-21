@@ -202,16 +202,18 @@ function BaseInputElement(
       <Box className="rustic-input-actions">
         {props.children}
         <Tooltip title="Send">
-          <IconButton
-            data-cy="send-button"
-            aria-label="send message"
-            onClick={handleSendMessage}
-            disabled={isSendDisabled}
-            color="primary"
-            className="rustic-send-button"
-          >
-            <Icon name="send" />
-          </IconButton>
+          <span>
+            <IconButton
+              data-cy="send-button"
+              aria-label="send message"
+              onClick={handleSendMessage}
+              disabled={isSendDisabled}
+              color="primary"
+              className="rustic-send-button"
+            >
+              <Icon name="send" />
+            </IconButton>
+          </span>
         </Tooltip>
       </Box>
     </Box>
