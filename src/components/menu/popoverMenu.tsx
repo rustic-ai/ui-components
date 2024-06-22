@@ -154,6 +154,7 @@ export default function PopoverMenu(props: PopoverMenuProps) {
     }
   }
 
+  const anchorElProp = isMobileView ? {} : { anchorEl: menuButtonRef.current }
   return (
     <>
       {renderButton()}
@@ -161,7 +162,7 @@ export default function PopoverMenu(props: PopoverMenuProps) {
       <PopoverMenuElement
         open={isMenuOpen}
         onClose={() => setIsMenuOpen(false)}
-        anchorEl={menuButtonRef.current}
+        {...anchorElProp}
         anchor="bottom"
         className="rustic-popover-menu"
         sx={{
