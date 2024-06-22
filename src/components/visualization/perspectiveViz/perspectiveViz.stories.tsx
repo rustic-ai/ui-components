@@ -10,6 +10,11 @@ const meta: Meta<React.ComponentProps<typeof PerspectiveViz>> = {
   tags: ['autodocs'],
   parameters: {
     layout: 'centered',
+    docs: {
+      argTypes: {
+        sort: 'requiredFirst',
+      },
+    },
   },
 }
 

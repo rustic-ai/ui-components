@@ -51,6 +51,55 @@ export function transformTableData(
   })
 }
 
+const perspectiveVizAdditionalStyles = `
+/* General Button Styles */
+button, .button:hover, #editor-container, .editable {
+  border-radius: 16px !important;
+}
+
+/* Hide border for aggregate Selector */
+.aggregate-selector:hover {
+  border: none !important;
+}
+
+/* Input and Select Elements */
+input, select, .noselect, #add-expression, .dropdown-width-container, 
+.pivot-column-border, .pivot-column, .column-selector-column-border {
+  border-radius: 8px !important;
+}
+
+/* Change background color */
+#settings_panel, #column_settings_sidebar {
+  background: white;
+}
+
+/* Expression Edit Button */
+.expression-edit-button {
+  display: none;
+}
+
+/* Add padding to expression input */
+#editor-container, .editable {
+  padding: 8px !important;
+}
+
+/* Change Button Font Size */
+.button select, .button {
+  font-size: 12px !important;
+}
+
+/* Enable Scrolling */
+#plugin_selector_container.open, #status_bar, #menu-bar, #app_panel {
+  overflow: scroll !important;
+}
+
+/* Hide unused buttons */
+#debug_open_button.sidebar_close_button, .reset-default-style-disabled, 
+.expression-edit-button, #theme, #status, #status_bar .input-sizer {
+  display: none !important;
+}
+`
+
 /**
 The PerspectiveViz component is designed to efficiently display and process large datasets, supporting interactive features such as filtering, sorting, and aggregating data for enhanced analysis and visualization. It integrates with the [Perspective library](https://perspective.finos.org/) to render data in various formats, including datagrids(pivot tables) and charts.
 
@@ -129,11 +178,7 @@ function PerspectiveViz(props: TableData) {
               })
               if (viewer.shadowRoot) {
                 const sheet = new CSSStyleSheet()
-                sheet.replaceSync(
-                  '#settings_panel { background: none}' +
-                    '#plugin_selector_container.open { overflow: scroll!important;}' +
-                    '#debug_open_button.sidebar_close_button { display: none; }'
-                )
+                sheet.replaceSync(perspectiveVizAdditionalStyles)
                 viewer.shadowRoot.adoptedStyleSheets.push(sheet)
               }
             })
