@@ -1,7 +1,7 @@
 /* eslint-disable no-magic-numbers */
 
 import Button from '@mui/material/Button'
-import type { StoryFn } from '@storybook/react'
+import type { Meta, StoryFn } from '@storybook/react'
 import React, { useState } from 'react'
 
 import { ParticipantRole, ParticipantType } from '../types'
@@ -9,24 +9,12 @@ import ParticipantsContainer, {
   type ParticipantsContainerProps,
 } from './participantsContainer'
 
-export default {
+const meta: Meta<React.ComponentProps<typeof ParticipantsContainer>> = {
   title: 'Rustic UI/Participants Container/Participants Container',
   component: ParticipantsContainer,
   tags: ['autodocs'],
-  argTypes: {
-    participants: {
-      description:
-        'A list of participants to be displayed. \n<pre>```interface Participant {\n  id: string\n  displayName: string\n  participantRole: ParticipantRole\n  participantType: ParticipantType\n}```</pre>',
-    },
-  },
   parameters: {
     layout: 'centered',
-    docs: {
-      description: {
-        component:
-          'The `ParticipantsContainer` component is responsible for displaying a list of participants within a dialog window. It organizes participants into separate lists based on their type (human or agent) and provides options to toggle between showing a subset of participants and displaying the full list. This component enhances the user experience by presenting participant information in a structured format and allowing users to view additional details as needed. \n\nNote: The component does not include the button displayed to toggle between the two views. This button is typically implemented in the parent component that uses the `ParticipantsContainer` component.',
-      },
-    },
   },
   decorators: [
     (Story: StoryFn) => {
@@ -52,8 +40,25 @@ export default {
     },
   ],
 }
+export default meta
 
-const createRandomParticipants = (numberOfParticipants: number) => {
+meta.argTypes = {
+  participants: {
+    table: {
+      type: {
+        summary: 'Array of Participant.',
+        detail:
+          'Each Participant has the following fields:\n' +
+          ' id: String representing the unique identifier for a participant\n' +
+          ' displayName: Name that is displayed for the participant\n' +
+          ' participantRole: It specifies the role assigned to a participant. Could either be `owner` or `member`. \n' +
+          ' participantType: Type of the participant. Could be `human` or `agent`. \n',
+      },
+    },
+  },
+}
+
+function createRandomParticipants(numberOfParticipants: number) {
   const participants = []
   for (let i = 0; i < numberOfParticipants; i++) {
     participants.push({
