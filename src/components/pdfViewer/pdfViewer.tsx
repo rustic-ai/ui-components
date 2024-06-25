@@ -7,15 +7,15 @@ import Typography from '@mui/material/Typography'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import Stack from '@mui/system/Stack'
 import useTheme from '@mui/system/useTheme'
+import type { RenderTask } from 'pdfjs-dist'
 import * as pdfjsLib from 'pdfjs-dist'
 import React, { useEffect, useRef, useState } from 'react'
 
 import type { PDFViewerProps } from '../types'
 import ViewerControlButton from './controlButton/controlButton'
 
-
 export function setPdfWorkerSrc(workerSrc: string) {
-  pdfjsLib.GlobalWorkerOptions.workerSrc = workerSrc;
+  pdfjsLib.GlobalWorkerOptions.workerSrc = workerSrc
 }
 
 function isPDFUrl(url: string) {
@@ -40,6 +40,7 @@ function PDFViewer(props: PDFViewerProps) {
   const [totalPages, setTotalPages] = useState(1)
   const [pageInput, setPageInput] = useState(1)
   const [hasError, setHasError] = useState<boolean>(false)
+  const [renderTask, setRenderTask] = useState<RenderTask>()
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
   const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'))
@@ -95,7 +96,16 @@ function PDFViewer(props: PDFViewerProps) {
         viewport,
         transform,
       }
-      page.render(renderContext)
+
+      if (renderTask) {
+        renderTask.cancel()
+      }
+
+      const newRenderTask = page.render(renderContext)
+      setRenderTask(newRenderTask)
+      newRenderTask.promise.then(() => {
+        setRenderTask(undefined)
+      })
     })
   }
 
@@ -169,26 +179,33 @@ function PDFViewer(props: PDFViewerProps) {
           <canvas ref={pdfRef} data-cy="pdf-canvas" />
         </Box>
       </Box>
-      <Stack direction="row" justifyContent="center" alignItems="center">
+      <Stack
+        direction="row"
+        justifyContent="center"
+        alignItems="center"
+        gap={1}
+      >
         <ViewerControlButton
           action="previousPage"
           onClick={goToPreviousPage}
           isDisabled={currentPage === 1}
+        />
+        <Typography variant="body1" className="rustic-page-indicator">
+          Page
+        </Typography>
+        <TextField
+          type="number"
+          value={pageInput}
+          onChange={handlePageInputChange}
+          size="small"
+          className="rustic-pdf-page-input"
+          data-cy="pdf-page-input"
         />
         <Typography
           variant="body1"
           className="rustic-page-indicator"
           data-cy="pdf-page-indicator"
         >
-          Page
-          <TextField
-            type="number"
-            value={pageInput}
-            onChange={handlePageInputChange}
-            size="small"
-            className="rustic-pdf-page-input"
-            data-cy="pdf-page-input"
-          />
           of {totalPages}
         </Typography>
         <ViewerControlButton
