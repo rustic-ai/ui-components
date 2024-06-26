@@ -13,6 +13,7 @@ import { v4 as getUUID } from 'uuid'
 
 import Icon from '../../icon/icon'
 import type { BaseInputProps, Message } from '../../types'
+import Emoji from '../emoji/emoji'
 
 function BaseInputElement(
   props: React.PropsWithChildren<BaseInputProps>,
@@ -54,26 +55,42 @@ function BaseInputElement(
       "The language you're speaking isn't supported. Try speaking in a different language or check your device settings.",
   }
 
-  const speechToTextButtonAdornment = {
-    endAdornment: (
-      <InputAdornment position="end">
-        {isEndingRecording ? (
-          <CircularProgress size={24} data-cy="spinner" />
-        ) : (
-          <Tooltip title={speechToTextTooltipTitle}>
-            <IconButton
-              data-cy="record-button"
-              onClick={handleToggleSpeechToText}
-              size="small"
-              sx={{ color: speechToTextIconColor }}
-            >
-              <Icon name={speechToTextIconName} />
-            </IconButton>
-          </Tooltip>
-        )}
-      </InputAdornment>
-    ),
+  function insertEmojiAtCursorPosition(emoji: string) {
+    if (inputRef.current) {
+      const { selectionStart, selectionEnd } = inputRef.current
+
+      if (selectionStart !== null && selectionEnd !== null) {
+        const currentText = messageText || ''
+        const newText =
+          currentText.substring(0, selectionStart) +
+          emoji +
+          currentText.substring(selectionEnd)
+
+        setMessageText(newText)
+        const newPosition = selectionStart + emoji.length
+        inputRef.current.selectionStart = newPosition
+        inputRef.current.selectionEnd = newPosition
+        inputRef.current.focus()
+      }
+    }
   }
+  function handleEmojiClick(emoji: string) {
+    insertEmojiAtCursorPosition(emoji)
+  }
+  const speechToTextButtonAdornment = isEndingRecording ? (
+    <CircularProgress size={24} data-cy="spinner" />
+  ) : (
+    <Tooltip title={speechToTextTooltipTitle}>
+      <IconButton
+        data-cy="record-button"
+        onClick={handleToggleSpeechToText}
+        size="small"
+        sx={{ color: speechToTextIconColor }}
+      >
+        <Icon name={speechToTextIconName} />
+      </IconButton>
+    </Tooltip>
+  )
 
   function handleToggleSpeechToText() {
     const microphone = new window.webkitSpeechRecognition()
@@ -186,9 +203,14 @@ function BaseInputElement(
             inputRef={inputRef}
             color="secondary"
             size="small"
-            InputProps={
-              props.enableSpeechToText ? speechToTextButtonAdornment : {}
-            }
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <Emoji onEmojiClick={handleEmojiClick} />
+                  {props.enableSpeechToText && speechToTextButtonAdornment}
+                </InputAdornment>
+              ),
+            }}
             InputLabelProps={{
               className: !isFocused ? 'rustic-input-label' : '',
               sx: {
