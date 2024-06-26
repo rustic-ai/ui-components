@@ -26,14 +26,16 @@ function ViewerControlButton(props: ViewerControlButtonProps) {
 
   return (
     <Tooltip title={control.label}>
-      <IconButton
-        onClick={props.onClick}
-        className={props.className}
-        disabled={props.isDisabled}
-        data-cy={`${dataCyPrefix}-button`}
-      >
-        <Icon name={control.symbol} />
-      </IconButton>
+      <span>
+        <IconButton
+          onClick={props.onClick}
+          className={props.className}
+          disabled={props.isDisabled}
+          data-cy={`${dataCyPrefix}-button`}
+        >
+          <Icon name={control.symbol} />
+        </IconButton>
+      </span>
     </Tooltip>
   )
 }
