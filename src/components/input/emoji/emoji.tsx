@@ -1,4 +1,5 @@
 import './emoji.css'
+import 'emoji-picker-element'
 
 import IconButton from '@mui/material/IconButton'
 import Popover from '@mui/material/Popover'
@@ -50,7 +51,11 @@ function Emoji(props: EmojiProps) {
   return (
     <div>
       <Tooltip title="Emoji">
-        <IconButton ref={buttonRef} onClick={handleButtonClick}>
+        <IconButton
+          ref={buttonRef}
+          onClick={handleButtonClick}
+          data-cy="emoji-button"
+        >
           <Icon name="Mood" />
         </IconButton>
       </Tooltip>
@@ -59,16 +64,17 @@ function Emoji(props: EmojiProps) {
         anchorEl={buttonRef.current}
         onClose={handleEmojiPickerClose}
         anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'center',
+          vertical: 'top',
+          horizontal: 'left',
         }}
         transformOrigin={{
-          vertical: 'top',
-          horizontal: 'center',
+          vertical: 'bottom',
+          horizontal: 'left',
         }}
       >
         {emojiPicker && (
           <div
+            data-cy="emoji-picker"
             className="rustic-emoji-picker"
             ref={(el) => el && el.appendChild(emojiPicker)}
           ></div>
