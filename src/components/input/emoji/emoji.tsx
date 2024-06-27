@@ -18,17 +18,17 @@ function Emoji(props: EmojiProps) {
   const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false)
   const [emojiPicker, setEmojiPicker] = useState<Element | null>(null)
 
-  function handleClick() {
+  function handleButtonClick() {
     setIsEmojiPickerOpen((prev) => !prev)
   }
 
-  function handleClose() {
+  function handleEmojiPickerClose() {
     setIsEmojiPickerOpen(false)
   }
 
   function handleEmojiClick(event: EmojiClickEvent) {
     event.detail.unicode && props.onEmojiClick(event.detail.unicode)
-    handleClose()
+    handleEmojiPickerClose()
   }
 
   useEffect(
@@ -50,14 +50,14 @@ function Emoji(props: EmojiProps) {
   return (
     <div>
       <Tooltip title="Emoji">
-        <IconButton ref={buttonRef} onClick={handleClick}>
+        <IconButton ref={buttonRef} onClick={handleButtonClick}>
           <Icon name="Mood" />
         </IconButton>
       </Tooltip>
       <Popover
         open={isEmojiPickerOpen}
         anchorEl={buttonRef.current}
-        onClose={handleClose}
+        onClose={handleEmojiPickerClose}
         anchorOrigin={{
           vertical: 'bottom',
           horizontal: 'center',

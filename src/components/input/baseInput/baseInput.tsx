@@ -55,18 +55,19 @@ function BaseInputElement(
       "The language you're speaking isn't supported. Try speaking in a different language or check your device settings.",
   }
 
-  function insertEmojiAtCursorPosition(emoji: string) {
+  function handleEmojiClick(emoji: string) {
     if (inputRef.current) {
-      const { selectionStart, selectionEnd } = inputRef.current
+      const { selectionStart } = inputRef.current
 
-      if (selectionStart !== null && selectionEnd !== null) {
+      if (typeof selectionStart === 'number') {
         const currentText = messageText || ''
         const newText =
           currentText.substring(0, selectionStart) +
           emoji +
-          currentText.substring(selectionEnd)
+          currentText.substring(selectionStart)
 
         setMessageText(newText)
+
         const newPosition = selectionStart + emoji.length
         inputRef.current.selectionStart = newPosition
         inputRef.current.selectionEnd = newPosition
@@ -74,9 +75,7 @@ function BaseInputElement(
       }
     }
   }
-  function handleEmojiClick(emoji: string) {
-    insertEmojiAtCursorPosition(emoji)
-  }
+
   const speechToTextButtonAdornment = isEndingRecording ? (
     <CircularProgress size={24} data-cy="spinner" />
   ) : (
