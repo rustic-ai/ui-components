@@ -164,6 +164,13 @@ const baseTheme = createTheme({
         },
       },
     },
+    MuiPopover: {
+      styleOverrides: {
+        paper: {
+          border: `1px solid ${dividerColor}`,
+        },
+      },
+    },
   },
 })
 

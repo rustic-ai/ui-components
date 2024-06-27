@@ -55,7 +55,7 @@ function BaseInputElement(
   const [isEndingRecording, setIsEndingRecording] = useState(false)
   const [speechToTextError, setSpeechToTextError] = useState<string>('')
   const [emojiSearchResults, setEmojiSearchResults] = useState<EmojiInfo[]>([])
-  const [showEmojiMenu, setShowEmojiMenu] = useState(false)
+  const [isEmojiMenuShown, setIsEmojiMenuShown] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
 
   const isEmptyMessage = !messageText.trim().length
@@ -70,7 +70,7 @@ function BaseInputElement(
 
   function handleEmojiClick(
     emoji: string,
-    shouldInputBeReplaced: boolean = false
+    shouldEmojiShortcodeBeReplaced: boolean = false
   ) {
     if (inputRef.current) {
       const { selectionStart, selectionEnd } = inputRef.current
@@ -84,7 +84,7 @@ function BaseInputElement(
         const endText = currentText.substring(selectionEnd)
         let newText
 
-        if (shouldInputBeReplaced) {
+        if (shouldEmojiShortcodeBeReplaced) {
           newText = startText.replace(/:(\w+)$/, emoji) + endText
         } else {
           newText = startText + emoji + endText
@@ -92,24 +92,27 @@ function BaseInputElement(
 
         setMessageText(newText)
 
-        const newPosition = shouldInputBeReplaced
+        const newPosition = shouldEmojiShortcodeBeReplaced
           ? startText.replace(/:(\w+)$/, emoji).length
           : selectionStart + emoji.length
-        inputRef.current.selectionStart = newPosition
-        inputRef.current.selectionEnd = newPosition
-        inputRef.current.focus()
+
+        setTimeout(() => {
+          inputRef.current?.focus()
+          inputRef.current?.setSelectionRange(newPosition, newPosition)
+        }, 0)
       }
     }
 
-    setShowEmojiMenu(false)
+    setIsEmojiMenuShown(false)
   }
 
+  const database = new Database()
+
   function searchEmojis(query: string) {
-    const database = new Database()
     database.getEmojiBySearchQuery(query).then((results) => {
       const resultLimit = 5
       setEmojiSearchResults(results.slice(0, resultLimit))
-      setShowEmojiMenu(true)
+      setIsEmojiMenuShown(true)
     })
   }
 
@@ -206,7 +209,7 @@ function BaseInputElement(
       const query = match[0].replace(':', '')
       searchEmojis(query)
     } else {
-      setShowEmojiMenu(false)
+      setIsEmojiMenuShown(false)
     }
   }
 
@@ -231,9 +234,9 @@ function BaseInputElement(
           }}
         >
           <Popover
-            open={showEmojiMenu}
+            open={isEmojiMenuShown}
             anchorEl={inputRef.current}
-            onClose={() => setShowEmojiMenu(false)}
+            onClose={() => setIsEmojiMenuShown(false)}
             disableAutoFocus={true}
             anchorOrigin={{
               vertical: 'top',
