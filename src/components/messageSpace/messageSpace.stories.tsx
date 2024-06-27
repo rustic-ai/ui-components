@@ -46,7 +46,7 @@ const meta: Meta<React.ComponentProps<typeof MessageSpace>> = {
 export default meta
 
 function getProfileIcon(message: ThreadableMessage) {
-  if (message.sender.name?.includes('agent')) {
+  if (message.sender.name?.toLowerCase().includes('agent')) {
     return <Icon name="smart_toy" />
   } else {
     return <Icon name="account_circle" />
