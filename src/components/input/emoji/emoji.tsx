@@ -4,11 +4,14 @@ import 'emoji-picker-element'
 import IconButton from '@mui/material/IconButton'
 import Popover from '@mui/material/Popover'
 import Tooltip from '@mui/material/Tooltip'
-import Picker from 'emoji-picker-element/picker'
 import type { EmojiClickEvent } from 'emoji-picker-element/shared'
 import React, { useEffect, useRef, useState } from 'react'
 
 import Icon from '../../icon/icon'
+
+interface EmojiPickerElement extends HTMLElement {
+  database: { close: () => void }
+}
 
 interface EmojiProps {
   onEmojiClick: (emoji: string) => void
@@ -29,32 +32,42 @@ function Emoji(props: EmojiProps) {
 
   function handleEmojiClick(event: EmojiClickEvent) {
     event.detail.unicode && props.onEmojiClick(event.detail.unicode)
+    const pickerElement = document.querySelector(
+      'emoji-picker'
+    ) as EmojiPickerElement
+    pickerElement?.database.close()
     handleEmojiPickerClose()
   }
 
-  useEffect(
-    function () {
-      if (isEmojiPickerOpen) {
-        const picker = new Picker({ emojiVersion: 15.0 })
-        picker.addEventListener('emoji-click', handleEmojiClick)
-        setEmojiPicker(picker)
+  useEffect(() => {
+    if (isEmojiPickerOpen && typeof window !== 'undefined') {
+      import('emoji-picker-element')
+        .then((module) => {
+          const Picker = module.Picker
+          const picker = new Picker()
 
-        return function () {
-          picker.removeEventListener('emoji-click', handleEmojiClick)
-          setEmojiPicker(null)
-        }
+          picker.addEventListener('emoji-click', handleEmojiClick)
+          setEmojiPicker(picker)
+        })
+        .catch((error) => {
+          console.error('Failed to load emoji picker', error)
+        })
+
+      return () => {
+        setEmojiPicker(null)
       }
-    },
-    [isEmojiPickerOpen]
-  )
+    }
+  }, [isEmojiPickerOpen])
 
   return (
     <div>
       <Tooltip title="Emoji">
         <IconButton
+          size="small"
           ref={buttonRef}
           onClick={handleButtonClick}
           data-cy="emoji-button"
+          color="primary"
         >
           <Icon name="Mood" />
         </IconButton>
@@ -65,11 +78,11 @@ function Emoji(props: EmojiProps) {
         onClose={handleEmojiPickerClose}
         anchorOrigin={{
           vertical: 'top',
-          horizontal: 'left',
+          horizontal: 'right',
         }}
         transformOrigin={{
           vertical: 'bottom',
-          horizontal: 'left',
+          horizontal: 'right',
         }}
       >
         {emojiPicker && (

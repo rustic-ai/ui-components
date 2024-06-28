@@ -84,9 +84,6 @@ describe('TextInput', () => {
       })
 
       it(`should add emoji to text input through emoji picker on ${viewport} screen`, () => {
-        Cypress.on('uncaught:exception', () => {
-          return false
-        })
         cy.viewport(viewport)
 
         cy.get(emojiButton).click()

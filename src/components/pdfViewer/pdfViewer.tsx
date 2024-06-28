@@ -103,9 +103,13 @@ function PDFViewer(props: PDFViewerProps) {
 
       const newRenderTask = page.render(renderContext)
       setRenderTask(newRenderTask)
-      newRenderTask.promise.then(() => {
-        setRenderTask(undefined)
-      })
+      newRenderTask.promise
+        .then(() => {
+          setRenderTask(undefined)
+        })
+        .catch((error) => {
+          console.error(error)
+        })
     })
   }
 
