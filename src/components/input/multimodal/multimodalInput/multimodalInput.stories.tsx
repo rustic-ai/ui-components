@@ -12,11 +12,6 @@ const multiModalInputMeta: Meta<React.ComponentProps<typeof MultimodalInput>> =
     component: MultimodalInput,
     tags: ['autodocs'],
     parameters: {
-      docs: {
-        argTypes: {
-          sort: 'requiredFirst',
-        },
-      },
       layout: 'centered',
       mockData: [
         {

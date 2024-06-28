@@ -25,7 +25,6 @@ const meta: Meta<React.FC<InputProps>> = {
       },
       argTypes: {
         exclude: ['send', 'isSendEnabled'],
-        sort: 'requiredFirst',
       },
       source: {
         transform: (code: string) => {

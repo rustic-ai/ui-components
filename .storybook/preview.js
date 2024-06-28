@@ -83,6 +83,9 @@ const preview = {
           <Stories />
         </>
       ),
+      argTypes: {
+        sort: 'requiredFirst',
+      },
     },
   },
 }
