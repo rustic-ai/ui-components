@@ -39,7 +39,7 @@ const speechRecognitionErrors = {
     "The language you're speaking isn't supported. Try speaking in a different language or check your device settings.",
 }
 
-function showEmojiInfo(emoji: EmojiInfo): React.ReactNode {
+function showEmojiInfo(emoji: EmojiInfo) {
   if ('unicode' in emoji && 'annotation' in emoji) {
     return `${emoji.unicode} ${emoji.annotation}`
   }
@@ -109,11 +109,22 @@ function BaseInputElement(
   const database = new Database()
 
   function searchEmojis(query: string) {
-    database.getEmojiBySearchQuery(query).then((results) => {
-      const resultLimit = 5
-      setEmojiSearchResults(results.slice(0, resultLimit))
-      setIsEmojiMenuShown(true)
-    })
+    database
+      .getEmojiBySearchQuery(query)
+      .then((results) => {
+        const resultLimit = 5
+        if (results.length) {
+          setEmojiSearchResults(results.slice(0, resultLimit))
+          setIsEmojiMenuShown(true)
+        } else {
+          setEmojiSearchResults([])
+          setIsEmojiMenuShown(false)
+        }
+      })
+      .catch(() => {
+        setEmojiSearchResults([])
+        setIsEmojiMenuShown(false)
+      })
   }
 
   const speechToTextButtonAdornment = isEndingRecording ? (
@@ -204,9 +215,34 @@ function BaseInputElement(
     setSpeechToTextError('')
     const newText = e.target.value
     setMessageText(newText)
-    const match = newText.match(/:(\w{2,})/g)
-    if (match) {
-      const query = match[0].replace(':', '')
+
+    // expression to match ':text:' format
+    const closedShortcode = newText.match(/:(\w{2,}):/g)
+    // expression to match ':something' format
+    const unclosedShortcode = newText.match(/:(\w{2,})/g)
+
+    if (closedShortcode) {
+      const shortcode = closedShortcode[0].replace(/:/g, '')
+
+      database
+        .getEmojiByShortcode(shortcode)
+        .then((emoji) => {
+          if (emoji && 'unicode' in emoji) {
+            const replacedText = newText.replace(
+              closedShortcode[0],
+              emoji.unicode
+            )
+            setMessageText(replacedText)
+          } else {
+            setMessageText(newText)
+          }
+        })
+        .catch(() => {
+          setMessageText(newText)
+        })
+      setIsEmojiMenuShown(false)
+    } else if (unclosedShortcode) {
+      const query = unclosedShortcode[0].replace(':', '')
       searchEmojis(query)
     } else {
       setIsEmojiMenuShown(false)
@@ -233,34 +269,36 @@ function BaseInputElement(
             borderColor: isFocused ? 'secondary.main' : 'action.disabled',
           }}
         >
-          <Popover
-            open={isEmojiMenuShown}
-            anchorEl={inputRef.current}
-            onClose={() => setIsEmojiMenuShown(false)}
-            disableAutoFocus={true}
-            anchorOrigin={{
-              vertical: 'top',
-              horizontal: 'left',
-            }}
-            transformOrigin={{
-              vertical: 'bottom',
-              horizontal: 'left',
-            }}
-          >
-            <MenuList>
-              {emojiSearchResults.map(
-                (emoji, index) =>
-                  'unicode' in emoji && (
-                    <MenuItem
-                      key={index}
-                      onClick={() => handleEmojiClick(emoji.unicode, true)}
-                    >
-                      {showEmojiInfo(emoji)}
-                    </MenuItem>
-                  )
-              )}
-            </MenuList>
-          </Popover>
+          {emojiSearchResults.length > 0 && (
+            <Popover
+              open={isEmojiMenuShown}
+              anchorEl={inputRef.current}
+              onClose={() => setIsEmojiMenuShown(false)}
+              disableAutoFocus={true}
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'left',
+              }}
+              transformOrigin={{
+                vertical: 'bottom',
+                horizontal: 'left',
+              }}
+            >
+              <MenuList data-cy="emoji-menu">
+                {emojiSearchResults.map(
+                  (emoji, index) =>
+                    'unicode' in emoji && (
+                      <MenuItem
+                        key={index}
+                        onClick={() => handleEmojiClick(emoji.unicode, true)}
+                      >
+                        {showEmojiInfo(emoji)}
+                      </MenuItem>
+                    )
+                )}
+              </MenuList>
+            </Popover>
+          )}
 
           <TextField
             data-cy="text-field"
