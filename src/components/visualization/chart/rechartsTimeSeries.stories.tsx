@@ -7,13 +7,28 @@ export default {
   tags: ['autodocs'],
   argTypes: {
     timeSeries: {
-      control: 'array',
-      description:
-        'Data to be displayed in the time series chart. The first field is used as the x-axis field. We currently support formatting timestamps in seconds and milliseconds. Other data types will be displayed as given. \n<pre>```interface TimeSeriesData {\n  timestamp: number\n  [key: string]: number\n}```</pre>',
+      table: {
+        type: {
+          summary: 'Array of TimeSeriesData',
+          detail:
+            'Each TimeSeriesData object has the following fields:\n' +
+            '  timestamp: Timestamp in milliseconds.\n ' +
+            ' [key: string]: Numbered data point.',
+        },
+      },
     },
     chartContainerMargin: {
-      description:
-        'Margin of chart container in pixel. For example, adding left margin could show larger numbers properly.\n<pre>```interface Margin {\n  top?: number\n  right?: number\n  bottom?: number\n  left?: number\n}```</pre>',
+      table: {
+        type: {
+          summary: 'Margin',
+          detail:
+            'Margin has the following optional fields:\n' +
+            '  top: Number of pixels to add to the top of the chart container.\n' +
+            '  right: Number of pixels to add to the right of the chart container.\n' +
+            '  bottom: Number of pixels to add to the bottom of the chart container.\n' +
+            '  left: Number of pixels to add to the left of the chart container.',
+        },
+      },
     },
   },
   parameters: {

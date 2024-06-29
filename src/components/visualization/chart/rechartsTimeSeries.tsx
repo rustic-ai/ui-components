@@ -40,7 +40,7 @@ export interface Margin {
 }
 
 export interface RechartsTimeSeriesProps {
-  /** Data to be displayed in the time series chart. The first field is used as the x-axis field. We currently support formatting epoch timestamps and ISO date strings. Other data types will be displayed as given. */
+  /** Data to be displayed in the time series chart. The first field is used as the x-axis field. We currently support formatting timestamps in milliseconds. Other data types will be displayed as given. */
   timeSeries: TimeSeriesData[]
   /** An array containing a predefined set of Hex color codes or string colors (e.g. 'blue'). The colors will be applied to the keys of the data object in order. */
   chartColors: string[]
@@ -80,7 +80,7 @@ export interface RechartsTimeSeriesProps {
   yAxisTickFormatter?: (value: number) => string
   /** Pass a function to format tooltip content. */
   tooltipFormatter?: (value: number, name: string) => [string, string]
-  /** Margin of chart container in pixel. For example, adding left margin could show larger numbers properly. */
+  /** Margin of chart container in pixels. For example, adding left margin could show larger numbered labels properly. */
   chartContainerMargin?: Margin
 }
 
