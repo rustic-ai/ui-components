@@ -11,7 +11,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import Icon from '../../icon/icon'
 
 interface EmojiPickerElement extends HTMLElement {
-  database: { close: () => void }
+  database: { close: () => Promise<void> }
 }
 
 interface EmojiProps {
@@ -48,7 +48,9 @@ function Emoji(props: EmojiProps) {
     const pickerElement = document.querySelector(
       'emoji-picker'
     ) as EmojiPickerElement
-    pickerElement?.database.close()
+    pickerElement?.database.close().catch((error) => {
+      console.error('Failed to close database:', error)
+    })
     handleEmojiPickerClose()
   }
 
