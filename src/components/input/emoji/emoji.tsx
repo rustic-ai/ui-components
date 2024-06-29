@@ -25,6 +25,13 @@ function Emoji(props: EmojiProps) {
   const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false)
   const [emojiPicker, setEmojiPicker] = useState<Element | null>(null)
 
+  const emojiPickerStyles = {
+    '--indicator-color': theme.palette.divider,
+    '--background': theme.palette.background.paper,
+    '--input-border-color': theme.palette.divider,
+    '--outline-color': theme.palette.secondary.main,
+  } as { [key: string]: string }
+
   function handleButtonClick() {
     setIsEmojiPickerOpen((prev) => !prev)
   }
@@ -54,6 +61,11 @@ function Emoji(props: EmojiProps) {
           const themeClass = theme.palette.mode === 'dark' ? 'dark' : 'light'
           picker.classList.add(themeClass)
           picker.addEventListener('emoji-click', handleEmojiClick)
+
+          Object.keys(emojiPickerStyles).forEach((key) => {
+            picker.style.setProperty(key, emojiPickerStyles[key])
+          })
+
           setEmojiPicker(picker)
         })
         .catch((error) => {

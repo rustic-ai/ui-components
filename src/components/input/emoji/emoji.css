@@ -1,6 +1,6 @@
 emoji-picker {
   --border-color: transparent;
-  --background: transparent;
+  --outline-size: 1px;
 }
 
 @media screen and (max-width: 600px) {

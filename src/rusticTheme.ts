@@ -168,6 +168,7 @@ const baseTheme = createTheme({
       styleOverrides: {
         paper: {
           border: `1px solid ${dividerColor}`,
+          backgroundImage: 'none',
         },
       },
     },
