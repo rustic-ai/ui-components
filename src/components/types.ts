@@ -286,6 +286,8 @@ export interface BaseInputProps {
   isSendEnabled?: boolean
   /** Boolean to enable speech-to-text. See which browsers are supported [here](https://developer.mozilla.org/en-US/docs/Web/API/SpeechRecognition#browser_compatibility). */
   enableSpeechToText?: boolean
+  /** Specifies the maximum number of emoji search results to display when the user enters a search query. The search query is triggered when the user types in a format like `:text`. */
+  maximumEmojiSearchResults?: number
 }
 
 export interface TextInputProps

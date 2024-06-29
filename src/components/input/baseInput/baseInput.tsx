@@ -111,9 +111,10 @@ function BaseInputElement(
     database
       .getEmojiBySearchQuery(query)
       .then((results) => {
-        const resultLimit = 5
         if (results.length) {
-          setEmojiSearchResults(results.slice(0, resultLimit))
+          setEmojiSearchResults(
+            results.slice(0, props.maximumEmojiSearchResults)
+          )
           setIsEmojiMenuShown(true)
         } else {
           setEmojiSearchResults([])
@@ -365,6 +366,7 @@ BaseInput.defaultProps = {
   fullWidth: true,
   maxRows: 6,
   enableSpeechToText: false,
+  maximumEmojiSearchResults: 5,
 }
 
 export default BaseInput
