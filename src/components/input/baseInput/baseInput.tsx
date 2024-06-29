@@ -62,10 +62,8 @@ function BaseInputElement(
   const isSendDisabled = isEmptyMessage && !props.isSendEnabled
 
   const speechToTextTooltipTitle = `${isRecording ? 'Stop' : 'Start'} speech to text`
-  const speechToTextInactiveColor = isFocused ? 'primary.main' : 'primary.light'
-  const speechToTextIconColor = isRecording
-    ? 'error.main'
-    : speechToTextInactiveColor
+  const featureButtonColor = isFocused ? 'primary.main' : 'primary.light'
+  const speechToTextIconColor = isRecording ? 'error.main' : featureButtonColor
   const speechToTextIconName = isRecording ? 'stop_circle' : 'speech_to_text'
 
   function handleEmojiClick(
@@ -96,6 +94,7 @@ function BaseInputElement(
           ? startText.replace(/:(\w+)$/, emoji).length
           : selectionStart + emoji.length
 
+        // focus doesn't work without setTimeout
         setTimeout(() => {
           inputRef.current?.focus()
           inputRef.current?.setSelectionRange(newPosition, newPosition)
@@ -320,7 +319,10 @@ function BaseInputElement(
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
-                  <Emoji onEmojiClick={handleEmojiClick} />
+                  <Emoji
+                    onEmojiClick={handleEmojiClick}
+                    buttonColor={featureButtonColor}
+                  />
                   {props.enableSpeechToText && speechToTextButtonAdornment}
                 </InputAdornment>
               ),

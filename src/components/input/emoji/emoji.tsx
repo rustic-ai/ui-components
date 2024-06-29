@@ -3,6 +3,7 @@ import 'emoji-picker-element'
 
 import IconButton from '@mui/material/IconButton'
 import Popover from '@mui/material/Popover'
+import { useTheme } from '@mui/material/styles'
 import Tooltip from '@mui/material/Tooltip'
 import type { EmojiClickEvent } from 'emoji-picker-element/shared'
 import React, { useEffect, useRef, useState } from 'react'
@@ -15,9 +16,11 @@ interface EmojiPickerElement extends HTMLElement {
 
 interface EmojiProps {
   onEmojiClick: (emoji: string) => void
+  buttonColor?: string
 }
 
 function Emoji(props: EmojiProps) {
+  const theme = useTheme()
   const buttonRef = useRef<HTMLButtonElement>(null)
   const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false)
   const [emojiPicker, setEmojiPicker] = useState<Element | null>(null)
@@ -28,6 +31,9 @@ function Emoji(props: EmojiProps) {
 
   function handleEmojiPickerClose() {
     setIsEmojiPickerOpen(false)
+    if (emojiPicker) {
+      setEmojiPicker(null)
+    }
   }
 
   function handleEmojiClick(event: EmojiClickEvent) {
@@ -45,7 +51,8 @@ function Emoji(props: EmojiProps) {
         .then((module) => {
           const Picker = module.Picker
           const picker = new Picker()
-
+          const themeClass = theme.palette.mode === 'dark' ? 'dark' : 'light'
+          picker.classList.add(themeClass)
           picker.addEventListener('emoji-click', handleEmojiClick)
           setEmojiPicker(picker)
         })
@@ -67,32 +74,32 @@ function Emoji(props: EmojiProps) {
           ref={buttonRef}
           onClick={handleButtonClick}
           data-cy="emoji-button"
-          color="primary"
+          sx={{ color: props.buttonColor }}
         >
           <Icon name="Mood" />
         </IconButton>
       </Tooltip>
-      <Popover
-        open={isEmojiPickerOpen}
-        anchorEl={buttonRef.current}
-        onClose={handleEmojiPickerClose}
-        anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'right',
-        }}
-        transformOrigin={{
-          vertical: 'bottom',
-          horizontal: 'right',
-        }}
-      >
-        {emojiPicker && (
+      {emojiPicker && (
+        <Popover
+          open={isEmojiPickerOpen}
+          anchorEl={buttonRef.current}
+          onClose={handleEmojiPickerClose}
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+          transformOrigin={{
+            vertical: 'bottom',
+            horizontal: 'right',
+          }}
+        >
           <div
             data-cy="emoji-picker"
             className="rustic-emoji-picker"
             ref={(el) => el && el.appendChild(emojiPicker)}
           ></div>
-        )}
-      </Popover>
+        </Popover>
+      )}
     </div>
   )
 }
