@@ -17,12 +17,6 @@ const meta: Meta<React.FC<InputProps>> = {
   parameters: {
     layout: 'centered',
     docs: {
-      description: {
-        component:
-          'The `TextInput` component enables users to input text messages ' +
-          'and send them over a WebSocket connection. It provides functionality ' +
-          'for sending messages with a sender, timestamp, and conversation ID.',
-      },
       argTypes: {
         exclude: ['send', 'isSendEnabled'],
       },

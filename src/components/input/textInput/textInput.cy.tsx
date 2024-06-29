@@ -11,6 +11,9 @@ describe('TextInput', () => {
   const message = 'Hello, Cypress!'
   const spaces = '     '
   const recordButton = '[data-cy=record-button]'
+  const emojiButton = '[data-cy=emoji-button]'
+  const emojiPicker = '[data-cy=emoji-picker]'
+  const emojiMenu = '[data-cy=emoji-menu]'
 
   context('Regular', () => {
     beforeEach(() => {
@@ -78,6 +81,35 @@ describe('TextInput', () => {
         cy.get('textarea').invoke('val').should('equal', message)
         cy.get(textInput).type('{enter}')
         cy.get('textarea').first().invoke('val').should('equal', '')
+      })
+
+      it(`should add emoji to text input through emoji picker on ${viewport} screen`, () => {
+        cy.viewport(viewport)
+
+        cy.get(emojiButton).click()
+        cy.get(emojiPicker).should('exist')
+
+        cy.get('emoji-picker').shadow().find('button#emo-🤣').click()
+        cy.get('textarea').invoke('val').should('equal', '🤣')
+      })
+
+      it(`should show relevant emojis when user types shortcode and emoji can be added to the text input on ${viewport} screen`, () => {
+        cy.viewport(viewport)
+
+        cy.get(textInput).type(':ap')
+        cy.get(emojiMenu).should('exist')
+        cy.get(`${emojiMenu} li`)
+          .first()
+          .should('contain.text', '🙇 person bowing')
+          .click()
+        cy.get('textarea').invoke('val').should('equal', '🙇')
+      })
+
+      it(`should convert text in ':text:' format to emoji on ${viewport} screen`, () => {
+        cy.viewport(viewport)
+
+        cy.get(textInput).type(':apple:')
+        cy.get('textarea').invoke('val').should('equal', '🍎')
       })
     })
   })

@@ -1,0 +1,11 @@
+emoji-picker {
+  --border-color: transparent;
+  --outline-size: 1px;
+}
+
+@media screen and (max-width: 600px) {
+  emoji-picker {
+    --num-columns: 5;
+    --category-emoji-size: 1.125rem;
+  }
+}
