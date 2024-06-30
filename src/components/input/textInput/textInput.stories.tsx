@@ -69,8 +69,8 @@ meta.argTypes = {
       type: {
         summary: 'Sender',
         detail:
-          'id: string representing sender id\n' +
-          'name: Optional string of sender name',
+          'id: String representing sender id.\n' +
+          'name: Optional string of sender name.',
       },
     },
   },

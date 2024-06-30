@@ -36,6 +36,16 @@ meta.argTypes = {
       },
     },
   },
+  sender: {
+    table: {
+      type: {
+        summary: 'Sender',
+        detail:
+          'id: String representing sender id.\n' +
+          'name: Optional string of sender name.',
+      },
+    },
+  },
 }
 
 export default meta

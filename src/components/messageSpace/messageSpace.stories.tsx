@@ -73,7 +73,7 @@ meta.argTypes = {
           'ThreadableMessage extends the Message interface which has the following fields:\n' +
           '  id: A string representing the unique identifier of the message.\n' +
           '  timestamp: A string representing the timestamp of the message.\n' +
-          '  sender: An object representing the sender of the message.\n' +
+          '  sender: An object representing the sender of the message. Refer to the `sender` prop.\n' +
           '  conversationId: A string representing the identifier of the conversation to which the message belongs.\n' +
           '  format: A string representing the format of the message.\n' +
           '  data: An object of type MessageData, which can contain any key-value pairs.\n' +
@@ -94,6 +94,16 @@ meta.argTypes = {
         summary: 'WebSocketClient',
         detail:
           'send: (message: Message) => void\nclose: () => void\nreconnect: () => void\n',
+      },
+    },
+  },
+  sender: {
+    table: {
+      type: {
+        summary: 'Sender',
+        detail:
+          'id: String representing sender id.\n' +
+          'name: Optional string of sender name.',
       },
     },
   },
