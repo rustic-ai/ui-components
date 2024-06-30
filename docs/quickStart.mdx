@@ -57,10 +57,31 @@ Follow these steps to quickly integrate Rustic UI Components into your applicati
        // Sample data for messages. Please make sure your message data uses props we defined for each message format.
        const messages = [/* Your message data array */];
 
+       // Sender data of user viewing the messages.
+       const sender = {
+            name: 'John Doe',
+            id: '123'
+       }
+
+       // Sample WebSocket connection object.
+       const ws = {
+            send: (message: Message) => {
+                /* Your custom logic */
+            },
+            close: () => {
+            /* Your custom logic */
+            },
+            reconnect: () => {
+            /* Your custom logic */
+            },
+       }
+
        return (
            <>
                <MessageSpace
                    messages={messages}
+                   sender={sender}
+                   ws={ws}
                    supportedElements={{
                    text: Text,
                    streamingText: StreamingText,
