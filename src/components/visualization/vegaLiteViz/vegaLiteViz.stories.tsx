@@ -113,7 +113,7 @@ export const WithTitleAndDescription = {
     spec: {
       $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
       width: 'container',
-      height: 'container',
+      height: '200',
       title: 'Number of Orders by Product',
       description:
         'This chart shows the number of orders by product in the last month.',
@@ -145,7 +145,6 @@ export const WithTitleAndDescription = {
     description:
       "The chart below illustrates the distribution of orders across different products in the last month for X Company. Each product's order count is displayed in thousands, providing a clear comparison of product performance.",
   },
-  decorators,
 }
 
 export const InvalidChart = {
@@ -388,7 +387,6 @@ export const Map = {
       ],
     },
   },
-  // decorators,
 }
 
 export const GlobeVisualization = {
