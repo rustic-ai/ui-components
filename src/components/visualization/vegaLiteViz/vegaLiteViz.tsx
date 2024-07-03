@@ -74,8 +74,9 @@ function VegaLiteViz(props: VegaLiteData) {
       if (!props.options?.config?.font) {
         options.config.font = defaultFont
       }
-
-      VegaEmbed(chartRef.current, props.spec, options)
+      const specToRender = { ...props.spec }
+      delete specToRender.title
+      VegaEmbed(chartRef.current, specToRender, options)
         .then((result) => {
           const opts = result.embedOptions
           const fileName =
@@ -125,12 +126,18 @@ function VegaLiteViz(props: VegaLiteData) {
           <PopoverMenu menuItems={menuItems} ariaLabel="Download options" />
         </Box>
 
-        {props.title && (
-          <Typography variant="subtitle2">{props.title}</Typography>
-        )}
+        {props.title && <Typography variant="h6">{props.title}</Typography>}
         {props.description && (
-          <Typography variant="caption">{props.description}</Typography>
+          <Typography variant="body1">{props.description}</Typography>
         )}
+        <Box textAlign="center" mt={1}>
+          {typeof props.spec.title === 'string' && (
+            <Typography variant="subtitle2">{props.spec.title}</Typography>
+          )}
+          {props.spec.description && (
+            <Typography variant="caption">{props.spec.description}</Typography>
+          )}
+        </Box>
         <div ref={chartRef} className="rustic-vega-lite" data-cy="vega-lite" />
       </Stack>
     )
