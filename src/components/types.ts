@@ -1,6 +1,8 @@
 import type { MermaidConfig } from 'mermaid'
 import type { Renderers } from 'vega'
 import type { EmbedOptions, VisualizationSpec } from 'vega-embed'
+
+import type { MessageSpaceProps } from './messageSpace/messageSpace'
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type MessageData = { [key: string]: any }
 
@@ -382,4 +384,18 @@ export type WeatherData = WeatherFormat & Updates<WeatherFormat>
 
 export interface WeatherProps extends WeatherData {
   weatherProvider?: string
+}
+
+export interface PromptBuilderProps
+  extends Omit<
+      MessageSpaceProps,
+      'getActionsComponent' | 'getProfileComponent' | 'scrollDownLabel'
+    >,
+    ConversationProps {
+  /** Function to close the prompt builder. This will be called when the user quits or after generating a prompt. */
+  onClose: () => void
+  /** Name of the agent participating in the conversation. */
+  agentName?: string
+  /** Avatar of the agent participating in the conversation. */
+  agentAvatar?: string
 }

@@ -1,0 +1,239 @@
+import './promptBuilder.css'
+import '../../index.css'
+
+import { useMediaQuery } from '@mui/material'
+import Avatar from '@mui/material/Avatar'
+import Button from '@mui/material/Button'
+import Card from '@mui/material/Card'
+import CircularProgress from '@mui/material/CircularProgress'
+import Dialog from '@mui/material/Dialog'
+import DialogActions from '@mui/material/DialogActions'
+import DialogContent from '@mui/material/DialogContent'
+import DialogContentText from '@mui/material/DialogContentText'
+import DialogTitle from '@mui/material/DialogTitle'
+import Divider from '@mui/material/Divider'
+import Typography from '@mui/material/Typography'
+import { Box, Stack, useTheme } from '@mui/system'
+import React, { useEffect, useState } from 'react'
+
+import ElementRenderer from '../elementRenderer/elementRenderer'
+import Icon from '../icon/icon'
+import type { Message, PromptBuilderProps } from '../types'
+
+/**
+The `PromptBuilder` component is an interactive tool designed to help users construct enhanced prompts through guided conversations with an agent. It operates in a dedicated message space, supporting multiple message formats. The conversation is structured as a thread, with the initiating message serving as the parent. Users should be able to invoke the Prompt Builder via a button click or a text input command. Once activated, the agent guides the user step-by-step to create a detailed prompt, culminating in a "Generate Prompts" button for finalization or a "Next Question" option for further refinement.
+
+__Note:__ A message sent to the server is required to invoke the Prompt Builder. The `messageId` of this message will be used as the parent thread message of this conversation.
+ */
+export default function PromptBuilder(props: PromptBuilderProps) {
+  const [isReadyToGenerate, setIsReadyToGenerate] = useState(false)
+  const [lastAnswerMessage, setLastAnswerMessage] = useState<Message | null>(
+    null
+  )
+  const [isLoading, setIsLoading] = useState(false)
+  const [isAttemptingToQuit, setIsAttemptingToQuit] = useState(false)
+  const [isGeneratingPrompts, setIsGeneratingPrompts] = useState(false)
+
+  const theme = useTheme()
+  const isMobileView = useMediaQuery(theme.breakpoints.down('md'))
+  const messages = props.messages || []
+  const lastMessage = messages[messages.length - 1]
+
+  const inputCapturer = {
+    ...props.ws,
+    send: (message: Message) => {
+      setLastAnswerMessage(message)
+    },
+  }
+
+  useEffect(() => {
+    if (lastMessage && lastMessage.sender !== props.sender) {
+      setIsLoading(false)
+    }
+
+    if (
+      lastMessage.format === 'promptBuilder' &&
+      lastMessage.data.isLastQuestion
+    ) {
+      setIsReadyToGenerate(true)
+    }
+  }, [props.messages?.length])
+
+  function handleNextQuestion() {
+    if (lastAnswerMessage) {
+      const message = {
+        ...lastAnswerMessage,
+        threadId: props.messageId,
+      }
+      props.ws.send(message)
+    }
+    setLastAnswerMessage(null)
+    setIsLoading(true)
+  }
+
+  function handleQuit() {
+    setIsAttemptingToQuit(false)
+    props.onClose()
+  }
+
+  function handleGeneratePrompts() {
+    setIsGeneratingPrompts(true)
+    setIsLoading(true)
+
+    const delay = 3000
+    setTimeout(() => {
+      props.onClose()
+    }, delay)
+  }
+
+  function renderMessages() {
+    if (!isGeneratingPrompts) {
+      return (
+        props.messages &&
+        props.messages.length > 0 &&
+        props.messages.map((message) => {
+          if (
+            message.sender !== props.sender &&
+            message.format !== 'promptBuilder'
+          ) {
+            return (
+              <ElementRenderer
+                key={message.id}
+                ws={inputCapturer}
+                sender={props.sender}
+                message={message}
+                supportedElements={props.supportedElements}
+              />
+            )
+          }
+        })
+      )
+    }
+  }
+
+  function renderNextQuestionButton() {
+    return (
+      <Button
+        variant="outlined"
+        endIcon={<Icon name="chevron_right" />}
+        onClick={handleNextQuestion}
+        disabled={!lastAnswerMessage}
+      >
+        Next question
+      </Button>
+    )
+  }
+
+  function renderQuitDialog() {
+    return (
+      <Dialog
+        open={isAttemptingToQuit}
+        onClose={() => setIsAttemptingToQuit(false)}
+        aria-labelledby="quit-dialog-title"
+        aria-describedby="quit-dialog-description"
+        sx={{
+          '& .MuiPaper-root': {
+            width: 'clamp(320px,50vw,600px)',
+            border: `1px solid ${theme.palette.divider}`,
+          },
+        }}
+      >
+        <DialogTitle
+          id="quit-dialog-title"
+          className="rustic-align-self-center"
+        >
+          Are you sure?
+        </DialogTitle>
+        <Divider />
+        <DialogContent>
+          <DialogContentText
+            id="quit-dialog-description"
+            className="rustic-align-self-center"
+          >
+            All progress will be lost.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions
+          className="rustic-prompt-builder-dialog-buttons"
+          disableSpacing
+        >
+          <Button
+            variant="outlined"
+            startIcon={<Icon name="close" />}
+            onClick={handleQuit}
+          >
+            Quit
+          </Button>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={() => setIsAttemptingToQuit(false)}
+          >
+            Continue build
+          </Button>
+        </DialogActions>
+      </Dialog>
+    )
+  }
+
+  return (
+    <Card variant="outlined" className="rustic-prompt-builder">
+      {renderQuitDialog()}
+      <Stack direction="row" gap={1} alignItems="center">
+        {props.agentAvatar && (
+          <Avatar
+            sx={{
+              border: `1px solid ${theme.palette.divider}`,
+            }}
+            className="rustic-prompt-builder-avatar"
+            src={props.agentAvatar}
+          />
+        )}
+        <Typography color="text.secondary">
+          {props.agentName ? props.agentName : 'Prompt Builder'}
+        </Typography>
+      </Stack>
+      <Divider className="rustic-prompt-builder-divider" />
+
+      <Stack className="rustic-prompt-builder-questions">
+        {renderMessages()}
+        {isLoading && (
+          <CircularProgress
+            color="secondary"
+            className="rustic-align-self-center"
+          />
+        )}
+      </Stack>
+
+      {!isGeneratingPrompts && (
+        <Stack className="rustic-prompt-builder-buttons">
+          <Box className="rustic-prompt-builder-buttons-left">
+            <Button
+              variant="outlined"
+              startIcon={<Icon name="close" />}
+              onClick={() => setIsAttemptingToQuit(true)}
+            >
+              Quit
+            </Button>
+            {isMobileView && renderNextQuestionButton()}
+          </Box>
+          {!isMobileView && (
+            <Box className="rustic-prompt-builder-buttons-right">
+              {!isMobileView && renderNextQuestionButton()}
+              {isReadyToGenerate && (
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={handleGeneratePrompts}
+                  disabled={isLoading}
+                >
+                  Generate
+                </Button>
+              )}
+            </Box>
+          )}
+        </Stack>
+      )}
+    </Card>
+  )
+}

@@ -27,3 +27,7 @@ code {
 .rustic-cursor-pointer {
   cursor: pointer;
 }
+
+.rustic-align-self-center {
+  align-self: center;
+}
