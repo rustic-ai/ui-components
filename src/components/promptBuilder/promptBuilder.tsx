@@ -124,6 +124,67 @@ export default function PromptBuilder(props: PromptBuilderProps) {
     )
   }
 
+  function renderGenerateButton() {
+    return (
+      <Button
+        variant="contained"
+        color="secondary"
+        onClick={handleGeneratePrompts}
+        disabled={isLoading}
+      >
+        Generate
+      </Button>
+    )
+  }
+
+  function renderQuitButton() {
+    return (
+      <Button
+        variant="outlined"
+        startIcon={<Icon name="close" />}
+        onClick={() => setIsAttemptingToQuit(true)}
+      >
+        Quit
+      </Button>
+    )
+  }
+
+  function renderMobileButtons() {
+    return (
+      <>
+        {!isGeneratingPrompts && (
+          <Stack className="rustic-prompt-builder-buttons">
+            <Box className="rustic-prompt-builder-buttons-left">
+              {renderQuitButton()}
+              {renderNextQuestionButton()}
+            </Box>
+            <Box className="rustic-prompt-builder-buttons-right">
+              {isReadyToGenerate && renderGenerateButton()}
+            </Box>
+          </Stack>
+        )}
+      </>
+    )
+  }
+
+  function renderDesktopButtons() {
+    return (
+      <>
+        {!isGeneratingPrompts && (
+          <Stack className="rustic-prompt-builder-buttons">
+            <Box className="rustic-prompt-builder-buttons-left">
+              {renderQuitButton()}
+            </Box>
+            <Box className="rustic-prompt-builder-buttons-right">
+              {renderNextQuestionButton()}
+              {isReadyToGenerate && renderGenerateButton()}
+            </Box>
+          </Stack>
+        )}
+      </>
+    )
+  }
+
   function renderQuitDialog() {
     return (
       <Dialog
@@ -205,35 +266,7 @@ export default function PromptBuilder(props: PromptBuilderProps) {
         )}
       </Stack>
 
-      {!isGeneratingPrompts && (
-        <Stack className="rustic-prompt-builder-buttons">
-          <Box className="rustic-prompt-builder-buttons-left">
-            <Button
-              variant="outlined"
-              startIcon={<Icon name="close" />}
-              onClick={() => setIsAttemptingToQuit(true)}
-            >
-              Quit
-            </Button>
-            {isMobileView && renderNextQuestionButton()}
-          </Box>
-          {!isMobileView && (
-            <Box className="rustic-prompt-builder-buttons-right">
-              {!isMobileView && renderNextQuestionButton()}
-              {isReadyToGenerate && (
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  onClick={handleGeneratePrompts}
-                  disabled={isLoading}
-                >
-                  Generate
-                </Button>
-              )}
-            </Box>
-          )}
-        </Stack>
-      )}
+      {isMobileView ? renderMobileButtons() : renderDesktopButtons()}
     </Card>
   )
 }
