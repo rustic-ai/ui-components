@@ -13,7 +13,7 @@ import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
 import Divider from '@mui/material/Divider'
 import Typography from '@mui/material/Typography'
-import { Box, Stack, useTheme } from '@mui/system'
+import { Box, useTheme } from '@mui/system'
 import React, { useEffect, useState } from 'react'
 
 import ElementRenderer from '../elementRenderer/elementRenderer'
@@ -153,7 +153,7 @@ export default function PromptBuilder(props: PromptBuilderProps) {
     return (
       <>
         {!isGeneratingPrompts && (
-          <Stack className="rustic-prompt-builder-buttons">
+          <Box className="rustic-prompt-builder-buttons">
             <Box className="rustic-prompt-builder-buttons-left">
               {renderQuitButton()}
               {renderNextQuestionButton()}
@@ -161,7 +161,7 @@ export default function PromptBuilder(props: PromptBuilderProps) {
             <Box className="rustic-prompt-builder-buttons-right">
               {isReadyToGenerate && renderGenerateButton()}
             </Box>
-          </Stack>
+          </Box>
         )}
       </>
     )
@@ -171,7 +171,7 @@ export default function PromptBuilder(props: PromptBuilderProps) {
     return (
       <>
         {!isGeneratingPrompts && (
-          <Stack className="rustic-prompt-builder-buttons">
+          <Box className="rustic-prompt-builder-buttons">
             <Box className="rustic-prompt-builder-buttons-left">
               {renderQuitButton()}
             </Box>
@@ -179,7 +179,7 @@ export default function PromptBuilder(props: PromptBuilderProps) {
               {renderNextQuestionButton()}
               {isReadyToGenerate && renderGenerateButton()}
             </Box>
-          </Stack>
+          </Box>
         )}
       </>
     )
@@ -240,7 +240,7 @@ export default function PromptBuilder(props: PromptBuilderProps) {
   return (
     <Card variant="outlined" className="rustic-prompt-builder">
       {renderQuitDialog()}
-      <Stack direction="row" gap={1} alignItems="center">
+      <Box className="rustic-prompt-builder-header">
         {props.agentAvatar && (
           <Avatar
             sx={{
@@ -253,10 +253,10 @@ export default function PromptBuilder(props: PromptBuilderProps) {
         <Typography color="text.secondary">
           {props.agentName ? props.agentName : 'Prompt Builder'}
         </Typography>
-      </Stack>
+      </Box>
       <Divider className="rustic-prompt-builder-divider" />
 
-      <Stack className="rustic-prompt-builder-questions">
+      <Box className="rustic-prompt-builder-questions">
         {renderMessages()}
         {isLoading && (
           <CircularProgress
@@ -264,7 +264,7 @@ export default function PromptBuilder(props: PromptBuilderProps) {
             className="rustic-align-self-center"
           />
         )}
-      </Stack>
+      </Box>
 
       {isMobileView ? renderMobileButtons() : renderDesktopButtons()}
     </Card>

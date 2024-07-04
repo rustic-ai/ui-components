@@ -2,6 +2,12 @@
   padding: 24px;
 }
 
+.rustic-prompt-builder-header {
+  display: flex;
+  gap: 8px;
+  align-items: 'center';
+}
+
 .rustic-prompt-builder-avatar {
   width: 24px;
   height: 24px;
@@ -13,6 +19,8 @@
 }
 
 .rustic-prompt-builder-questions {
+  display: flex;
+  flex-direction: column;
   gap: 24px;
 }
 
@@ -22,7 +30,6 @@
 
 .rustic-prompt-builder-buttons {
   display: flex;
-  flex-direction: row;
   justify-content: space-between;
   margin-top: 56px;
   gap: 16px;
