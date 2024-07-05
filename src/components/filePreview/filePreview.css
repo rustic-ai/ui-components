@@ -8,11 +8,7 @@
   height: 56px;
 }
 
-.rustic-cursor-pointer {
-  cursor: pointer;
-}
-
-.rustic-pdf-viewer-modal {
+.rustic-file-preview-modal {
   width: 90vw;
   height: 90vh;
   display: flex;
@@ -20,12 +16,12 @@
   justify-self: center;
 }
 
-.rustic-pdf-viewer-modal .rustic-pdf-viewer-container {
+.rustic-file-preview-modal .rustic-modal-content {
   position: relative;
   width: 100%;
 }
 
-.rustic-pdf-viewer-container .rustic-close-button {
+.rustic-modal-content .rustic-close-button {
   position: absolute;
   top: 16px;
   right: 16px;

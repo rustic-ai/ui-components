@@ -1,4 +1,5 @@
 import './filePreview.css'
+import '../../index.css'
 
 import Card from '@mui/material/Card'
 import IconButton from '@mui/material/IconButton'
@@ -17,6 +18,13 @@ export interface FilePreviewProps {
   file: FileData
 }
 
+const supportedViewers: {
+  [key: string]: React.ComponentType<{ url: string }>
+} = {
+  pdf: PDFViewer,
+  // Add more mappings as needed for different file types
+}
+
 export default function FilePreview(
   props: React.PropsWithChildren<FilePreviewProps>
 ) {
@@ -33,13 +41,22 @@ export default function FilePreview(
     setIsModalOpen(false)
   }
 
-  const isPdfFile =
-    props.file.url && props.file.url.toLowerCase().endsWith('.pdf')
+  function getFileExtension(url: string): string {
+    const splittedUrl = url.split('.')
+    const extension = splittedUrl[splittedUrl.length - 1].toLowerCase()
+    return extension
+  }
+
+  const fileExtension = props.file.url && getFileExtension(props.file.url)
+  const ModalContentComponent = fileExtension
+    ? supportedViewers[fileExtension]
+    : null
+  const hasModalContent = !!ModalContentComponent
 
   return (
     <>
       <Card
-        className={`rustic-file-preview${isPdfFile ? ' rustic-cursor-pointer' : ''}`}
+        className={`rustic-file-preview${hasModalContent ? ' rustic-cursor-pointer' : ''}`}
         data-cy="file-preview"
         variant="outlined"
         sx={{ boxShadow: theme.shadows[1] }}
@@ -50,23 +67,24 @@ export default function FilePreview(
         </Typography>
         <div onClick={(e) => e.stopPropagation()}>{props.children}</div>
       </Card>
-      {isPdfFile && (
+
+      {hasModalContent && (
         <Modal
           open={isModalOpen}
           onClose={handleCloseModal}
-          className="rustic-pdf-viewer-modal"
+          className="rustic-file-preview-modal"
         >
-          <div className="rustic-pdf-viewer-container">
+          <div className="rustic-modal-content">
             <Tooltip title="Close">
               <IconButton
                 onClick={handleCloseModal}
                 className="rustic-close-button"
-                data-cy="pdf-viewer-close-button"
+                data-cy="viewer-close-button"
               >
                 <Icon name="close" />
               </IconButton>
             </Tooltip>
-            {props.file.url && <PDFViewer url={props.file.url} />}
+            {props.file.url && <ModalContentComponent url={props.file.url} />}
           </div>
         </Modal>
       )}

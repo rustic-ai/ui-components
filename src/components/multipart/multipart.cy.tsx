@@ -11,7 +11,7 @@ describe('Multipart Component', () => {
     text: 'This is a test message',
     files: [{ name: 'image.jpg' }, { name: 'document.pdf' }],
   }
-
+  const fileName = '[data-cy=file-name]'
   const filePreview = `[data-cy=file-preview]`
   supportedViewports.forEach((viewport) => {
     it(`renders text and file previews correctly on ${viewport} screen`, () => {
@@ -23,7 +23,7 @@ describe('Multipart Component', () => {
 
       props.files.forEach((file, index) => {
         cy.get(`${filePreview}:eq(${index})`).within(() => {
-          cy.get('[data-cy=file-name]').should(
+          cy.get(fileName).should(
             'contain',
             file.name.substring(0, maximumFileNameLength)
           )
@@ -56,9 +56,9 @@ describe('Multipart Component', () => {
         />
       )
 
-      cy.get('[data-cy=file-name]').click()
+      cy.get(fileName).click()
       cy.get('[data-cy=pdf-canvas]').should('be.visible')
-      cy.get('[data-cy=pdf-viewer-close-button]').click()
+      cy.get('[data-cy=viewer-close-button]').click()
       cy.get('[data-cy=pdf-canvas]').should('not.exist')
     })
   })
