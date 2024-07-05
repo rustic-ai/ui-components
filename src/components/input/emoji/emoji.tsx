@@ -5,14 +5,11 @@ import IconButton from '@mui/material/IconButton'
 import Popover from '@mui/material/Popover'
 import { useTheme } from '@mui/material/styles'
 import Tooltip from '@mui/material/Tooltip'
+import type Picker from 'emoji-picker-element/picker'
 import type { EmojiClickEvent } from 'emoji-picker-element/shared'
 import React, { useEffect, useRef, useState } from 'react'
 
 import Icon from '../../icon/icon'
-
-interface EmojiPickerElement extends HTMLElement {
-  database: { close: () => Promise<void> }
-}
 
 interface EmojiProps {
   onEmojiClick: (emoji: string) => void
@@ -22,8 +19,8 @@ interface EmojiProps {
 function Emoji(props: EmojiProps) {
   const theme = useTheme()
   const buttonRef = useRef<HTMLButtonElement>(null)
+  const emojiPickerRef = useRef<Picker | null>(null)
   const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false)
-  const [emojiPicker, setEmojiPicker] = useState<Element | null>(null)
 
   const emojiPickerStyles = {
     '--indicator-color': theme.palette.divider,
@@ -38,24 +35,17 @@ function Emoji(props: EmojiProps) {
 
   function handleEmojiPickerClose() {
     setIsEmojiPickerOpen(false)
-    if (emojiPicker) {
-      setEmojiPicker(null)
-    }
   }
 
   function handleEmojiClick(event: EmojiClickEvent) {
     event.detail.unicode && props.onEmojiClick(event.detail.unicode)
-    const pickerElement = document.querySelector(
-      'emoji-picker'
-    ) as EmojiPickerElement
-    pickerElement?.database.close().catch((error) => {
-      console.error('Failed to close database:', error)
-    })
     handleEmojiPickerClose()
   }
 
   useEffect(() => {
-    if (isEmojiPickerOpen && typeof window !== 'undefined') {
+    const pickerElement = emojiPickerRef.current
+
+    if (!pickerElement && typeof window !== 'undefined') {
       import('emoji-picker-element')
         .then((module) => {
           const Picker = module.Picker
@@ -68,17 +58,27 @@ function Emoji(props: EmojiProps) {
             picker.style.setProperty(key, emojiPickerStyles[key])
           })
 
-          setEmojiPicker(picker)
+          emojiPickerRef.current = picker
         })
         .catch((error) => {
           console.error('Failed to load emoji picker', error)
         })
-
-      return () => {
-        setEmojiPicker(null)
-      }
     }
-  }, [isEmojiPickerOpen])
+
+    if (isEmojiPickerOpen && pickerElement) {
+      pickerElement.addEventListener('emoji-click', handleEmojiClick)
+    }
+
+    return () => {
+      pickerElement?.removeEventListener('emoji-click', handleEmojiClick)
+    }
+  }, [isEmojiPickerOpen, props.onEmojiClick])
+
+  function appendPicker(el: HTMLDivElement | null) {
+    if (el && emojiPickerRef.current && !el.contains(emojiPickerRef.current)) {
+      el.appendChild(emojiPickerRef.current)
+    }
+  }
 
   return (
     <div>
@@ -93,7 +93,7 @@ function Emoji(props: EmojiProps) {
           <Icon name="Mood" />
         </IconButton>
       </Tooltip>
-      {emojiPicker && (
+      {emojiPickerRef.current && (
         <Popover
           open={isEmojiPickerOpen}
           anchorEl={buttonRef.current}
@@ -110,7 +110,7 @@ function Emoji(props: EmojiProps) {
           <div
             data-cy="emoji-picker"
             className="rustic-emoji-picker"
-            ref={(el) => el && el.appendChild(emojiPicker)}
+            ref={appendPicker}
           ></div>
         </Popover>
       )}
