@@ -7,3 +7,26 @@
   width: 220px;
   height: 56px;
 }
+
+.rustic-cursor-pointer {
+  cursor: pointer;
+}
+
+.rustic-pdf-viewer-modal {
+  width: 90vw;
+  height: 90vh;
+  display: flex;
+  align-self: center;
+  justify-self: center;
+}
+
+.rustic-pdf-viewer-modal .rustic-pdf-viewer-container {
+  position: relative;
+  width: 100%;
+}
+
+.rustic-pdf-viewer-container .rustic-close-button {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+}

@@ -1,7 +1,10 @@
 import React from 'react'
 
 import { supportedViewports } from '../../../cypress/support/variables'
+import { setPdfWorkerSrc } from '../pdfViewer/pdfViewer'
 import Multipart from './multipart'
+
+setPdfWorkerSrc('/files/pdf.worker.mjs')
 
 describe('Multipart Component', () => {
   const props = {
@@ -45,6 +48,18 @@ describe('Multipart Component', () => {
       )
 
       cy.get('[data-cy=download-button]').should('be.visible')
+    })
+    it(`can open and close the pdfViewer for pdf file on ${viewport} screen`, () => {
+      cy.mount(
+        <Multipart
+          files={[{ name: 'pdfExample.pdf', url: '/files/pdfExample.pdf' }]}
+        />
+      )
+
+      cy.get('[data-cy=file-name]').click()
+      cy.get('[data-cy=pdf-canvas]').should('be.visible')
+      cy.get('[data-cy=pdf-viewer-close-button]').click()
+      cy.get('[data-cy=pdf-canvas]').should('not.exist')
     })
   })
 })

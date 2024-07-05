@@ -54,8 +54,8 @@ export const FileWithURL = {
   args: {
     files: [
       {
-        name: 'image.png',
-        url: 'images/image-component-example.png',
+        name: 'pdfExample.pdf',
+        url: 'files/pdfExample.pdf',
       },
     ],
   },
