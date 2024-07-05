@@ -388,10 +388,11 @@ export interface WeatherProps extends WeatherData {
 
 export interface PromptBuilderProps
   extends Omit<
-      MessageSpaceProps,
-      'getActionsComponent' | 'getProfileComponent' | 'scrollDownLabel'
-    >,
-    ConversationProps {
+    MessageSpaceProps,
+    'getActionsComponent' | 'getProfileComponent' | 'scrollDownLabel'
+  > {
+  /** Message id of the message that invokes the prompt builder. */
+  messageId: string
   /** Function to close the prompt builder. This will be called when the user quits or after generating a prompt. */
   onClose: () => void
   /** Name of the agent participating in the conversation. */

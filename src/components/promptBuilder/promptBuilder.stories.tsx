@@ -26,18 +26,52 @@ const meta: Meta<React.ComponentProps<typeof PromptBuilder>> = {
 }
 
 meta.argTypes = {
-  conversationId: {
-    description: 'Id of the current conversation.',
-  },
-  messageId: {
-    description: 'Message id of the message that invokes the prompt builder.',
-  },
   ws: {
+    type: { name: 'string', required: true },
     description:
       'WebSocket connection to send and receive messages to and from a backend.',
+    table: {
+      type: {
+        summary: 'WebSocketClient\n',
+        detail:
+          'A websocket client with supports the following methods:\n' +
+          'send: (msg: Message) => void\n' +
+          'close: () => void\n' +
+          'reconnect: () => void',
+      },
+    },
   },
   sender: {
-    description: 'Current user.',
+    description: 'The sender of the message.',
+    type: { name: 'object', required: true, value: {} },
+    table: {
+      type: {
+        summary: 'Sender',
+        detail:
+          'id: String representing sender id.\n' +
+          'name: Optional string of sender name.',
+      },
+    },
+  },
+  supportedElements: {
+    description:
+      'A component map contains message formats as keys and their corresponding React components as values.',
+    type: { name: 'object', required: true, value: {} },
+    table: {
+      type: {
+        summary: 'ComponentMap',
+      },
+    },
+  },
+  messages: {
+    description:
+      'An array of messages to be rendered. See `MessageSpace` for more details about the `ThreadableMessage` object.',
+    type: { name: 'object', required: false, value: {} },
+    table: {
+      type: {
+        summary: 'ThreadableMessage[]',
+      },
+    },
   },
 }
 
