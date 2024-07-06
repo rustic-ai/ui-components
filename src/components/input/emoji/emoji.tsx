@@ -19,7 +19,7 @@ interface EmojiProps {
 function Emoji(props: EmojiProps) {
   const theme = useTheme()
   const buttonRef = useRef<HTMLButtonElement>(null)
-  const emojiPickerRef = useRef<Picker | null>(null)
+  const emojiRef = useRef<Picker | null>(null)
   const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false)
 
   const emojiPickerStyles = {
@@ -43,40 +43,38 @@ function Emoji(props: EmojiProps) {
   }
 
   useEffect(() => {
-    const pickerElement = emojiPickerRef.current
-
-    if (!pickerElement && typeof window !== 'undefined') {
+    if (!emojiRef.current && typeof window !== 'undefined') {
       import('emoji-picker-element')
         .then((module) => {
           const Picker = module.Picker
           const picker = new Picker()
           const themeClass = theme.palette.mode === 'dark' ? 'dark' : 'light'
           picker.classList.add(themeClass)
-          picker.addEventListener('emoji-click', handleEmojiClick)
 
           Object.keys(emojiPickerStyles).forEach((key) => {
             picker.style.setProperty(key, emojiPickerStyles[key])
           })
 
-          emojiPickerRef.current = picker
+          emojiRef.current = picker
         })
         .catch((error) => {
           console.error('Failed to load emoji picker', error)
         })
     }
+  }, [])
 
-    if (isEmojiPickerOpen && pickerElement) {
-      pickerElement.addEventListener('emoji-click', handleEmojiClick)
+  useEffect(() => {
+    if (emojiRef.current) {
+      emojiRef.current.addEventListener('emoji-click', handleEmojiClick)
     }
-
     return () => {
-      pickerElement?.removeEventListener('emoji-click', handleEmojiClick)
+      emojiRef.current?.removeEventListener('emoji-click', handleEmojiClick)
     }
   }, [isEmojiPickerOpen, props.onEmojiClick])
 
   function appendPicker(el: HTMLDivElement | null) {
-    if (el && emojiPickerRef.current && !el.contains(emojiPickerRef.current)) {
-      el.appendChild(emojiPickerRef.current)
+    if (el && emojiRef.current && !el.contains(emojiRef.current)) {
+      el.appendChild(emojiRef.current)
     }
   }
 
@@ -93,7 +91,7 @@ function Emoji(props: EmojiProps) {
           <Icon name="Mood" />
         </IconButton>
       </Tooltip>
-      {emojiPickerRef.current && (
+      {emojiRef.current && (
         <Popover
           open={isEmojiPickerOpen}
           anchorEl={buttonRef.current}
