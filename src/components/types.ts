@@ -261,6 +261,13 @@ export interface MultipartFormat extends DataFormat {
   files: FileData[]
   /** Text content sent along with the files. */
   text?: string
+  /**
+   * An object mapping file extensions to their respective viewer components.
+   * Each key represents a file type (e.g., 'pdf', 'jpg'), and the corresponding value is a React component
+   * that takes a `url` prop and renders the appropriate viewer for that file type. This prop is used to decide
+   * which viewer component should be used to open and display the file within the modal.
+   */
+  supportedViewers?: { [key: string]: React.ComponentType<{ url: string }> }
 }
 
 export type MultipartData = MultipartFormat & Updates<MultipartFormat>

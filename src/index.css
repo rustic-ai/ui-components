@@ -23,3 +23,7 @@ code {
   gap: 8px;
   flex-wrap: wrap;
 }
+
+.rustic-cursor-pointer {
+  cursor: pointer;
+}
