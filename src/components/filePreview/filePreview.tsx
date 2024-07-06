@@ -16,6 +16,7 @@ import type { FileData } from '../types'
 
 export interface FilePreviewProps {
   file: FileData
+  supportedViewers?: { [key: string]: React.ComponentType<{ url: string }> }
 }
 
 const supportedViewers: {
@@ -41,16 +42,15 @@ export default function FilePreview(
     setIsModalOpen(false)
   }
 
-  function getFileExtension(url: string): string {
+  function getFileType(url: string): string {
     const splittedUrl = url.split('.')
     const extension = splittedUrl[splittedUrl.length - 1].toLowerCase()
     return extension
   }
 
-  const fileExtension = props.file.url && getFileExtension(props.file.url)
-  const ModalContentComponent = fileExtension
-    ? supportedViewers[fileExtension]
-    : null
+  const fileType = props.file.url && getFileType(props.file.url)
+  const ModalContentComponent =
+    fileType && props.supportedViewers ? props.supportedViewers[fileType] : null
   const hasModalContent = !!ModalContentComponent
 
   return (
@@ -90,4 +90,8 @@ export default function FilePreview(
       )}
     </>
   )
+}
+
+FilePreview.defaultProps = {
+  supportedViewers: supportedViewers,
 }
