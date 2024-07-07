@@ -11,12 +11,6 @@ const meta: Meta<React.ComponentProps<typeof PopoverMenu>> = {
   tags: ['autodocs'],
   parameters: {
     layout: 'centered',
-    docs: {
-      description: {
-        component:
-          'The `PopoverMenu` component is a versatile menu display component designed to simplify the presentation of menu items within your application. It provides a clean and customizable interface for rendering a list of menu items in a popup menu format.\n\nNote: `onClose` functionality is built into the component and will be triggered when the user clicks outside of the menu as well as menu items.',
-      },
-    },
   },
 }
 export default meta

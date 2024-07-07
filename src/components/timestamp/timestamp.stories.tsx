@@ -1,20 +1,16 @@
+import type { Meta } from '@storybook/react/*'
+
 import Timestamp from './timestamp'
 
-export default {
+const meta: Meta<React.ComponentProps<typeof Timestamp>> = {
   title: 'Rustic UI/Timestamp/Timestamp',
   component: Timestamp,
   tags: ['autodocs'],
   parameters: {
     layout: 'centered',
-    docs: {
-      description: {
-        component:
-          'The `Timestamp` component is responsible for displaying a timestamp in a visually consistent and formatted manner. It takes an ISO 8601 formatted timestamp as input and utilizes helper functions to format and render the timestamp.',
-      },
-    },
   },
 }
-
+export default meta
 function getYesterdayDate() {
   const today = new Date()
   const yesterday = new Date(today)

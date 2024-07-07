@@ -11,6 +11,7 @@ import Icon from '../icon/icon'
 import Text from '../text/text'
 import type { MultipartData } from '../types'
 
+/** The `Multipart` component is a versatile message format designed to accommodate both textual content and file attachments within a single message interface. */
 export default function Multipart(props: MultipartData) {
   function renderFiles() {
     const files = props.files.map((file, index) => {

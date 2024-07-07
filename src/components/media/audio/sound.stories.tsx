@@ -4,14 +4,6 @@ const meta = {
   title: 'Rustic UI/Audio/Sound',
   component: Sound,
   tags: ['autodocs'],
-  parameters: {
-    docs: {
-      description: {
-        component:
-          'The `Sound` component is an audio player designed for playing audio files in web applications. It provides controls for playback, volume adjustment, and playback rate modification. The component is suitable for embedding audio content with accompanying transcripts, making it accessible and user-friendly.',
-      },
-    },
-  },
 }
 
 export default meta

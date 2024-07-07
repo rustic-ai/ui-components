@@ -9,12 +9,6 @@ export default {
   tags: ['autodocs'],
   parameters: {
     layout: 'centered',
-    docs: {
-      description: {
-        component:
-          "The `Video` component is a customizable video player that provides essential controls for playback, volume adjustment, fullscreen mode, and more. It offers a seamless viewing experience for users while allowing developers to easily integrate and customize the player to fit their application's needs.",
-      },
-    },
   },
   decorators: [
     (Story: StoryFn) => {

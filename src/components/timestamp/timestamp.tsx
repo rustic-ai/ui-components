@@ -8,6 +8,7 @@ export interface TimestampProps {
   timestamp: string
 }
 
+/** The `Timestamp` component is responsible for displaying a timestamp in a visually consistent and formatted manner. It takes an ISO 8601 formatted timestamp as input and utilizes helper functions to format and render the timestamp. */
 const Timestamp = (props: TimestampProps) => {
   return (
     <Typography

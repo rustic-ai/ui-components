@@ -1,22 +1,17 @@
-import type { StoryFn } from '@storybook/react'
+import type { Meta, StoryFn } from '@storybook/react'
 import React from 'react'
 
 import Image from './image'
 
-export default {
+const meta: Meta<React.ComponentProps<typeof Image>> = {
   title: 'Rustic UI/Image/Image',
   component: Image,
   tags: ['autodocs'],
   parameters: {
     layout: 'centered',
-    docs: {
-      description: {
-        component:
-          'The `Image` component facilitates the display of images, providing loading indication and error handling capabilities. It supports customization of image dimensions and alternative text, ensuring accessibility and a seamless user experience. Supported image formats: jpeg, png, gif, svg, webp, AVIF, APNG.',
-      },
-    },
   },
 }
+export default meta
 
 export const Default = {
   args: {

@@ -31,6 +31,7 @@ function SortIcon() {
   return <Icon name="expand_all" />
 }
 
+/** The `Table` component provides a simple and customizable table display for presenting structured data. It supports rendering data rows with associated headers and allows for easy customization of table title, description, and column headers. Pagination is enabled when the number of rows exceeds 10. */
 export default function Table(props: TableData) {
   if (props.data.length === 0) {
     return <Typography variant="body2">No data available</Typography>
