@@ -120,6 +120,7 @@ export default function PromptBuilder(props: PromptBuilderProps) {
         endIcon={<Icon name="chevron_right" />}
         onClick={handleNextQuestion}
         disabled={!lastAnswerMessage}
+        data-cy="next-question-button"
       >
         Next question
       </Button>
@@ -133,6 +134,7 @@ export default function PromptBuilder(props: PromptBuilderProps) {
         color="secondary"
         onClick={handleGeneratePrompts}
         disabled={isLoading}
+        data-cy="generate-button"
       >
         Generate
       </Button>
@@ -145,6 +147,7 @@ export default function PromptBuilder(props: PromptBuilderProps) {
         variant="outlined"
         startIcon={<Icon name="close" />}
         onClick={() => setIsAttemptingToQuit(true)}
+        data-cy="quit-button"
       >
         Quit
       </Button>
@@ -204,6 +207,7 @@ export default function PromptBuilder(props: PromptBuilderProps) {
         <DialogTitle
           id="quit-dialog-title"
           className="rustic-align-self-center"
+          data-cy="quit-dialog-title"
         >
           Are you sure?
         </DialogTitle>
@@ -224,6 +228,7 @@ export default function PromptBuilder(props: PromptBuilderProps) {
             variant="outlined"
             startIcon={<Icon name="close" />}
             onClick={handleQuit}
+            data-cy="confirm-quit-button"
           >
             Quit
           </Button>
@@ -231,6 +236,7 @@ export default function PromptBuilder(props: PromptBuilderProps) {
             variant="contained"
             color="secondary"
             onClick={() => setIsAttemptingToQuit(false)}
+            data-cy="continue-build-button"
           >
             Continue build
           </Button>
@@ -240,7 +246,11 @@ export default function PromptBuilder(props: PromptBuilderProps) {
   }
 
   return (
-    <Card variant="outlined" className="rustic-prompt-builder">
+    <Card
+      variant="outlined"
+      className="rustic-prompt-builder"
+      data-cy="prompt-builder"
+    >
       {renderQuitDialog()}
       <Box className="rustic-prompt-builder-header">
         {props.agentAvatar && (
@@ -252,7 +262,7 @@ export default function PromptBuilder(props: PromptBuilderProps) {
             src={props.agentAvatar}
           />
         )}
-        <Typography color="text.secondary">
+        <Typography color="text.secondary" data-cy="component-title">
           {props.agentName ? props.agentName : 'Prompt Builder'}
         </Typography>
       </Box>
@@ -264,6 +274,7 @@ export default function PromptBuilder(props: PromptBuilderProps) {
           <CircularProgress
             color="secondary"
             className="rustic-align-self-center"
+            data-cy="loading-spinner"
           />
         )}
       </Box>
