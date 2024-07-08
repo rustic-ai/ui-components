@@ -18,7 +18,7 @@ export default function Action(props: ActionProps) {
   return (
     <Tooltip title={props.label}>
       <IconButton
-        data-cy={`${props.label.toLowerCase().replace(' ', '-')}-button`}
+        data-cy={`${props.label.toLowerCase().replace(/\s+/g, '-')}-button`}
         color="inherit"
         aria-label={props.label}
         onClick={(
