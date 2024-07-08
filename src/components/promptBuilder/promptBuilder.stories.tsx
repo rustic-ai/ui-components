@@ -3,7 +3,7 @@ import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import { Stack } from '@mui/system'
 import type { Meta, StoryFn } from '@storybook/react/*'
-import React, { useRef, useState } from 'react'
+import React, { useState } from 'react'
 import { v4 as getUUID } from 'uuid'
 
 import Question from '../question/question'
@@ -26,7 +26,7 @@ const meta: Meta<React.ComponentProps<typeof PromptBuilder>> = {
   decorators: [
     (Story: StoryFn) => {
       return (
-        <div style={{ width: 'clamp(250px,50vw,600px)' }}>
+        <div style={{ width: 'clamp(300px,50vw,600px)' }}>
           <Story />
         </div>
       )
@@ -90,7 +90,7 @@ const promptBuilderAgent = { name: 'Prompt Builder', id: '2' }
 const user = { name: 'You', id: '1' }
 
 function CustomTextInput(props: Omit<QuestionProps, 'options'>) {
-  const messageRef = useRef<HTMLInputElement>()
+  const [messageText, setMessageText] = useState('')
   const [isSubmitted, setIsSubmitted] = useState(false)
 
   function handleSendMessage(): void {
@@ -101,7 +101,7 @@ function CustomTextInput(props: Omit<QuestionProps, 'options'>) {
       sender: props.sender,
       conversationId: props.conversationId,
       format: 'text',
-      data: { text: messageRef.current?.value },
+      data: { text: messageText },
       inReplyTo: props.messageId,
     }
 
@@ -113,14 +113,15 @@ function CustomTextInput(props: Omit<QuestionProps, 'options'>) {
     <Stack spacing={1}>
       <Typography variant="subtitle2">{props.title}</Typography>
       <TextField
-        InputProps={{ ref: messageRef }}
+        value={messageText}
+        onChange={(e) => setMessageText(e.target.value)}
         disabled={isSubmitted}
         multiline
         rows={2}
       />
       <Button
         onClick={handleSendMessage}
-        disabled={isSubmitted}
+        disabled={isSubmitted || !messageText.trim()}
         variant="outlined"
         size="small"
       >
