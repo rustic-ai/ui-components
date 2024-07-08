@@ -15,6 +15,11 @@ import { useEffect, useRef, useState } from 'react'
 import Icon from '../icon/icon'
 import type { LocationFormat } from '../types'
 
+/** The `OpenLayersMap` component supports OpenStreetMap tiles where users can easily zoom in and zoom out to navigate the map effectively. The `OpenLayersMap` component uses the [OpenLayers](https://openlayers.org/en/latest/apidoc/module-ol_Map-Map.html) map library.
+ *
+ * Height and width are configured through the class `rustic-open-layers-map-canvas`.
+ *
+ * Note: If you are not seeing the component or come across the error "An error occurred while loading the map", ensure that `@import '@rustic-ai/ui-components/dist/index.css';` is at the top of your `index.css` file. */
 export default function OpenLayersMap(props: LocationFormat) {
   const [errorMessage, setErrorMessage] = useState('')
   const mapTargetElement = useRef<HTMLDivElement>(null)

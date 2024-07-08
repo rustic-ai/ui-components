@@ -1,7 +1,9 @@
 /* eslint-disable no-magic-numbers */
+import type { Meta } from '@storybook/react/*'
+
 import RechartsTimeSeries from './rechartsTimeSeries'
 
-export default {
+const meta: Meta<React.ComponentProps<typeof RechartsTimeSeries>> = {
   title: 'Rustic UI/Visualization/Chart/Recharts Time Series',
   component: RechartsTimeSeries,
   tags: ['autodocs'],
@@ -33,14 +35,10 @@ export default {
   },
   parameters: {
     layout: 'centered',
-    docs: {
-      description: {
-        component:
-          'The `RechartsTimeSeries` component integrates the [Recharts](https://recharts.org/en-US/api) library to facilitate the visualization of time-based data through various chart types such as line charts, bar charts, and area charts. It supports customizations for reference lines, tooltips, and chart type toggling, providing a flexible and interactive data representation solution.',
-      },
-    },
   },
 }
+
+export default meta
 
 const chartColors = ['#648FFF', '#785EF0', '#DC267F', '#FE6100', '#FFB000']
 

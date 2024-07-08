@@ -18,13 +18,6 @@ export default {
   },
   parameters: {
     layout: 'centered',
-    docs: {
-      description: {
-        component:
-          'There are currently 2 text components available, `Text` and `StreamingText`.\n\nThe `Text` component renders text content in a simple and straightforward manner, without any additional features or capabilities. It is suitable for rendering static text that does not require dynamic updates or streams of text data.\n\nOn the other hand, the `StreamingText` component is designed to handle streams of text data, allowing for dynamic updates to the displayed text content. It supports real-time updates of text content through the `updatedData` attribute, enabling the continuous appending of new text data to the existing content.\n\n ' +
-          'Tip: Use `Text` when displaying static content, and use `StreamingText` when its being updated dynamically and new content should be appended to existing content.',
-      },
-    },
   },
 }
 

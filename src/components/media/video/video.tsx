@@ -21,6 +21,7 @@ import { FullscreenButton, MiniPlayerButton } from '../controls/videoControls'
 import TimeIndicator from '../timeIndicator/timeIndicator'
 import Transcript from '../transcript/transcript'
 
+/** The `Video` component is a customizable video player that provides essential controls for playback, volume adjustment, fullscreen mode, and more. It offers a seamless viewing experience for users while allowing developers to easily integrate and customize the player to fit their application's needs. */
 export default function Video(props: VideoFormat) {
   const [isTranscriptVisible, setIsTranscriptVisible] = useState(false)
   const [areCaptionsVisible, setAreCaptionsVisible] = useState(false)

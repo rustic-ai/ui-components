@@ -20,6 +20,7 @@ import { MediaIconButton } from '../controls/mediaIconButton'
 import TimeIndicator from '../timeIndicator/timeIndicator'
 import Transcript from '../transcript/transcript'
 
+/** The `Sound` component is an audio player designed for playing audio files in web applications. It provides controls for playback, volume adjustment, and playback rate modification. The component is suitable for embedding audio content with accompanying transcripts, making it accessible and user-friendly. */
 export default function Sound(props: AudioFormat) {
   const [isTranscriptShown, setIsTranscriptShown] = useState(false)
   const [areCaptionsShown, setAreCaptionsShown] = useState(false)

@@ -1,22 +1,18 @@
-import type { StoryFn } from '@storybook/react'
+import type { Meta, StoryFn } from '@storybook/react'
 import React from 'react'
 
 import YoutubeVideo from './youtubeVideo'
 
-export default {
+const meta: Meta<React.ComponentProps<typeof YoutubeVideo>> = {
   title: 'Rustic UI/Video/Youtube Video',
   component: YoutubeVideo,
   tags: ['autodocs'],
   parameters: {
     layout: 'centered',
-    docs: {
-      description: {
-        component:
-          'The `YoutubeVideo` component enables the embedding of YouTube videos, providing a seamless playback experience.',
-      },
-    },
   },
 }
+
+export default meta
 
 const youtubeVideoId = 'MtN1YnoL46Q'
 

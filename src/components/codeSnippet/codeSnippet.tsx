@@ -10,6 +10,13 @@ import React, { useEffect, useRef } from 'react'
 
 import type { CodeData } from '../types'
 
+/** The `CodeSnippet` component, powered by [CodeMirror](https://codemirror.net/), enables displaying code blocks with syntax highlighting for [various programming languages](https://codemirror.net/5/mode/). For further customization of the component's theme, refer to the [styling guide](https://codemirror.net/examples/styling/) provided by the CodeMirror library.
+
+* Note: CodeMirror libraries are not bundled, so they must be included in the application's build process. You can install them using npm:
+
+* ```typescript
+* npm i @codemirror/language @codemirror/language-data @codemirror/state @codemirror/theme-one-dark @codemirror/view
+* ``` */
 export default function CodeSnippet(props: CodeData) {
   const codeSnippetContainer = useRef<HTMLDivElement>(null)
   const editorView = useRef<EditorView>()
