@@ -9,8 +9,7 @@ export interface TextToSpeechProps {
 }
 
 export default function TextToSpeech(props: TextToSpeechProps) {
-  const [tooltipContent, setTooltipContent] = useState('Text to speech')
-  const [isPlaying, setIsPlaying] = useState(false)
+  const [tooltipContent, setTooltipContent] = useState('Start reading aloud')
 
   const content = [
     props.message.data.title,
@@ -22,18 +21,15 @@ export default function TextToSpeech(props: TextToSpeechProps) {
   const utterance = new SpeechSynthesisUtterance(combinedText)
 
   function handleOnClick() {
-    if (isPlaying) {
+    if (window.speechSynthesis.speaking) {
       window.speechSynthesis.cancel()
-      setIsPlaying(false)
-      setTooltipContent('Text to speech')
+      setTooltipContent('Start reading aloud')
     } else {
       utterance.onend = () => {
-        setIsPlaying(false)
-        setTooltipContent('Text to speech')
+        setTooltipContent('Start reading aloud')
       }
       window.speechSynthesis.speak(utterance)
-      setIsPlaying(true)
-      setTooltipContent('Stop speech')
+      setTooltipContent('Stop reading aloud')
     }
   }
 

@@ -15,14 +15,14 @@ describe('TextToSpeech Component', () => {
       text: 'The main message text.',
     },
   }
-  const textToSpeechButton = '[data-cy="text-to-speech-button"]'
+  const textToSpeechButton = '[data-cy="start-reading-aloud-button"]'
   const tooltip = '[role="tooltip"]'
   it('shows tooltips on hover', () => {
     cy.mount(<TextToSpeech message={mockMessage} />)
     cy.get(textToSpeechButton).trigger('mouseover')
-    cy.get(tooltip).should('be.visible').and('have.text', 'Text to speech')
+    cy.get(tooltip).should('be.visible').and('have.text', 'Start reading aloud')
     cy.get(textToSpeechButton).click()
-    cy.get(tooltip).should('be.visible').and('have.text', 'Stop speech')
+    cy.get(tooltip).should('be.visible').and('have.text', 'Stop reading aloud')
   })
 
   it('combines text content correctly', () => {
