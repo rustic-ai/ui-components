@@ -82,7 +82,7 @@ export default function PromptBuilder(props: PromptBuilderProps) {
 
     const delay = 3000
     setTimeout(() => {
-      props.onClose()
+      props.onGenerate()
     }, delay)
   }
 

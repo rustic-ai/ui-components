@@ -393,6 +393,8 @@ export interface PromptBuilderProps
   > {
   /** Message id of the message that invokes the prompt builder. */
   messageId: string
+  /** Function to generate a prompt. This will be called when the user clicks on the generate button. */
+  onGenerate: () => void
   /** Function to close the prompt builder. This will be called when the user quits or after generating a prompt. */
   onClose: () => void
   /** Name of the agent participating in the conversation. */
