@@ -47,15 +47,17 @@ export default function PromptBuilder(props: PromptBuilderProps) {
   }
 
   useEffect(() => {
-    if (lastMessage && lastMessage.sender !== props.sender) {
-      setIsLoading(false)
-    }
+    if (messages.length > 0) {
+      if (lastMessage && lastMessage.sender !== props.sender) {
+        setIsLoading(false)
+      }
 
-    if (
-      lastMessage.format === 'promptBuilder' &&
-      lastMessage.data.isLastQuestion
-    ) {
-      setIsReadyToGenerate(true)
+      if (
+        lastMessage.format === 'promptBuilder' &&
+        lastMessage.data.isLastQuestion
+      ) {
+        setIsReadyToGenerate(true)
+      }
     }
   }, [props.messages?.length])
 
