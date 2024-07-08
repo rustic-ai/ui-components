@@ -1,10 +1,19 @@
+import Button from '@mui/material/Button'
+import TextField from '@mui/material/TextField'
+import Typography from '@mui/material/Typography'
+import { Stack } from '@mui/system'
 import type { Meta, StoryFn } from '@storybook/react/*'
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { v4 as getUUID } from 'uuid'
 
 import Question from '../question/question'
 import Text from '../text/text'
-import type { MessageData, ThreadableMessage } from '../types'
+import type {
+  Message,
+  MessageData,
+  QuestionProps,
+  ThreadableMessage,
+} from '../types'
 import PromptBuilder from './promptBuilder'
 
 const meta: Meta<React.ComponentProps<typeof PromptBuilder>> = {
@@ -80,6 +89,47 @@ export default meta
 const promptBuilderAgent = { name: 'Prompt Builder', id: '2' }
 const user = { name: 'You', id: '1' }
 
+function CustomTextInput(props: Omit<QuestionProps, 'options'>) {
+  const messageRef = useRef<HTMLInputElement>()
+  const [isSubmitted, setIsSubmitted] = useState(false)
+
+  function handleSendMessage(): void {
+    const currentTime = new Date().toISOString()
+    const formattedMessage: Message = {
+      id: getUUID(),
+      timestamp: currentTime,
+      sender: props.sender,
+      conversationId: props.conversationId,
+      format: 'text',
+      data: { text: messageRef.current?.value },
+      inReplyTo: props.messageId,
+    }
+
+    props.ws.send(formattedMessage)
+    setIsSubmitted(true)
+  }
+
+  return (
+    <Stack spacing={1}>
+      <Typography variant="subtitle2">{props.title}</Typography>
+      <TextField
+        InputProps={{ ref: messageRef }}
+        disabled={isSubmitted}
+        multiline
+        rows={2}
+      />
+      <Button
+        onClick={handleSendMessage}
+        disabled={isSubmitted}
+        variant="outlined"
+        size="small"
+      >
+        Submit
+      </Button>
+    </Stack>
+  )
+}
+
 const args = {
   sender: user,
   conversationId: '1',
@@ -88,6 +138,7 @@ const args = {
   supportedElements: {
     text: Text,
     question: Question,
+    textInput: CustomTextInput,
   },
 }
 
@@ -106,16 +157,9 @@ export const Default = {
   decorators: [
     (Story: StoryFn) => {
       const [messages, setMessages] = useState<ThreadableMessage[]>([
-        generateMessage('question', {
+        generateMessage('textInput', {
           title:
-            'Hi there! Let’s build a prompt together. Start by choosing a topic.',
-          options: [
-            'business',
-            'entertainment',
-            'health',
-            'politics',
-            'technology',
-          ],
+            'Hi there! Let’s build a prompt together. What is your question or topic?',
         }),
       ])
 
