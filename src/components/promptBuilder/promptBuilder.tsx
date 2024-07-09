@@ -23,7 +23,9 @@ import type { Message, PromptBuilderProps } from '../types'
 /**
 The `PromptBuilder` component is an interactive tool designed to help users construct enhanced prompts through guided conversations with an agent. It operates in a dedicated message space, supporting multiple message formats. The conversation is structured as a thread, with the initiating message serving as the parent. Users should be able to invoke the Prompt Builder via a button click or a text input command. Once activated, the agent guides the user step-by-step to create a detailed prompt, culminating in a "Generate Prompts" button for finalization or a "Next Question" option for further refinement.
 
-__Note:__ A message sent to the server is required to invoke the Prompt Builder. The `messageId` of this message will be used as the parent thread message of this conversation.
+Notes for implementation:
+- The Prompt Builder should be invoked with a message sent to the server. The `messageId` of this message will be used as the parent thread message of this conversation.
+- The user will be allowed to start generating prompts when a message has been received with format of `promptBuilder` and data field of `isLastQuestion` set to `true`.
  */
 export default function PromptBuilder(props: PromptBuilderProps) {
   const [isReadyToGenerate, setIsReadyToGenerate] = useState(false)
