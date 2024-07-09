@@ -83,11 +83,7 @@ export default function PromptBuilder(props: PromptBuilderProps) {
   function handleGeneratePrompts() {
     setIsGeneratingPrompts(true)
     setIsLoading(true)
-
-    const delay = 3000
-    setTimeout(() => {
-      props.onGenerate()
-    }, delay)
+    props.onGenerate()
   }
 
   function renderMessages() {
