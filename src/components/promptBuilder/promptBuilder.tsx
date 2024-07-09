@@ -163,9 +163,11 @@ export default function PromptBuilder(props: PromptBuilderProps) {
               {renderQuitButton()}
               {renderNextQuestionButton()}
             </Box>
-            <Box className="rustic-prompt-builder-buttons-right">
-              {isReadyToGenerate && renderGenerateButton()}
-            </Box>
+            {isReadyToGenerate && (
+              <Box className="rustic-prompt-builder-buttons-right">
+                {renderGenerateButton()}
+              </Box>
+            )}
           </Box>
         )}
       </>
