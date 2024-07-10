@@ -134,7 +134,7 @@ const baseTheme = createTheme({
       lineHeight: 1.66,
     },
     button: {
-      textTransform: 'capitalize',
+      textTransform: 'none',
     },
   },
   palette: {
@@ -215,7 +215,6 @@ const lightModePrimaryButtonBasestyle = {
   background: lightModePrimaryMainColor,
   color: whiteColor,
   fontWeight: 700,
-  textTransform: 'none',
   '&:hover': {
     background: lightModePrimaryLightColor,
   },
@@ -232,7 +231,6 @@ const lightModeSecondaryButtonBasestyle = {
   background: whiteColor,
   color: lightModeTextPrimaryColor,
   fontWeight: 700,
-  textTransform: 'none',
   border: `1px solid ${lightModePrimaryLightColor}`,
   '&:focus': {
     border: `4px solid ${lightModePrimaryLightColor}`,
@@ -548,7 +546,6 @@ const darkModePrimaryButtonBasestyle = {
   background: darkModePrimaryMainColor,
   color: blackColor,
   fontWeight: 700,
-  textTransform: 'none',
   '&:hover': {
     background: darkModePrimaryLightColor,
   },
@@ -565,7 +562,6 @@ const darkModeSecondaryButtonBasestyle = {
   background: darkModePaperColor,
   color: whiteColor,
   fontWeight: 700,
-  textTransform: 'none',
   border: `1px solid ${darkModePrimaryLightColor}`,
   '&:focus': {
     border: `4px solid ${darkModePrimaryLightColor}`,
