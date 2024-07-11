@@ -135,6 +135,7 @@ const baseTheme = createTheme({
     },
     button: {
       textTransform: 'none',
+      height: 'fit-content',
     },
   },
   palette: {
