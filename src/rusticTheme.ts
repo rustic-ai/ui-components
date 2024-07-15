@@ -135,7 +135,6 @@ const baseTheme = createTheme({
     },
     button: {
       textTransform: 'none',
-      height: 'fit-content',
     },
   },
   palette: {
@@ -212,10 +211,15 @@ const lightModeSecondarySelectedColor = '#FF692829'
 const lightModeSecondaryFocusColor = '#FF69281F'
 const lightModeSecondaryBorder = '#FF692880'
 
+const buttonGeneralStyle = {
+  fontWeight: 700,
+  height: 'fit-content',
+}
+
 const lightModePrimaryButtonBasestyle = {
+  ...buttonGeneralStyle,
   background: lightModePrimaryMainColor,
   color: whiteColor,
-  fontWeight: 700,
   '&:hover': {
     background: lightModePrimaryLightColor,
   },
@@ -229,9 +233,9 @@ const lightModePrimaryButtonBasestyle = {
 }
 
 const lightModeSecondaryButtonBasestyle = {
+  ...buttonGeneralStyle,
   background: whiteColor,
   color: lightModeTextPrimaryColor,
-  fontWeight: 700,
   border: `1px solid ${lightModePrimaryLightColor}`,
   '&:focus': {
     border: `4px solid ${lightModePrimaryLightColor}`,
@@ -544,9 +548,9 @@ const darkModePrimaryHoverColor = '#FFFCFB14'
 const darkModeActionActiveColor = '#FFFFFF4D'
 
 const darkModePrimaryButtonBasestyle = {
+  ...buttonGeneralStyle,
   background: darkModePrimaryMainColor,
   color: blackColor,
-  fontWeight: 700,
   '&:hover': {
     background: darkModePrimaryLightColor,
   },
@@ -560,9 +564,9 @@ const darkModePrimaryButtonBasestyle = {
 }
 
 const darkModeSecondaryButtonBasestyle = {
+  ...buttonGeneralStyle,
   background: darkModePaperColor,
   color: whiteColor,
-  fontWeight: 700,
   border: `1px solid ${darkModePrimaryLightColor}`,
   '&:focus': {
     border: `4px solid ${darkModePrimaryLightColor}`,
