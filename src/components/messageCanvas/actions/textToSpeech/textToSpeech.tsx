@@ -16,6 +16,7 @@ export default function TextToSpeech(props: TextToSpeechProps) {
     props.message.data.description,
     props.message.data.alt,
     props.message.data.text,
+    props.message.data.transcript,
   ]
   const combinedText = content.filter(Boolean).join(' ')
   const utterance = new SpeechSynthesisUtterance(combinedText)

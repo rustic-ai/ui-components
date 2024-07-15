@@ -71,6 +71,11 @@ export interface Updates<T extends DataFormat> {
   updatedData?: T[]
 }
 
+export interface VisualizationFormat extends DataFormat {
+  /** Descriptive text for providing context and meaning for the visualization. */
+  alt?: string
+}
+
 export interface TextFormat extends DataFormat {
   text: string
 }
@@ -108,7 +113,7 @@ export interface CalendarFormat extends DataFormat {
 
 export type CalendarData = CalendarFormat & Updates<CalendarFormat>
 
-export interface LocationFormat extends DataFormat {
+export interface LocationFormat extends VisualizationFormat {
   /** Longitude in decimal degrees. */
   longitude: number
   /** Latitude in decimal degrees. */
@@ -119,15 +124,13 @@ export interface LocationFormat extends DataFormat {
   description?: string
 }
 
-export interface ImageFormat extends DataFormat {
+export interface ImageFormat extends VisualizationFormat {
   /** Base64 encoded image or path to an image file. */
   src: string
   /** Width rendered in pixels. If neither width nor height are provided, the image will be set to be contained in the parent container. */
   width?: number
   /** Height rendered in pixels. */
   height?: number
-  /** Alternative text for the image used for assistive technology. */
-  alt?: string
 }
 
 export interface TableHeader {
@@ -195,7 +198,7 @@ export type TableConfig = {
   filter?: TableFilter[]
 }
 
-export interface TableFormat extends DataFormat {
+export interface TableFormat extends VisualizationFormat {
   /** Data to be displayed in the table. */
   data: Array<Record<string, string | number>>
   /** Optional array to set the order of columns and assign labels.
@@ -214,7 +217,7 @@ type VegaLiteOptions = EmbedOptions<string, Renderers> & {
   }
 }
 
-export interface VegaLiteFormat extends DataFormat {
+export interface VegaLiteFormat extends VisualizationFormat {
   /** Follow Vega-lite's [documentation](https://vega.github.io/vega-lite/) to provide a specification object. Schema should be included in the spec. Need to use 'container' for width or height for responsive chart. */
   spec: VisualizationSpec
   theme: {
@@ -226,7 +229,7 @@ export interface VegaLiteFormat extends DataFormat {
 
 export type VegaLiteData = VegaLiteFormat & Updates<VegaLiteFormat>
 
-export interface MermaidFormat extends DataFormat {
+export interface MermaidFormat extends VisualizationFormat {
   /** Diagram definition following [Mermaid's syntax](https://mermaid.js.org/intro/syntax-reference.html#syntax-structure). The use of [these](https://mermaid.js.org/intro/syntax-reference.html#diagram-breaking) words or symbols can break diagrams. */
   diagram: string
   /** Configuration for altering and customizing Mermaid Diagrams. Refer [Mermaid docs](https://mermaid.js.org/config/schema-docs/config.html) for details. */
@@ -256,7 +259,7 @@ export interface FileData {
   url?: string
 }
 
-export interface MultipartFormat extends DataFormat {
+export interface MultipartFormat extends VisualizationFormat {
   /** An array of file data. */
   files: FileData[]
   /** Text content sent along with the files. */
@@ -344,7 +347,7 @@ export interface ConversationProps {
   messageId: string
 }
 
-export interface QuestionFormat extends DataFormat {
+export interface QuestionFormat extends VisualizationFormat {
   /** Array of options to choose from. */
   options: (string | number)[]
 }
@@ -369,7 +372,7 @@ export interface Weather {
   }
 }
 
-export interface WeatherFormat extends DataFormat {
+export interface WeatherFormat extends VisualizationFormat {
   /** Array of daily weather data. */
   weather: Weather[]
   /** The location from which the weather data is from. */
