@@ -7,10 +7,9 @@ import '@finos/perspective-viewer/dist/css/pro-dark.css'
 
 import perspective, { type ViewConfig } from '@finos/perspective'
 import type { HTMLPerspectiveViewerElement } from '@finos/perspective-viewer'
-import type { Theme } from '@mui/material/styles'
+import { useTheme } from '@mui/material/styles'
 import Typography from '@mui/material/Typography'
 import Stack from '@mui/system/Stack'
-import useTheme from '@mui/system/useTheme'
 import React, { useEffect, useRef, useState } from 'react'
 
 import type {
@@ -62,7 +61,7 @@ function PerspectiveViz(props: TableData) {
   }
 
   const viewerRef = useRef<HTMLPerspectiveViewerElement | null>(null)
-  const rusticTheme: Theme = useTheme()
+  const rusticTheme = useTheme()
   const [hasError, setHasError] = useState<boolean>(false)
   const currentTheme = rusticTheme.palette.mode
   const perspectiveTheme = currentTheme === 'dark' ? 'Pro Dark' : 'Pro Light'

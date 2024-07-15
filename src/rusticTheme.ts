@@ -1,18 +1,46 @@
 /* eslint-disable no-magic-numbers */
-import type { Shadows } from '@mui/material/styles'
+import type { Palette, PaletteColor, Shadows } from '@mui/material/styles'
 import { createTheme, responsiveFontSizes } from '@mui/material/styles'
 import { deepmerge } from '@mui/utils'
 
 const blackColor = '#000000'
 const whiteColor = '#FFFFFF'
-const SecondaryMainColor = '#FF6928'
-const SecondaryDarkColor = '#E54500'
-const actionActiveColor = '#5F5C5A'
-const actionFocusColor = '#E7E7E7'
-const actionDisabledBackgroundColor = '#CFCFCF'
-const actionDisabledColor = '#A7A19E'
-const actionSelectedColor = '#D6D0D0'
-const dividerColor = '#D0C4BE'
+const secondaryMainColor = '#FF6928'
+const secondaryDarkColor = '#E54500'
+const secondaryLightColor = '#FF692899'
+const secondaryFocusVisibleColor = '#FF69284D'
+
+interface CustomPaletteColor {
+  focus?: string
+  hover?: string
+  selected?: string
+  focusVisible?: string
+  border?: string
+}
+
+declare module '@mui/material/styles' {
+  export interface RusticPalette extends Palette {
+    primary: PaletteColor & CustomPaletteColor
+    secondary: PaletteColor & CustomPaletteColor
+  }
+}
+
+declare module '@mui/material/Button' {
+  interface ButtonPropsVariantOverrides {
+    rusticPrimary: true
+    rusticSecondary: true
+  }
+}
+
+declare module '@mui/material/Chip' {
+  interface ChipPropsVariantOverrides {
+    rusticPrimary: true
+    rusticSecondary: true
+  }
+  interface ChipPropsSizeOverrides {
+    large: true
+  }
+}
 
 const baseTheme = createTheme({
   shape: {
@@ -106,7 +134,7 @@ const baseTheme = createTheme({
       lineHeight: 1.66,
     },
     button: {
-      textTransform: 'capitalize',
+      textTransform: 'none',
     },
   },
   palette: {
@@ -116,15 +144,18 @@ const baseTheme = createTheme({
     },
     error: {
       main: '#F82A43',
+      dark: '#C82639',
+      light: '#FF9BA7',
     },
     warning: {
       main: '#FFB800',
+      dark: '#DC8400',
+      light: '#FFDB7D',
     },
     info: {
       main: '#0094FF',
-    },
-    success: {
-      main: '#35A700',
+      dark: '#005A9B',
+      light: '#8CCFFF',
     },
   },
   shadows: [
@@ -140,74 +171,196 @@ const baseTheme = createTheme({
       }
     }),
   ] as Shadows,
-  components: {
-    MuiTableCell: {
-      styleOverrides: {
-        head: {
-          backgroundColor: actionFocusColor,
-        },
-        root: {
-          borderBottom: `1px solid ${dividerColor}`,
-          padding: '8px 16px',
-        },
-      },
-    },
-    MuiTableSortLabel: {
-      styleOverrides: {
-        root: {
-          '&.Mui-active': {
-            color: blackColor,
-            '& .MuiTableSortLabel-icon': {
-              color: blackColor,
-            },
-          },
-        },
-      },
-    },
-    MuiPopover: {
-      styleOverrides: {
-        paper: {
-          border: `1px solid ${dividerColor}`,
-          backgroundImage: 'none',
-        },
-      },
-    },
-  },
 })
 
-const lightModePrimaryMainColor = '#3D3834'
+const smallButtonAndChipStyle = {
+  fontSize: '12px',
+  lineHeight: 1.5,
+  letterSpacing: '0.5px',
+  padding: '4px 12px',
+}
+
+const mediumButtonAndChipStyle = {
+  fontSize: '14px',
+  lineHeight: 1.43,
+  letterSpacing: '0.25px',
+  padding: '8px 16px',
+}
+
+const largeButtonAndChipStyle = {
+  fontSize: '16px',
+  lineHeight: 1.75,
+  letterSpacing: '0.15px',
+  padding: '16px 24px',
+}
+
+const lightModeDividerColor = '#E1D9D5'
+const lightModeFocusColor = '#0000001F'
+const lightModePrimaryMainColor = '#2D2825'
+const lightModePrimaryLightColor = '#2D282599'
+const lightModeTextPrimaryColor = '#1E0C04'
+const lightModeDisabledColor = '#00000061'
+const lightModePrimaryHoverColor = '#2D282514'
+const lightModePrimarySelectedColor = '#2D282529'
+const lightModePrimaryFocusColor = '#2D28251F'
+const lightModePrimaryFocusVisibleColor = '#2D28254D'
+const lightModePrimaryBorder = '#2D282580'
+
+const lightModeSecondaryHoverColor = '#FF692814'
+const lightModeSecondarySelectedColor = '#FF692829'
+const lightModeSecondaryFocusColor = '#FF69281F'
+const lightModeSecondaryBorder = '#FF692880'
+
+const buttonGeneralStyle = {
+  fontWeight: 700,
+  height: 'fit-content',
+}
+
+const lightModePrimaryButtonBasestyle = {
+  ...buttonGeneralStyle,
+  background: lightModePrimaryMainColor,
+  color: whiteColor,
+  '&:hover': {
+    background: lightModePrimaryLightColor,
+  },
+  '&:focus': {
+    border: `4px solid ${lightModePrimaryLightColor}`,
+  },
+  '&.Mui-disabled': {
+    background: lightModeDisabledColor,
+    color: whiteColor,
+  },
+}
+
+const lightModeSecondaryButtonBasestyle = {
+  ...buttonGeneralStyle,
+  background: whiteColor,
+  color: lightModeTextPrimaryColor,
+  border: `1px solid ${lightModePrimaryLightColor}`,
+  '&:focus': {
+    border: `4px solid ${lightModePrimaryLightColor}`,
+  },
+  '&.Mui-disabled': {
+    border: `1px solid ${lightModeDisabledColor}`,
+    background: lightModeDisabledColor,
+    color: lightModeTextPrimaryColor,
+    opacity: 100,
+  },
+}
+const chipGeneralStyle = {
+  fontWeight: 700,
+  '& .MuiChip-label': {
+    padding: 0,
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
+  },
+}
+const lightModePrimaryChipBasestyle = {
+  background: lightModePrimaryFocusVisibleColor,
+  color: lightModeTextPrimaryColor,
+  border: `1px solid ${lightModePrimaryBorder}`,
+  '&:hover': {
+    border: `1px solid ${lightModePrimaryBorder}`,
+    background: lightModePrimaryHoverColor,
+  },
+  '&:focus': {
+    border: `3px solid ${lightModePrimaryBorder}`,
+    background: lightModePrimaryFocusColor,
+  },
+  '&.Mui-disabled': {
+    background: lightModeDisabledColor,
+    opacity: 100,
+    border: 'none',
+    color: whiteColor,
+    '& .MuiChip-icon': {
+      color: whiteColor,
+    },
+  },
+  '& .MuiChip-icon': {
+    margin: '0px 8px 0px 0px',
+    color: lightModeTextPrimaryColor,
+  },
+  ...chipGeneralStyle,
+}
+
+const lightModeSecondaryChipBasestyle = {
+  background: whiteColor,
+  color: lightModeTextPrimaryColor,
+  border: `1px solid ${secondaryLightColor}`,
+  '&:focus': {
+    border: `4px solid ${secondaryLightColor}`,
+  },
+  '&.Mui-disabled': {
+    border: `1px solid ${secondaryLightColor}`,
+    background: secondaryFocusVisibleColor,
+    opacity: 100,
+  },
+  '& .MuiChip-icon': {
+    margin: '0px 8px 0px 0px',
+    color: lightModeTextPrimaryColor,
+  },
+  ...chipGeneralStyle,
+}
 
 let rusticLightTheme = createTheme(
   deepmerge(baseTheme, {
     palette: {
       mode: 'light',
-      divider: dividerColor,
+      divider: lightModeDividerColor,
       text: {
-        primary: '#1E0C04',
+        primary: lightModeTextPrimaryColor,
         secondary: '#4E443F',
         disabled: '#9C9795',
       },
       primary: {
         main: lightModePrimaryMainColor,
-        dark: '#2D2825',
-        light: '#716865',
+        dark: blackColor,
+        light: lightModePrimaryLightColor,
+        contrastText: whiteColor,
+        focus: lightModePrimaryFocusColor,
+        focusVisible: lightModePrimaryFocusVisibleColor,
+        hover: lightModePrimaryHoverColor,
+        selected: lightModePrimarySelectedColor,
+        border: lightModePrimaryBorder,
       },
       secondary: {
-        main: SecondaryMainColor,
-        light: '#FFDBCC',
-        dark: SecondaryDarkColor,
+        main: secondaryMainColor,
+        light: secondaryLightColor,
+        dark: secondaryDarkColor,
+        contrastText: whiteColor,
+        focus: lightModeSecondaryFocusColor,
+        focusVisible: secondaryFocusVisibleColor,
+        hover: lightModeSecondaryHoverColor,
+        selected: lightModeSecondarySelectedColor,
+        border: lightModeSecondaryBorder,
       },
       background: {
         default: '#F7F6F5',
         paper: whiteColor,
       },
       action: {
-        active: actionActiveColor,
-        hover: '#EFEAEA',
-        selected: actionSelectedColor,
-        disabledBackground: actionDisabledBackgroundColor,
-        focus: actionFocusColor,
-        disabled: actionDisabledColor,
+        active: '#0000008F',
+        hover: '#00000014',
+        selected: '#00000029',
+        disabledBackground: lightModeFocusColor,
+        focus: lightModeFocusColor,
+        disabled: lightModeDisabledColor,
+      },
+      success: {
+        main: '#007F51',
+        dark: '#014F33',
+        light: '#00D788',
+        contrastText: whiteColor,
+      },
+      error: {
+        contrastText: whiteColor,
+      },
+      warning: {
+        contrastText: whiteColor,
+      },
+      info: {
+        contrastText: whiteColor,
       },
     },
     components: {
@@ -219,43 +372,318 @@ let rusticLightTheme = createTheme(
           },
         },
       },
+      MuiTableCell: {
+        styleOverrides: {
+          head: {
+            backgroundColor: lightModeFocusColor,
+          },
+          root: {
+            borderBottom: `1px solid ${lightModeDividerColor}`,
+            padding: '8px 16px',
+          },
+        },
+      },
+      MuiTableSortLabel: {
+        styleOverrides: {
+          root: {
+            '&.Mui-active': {
+              '& .MuiTableSortLabel-icon': {
+                color: lightModeTextPrimaryColor,
+              },
+            },
+          },
+        },
+      },
+      MuiPopover: {
+        styleOverrides: {
+          paper: {
+            border: `1px solid ${lightModeDividerColor}`,
+            backgroundImage: 'none',
+          },
+        },
+      },
+      MuiButton: {
+        variants: [
+          {
+            props: { variant: 'rusticPrimary', size: 'small' },
+            style: {
+              borderRadius: '8px',
+              ...smallButtonAndChipStyle,
+              ...lightModePrimaryButtonBasestyle,
+            },
+          },
+          {
+            props: { variant: 'rusticPrimary', size: 'medium' },
+            style: {
+              borderRadius: '12px',
+              ...mediumButtonAndChipStyle,
+              ...lightModePrimaryButtonBasestyle,
+            },
+          },
+          {
+            props: { variant: 'rusticPrimary', size: 'large' },
+            style: {
+              borderRadius: '16px',
+              ...largeButtonAndChipStyle,
+              ...lightModePrimaryButtonBasestyle,
+            },
+          },
+          {
+            props: { variant: 'rusticSecondary', size: 'small' },
+            style: {
+              borderRadius: '8px',
+              '&:hover': {
+                border: `1px solid ${blackColor}`,
+                background: whiteColor,
+              },
+              ...smallButtonAndChipStyle,
+              ...lightModeSecondaryButtonBasestyle,
+            },
+          },
+          {
+            props: { variant: 'rusticSecondary', size: 'medium' },
+            style: {
+              borderRadius: '12px',
+              '&:hover': {
+                border: `2px solid ${blackColor}`,
+                background: whiteColor,
+              },
+              ...mediumButtonAndChipStyle,
+              ...lightModeSecondaryButtonBasestyle,
+            },
+          },
+          {
+            props: { variant: 'rusticSecondary', size: 'large' },
+            style: {
+              borderRadius: '16px',
+              '&:hover': {
+                border: `2px solid ${blackColor}`,
+                background: whiteColor,
+              },
+              ...largeButtonAndChipStyle,
+              ...lightModeSecondaryButtonBasestyle,
+            },
+          },
+        ],
+      },
+      MuiChip: {
+        variants: [
+          {
+            props: { variant: 'rusticPrimary', size: 'small' },
+            style: {
+              borderRadius: '24px',
+              ...smallButtonAndChipStyle,
+              ...lightModePrimaryChipBasestyle,
+            },
+          },
+          {
+            props: { variant: 'rusticPrimary', size: 'medium' },
+            style: {
+              borderRadius: '32px',
+              ...mediumButtonAndChipStyle,
+              ...lightModePrimaryChipBasestyle,
+            },
+          },
+          {
+            props: { variant: 'rusticPrimary', size: 'large' },
+            style: {
+              borderRadius: '48px',
+              ...largeButtonAndChipStyle,
+              ...lightModePrimaryChipBasestyle,
+            },
+          },
+          {
+            props: { variant: 'rusticSecondary', size: 'small' },
+            style: {
+              borderRadius: '24px',
+              '&:hover': {
+                border: `1px solid ${secondaryMainColor}`,
+                background: whiteColor,
+              },
+              ...smallButtonAndChipStyle,
+              ...lightModeSecondaryChipBasestyle,
+            },
+          },
+          {
+            props: { variant: 'rusticSecondary', size: 'medium' },
+            style: {
+              borderRadius: '32px',
+              '&:hover': {
+                border: `2px solid ${secondaryMainColor}`,
+                background: whiteColor,
+              },
+              ...mediumButtonAndChipStyle,
+              ...lightModeSecondaryChipBasestyle,
+            },
+          },
+          {
+            props: { variant: 'rusticSecondary', size: 'large' },
+            style: {
+              borderRadius: '48px',
+              '&:hover': {
+                border: `2px solid ${secondaryMainColor}`,
+                background: whiteColor,
+              },
+              ...largeButtonAndChipStyle,
+              ...lightModeSecondaryChipBasestyle,
+            },
+          },
+        ],
+      },
     },
   })
 )
 
-const darkModePaperColor = '#2F2F2F'
+const darkModeFocusColor = '#FFFFFF1F'
+const darkModeDividerColor = '#E1D9D5'
+const darkModePaperColor = '#202020'
 const darkModePrimaryMainColor = '#FFFCFB'
+const darkModePrimaryLightColor = '#FFFCFB99'
+const darkModeContrastColor = '#000000DE'
+const darkModeActionDisabledColor = '#FFFFFF61'
+const darkModePrimaryBorderColor = '#FF692880'
+const darkModePrimaryFocusColor = '#FFFCFB1F'
+const darkModePrimaryFocusVisibleColor = '#FFFCFB4D'
+const darkModePrimaryHoverColor = '#FFFCFB14'
+const darkModeActionActiveColor = '#FFFFFF4D'
+
+const darkModePrimaryButtonBasestyle = {
+  ...buttonGeneralStyle,
+  background: darkModePrimaryMainColor,
+  color: blackColor,
+  '&:hover': {
+    background: darkModePrimaryLightColor,
+  },
+  '&:focus': {
+    border: `4px solid ${darkModePrimaryLightColor}`,
+  },
+  '&.Mui-disabled': {
+    background: darkModeActionActiveColor,
+    color: blackColor,
+  },
+}
+
+const darkModeSecondaryButtonBasestyle = {
+  ...buttonGeneralStyle,
+  background: darkModePaperColor,
+  color: whiteColor,
+  border: `1px solid ${darkModePrimaryLightColor}`,
+  '&:focus': {
+    border: `4px solid ${darkModePrimaryLightColor}`,
+  },
+  '&.Mui-disabled': {
+    border: `1px solid ${darkModeActionActiveColor}`,
+    background: darkModeActionActiveColor,
+    color: whiteColor,
+    opacity: 100,
+  },
+}
+
+const darkModePrimaryChipBasestyle = {
+  background: darkModePrimaryFocusVisibleColor,
+  color: whiteColor,
+  border: `1px solid ${darkModePrimaryBorderColor}`,
+  '&:hover': {
+    border: `1px solid ${darkModePrimaryBorderColor}`,
+    background: darkModePrimaryHoverColor,
+  },
+  '&:focus': {
+    border: `4px solid ${darkModePrimaryLightColor}`,
+    background: darkModePrimaryFocusColor,
+  },
+  '&.Mui-disabled': {
+    background: darkModeActionDisabledColor,
+    opacity: 100,
+    border: 'none',
+    color: darkModeContrastColor,
+    '& .MuiChip-icon': {
+      color: darkModeContrastColor,
+    },
+  },
+  ...chipGeneralStyle,
+  '& .MuiChip-icon': {
+    margin: '0px 8px 0px 0px',
+    color: whiteColor,
+  },
+}
+
+const darkModeSecondaryChipBasestyle = {
+  background: darkModePaperColor,
+  color: whiteColor,
+  border: `1px solid ${secondaryLightColor}`,
+  '&:focus': {
+    border: `4px solid ${secondaryLightColor}`,
+  },
+  '&.Mui-disabled': {
+    border: `1px solid ${secondaryFocusVisibleColor}`,
+    background: secondaryFocusVisibleColor,
+    opacity: 100,
+  },
+  '& .MuiChip-icon': {
+    margin: '0px 8px 0px 0px',
+    color: whiteColor,
+  },
+  ...chipGeneralStyle,
+}
+
 let rusticDarkTheme = createTheme(
   deepmerge(baseTheme, {
     palette: {
       mode: 'dark',
-      divider: dividerColor,
+      divider: darkModeDividerColor,
       primary: {
         main: darkModePrimaryMainColor,
-        dark: SecondaryDarkColor,
-        light: '#FFDBCC',
+        dark: whiteColor,
+        light: darkModePrimaryLightColor,
+        contrastText: darkModeContrastColor,
+        hover: darkModePrimaryHoverColor,
+        selected: '#FFFCFB29',
+        focus: darkModePrimaryFocusColor,
+        focusVisible: darkModePrimaryFocusVisibleColor,
+        border: darkModePrimaryBorderColor,
       },
       secondary: {
-        main: SecondaryMainColor,
-        light: '#FFA983',
-        dark: SecondaryDarkColor,
+        main: secondaryMainColor,
+        light: secondaryLightColor,
+        dark: secondaryDarkColor,
+        contrastText: darkModeContrastColor,
+        hover: '#FF692814',
+        selected: '#FF692829',
+        focus: '#FF69281F',
+        focusVisible: secondaryFocusVisibleColor,
+        border: '#FF692880',
       },
       background: {
-        default: '#040404',
+        default: '#2C2C2C',
         paper: darkModePaperColor,
       },
       text: {
         primary: whiteColor,
-        secondary: '#EBEBEB',
-        disabled: '#C1C1C1',
+        secondary: '#FFFFFFB2',
+        disabled: '#FFFFFF61',
       },
       action: {
-        active: actionActiveColor,
-        hover: '#9A9A9A',
-        selected: actionSelectedColor,
-        focus: actionFocusColor,
-        disabledBackground: actionDisabledBackgroundColor,
-        disabled: actionDisabledColor,
+        active: darkModeActionActiveColor,
+        hover: darkModeActionActiveColor,
+        selected: '#FFFFFF29',
+        focus: darkModeFocusColor,
+        disabledBackground: darkModeFocusColor,
+        disabled: darkModeActionDisabledColor,
+      },
+      success: {
+        main: '#00B775',
+        dark: '#01784D',
+        light: '#00E390',
+        contrastText: darkModeContrastColor,
+      },
+      error: {
+        contrastText: darkModeContrastColor,
+      },
+      warning: {
+        contrastText: darkModeContrastColor,
+      },
+      info: {
+        contrastText: darkModeContrastColor,
       },
     },
     components: {
@@ -263,9 +691,167 @@ let rusticDarkTheme = createTheme(
         styleOverrides: {
           tooltip: {
             backgroundColor: darkModePrimaryMainColor,
-            color: darkModePaperColor,
+            color: blackColor,
           },
         },
+      },
+      MuiTableSortLabel: {
+        styleOverrides: {
+          root: {
+            '&.Mui-active': {
+              '& .MuiTableSortLabel-icon': {
+                color: whiteColor,
+              },
+            },
+          },
+        },
+      },
+      MuiTableCell: {
+        styleOverrides: {
+          head: {
+            backgroundColor: darkModeFocusColor,
+          },
+          root: {
+            borderBottom: `1px solid ${darkModeDividerColor}`,
+            padding: '8px 16px',
+          },
+        },
+      },
+      MuiPopover: {
+        styleOverrides: {
+          paper: {
+            border: `1px solid ${darkModeDividerColor}`,
+            backgroundImage: 'none',
+          },
+        },
+      },
+      MuiChip: {
+        variants: [
+          {
+            props: { variant: 'rusticPrimary', size: 'small' },
+            style: {
+              borderRadius: '24px',
+              ...smallButtonAndChipStyle,
+              ...darkModePrimaryChipBasestyle,
+            },
+          },
+          {
+            props: { variant: 'rusticPrimary', size: 'medium' },
+            style: {
+              borderRadius: '32px',
+              ...mediumButtonAndChipStyle,
+              ...darkModePrimaryChipBasestyle,
+            },
+          },
+          {
+            props: { variant: 'rusticPrimary', size: 'large' },
+            style: {
+              borderRadius: '48px',
+              ...largeButtonAndChipStyle,
+              ...darkModePrimaryChipBasestyle,
+            },
+          },
+          {
+            props: { variant: 'rusticSecondary', size: 'small' },
+            style: {
+              borderRadius: '24px',
+              '&:hover': {
+                background: darkModePaperColor,
+                border: `1px solid ${secondaryMainColor}`,
+              },
+              ...smallButtonAndChipStyle,
+              ...darkModeSecondaryChipBasestyle,
+            },
+          },
+          {
+            props: { variant: 'rusticSecondary', size: 'medium' },
+            style: {
+              borderRadius: '32px',
+              '&:hover': {
+                background: darkModePaperColor,
+                border: `2px solid ${secondaryMainColor}`,
+              },
+              ...mediumButtonAndChipStyle,
+              ...darkModeSecondaryChipBasestyle,
+            },
+          },
+          {
+            props: { variant: 'rusticSecondary', size: 'large' },
+            style: {
+              borderRadius: '48px',
+              '&:hover': {
+                background: darkModePaperColor,
+                border: `2px solid ${secondaryMainColor}`,
+              },
+              ...largeButtonAndChipStyle,
+              ...darkModeSecondaryChipBasestyle,
+            },
+          },
+        ],
+      },
+      MuiButton: {
+        variants: [
+          {
+            props: { variant: 'rusticPrimary', size: 'small' },
+            style: {
+              borderRadius: '8px',
+              ...smallButtonAndChipStyle,
+              ...darkModePrimaryButtonBasestyle,
+            },
+          },
+          {
+            props: { variant: 'rusticPrimary', size: 'medium' },
+            style: {
+              borderRadius: '12px',
+              ...mediumButtonAndChipStyle,
+              ...darkModePrimaryButtonBasestyle,
+            },
+          },
+          {
+            props: { variant: 'rusticPrimary', size: 'large' },
+            style: {
+              borderRadius: '16px',
+              ...largeButtonAndChipStyle,
+              ...darkModePrimaryButtonBasestyle,
+            },
+          },
+          {
+            props: { variant: 'rusticSecondary', size: 'small' },
+            style: {
+              borderRadius: '8px',
+              '&:hover': {
+                background: darkModePaperColor,
+                border: `1px solid ${whiteColor}`,
+              },
+              ...smallButtonAndChipStyle,
+              ...darkModeSecondaryButtonBasestyle,
+            },
+          },
+          {
+            props: { variant: 'rusticSecondary', size: 'medium' },
+            style: {
+              borderRadius: '12px',
+              '&:hover': {
+                background: darkModePaperColor,
+                border: `2px solid ${whiteColor}`,
+              },
+              ...mediumButtonAndChipStyle,
+              ...darkModeSecondaryButtonBasestyle,
+            },
+          },
+          {
+            props: { variant: 'rusticSecondary', size: 'large' },
+            style: {
+              borderRadius: '16px',
+              '&:hover': {
+                background: darkModePaperColor,
+                border: `2px solid ${whiteColor}`,
+              },
+              ...largeButtonAndChipStyle,
+              ...darkModeSecondaryButtonBasestyle,
+            },
+          },
+        ],
       },
     },
   })

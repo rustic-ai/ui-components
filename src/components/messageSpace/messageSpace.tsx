@@ -1,6 +1,6 @@
 import './messageSpace.css'
 
-import Button from '@mui/material/Button'
+import Chip from '@mui/material/Chip'
 import Box from '@mui/system/Box'
 import React, { useEffect, useRef, useState } from 'react'
 
@@ -185,21 +185,24 @@ export default function MessageSpace(props: MessageSpaceProps) {
           )
         })}
       {!isScrolledToBottom && !isScrollButtonHidden && (
-        <Button
+        <Chip
           data-cy="scroll-down-button"
-          variant="contained"
-          color="secondary"
+          variant="rusticSecondary"
           className="rustic-scroll-down-button"
+          size="medium"
           onClick={handleScrollDown}
-          endIcon={<Icon name="arrow_downward" className="rustic-end-icon" />}
-        >
-          {props.scrollDownLabel}
-        </Button>
+          label={
+            <>
+              {props.scrollDownLabel}
+              <Icon name="arrow_downward" />
+            </>
+          }
+        />
       )}
     </Box>
   )
 }
 
 MessageSpace.defaultProps = {
-  scrollDownLabel: 'scroll down',
+  scrollDownLabel: 'Scroll down',
 }
