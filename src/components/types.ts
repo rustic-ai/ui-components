@@ -72,7 +72,7 @@ export interface Updates<T extends DataFormat> {
 }
 
 export interface VisualizationFormat extends DataFormat {
-  /** Descriptive text for providing context and meaning for the visualization. */
+  /** Alternative text for the visualization components used for assistive technology. */
   alt?: string
 }
 
@@ -259,7 +259,7 @@ export interface FileData {
   url?: string
 }
 
-export interface MultipartFormat extends VisualizationFormat {
+export interface MultipartFormat extends DataFormat {
   /** An array of file data. */
   files: FileData[]
   /** Text content sent along with the files. */
@@ -347,7 +347,7 @@ export interface ConversationProps {
   messageId: string
 }
 
-export interface QuestionFormat extends VisualizationFormat {
+export interface QuestionFormat extends DataFormat {
   /** Array of options to choose from. */
   options: (string | number)[]
 }
@@ -372,7 +372,7 @@ export interface Weather {
   }
 }
 
-export interface WeatherFormat extends VisualizationFormat {
+export interface WeatherFormat extends DataFormat {
   /** Array of daily weather data. */
   weather: Weather[]
   /** The location from which the weather data is from. */
