@@ -15,6 +15,13 @@ function removeJsxAttributesTransformer(attributes) {
   }
 }
 
+function getCssFilename(pathData) {
+  if (pathData.chunk.name === 'library') {
+    return 'index.css'
+  }
+  return `components/${pathData.chunk.name}/index.css`
+}
+
 module.exports = {
   ...commonConfig,
   mode: 'production',
@@ -54,5 +61,9 @@ module.exports = {
       ],
     }),
   ],
-  plugins: [new MiniCssExtractPlugin({ filename: `index.css` })],
+  plugins: [
+    new MiniCssExtractPlugin({
+      filename: getCssFilename,
+    }),
+  ],
 }
