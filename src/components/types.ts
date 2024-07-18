@@ -1,8 +1,5 @@
-import type { MermaidConfig } from 'mermaid'
-import type { Renderers } from 'vega'
-import type { EmbedOptions, VisualizationSpec } from 'vega-embed'
-
 import type { MessageSpaceProps } from './messageSpace/messageSpace'
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type MessageData = { [key: string]: any }
 
@@ -212,34 +209,6 @@ export interface TableFormat extends VisualizationFormat {
 }
 
 export type TableData = TableFormat & Updates<TableFormat>
-
-//VegaLite's typescript doesn't recognize font as a valid props
-type VegaLiteOptions = EmbedOptions<string, Renderers> & {
-  config?: EmbedOptions['config'] & {
-    font?: string
-  }
-}
-
-export interface VegaLiteFormat extends VisualizationFormat {
-  /** Follow Vega-lite's [documentation](https://vega.github.io/vega-lite/) to provide a specification object. Schema should be included in the spec. Need to use 'container' for width or height for responsive chart. */
-  spec: VisualizationSpec
-  theme: {
-    light?: VegaLiteOptions['theme']
-    dark: VegaLiteOptions['theme']
-  }
-  options?: VegaLiteOptions
-}
-
-export type VegaLiteData = VegaLiteFormat & Updates<VegaLiteFormat>
-
-export interface MermaidFormat extends VisualizationFormat {
-  /** Diagram definition following [Mermaid's syntax](https://mermaid.js.org/intro/syntax-reference.html#syntax-structure). The use of [these](https://mermaid.js.org/intro/syntax-reference.html#diagram-breaking) words or symbols can break diagrams. */
-  diagram: string
-  /** Configuration for altering and customizing Mermaid Diagrams. Refer [Mermaid docs](https://mermaid.js.org/config/schema-docs/config.html) for details. */
-  config?: MermaidConfig
-}
-
-export type MermaidData = MermaidFormat & Updates<MermaidFormat>
 
 export interface MediaFormat extends DataFormat {
   /** URL of the media file to be played. */

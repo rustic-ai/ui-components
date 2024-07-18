@@ -10,7 +10,7 @@ import { renderToStaticMarkup } from 'react-dom/server'
 import { default as VegaEmbed } from 'vega-embed'
 
 import PopoverMenu, { type PopoverMenuItem } from '../../menu/popoverMenu'
-import type { VegaLiteData } from '../../types'
+import type { VegaLiteData } from './vegaLiteViz.types'
 
 /** The `VegaLiteViz` component is a versatile tool for visualizing data using the Vega-Lite grammar. With support for various graphic types, it empowers users to create engaging and informative data visualizations effortlessly. */
 function VegaLiteViz(props: VegaLiteData) {
