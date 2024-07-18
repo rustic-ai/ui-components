@@ -1,19 +1,23 @@
+/* eslint-disable no-magic-numbers */
+
+import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
+import Chip from '@mui/material/Chip'
+import Divider from '@mui/material/Divider'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import { Stack } from '@mui/system'
 import type { Meta, StoryFn } from '@storybook/react/*'
+import { Server } from 'mock-socket'
 import React, { useState } from 'react'
 import { v4 as getUUID } from 'uuid'
 
+import TextInput from '../input/textInput/textInput'
+import MessageSpace from '../messageSpace/messageSpace'
 import Question from '../question/question'
 import Text from '../text/text'
-import type {
-  Message,
-  MessageData,
-  QuestionProps,
-  ThreadableMessage,
-} from '../types'
+import type { Message, QuestionProps } from '../types'
+import { getMockWebSocketClient, sendMessageToClient } from './mockWebSocket'
 import PromptBuilder from './promptBuilder'
 
 const meta: Meta<React.ComponentProps<typeof PromptBuilder>> = {
@@ -36,15 +40,16 @@ const meta: Meta<React.ComponentProps<typeof PromptBuilder>> = {
 
 meta.argTypes = {
   ws: {
-    type: { name: 'string', required: true },
     description:
       'WebSocket connection to send and receive messages to and from a backend.',
+    type: { name: 'object', required: true, value: {} },
     table: {
       type: {
         summary: 'WebSocketClient\n',
         detail:
-          'A websocket client with supports the following methods:\n' +
+          'A websocket client that supports the following methods:\n' +
           'send: (msg: Message) => void\n' +
+          'onReceive:  (handler: (event: MessageEvent) => void) => void\n' +
           'close: () => void\n' +
           'reconnect: () => void',
       },
@@ -72,13 +77,13 @@ meta.argTypes = {
       },
     },
   },
-  messages: {
+  getProfileComponent: {
     description:
-      'An array of messages to be rendered. See `MessageSpace` for more details about the `ThreadableMessage` object.',
-    type: { name: 'object', required: false, value: {} },
+      'A function that returns a React element to display sender details, like names and/or avatars. Here, it can be used to display the prompt builder agent\'s name or you can provide your own custom header. If this prop is not used, a default display of the name "Prompt Builder" will be shown.',
+    type: 'function',
     table: {
       type: {
-        summary: 'ThreadableMessage[]',
+        summary: '(message: ThreadableMessage) => ReactNode',
       },
     },
   },
@@ -86,8 +91,71 @@ meta.argTypes = {
 
 export default meta
 
-const promptBuilderAgent = { name: 'Prompt Builder', id: '2' }
-const user = { name: 'You', id: '1' }
+const webSocketUrl = 'ws://localhost:8080'
+const server = new Server(webSocketUrl)
+
+server.on('connection', (socket) => {
+  sendMessageToClient(socket, 'textInput', {
+    title:
+      'Hi there! Let’s build a prompt together. What is your question or topic?',
+  })
+
+  const receivedClientResponses = []
+
+  socket.on('message', (message) => {
+    const parsedMessage = JSON.parse(message as string)
+    receivedClientResponses.push(parsedMessage)
+
+    if (receivedClientResponses.length === 1) {
+      sendMessageToClient(socket, 'question', {
+        title: 'What is your main goal?',
+        options: [
+          'grow my business',
+          'sell internationally',
+          'hire or train employees',
+        ],
+      })
+    } else if (receivedClientResponses.length === 2) {
+      sendMessageToClient(socket, 'question', {
+        title: 'How many employees do you have?',
+        options: [
+          'Just me',
+          '1 to 5 people',
+          '10 to 20 people',
+          '30 to 50',
+          'More than 50',
+          'More than 100',
+          'More than 300',
+        ],
+      })
+    } else if (receivedClientResponses.length === 3) {
+      sendMessageToClient(socket, 'text', {
+        text: 'Great! Generate a prompt now or help me learn more for a better result.',
+      })
+      sendMessageToClient(socket, 'question', {
+        title: 'Where is your company based?',
+        options: [
+          'North America',
+          'Europe',
+          'Asia',
+          'Africa',
+          'Australia',
+          'South America',
+          'Antarctica',
+        ],
+      })
+      sendMessageToClient(socket, 'promptBuilder', {
+        isLastQuestion: true,
+      })
+    } else if (receivedClientResponses.length === 4) {
+      sendMessageToClient(socket, 'question', {
+        title:
+          "I'm not a real agent, but if I were, I would continue to ask you relevant questions to continue building an effective prompt.",
+        options: ['Understood', 'Sounds good'],
+      })
+    }
+  })
+})
 
 function CustomTextInput(props: Omit<QuestionProps, 'options'>) {
   const [messageText, setMessageText] = useState('')
@@ -131,11 +199,14 @@ function CustomTextInput(props: Omit<QuestionProps, 'options'>) {
   )
 }
 
+const messageSpaceAgent = { name: 'Agent', id: '2' }
+const user = { name: 'You', id: '1' }
+const conversationId = '1'
+const messageId = getUUID()
+
 const args = {
   sender: user,
-  conversationId: '1',
-  messageId: getUUID(),
-  onClose: () => {},
+  messageId: messageId,
   supportedElements: {
     text: Text,
     question: Question,
@@ -143,116 +214,111 @@ const args = {
   },
 }
 
-function generateMessage(format: string, data: MessageData) {
-  return {
-    id: getUUID(),
-    sender: promptBuilderAgent,
-    timestamp: new Date().toISOString(),
-    conversationId: '1',
-    format,
-    data,
-  }
-}
-
 export const Default = {
   decorators: [
     (Story: StoryFn) => {
-      const [messages, setMessages] = useState<ThreadableMessage[]>([
-        generateMessage('textInput', {
-          title:
-            'Hi there! Let’s build a prompt together. What is your question or topic?',
-        }),
+      const [isPromptBuilderOpen, setIsPromptBuilderOpen] = useState(false)
+      const [messageSpaceMessages, setMessageSpaceMessages] = useState<
+        Message[]
+      >([
+        {
+          conversationId,
+          id: getUUID(),
+          timestamp: new Date().toISOString(),
+          sender: messageSpaceAgent,
+          format: 'text',
+          data: { text: 'Hello! How can I help you?' },
+        },
       ])
 
-      const messageFlows = [
-        {
-          title: 'What is your main goal?',
-          options: [
-            'grow my business',
-            'sell internationally',
-            'hire or train employees',
-          ],
+      const boilerplateWs = {
+        send: (message: Message) => {
+          setMessageSpaceMessages((prev) => [...prev, message])
         },
-        {
-          title: 'How many employees do you have?',
-          options: [
-            'Just me',
-            '1 to 5 people',
-            '10 to 20 people',
-            '30 to 50',
-            'More than 50',
-            'More than 100',
-            'More than 300',
-          ],
-        },
-      ]
+        close: () => {},
+        reconnect: () => {},
+        onReceive: () => {},
+      }
 
-      const handleMessages = () => {
-        const delay = 2000
-        const nextFlow = messageFlows[messages.length - 1]
-        const generatingThreshold = 3
-
-        if (nextFlow) {
-          setTimeout(() => {
-            setMessages((prev) => [
-              ...prev,
-              generateMessage('question', nextFlow),
-            ])
-          }, delay)
-        } else if (messages.length === generatingThreshold) {
-          // agent decides there is sufficient enough information to generate a prompt
-          setTimeout(() => {
-            setMessages((prev) => [
-              ...prev,
-              generateMessage('text', {
-                text: 'Generate a prompt now or help me learn more for a better result.',
-              }),
-              generateMessage('question', {
-                title: 'Where is your company based?',
-                options: [
-                  'North America',
-                  'Europe',
-                  'Asia',
-                  'Africa',
-                  'Australia',
-                  'South America',
-                  'Antarctica',
-                ],
-              }),
-              {
-                id: getUUID(),
-                sender: promptBuilderAgent,
-                timestamp: new Date().toISOString(),
-                conversationId: '1',
-                format: 'promptBuilder',
-                data: { isLastQuestion: true },
+      function handleOnSubmit() {
+        setIsPromptBuilderOpen(false)
+        setTimeout(() => {
+          setMessageSpaceMessages((prev) => [
+            ...prev,
+            {
+              conversationId,
+              id: getUUID(),
+              timestamp: new Date().toISOString(),
+              sender: messageSpaceAgent,
+              format: 'text',
+              data: {
+                text: 'Here is a refined prompt I have generated based on your input to get you optimum results.\n\n"I\'m looking to grow my business, which currently has more than 50 employees and is based in North America. I need strategies and actionable insights to achieve significant growth. Specifically, I\'m interested in:\n\n1. Effective marketing techniques tailored to North American markets.\n\n2. Best practices for scaling operations while maintaining quality and customer satisfaction.\n\n3. Innovative ways to optimize our workforce for higher productivity and employee engagement.\n\n4. Leveraging technology and digital tools to streamline processes and improve efficiency.\n\n5. Identifying new market opportunities and expanding our customer base.\n\nPlease provide detailed suggestions, case studies, or examples relevant to businesses in similar situations. Include steps for implementation and potential challenges to consider."',
               },
-            ])
-          }, delay)
+              inReplyTo: messageId,
+            },
+          ])
+        }, 500)
+      }
+
+      function renderPromptBuilder() {
+        if (isPromptBuilderOpen) {
+          return (
+            <Story
+              args={{
+                ...args,
+                ws: getMockWebSocketClient(webSocketUrl),
+                onCancel: () => setIsPromptBuilderOpen(false),
+                onSubmit: handleOnSubmit,
+              }}
+            />
+          )
         } else {
-          setTimeout(() => {
-            setMessages((prev) => [
-              ...prev,
-              generateMessage('question', {
-                title:
-                  "I'm not a real agent, but if I were, I would continue to ask you relevant questions to continue building an effective prompt.",
-                options: ['Understood', 'Sounds good'],
-              }),
-            ])
-          }, delay)
+          return (
+            <Chip
+              variant="outlined"
+              label="Build a prompt"
+              color="secondary"
+              onClick={() => setIsPromptBuilderOpen(true)}
+              sx={{
+                width: 'fit-content',
+              }}
+            />
+          )
         }
       }
 
       return (
-        <Story
-          args={{
-            ...args,
-            messages,
-            ws: {
-              send: handleMessages,
-            },
-          }}
-        />
+        <Stack justifyContent="center">
+          <Typography variant="h4">Message Space</Typography>
+          <Divider sx={{ marginTop: 2 }} />
+          <Stack
+            sx={{
+              justifyContent: 'space-between',
+              height: 500,
+              paddingTop: 2,
+              gap: 2,
+            }}
+          >
+            <MessageSpace
+              ws={boilerplateWs}
+              sender={user}
+              supportedElements={{ text: Text }}
+              messages={messageSpaceMessages}
+              getProfileComponent={(message) => {
+                return <>{message.sender.name}</>
+              }}
+            />
+            <Box overflow="scroll">{renderPromptBuilder()}</Box>
+            {!isPromptBuilderOpen && (
+              <TextInput
+                ws={boilerplateWs}
+                sender={user}
+                conversationId={conversationId}
+                placeholder="Type your message..."
+              />
+            )}
+          </Stack>
+        </Stack>
       )
     },
   ],

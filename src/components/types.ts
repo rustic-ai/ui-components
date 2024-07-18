@@ -40,6 +40,7 @@ export interface ComponentMap {
 
 export interface WebSocketClient {
   send: (message: Message) => void
+  onReceive?: (handler: (event: MessageEvent) => void) => void
   close: () => void
   reconnect: () => void
 }
@@ -389,16 +390,12 @@ export interface WeatherProps extends WeatherData {
 export interface PromptBuilderProps
   extends Omit<
     MessageSpaceProps,
-    'getActionsComponent' | 'getProfileComponent' | 'scrollDownLabel'
+    'getActionsComponent' | 'scrollDownLabel' | 'messages'
   > {
-  /** Message id of the message that invokes the prompt builder. */
-  messageId: string
-  /** Function to generate a prompt. This will be called when the user clicks on the generate button. */
-  onGenerate: () => void
-  /** Function to close the prompt builder. This will be called when the user quits or after generating a prompt. */
-  onClose: () => void
-  /** Name of the agent participating in the conversation. */
-  agentName?: string
-  /** Avatar of the agent participating in the conversation. */
-  agentAvatar?: string
+  /** Message id of the message that invokes the PromptBuilder. It is optional and intended to support the use of threads in your application, should you choose to implement them. All interactions within a PromptBuilder session are considered part of a single thread. In this component, the collected user inputs are submitted as messages to the server, with the `threadId` field of those messages set to this message id. This marks the message invoking the PromptBuilder as the parent message of the thread. Refer to the `MessageSpace` documentation to read more about `Message` interface. */
+  messageId?: string
+  /** Function called when the user clicks on the "Generate" button. At this point, the conversation within the prompt builder will cease. Provide your custom logic to dictate what happens next and where the generated prompt will be displayed. */
+  onSubmit: () => void
+  /** Function called when quitting the prompt builder. A confirmation modal will appear when the user clicks on the "Quit" button. The user will be given an option to quit or continue building the prompt- here, the function will be called upon confirmation of quitting. */
+  onCancel: () => void
 }
