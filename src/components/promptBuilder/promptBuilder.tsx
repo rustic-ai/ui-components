@@ -83,7 +83,7 @@ export default function PromptBuilder(props: PromptBuilderProps) {
     }
   }, [messages.length])
 
-  function handleNextQuestion() {
+  function handleSendInput() {
     if (lastInputMessage) {
       const message = {
         ...lastInputMessage,
@@ -91,6 +91,10 @@ export default function PromptBuilder(props: PromptBuilderProps) {
       }
       props.ws.send(message)
     }
+  }
+
+  function handleNextQuestion() {
+    handleSendInput()
     setLastInputMessage(null)
     setIsLoading(true)
   }
@@ -101,6 +105,7 @@ export default function PromptBuilder(props: PromptBuilderProps) {
   }
 
   function handleGeneratePrompts() {
+    handleSendInput()
     setIsGeneratingPrompts(true)
     setIsLoading(true)
     props.onSubmit()
