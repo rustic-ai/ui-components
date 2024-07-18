@@ -22,7 +22,7 @@
     "./*/*/*.css":"./dist/components/*/*/*/index.css",
     "./general/*": "./dist/*.js",
     "./general/*.css": "./dist/*.css",
-    "./general/types": "./dist/components/types.d.ts"
+    "./types": "./dist/components/types.d.ts"
   },
   "dependencies": {
     "@codemirror/language": "6.10.1",

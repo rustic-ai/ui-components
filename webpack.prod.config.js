@@ -48,19 +48,7 @@ module.exports = {
     ],
   },
   externalsPresets: { node: true },
-  externals: [
-    nodeExternals({
-      allowlist: [
-        'dompurify',
-        '/^@fullcalendar/',
-        'marked',
-        'ol',
-        'pluralize',
-        'recharts',
-        'uuid',
-      ],
-    }),
-  ],
+  externals: [nodeExternals({})],
   plugins: [
     new MiniCssExtractPlugin({
       filename: getCssFilename,
