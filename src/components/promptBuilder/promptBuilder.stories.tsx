@@ -41,7 +41,9 @@ const meta: Meta<React.ComponentProps<typeof PromptBuilder>> = {
 meta.argTypes = {
   ws: {
     description:
-      'WebSocket connection to send and receive messages to and from a backend.',
+      'WebSocket connection to send and receive messages to and from a backend. The key methods to focus on are `send` and `onReceive`.\n\n' +
+      "The `onReceive` method is responsible for providing access to the WebSocket's `onmessage` event through `handler`, allowing `PromptBuilder` to receive and render messages from the server. An `onReceive` method is needed for the functionality of this component.\n\n" +
+      'The `send` method is responsible for sending user inputs to the server. It sends the captured inputs as messages whenever the "Next Question". It will also send captured inputs when clicking "Generate", even if "Next Question" was not clicked beforehand.',
     type: { name: 'object', required: true, value: {} },
     table: {
       type: {
@@ -49,9 +51,9 @@ meta.argTypes = {
         detail:
           'A websocket client that supports the following methods:\n' +
           'send: (msg: Message) => void\n' +
-          'onReceive:  (handler: (event: MessageEvent) => void) => void\n' +
           'close: () => void\n' +
-          'reconnect: () => void',
+          'reconnect: () => void\n' +
+          'onReceive?:  (handler: (event: MessageEvent) => void) => void\n',
       },
     },
   },

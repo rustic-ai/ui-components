@@ -40,9 +40,9 @@ export interface ComponentMap {
 
 export interface WebSocketClient {
   send: (message: Message) => void
-  onReceive?: (handler: (event: MessageEvent) => void) => void
   close: () => void
   reconnect: () => void
+  onReceive?: (handler: (event: MessageEvent) => void) => void
 }
 
 export enum ParticipantRole {

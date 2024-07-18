@@ -63,7 +63,9 @@ export default function PromptBuilder(props: PromptBuilderProps) {
       setMessages((prev) => [...prev, receivedMessage])
     }
 
-    props.ws.onReceive(handleIncomingMessage)
+    if (props.ws.onReceive) {
+      props.ws.onReceive(handleIncomingMessage)
+    }
   }, [props.ws])
 
   useEffect(() => {
