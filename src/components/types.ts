@@ -399,6 +399,6 @@ export interface PromptBuilderProps
   messageId?: string
   /** Function called when the user clicks on the "Generate" button. At this point, the conversation within the prompt builder will cease. Provide your custom logic to dictate what happens next and where the generated prompt will be displayed. */
   onSubmit: () => void
-  /** Function called when quitting the prompt builder. A confirmation modal will appear when the user clicks on the "Quit" button. The user will be given an option to quit or continue building the prompt- here, the function will be called upon confirmation of quitting. */
+  /** Function called when quitting the prompt builder. A confirmation modal will appear when the user clicks on the "Quit" button. The user will be given an option to quit or continue building the prompt. The function will be called upon confirmation of quitting. */
   onCancel: () => void
 }

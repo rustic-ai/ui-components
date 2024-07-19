@@ -2,7 +2,7 @@ import './question.css'
 
 import { useMediaQuery, useTheme } from '@mui/material'
 import Box from '@mui/material/Box'
-import Button from '@mui/material/Button'
+import Chip from '@mui/material/Chip'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import React, { useState } from 'react'
@@ -41,23 +41,21 @@ export default function Question(props: QuestionProps) {
   const buttonList = props.options.map((option, index) => {
     const selectedStyles = {
       '&.Mui-disabled': {
-        color: 'common.white',
         backgroundColor: 'secondary.main',
       },
     }
-
     return (
-      <Button
+      <Chip
         key={index}
         onClick={() => handleSubmitResponse(option)}
-        variant="outlined"
+        variant="rusticSecondary"
+        size="small"
         sx={selectedOption === option ? selectedStyles : {}}
-        color="secondary"
         className="rustic-option"
         disabled={!!selectedOption}
-      >
-        {option}
-      </Button>
+        aria-disabled={!!selectedOption}
+        label={option}
+      ></Chip>
     )
   })
 

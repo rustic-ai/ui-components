@@ -73,7 +73,7 @@ describe('PromptBuilder Component', () => {
     cy.get(questionsButtonsContainer)
       .children()
       .each((button) => {
-        cy.wrap(button).should('be.enabled')
+        cy.wrap(button).should('have.attr', 'aria-disabled', 'false')
       })
     cy.get(nextQuestionButton).should('be.disabled')
   })

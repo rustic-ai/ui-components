@@ -29,8 +29,8 @@
   gap: 16px;
 }
 
-.rustic-prompt-builder-buttons-right,
 .rustic-prompt-builder-buttons-left {
+  width: 100%;
   display: flex;
   gap: 8px;
   justify-content: space-between;
@@ -49,5 +49,9 @@
 
   .rustic-prompt-builder-buttons {
     flex-direction: column;
+  }
+
+  .rustic-prompt-builder-buttons-right {
+    display: flex;
   }
 }

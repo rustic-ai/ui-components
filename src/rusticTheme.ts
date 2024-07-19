@@ -177,21 +177,24 @@ const smallButtonAndChipStyle = {
   fontSize: '12px',
   lineHeight: 1.5,
   letterSpacing: '0.5px',
-  padding: '4px 12px',
+  padding: '0 12px',
+  minHeight: '26px',
 }
 
 const mediumButtonAndChipStyle = {
   fontSize: '14px',
   lineHeight: 1.43,
   letterSpacing: '0.25px',
-  padding: '8px 16px',
+  padding: '0 16px',
+  minHeight: '40px',
 }
 
 const largeButtonAndChipStyle = {
   fontSize: '16px',
   lineHeight: 1.75,
   letterSpacing: '0.15px',
-  padding: '16px 24px',
+  padding: '0 24px',
+  minHeight: '64px',
 }
 
 const lightModeDividerColor = '#E1D9D5'
@@ -213,7 +216,6 @@ const lightModeSecondaryBorder = '#FF692880'
 
 const buttonGeneralStyle = {
   fontWeight: 700,
-  height: 'fit-content',
 }
 
 const lightModePrimaryButtonBasestyle = {
