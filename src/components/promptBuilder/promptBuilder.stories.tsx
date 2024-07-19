@@ -43,7 +43,7 @@ meta.argTypes = {
     description:
       'WebSocket connection to send and receive messages to and from a backend. The key methods to focus on are `send` and `onReceive`.\n\n' +
       "The `onReceive` method is responsible for providing access to the WebSocket's `onmessage` event through `handler`, allowing `PromptBuilder` to receive and render messages from the server. An `onReceive` method is needed for the functionality of this component.\n\n" +
-      'The `send` method is responsible for sending user inputs to the server. It sends the captured inputs as messages whenever the "Next Question". It will also send captured inputs when clicking "Generate", even if "Next Question" was not clicked beforehand.',
+      'The `send` method is responsible for sending user inputs to the server. It sends the captured inputs as messages whenever the "Next Question" is clicked. It will also send captured inputs when clicking "Generate", even if "Next Question" was not clicked beforehand.',
     type: { name: 'object', required: true, value: {} },
     table: {
       type: {
@@ -192,7 +192,7 @@ function CustomTextInput(props: Omit<QuestionProps, 'options'>) {
       <Button
         onClick={handleSendMessage}
         disabled={isSubmitted || !messageText.trim()}
-        variant="outlined"
+        variant="rusticSecondary"
         size="small"
       >
         Submit
@@ -277,13 +277,9 @@ export const Default = {
         } else {
           return (
             <Chip
-              variant="outlined"
+              variant="rusticSecondary"
               label="Build a prompt"
-              color="secondary"
               onClick={() => setIsPromptBuilderOpen(true)}
-              sx={{
-                width: 'fit-content',
-              }}
             />
           )
         }

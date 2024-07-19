@@ -1,7 +1,6 @@
 import './promptBuilder.css'
 import '../../index.css'
 
-import { useMediaQuery } from '@mui/material'
 import Button from '@mui/material/Button'
 import Card from '@mui/material/Card'
 import CircularProgress from '@mui/material/CircularProgress'
@@ -47,7 +46,6 @@ export default function PromptBuilder(props: PromptBuilderProps) {
   const [lastInputMessage, setLastInputMessage] = useState<Message | null>(null)
 
   const theme = useTheme()
-  const isMobileView = useMediaQuery(theme.breakpoints.down('md'))
   const lastMessage = messages[messages.length - 1]
 
   const inputCapturer = {
@@ -57,12 +55,12 @@ export default function PromptBuilder(props: PromptBuilderProps) {
     },
   }
 
-  useEffect(() => {
-    function handleIncomingMessage(event: MessageEvent) {
-      const receivedMessage = JSON.parse(event.data)
-      setMessages((prev) => [...prev, receivedMessage])
-    }
+  function handleIncomingMessage(event: MessageEvent) {
+    const receivedMessage = JSON.parse(event.data)
+    setMessages((prev) => [...prev, receivedMessage])
+  }
 
+  useEffect(() => {
     if (props.ws.onReceive) {
       props.ws.onReceive(handleIncomingMessage)
     }
@@ -112,36 +110,34 @@ export default function PromptBuilder(props: PromptBuilderProps) {
   }
 
   function renderMessages() {
-    if (!isGeneratingPrompts) {
-      return (
-        messages.length > 0 &&
-        messages.map((message) => {
-          if (
-            message.sender.id !== props.sender.id &&
-            message.format !== 'promptBuilder'
-          ) {
-            return (
-              <ElementRenderer
-                key={message.id}
-                ws={inputCapturer}
-                sender={props.sender}
-                message={message}
-                supportedElements={props.supportedElements}
-              />
-            )
-          }
-        })
-      )
+    if (!isGeneratingPrompts && messages.length > 0) {
+      return messages.map((message) => {
+        const shouldMessageBeRendered =
+          message.sender.id !== props.sender.id &&
+          message.format !== 'promptBuilder'
+        if (shouldMessageBeRendered) {
+          return (
+            <ElementRenderer
+              key={message.id}
+              ws={inputCapturer}
+              sender={props.sender}
+              message={message}
+              supportedElements={props.supportedElements}
+            />
+          )
+        }
+      })
     }
   }
 
   function renderNextQuestionButton() {
     return (
       <Button
-        variant="outlined"
+        variant="rusticSecondary"
         endIcon={<Icon name="chevron_right" />}
         onClick={handleNextQuestion}
         disabled={!lastInputMessage}
+        aria-disabled={!lastInputMessage}
         data-cy="next-question-button"
       >
         Next question
@@ -152,10 +148,10 @@ export default function PromptBuilder(props: PromptBuilderProps) {
   function renderGenerateButton() {
     return (
       <Button
-        variant="contained"
-        color="secondary"
+        variant="rusticPrimary"
         onClick={handleGeneratePrompts}
         disabled={isLoading}
+        aria-disabled={isLoading}
         data-cy="generate-button"
       >
         Generate
@@ -166,7 +162,7 @@ export default function PromptBuilder(props: PromptBuilderProps) {
   function renderQuitButton() {
     return (
       <Button
-        variant="outlined"
+        variant="rusticSecondary"
         startIcon={<Icon name="close" />}
         onClick={() => setIsAttemptingToQuit(true)}
         data-cy="quit-button"
@@ -176,7 +172,7 @@ export default function PromptBuilder(props: PromptBuilderProps) {
     )
   }
 
-  function renderMobileButtons() {
+  function renderButtons() {
     return (
       <>
         {!isGeneratingPrompts && (
@@ -190,24 +186,6 @@ export default function PromptBuilder(props: PromptBuilderProps) {
                 {renderGenerateButton()}
               </Box>
             )}
-          </Box>
-        )}
-      </>
-    )
-  }
-
-  function renderDesktopButtons() {
-    return (
-      <>
-        {!isGeneratingPrompts && (
-          <Box className="rustic-prompt-builder-buttons">
-            <Box className="rustic-prompt-builder-buttons-left">
-              {renderQuitButton()}
-            </Box>
-            <Box className="rustic-prompt-builder-buttons-right">
-              {renderNextQuestionButton()}
-              {isReadyToGenerate && renderGenerateButton()}
-            </Box>
           </Box>
         )}
       </>
@@ -249,7 +227,7 @@ export default function PromptBuilder(props: PromptBuilderProps) {
           disableSpacing
         >
           <Button
-            variant="outlined"
+            variant="rusticSecondary"
             startIcon={<Icon name="close" />}
             onClick={handleQuit}
             data-cy="confirm-quit-button"
@@ -257,8 +235,7 @@ export default function PromptBuilder(props: PromptBuilderProps) {
             Quit
           </Button>
           <Button
-            variant="contained"
-            color="secondary"
+            variant="rusticPrimary"
             onClick={() => setIsAttemptingToQuit(false)}
             data-cy="continue-build-button"
           >
@@ -292,7 +269,6 @@ export default function PromptBuilder(props: PromptBuilderProps) {
         {renderQuitDialog()}
         {renderHeader()}
         <Divider className="rustic-prompt-builder-divider" />
-
         <Box className="rustic-prompt-builder-questions">
           {renderMessages()}
           {isLoading && (
@@ -303,8 +279,7 @@ export default function PromptBuilder(props: PromptBuilderProps) {
             />
           )}
         </Box>
-
-        {isMobileView ? renderMobileButtons() : renderDesktopButtons()}
+        {renderButtons()}
       </Card>
     )
   }
