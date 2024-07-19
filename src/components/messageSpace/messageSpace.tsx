@@ -1,4 +1,5 @@
 import './messageSpace.css'
+import '../../index.css'
 
 import Chip from '@mui/material/Chip'
 import Box from '@mui/system/Box'
@@ -192,10 +193,10 @@ export default function MessageSpace(props: MessageSpaceProps) {
           size="medium"
           onClick={handleScrollDown}
           label={
-            <>
+            <div className="rustic-chip-label">
               {props.scrollDownLabel}
               <Icon name="arrow_downward" />
-            </>
+            </div>
           }
         />
       )}

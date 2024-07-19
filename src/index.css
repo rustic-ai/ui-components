@@ -31,3 +31,9 @@ code {
 .rustic-align-self-center {
   align-self: center;
 }
+
+.rustic-chip-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}

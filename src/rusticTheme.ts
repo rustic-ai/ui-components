@@ -251,9 +251,6 @@ const chipGeneralStyle = {
   fontWeight: 700,
   '& .MuiChip-label': {
     padding: 0,
-    display: 'flex',
-    alignItems: 'center',
-    gap: '8px',
   },
 }
 const lightModePrimaryChipBasestyle = {
