@@ -131,6 +131,41 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
+  "peerDependenciesMeta": {
+    "@codemirror/language": {
+      "optional": true
+    },
+    "@codemirror/language-data": {
+      "optional": true
+    },
+    "@codemirror/state": {
+      "optional": true
+    },
+    "@codemirror/theme-one-dark": {
+      "optional": true
+    },
+    "@codemirror/view": {
+      "optional": true
+    },
+    "@finos/perspective": {
+      "optional": true
+    },
+    "@finos/perspective-viewer": {
+      "optional": true
+    },
+    "@finos/perspective-viewer-d3fc": {
+      "optional": true
+    },
+    "@finos/perspective-viewer-datagrid": {
+      "optional": true
+    },
+    "emoji-picker-element": {
+      "optional": true
+    },
+    "pdfjs-dist": {
+      "optional": true
+    }
+  },
   "scripts": {
     "build": "webpack --config webpack.prod.config.js",
     "setup-dev-env": "husky install",
