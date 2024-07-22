@@ -41,7 +41,8 @@ export default function Question(props: QuestionProps) {
   const buttonList = props.options.map((option, index) => {
     const selectedStyles = {
       '&.Mui-disabled': {
-        backgroundColor: 'secondary.main',
+        backgroundColor: 'secondary.light',
+        color: 'text.primary',
       },
     }
     return (
