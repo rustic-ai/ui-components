@@ -70,3 +70,5 @@ export {
 
 export * from '../rusticTheme'
 export * from './types'
+export * from './visualization/mermaidViz/mermaidViz.types'
+export * from './visualization/vegaLiteViz/vegaLiteViz.types'

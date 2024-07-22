@@ -15,6 +15,13 @@ function removeJsxAttributesTransformer(attributes) {
   }
 }
 
+function getCssFilename(pathData) {
+  if (pathData.chunk.name === 'library') {
+    return 'index.css'
+  }
+  return `components/${pathData.chunk.name}/index.css`
+}
+
 module.exports = {
   ...commonConfig,
   mode: 'production',
@@ -41,18 +48,10 @@ module.exports = {
     ],
   },
   externalsPresets: { node: true },
-  externals: [
-    nodeExternals({
-      allowlist: [
-        'dompurify',
-        '/^@fullcalendar/',
-        'marked',
-        'ol',
-        'pluralize',
-        'recharts',
-        'uuid',
-      ],
+  externals: [nodeExternals({})],
+  plugins: [
+    new MiniCssExtractPlugin({
+      filename: getCssFilename,
     }),
   ],
-  plugins: [new MiniCssExtractPlugin({ filename: `index.css` })],
 }

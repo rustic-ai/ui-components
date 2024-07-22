@@ -8,7 +8,7 @@ import mermaid from 'mermaid'
 import React, { useEffect, useRef, useState } from 'react'
 import { v4 as getUUID } from 'uuid'
 
-import type { MermaidData } from '../../types'
+import type { MermaidData } from './mermaidViz.types'
 
 /** The `MermaidViz` component leverages [Mermaid.js](https://mermaid.js.org/) to create dynamic and interactive diagrams, including flowcharts, sequence diagrams, class diagrams, and more. It is ideal for visualizing complex data and processes in a clear and structured manner. */
 function MermaidViz(props: MermaidData) {
