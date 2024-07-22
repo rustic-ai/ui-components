@@ -202,6 +202,7 @@ const lightModeFocusColor = '#0000001F'
 const lightModePrimaryMainColor = '#2D2825'
 const lightModePrimaryLightColor = '#2D282599'
 const lightModeTextPrimaryColor = '#1E0C04'
+const lightModeTextDisabledColor = '#9C9795'
 const lightModeDisabledColor = '#00000061'
 const lightModePrimaryHoverColor = '#2D282514'
 const lightModePrimarySelectedColor = '#2D282529'
@@ -218,6 +219,14 @@ const buttonGeneralStyle = {
   fontWeight: 700,
 }
 
+const lightModeDisabledButtonStyling = {
+  '&.Mui-disabled': {
+    background: whiteColor,
+    color: lightModeTextDisabledColor,
+    border: `1px solid ${lightModeDisabledColor}`,
+  },
+}
+
 const lightModePrimaryButtonBasestyle = {
   ...buttonGeneralStyle,
   background: lightModePrimaryMainColor,
@@ -228,10 +237,7 @@ const lightModePrimaryButtonBasestyle = {
   '&:focus': {
     border: `4px solid ${lightModePrimaryLightColor}`,
   },
-  '&.Mui-disabled': {
-    background: lightModeDisabledColor,
-    color: whiteColor,
-  },
+  ...lightModeDisabledButtonStyling,
 }
 
 const lightModeSecondaryButtonBasestyle = {
@@ -242,15 +248,11 @@ const lightModeSecondaryButtonBasestyle = {
   '&:focus': {
     border: `4px solid ${lightModePrimaryLightColor}`,
   },
-  '&.Mui-disabled': {
-    border: `1px solid ${lightModeDisabledColor}`,
-    background: lightModeDisabledColor,
-    color: lightModeTextPrimaryColor,
-    opacity: 100,
-  },
+  ...lightModeDisabledButtonStyling,
 }
+
 const chipGeneralStyle = {
-  fontWeight: 700,
+  fontWeight: 400,
   '& .MuiChip-label': {
     padding: 0,
     display: 'flex',
@@ -295,7 +297,8 @@ const lightModeSecondaryChipBasestyle = {
   },
   '&.Mui-disabled': {
     border: `1px solid ${secondaryLightColor}`,
-    background: secondaryFocusVisibleColor,
+    background: whiteColor,
+    color: secondaryLightColor,
     opacity: 100,
   },
   '& .MuiChip-icon': {
@@ -313,7 +316,7 @@ let rusticLightTheme = createTheme(
       text: {
         primary: lightModeTextPrimaryColor,
         secondary: '#4E443F',
-        disabled: '#9C9795',
+        disabled: lightModeTextDisabledColor,
       },
       primary: {
         main: lightModePrimaryMainColor,
@@ -536,6 +539,7 @@ let rusticLightTheme = createTheme(
   })
 )
 
+const darkModeTextDisabledColor = '#FFFFFF61'
 const darkModeFocusColor = '#FFFFFF1F'
 const darkModeDividerColor = '#E1D9D5'
 const darkModePaperColor = '#202020'
@@ -549,6 +553,14 @@ const darkModePrimaryFocusVisibleColor = '#FFFCFB4D'
 const darkModePrimaryHoverColor = '#FFFCFB14'
 const darkModeActionActiveColor = '#FFFFFF4D'
 
+const darkModeDisabledButtonStyling = {
+  '&.Mui-disabled': {
+    background: darkModeActionActiveColor,
+    color: darkModeTextDisabledColor,
+    border: `1px solid ${darkModeActionDisabledColor}`,
+  },
+}
+
 const darkModePrimaryButtonBasestyle = {
   ...buttonGeneralStyle,
   background: darkModePrimaryMainColor,
@@ -559,10 +571,7 @@ const darkModePrimaryButtonBasestyle = {
   '&:focus': {
     border: `4px solid ${darkModePrimaryLightColor}`,
   },
-  '&.Mui-disabled': {
-    background: darkModeActionActiveColor,
-    color: blackColor,
-  },
+  ...darkModeDisabledButtonStyling,
 }
 
 const darkModeSecondaryButtonBasestyle = {
@@ -573,12 +582,7 @@ const darkModeSecondaryButtonBasestyle = {
   '&:focus': {
     border: `4px solid ${darkModePrimaryLightColor}`,
   },
-  '&.Mui-disabled': {
-    border: `1px solid ${darkModeActionActiveColor}`,
-    background: darkModeActionActiveColor,
-    color: whiteColor,
-    opacity: 100,
-  },
+  ...darkModeDisabledButtonStyling,
 }
 
 const darkModePrimaryChipBasestyle = {
@@ -617,8 +621,9 @@ const darkModeSecondaryChipBasestyle = {
     border: `4px solid ${secondaryLightColor}`,
   },
   '&.Mui-disabled': {
-    border: `1px solid ${secondaryFocusVisibleColor}`,
-    background: secondaryFocusVisibleColor,
+    background: darkModePaperColor,
+    color: secondaryLightColor,
+    border: `1px solid ${secondaryLightColor}`,
     opacity: 100,
   },
   '& .MuiChip-icon': {
@@ -662,7 +667,7 @@ let rusticDarkTheme = createTheme(
       text: {
         primary: whiteColor,
         secondary: '#FFFFFFB2',
-        disabled: '#FFFFFF61',
+        disabled: darkModeTextDisabledColor,
       },
       action: {
         active: darkModeActionActiveColor,
