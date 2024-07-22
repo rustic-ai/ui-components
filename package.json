@@ -20,8 +20,8 @@
     "./*.css": "./dist/components/*/index.css",
     "./*/*.css":"./dist/components/*/*/index.css",
     "./*/*/*.css":"./dist/components/*/*/*/index.css",
-    "./general/*": "./dist/*.js",
-    "./general/*.css": "./dist/*.css",
+    "./theme":"./dist/rusticTheme.js",
+    "./index.css":"./dist/index.css",
     "./types": "./dist/components/types.d.ts"
   },
   "dependencies": {
@@ -121,15 +121,23 @@
     "@finos/perspective-viewer": "^2.10.1",
     "@finos/perspective-viewer-d3fc": "^2.10.1",
     "@finos/perspective-viewer-datagrid": "^2.10.1",
+    "@fullcalendar/core": "^6.1.10",
+    "@fullcalendar/daygrid": "^6.1.10",
+    "@fullcalendar/react": "^6.1.10",
     "@mui/material": "^5.15.7",
     "@mui/styled-engine-sc": "^5.14.11",
     "@mui/system": "^5.15.8",
     "@types/react": "^18.2.37",
     "@types/react-dom": "^18.2.15",
     "emoji-picker-element": "^1.21.3",
+    "dompurify": "^3.0.6",
+    "marked": "^10.0.0",
+    "ol": "^9.0.0",
     "pdfjs-dist": "^4.3.136",
+    "pluralize": "^8.0.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "recharts": "^2.10.3"
   },
   "peerDependenciesMeta": {
     "@codemirror/language": {
@@ -159,10 +167,37 @@
     "@finos/perspective-viewer-datagrid": {
       "optional": true
     },
+    "@fullcalendar/core": {
+      "optional": true
+    },
+    "@fullcalendar/daygrid": {
+      "optional": true
+    },
+    "@fullcalendar/react": {
+      "optional": true
+    },
     "emoji-picker-element": {
       "optional": true
     },
+    "dompurify":  {
+      "optional": true
+    },
+    "marked":  {
+      "optional": true
+    },
+    "ol":  {
+      "optional": true
+    },
     "pdfjs-dist": {
+      "optional": true
+    },
+    "pluralize":  {
+      "optional": true
+    },
+    "react-dom":  {
+      "optional": true
+    },
+    "recharts":  {
       "optional": true
     }
   },

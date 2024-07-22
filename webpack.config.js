@@ -26,6 +26,8 @@ function getComponentEntries(dirPath) {
 function getOutputFilename(pathData) {
   if (pathData.chunk.name === 'library') {
     return 'index.js'
+  } else if (pathData.chunk.name === 'theme') {
+    return 'rusticTheme.js'
   }
   return `components/${pathData.chunk.name}/index.js`
 }
@@ -35,6 +37,7 @@ const commonConfig = {
   },
   entry: {
     library: path.resolve(__dirname, 'src/components/index.ts'),
+    theme: path.resolve(__dirname, 'src/rusticTheme.ts'),
     ...getComponentEntries(path.resolve(__dirname, 'src/components')),
   },
   output: {
