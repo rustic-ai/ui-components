@@ -19,7 +19,12 @@ import type { LocationFormat } from '../types'
  *
  * Height and width are configured through the class `rustic-open-layers-map-canvas`.
  *
- * Note: If you are not seeing the component or come across the error "An error occurred while loading the map", ensure that `@import '@rustic-ai/ui-components/dist/index.css';` is at the top of your `index.css` file. */
+ * Note: `ol` is not bundled, so please install the following package using npm:
+ *
+ * ```typescript
+ * npm i ol
+ * ```
+ * If you are not seeing the component or come across the error "An error occurred while loading the map", ensure that `@import '@rustic-ai/ui-components/index.css';` is at the top of your `index.css` file. */
 export default function OpenLayersMap(props: LocationFormat) {
   const [errorMessage, setErrorMessage] = useState('')
   const mapTargetElement = useRef<HTMLDivElement>(null)

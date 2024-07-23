@@ -11,7 +11,13 @@ import { v4 as getUUID } from 'uuid'
 import type { Message, QuestionProps } from '../types'
 
 /**
-The `Question` component provides a user interface for selecting an option from a list. It is designed to facilitate interactive decision-making and response submission within a conversation or messaging context.
+ * The `Question` component provides a user interface for selecting an option from a list. It is designed to facilitate interactive decision-making and response submission within a conversation or messaging context.
+ *
+ * Note: `uuid` is not bundled, so please install the following package using npm:
+ *
+ * ```typescript
+ * npm i uuid
+ * ```
  */
 export default function Question(props: QuestionProps) {
   const [selectedOption, setSelectedOption] = useState<string | number>('')

@@ -50,10 +50,13 @@ export function transformTableData(
   })
 }
 
-/**
-The PerspectiveViz component is designed to efficiently display and process large datasets, supporting interactive features such as filtering, sorting, and aggregating data for enhanced analysis and visualization. It integrates with the [Perspective library](https://perspective.finos.org/) to render data in various formats, including datagrids(pivot tables) and charts.
-
-Note: [Perspective](https://perspective.finos.org/) is not bundled, so it must be included in the application's build process.
+/** The PerspectiveViz component is designed to efficiently display and process large datasets, supporting interactive features such as filtering, sorting, and aggregating data for enhanced analysis and visualization. It integrates with the [Perspective library](https://perspective.finos.org/) to render data in various formats, including datagrids(pivot tables) and charts.
+ *
+ * Note: [Perspective](https://perspective.finos.org/) libraries are not bundled, so they must be included in the application's build process:
+ *
+ * ```typescript
+ * npm i @finos/perspective @finos/perspective-viewer @finos/perspective-viewer-d3fc @finos/perspective-viewer-datagrid
+ * ```
  */
 function PerspectiveViz(props: TableData) {
   if (props.data.length === 0) {

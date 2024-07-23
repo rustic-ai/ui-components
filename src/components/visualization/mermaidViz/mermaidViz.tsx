@@ -10,7 +10,14 @@ import { v4 as getUUID } from 'uuid'
 
 import type { MermaidData } from './mermaidViz.types'
 
-/** The `MermaidViz` component leverages [Mermaid.js](https://mermaid.js.org/) to create dynamic and interactive diagrams, including flowcharts, sequence diagrams, class diagrams, and more. It is ideal for visualizing complex data and processes in a clear and structured manner. */
+/** The `MermaidViz` component leverages [Mermaid.js](https://mermaid.js.org/) to create dynamic and interactive diagrams, including flowcharts, sequence diagrams, class diagrams, and more. It is ideal for visualizing complex data and processes in a clear and structured manner.
+ *
+ * Note: `mermaid` and `uuid` are not bundled, so please install the following packages using npm:
+ *
+ * ```typescript
+ * npm i mermaid uuid
+ * ```
+ */
 function MermaidViz(props: MermaidData) {
   const mermaidRef = useRef<HTMLDivElement>(null)
   const [errorMessage, setErrorMessage] = useState<string>()

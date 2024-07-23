@@ -33,6 +33,10 @@ function isPDFUrl(url: string) {
  * ```
  *
  * Note: [PDF.js](https://mozilla.github.io/pdf.js/) is not bundled, so it must be included in the application's build process.
+ *
+ * ```typescript
+ * npm i pdfjs-dist
+ * ```
  */
 function PDFViewer(props: PDFViewerProps) {
   const pdfRef = useRef<HTMLCanvasElement | null>(null)

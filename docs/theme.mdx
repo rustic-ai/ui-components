@@ -22,7 +22,7 @@ You can import Rustic themes directly from the library package. For instance:
 
 ```
 // Light theme is the default rustic theme
-import { rusticTheme } from '@rustic-ai/ui-components'
+import rusticTheme from '@rustic-ai/ui-components/theme'
 ```
 
 After importing the desired theme, pass it to the ThemeProvider component:
@@ -47,7 +47,7 @@ import { ThemeProvider, createTheme, CssBaseline, IconButton } from '@mui/materi
 import {
   rusticDarkTheme,
   rusticLightTheme,
-} from '@rustic-ai/ui-components'
+} from '@rustic-ai/ui-components/theme'
 
  const DarkModeToggle = ({ isDarkMode, toggleDarkMode }) => {
     return (

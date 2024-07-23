@@ -11,7 +11,13 @@ import type { TextData } from '../types'
  *
  * On the other hand, the `StreamingText` component is designed to handle streams of text data, allowing for dynamic updates to the displayed text content. It supports real-time updates of text content through the `updatedData` attribute, enabling the continuous appending of new text data to the existing content.
  *
- * Tip: Use `Text` when displaying static content, and use `StreamingText` when its being updated dynamically and new content should be appended to existing content. */
+ * Tip: Use `Text` when displaying static content, and use `StreamingText` when its being updated dynamically and new content should be appended to existing content.
+ *
+ * Note: `dompurify` is not bundled, so please install the following package using npm:
+ *
+ * ```typescript
+ * npm i dompurify
+ * ``` */
 const Text = (props: TextData) => {
   return (
     <Typography variant="body2" className="rustic-text">

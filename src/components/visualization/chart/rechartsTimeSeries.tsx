@@ -107,7 +107,14 @@ function areAllDatasetsVisible(datasetsVisibility: { [key: string]: boolean }) {
   return Object.values(datasetsVisibility).every((value) => value === true)
 }
 
-/** The `RechartsTimeSeries` component integrates the [Recharts](https://recharts.org/en-US/api) library to facilitate the visualization of time-based data through various chart types such as line charts, bar charts, and area charts. It supports customizations for reference lines, tooltips, and chart type toggling, providing a flexible and interactive data representation solution. */
+/** The `RechartsTimeSeries` component integrates the [Recharts](https://recharts.org/en-US/api) library to facilitate the visualization of time-based data through various chart types such as line charts, bar charts, and area charts. It supports customizations for reference lines, tooltips, and chart type toggling, providing a flexible and interactive data representation solution.
+ *
+ * Note: `Recharts` is not bundled, so please install the following package using npm:
+ *
+ * ```typescript
+ * npm i recharts
+ * ```
+ */
 function RechartsTimeSeries(props: RechartsTimeSeriesProps) {
   const [timeSeriesType, setTimeSeriesType] = useState<TimeSeriesType>(
     props.defaultChartType || 'line'
