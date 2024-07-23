@@ -21,8 +21,14 @@ function transformEvent(event: CalendarEvent) {
 }
 
 /** The `FCCalendar` component integrates the [FullCalendar](https://fullcalendar.io/docs) library to provide a versatile and interactive calendar view for managing events. It allows users to view events across different time frames and provides features for navigation.
-
-* **Note**: On mobile screens, the calendar will default to the day view, offering users a detailed perspective of events for the selected day. Conversely, on larger screens, such as desktops or tablets, the calendar will default to the month view, offering users an overview of events scheduled throughout the month. */
+ *
+ * FullCalendar libraries are not bundled, so please install the following packages using npm:
+ *
+ * ```typescript
+ * npm i @fullcalendar/core @fullcalendar/daygrid @fullcalendar/react
+ * ```
+ *
+ * **Note**: On mobile screens, the calendar will default to the day view, offering users a detailed perspective of events for the selected day. Conversely, on larger screens, such as desktops or tablets, the calendar will default to the month view, offering users an overview of events scheduled throughout the month. */
 export default function FCCalendar(props: CalendarData) {
   const theme = useTheme()
   const isDesktop = useMediaQuery(theme.breakpoints.up('md'))

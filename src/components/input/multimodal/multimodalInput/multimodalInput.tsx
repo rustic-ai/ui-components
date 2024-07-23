@@ -18,7 +18,14 @@ __How does file upload work?__
 2. Selected files are sent to a designated HTTP API.
 3. The HTTP API can update the upload progress for each file and is responsible for transforming and storing the files securely.
 4. Once uploaded, the file names are appended to the data sent over WebSocket. Files can also be deleted after being uploaded and an HTTP API is sent to delete the file from storage.
-5. The backend server of the application utilizes the uploaded files along with the text messages for message processing. */
+5. The backend server of the application utilizes the uploaded files along with the text messages for message processing. 
+
+* **Note**: `emoji-picker-element` and `uuid` are not bundled, so please install the following packages using npm:
+* 
+* ```typescript
+* npm i emoji-picker-element uuid
+* ```
+*/
 export default function MultimodalInput(props: MultimodalInputProps) {
   const [filesInfo, setFilesInfo] = useState<FileData[]>([])
   const [messageId, setMessageId] = useState(getUUID())

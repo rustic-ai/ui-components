@@ -20,7 +20,13 @@ export function convertMarkdownToHtml(text: string): string {
  *
  * On the other hand, the `MarkedStreamingMarkdown` component is designed to handle streams of markdown-formatted text data. This component supports updates involving continuous appending of new markdown data to the existing content through the `updatedData` attribute.
  *
- * Tip: Use `MarkedMarkdown` when displaying static content or when you'd like to support content overwrite updates, and use `MarkedStreamingMarkdown` when its being updated dynamically and new content should be appended to existing content. */
+ * Tip: Use `MarkedMarkdown` when displaying static content or when you'd like to support content overwrite updates, and use `MarkedStreamingMarkdown` when its being updated dynamically and new content should be appended to existing content.
+ *
+ * Note: `marked` and `dompurify` are not bundled, so please install the following packages using npm:
+ *
+ * ```typescript
+ * npm i marked dompurify
+ * ``` */
 const MarkedMarkdown = (props: TextData) => {
   const [html, setHtml] = useState(convertMarkdownToHtml(props.text))
 

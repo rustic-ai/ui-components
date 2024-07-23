@@ -18,10 +18,12 @@ Follow these steps to quickly integrate Rustic UI Components into your applicati
    npm install @mui/material @emotion/react @emotion/styled
    ```
 
+   Please refer to the documentation for each component to determine if additional packages need to be installed for its use.
+
 2. Add the following to the top of your `index.css` file to import the CSS styles:
 
    ```
-   @import '@rustic-ai/ui-components/dist/index.css';
+   @import '@rustic-ai/ui-components/index.css';
    ```
 
 3. Rustic UI Components use [Material Symbols](https://fonts.google.com/icons) icons. To ensure the icons are displayed correctly, add the following to the `<head>` of your `index.html` file:
@@ -36,22 +38,19 @@ Follow these steps to quickly integrate Rustic UI Components into your applicati
 4. Start integrating Rustic UI Components into your application by importing the necessary components. Below is a sample code snippet demonstrating how to use the MessageSpace component to render messages:
 
    ```
-   import {
-     CodeSnippet
-     FCCalendar,
-     Image,
-     MarkedMarkdown,
-     MarkedStreamingMarkdown,
-     MessageSpace,
-     OpenLayersMap,
-     RechartsTimeSeries,
-     Sound,
-     StreamingText,
-     Table,
-     Text,
-     Video,
-     YoutubeVideo,
-   } from '@rustic-ai/ui-components'
+   import FCCalendar from "@rustic-ai/ui-components/calendar"
+   import CodeSnippet from "@rustic-ai/ui-components/codeSnippet"
+   import Image from "@rustic-ai/ui-components/image"
+   import OpenLayersMap from "@rustic-ai/ui-components/map"
+   import MarkedMarkdown, { MarkedStreamingMarkdown } from "@rustic-ai/ui-components/markdown"
+   import Sound from "@rustic-ai/ui-components/media/audio"
+   import Video from "@rustic-ai/ui-components/media/video"
+   import MessageSpace from "@rustic-ai/ui-components/messageSpace"
+   import Question from "@rustic-ai/ui-components/question"
+   import Table from "@rustic-ai/ui-components/table"
+   import { StreamingText, Text } from "@rustic-ai/ui-components/text"
+   import YoutubeVideo from "@rustic-ai/ui-components/video"
+   import RechartsTimeSeries from "@rustic-ai/ui-components/visualization/chart"
 
    export default function YourApp() {
        // Sample data for messages. Please make sure your message data uses props we defined for each message format.

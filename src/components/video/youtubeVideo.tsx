@@ -16,7 +16,14 @@ export interface YoutubeVideoProps {
   title?: string
 }
 
-/** The `YoutubeVideo` component enables the embedding of YouTube videos, providing a seamless playback experience. */
+/** The `YoutubeVideo` component enables the embedding of YouTube videos, providing a seamless playback experience.
+ *
+ * Note: `dompurify` is not bundled, so please install the following package using npm:
+ *
+ * ```typescript
+ * npm i dompurify
+ * ```
+ */
 export default function YoutubeVideo(props: YoutubeVideoProps) {
   const sanitizedYoutubeVideoId = DOMPurify.sanitize(props.youtubeVideoId)
 
