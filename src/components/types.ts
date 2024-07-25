@@ -236,6 +236,11 @@ export interface MultipartFormat extends DataFormat {
   files: FileData[]
   /** Text content sent along with the files. */
   text?: string
+}
+
+export type MultipartData = MultipartFormat & Updates<MultipartFormat>
+
+export interface MultipartProps extends MultipartData {
   /**
    * An object mapping file extensions to their respective viewer components.
    * Each key represents a file type (e.g., 'pdf', 'jpg'), and the corresponding value is a React component
@@ -244,8 +249,6 @@ export interface MultipartFormat extends DataFormat {
    */
   supportedViewers?: { [key: string]: React.ComponentType<{ url: string }> }
 }
-
-export type MultipartData = MultipartFormat & Updates<MultipartFormat>
 
 export interface BaseInputProps {
   /** Current user. */
