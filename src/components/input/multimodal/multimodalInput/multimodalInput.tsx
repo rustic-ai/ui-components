@@ -62,7 +62,7 @@ export default function MultimodalInput(props: MultimodalInputProps) {
   function handleSendMessage(formattedMessage: Message): void {
     if (hasAddedFiles) {
       formattedMessage.id = messageId
-      formattedMessage.format = 'multipart'
+      formattedMessage.format = 'filesWithText'
       formattedMessage.data.files = filesInfo
     }
 
