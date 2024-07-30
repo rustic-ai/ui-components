@@ -39,8 +39,11 @@ export function getMockWebSocketClient(webSocketUrl: string): WebSocketClient {
         ws = new WebSocket(webSocketUrl)
       }
     },
-    onReceive: (handler: (event: MessageEvent) => void) => {
-      ws.onmessage = handler
+    onReceive: (handler: (message: Message) => void) => {
+      ws.onmessage = (event) => {
+        const receivedMessage = JSON.parse(event.data)
+        handler(receivedMessage)
+      }
     },
   }
 }

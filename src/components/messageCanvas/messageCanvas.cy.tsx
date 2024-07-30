@@ -6,7 +6,7 @@ import {
   testUser,
 } from '../../../cypress/support/variables'
 import Icon from '../icon/icon'
-import type { ThreadableMessage } from '../types'
+import type { Message } from '../types'
 import CopyText from './actions/copy/copyText'
 import MessageCanvas from './messageCanvas'
 
@@ -43,7 +43,7 @@ describe('MessageCanvas', () => {
       cy.mount(
         <MessageCanvas
           message={testMessage}
-          getActionsComponent={(message: ThreadableMessage) => {
+          getActionsComponent={(message: Message) => {
             const copyButton = message.format === 'text' && (
               <CopyText message={message} />
             )

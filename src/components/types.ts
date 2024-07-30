@@ -39,7 +39,7 @@ export interface WebSocketClient {
   send: (message: Message) => void
   close: () => void
   reconnect: () => void
-  onReceive?: (handler: (event: MessageEvent) => void) => void
+  onReceive?: (handler: (message: Message) => void) => void
 }
 
 export enum ParticipantRole {

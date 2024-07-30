@@ -9,12 +9,7 @@ import Icon from '../icon/icon'
 import MessageCanvas, {
   type MessageContainerProps,
 } from '../messageCanvas/messageCanvas'
-import type {
-  ComponentMap,
-  Sender,
-  ThreadableMessage,
-  WebSocketClient,
-} from '../types'
+import type { ComponentMap, Message, Sender, WebSocketClient } from '../types'
 
 export interface MessageSpaceProps extends MessageContainerProps {
   /** WebSocket connection to send and receive messages to and from a backend. This can be useful for component interactions, for example, to send filter conditions, user location, etc. */
@@ -23,7 +18,7 @@ export interface MessageSpaceProps extends MessageContainerProps {
   sender: Sender
   /** A component map contains message formats as keys and their corresponding React components as values. */
   supportedElements: ComponentMap
-  messages?: ThreadableMessage[]
+  messages?: Message[]
   /** Text label for scroll down button. Default value is 'scroll down'. */
   scrollDownLabel?: string
 }
@@ -34,6 +29,23 @@ function usePrevious(value: number) {
     ref.current = value
   })
   return ref.current
+}
+
+function getCombinedMessages(
+  messages: { [key: string]: Message[] },
+  message: Message
+) {
+  const key = message.format.includes('update') ? message.threadId : message.id
+  if (key) {
+    const existingMessages = messages[key] || []
+    const newMessages = {
+      ...messages,
+      [key]: existingMessages.concat(message),
+    }
+    return newMessages
+  } else {
+    return messages
+  }
 }
 
 /**
@@ -51,8 +63,10 @@ export default function MessageSpace(props: MessageSpaceProps) {
   const [isScrolledToBottom, setIsScrolledToBottom] = useState(true)
   const [isScrollButtonHidden, setIsScrollButtonHidden] = useState(true)
   const [areVideosLoaded, setAreVideosLoaded] = useState(false)
-
-  const currentMessagesLength = props.messages?.length || 0
+  const [chatMessages, setChatMessages] = useState<{
+    [messageId: string]: Message[]
+  }>({})
+  const currentMessagesLength = Object.keys(chatMessages).length
   const previousMessagesLength = usePrevious(currentMessagesLength)
   const hideScrollButtonDuration = 2000
 
@@ -156,7 +170,30 @@ export default function MessageSpace(props: MessageSpaceProps) {
       hideScrollButton()
       scrollToLastMessage()
     }
-  }, [isScrolledToBottom, props.messages?.length])
+  }, [isScrolledToBottom, Object.keys(chatMessages).length])
+
+  useEffect(() => {
+    let messageDict: { [messageId: string]: Message[] } = {}
+
+    props.messages?.forEach((message) => {
+      const newMessageDict = getCombinedMessages(messageDict, message)
+      messageDict = newMessageDict
+    })
+
+    setChatMessages(messageDict)
+  }, [props.messages])
+
+  function handleIncomingMessage(message: Message) {
+    setChatMessages((prevMessages) =>
+      getCombinedMessages(prevMessages, message)
+    )
+  }
+
+  useEffect(() => {
+    if (props.ws.onReceive) {
+      props.ws.onReceive(handleIncomingMessage)
+    }
+  }, [])
 
   return (
     <Box
@@ -164,26 +201,26 @@ export default function MessageSpace(props: MessageSpaceProps) {
       data-cy="message-space"
       className="rustic-message-space"
     >
-      {props.messages &&
-        props.messages.length > 0 &&
-        props.messages.map((message, index) => {
-          return (
-            <MessageCanvas
-              key={message.id}
-              message={message}
-              getActionsComponent={props.getActionsComponent}
-              getProfileComponent={props.getProfileComponent}
-              ref={index === currentMessagesLength - 1 ? scrollEndRef : null}
-            >
-              <ElementRenderer
-                ws={props.ws}
-                sender={props.sender}
-                message={message}
-                supportedElements={props.supportedElements}
-              />
-            </MessageCanvas>
-          )
-        })}
+      {Object.keys(chatMessages).map((key, index) => {
+        const messages = chatMessages[key]
+        const lastestMessage = messages[messages.length - 1]
+        return (
+          <MessageCanvas
+            key={key}
+            message={lastestMessage}
+            getActionsComponent={props.getActionsComponent}
+            getProfileComponent={props.getProfileComponent}
+            ref={index === currentMessagesLength - 1 ? scrollEndRef : null}
+          >
+            <ElementRenderer
+              ws={props.ws}
+              sender={props.sender}
+              messages={messages}
+              supportedElements={props.supportedElements}
+            />
+          </MessageCanvas>
+        )
+      })}
       {!isScrolledToBottom && !isScrollButtonHidden && (
         <Chip
           data-cy="scroll-down-button"

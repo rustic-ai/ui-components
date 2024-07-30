@@ -55,9 +55,8 @@ export default function PromptBuilder(props: PromptBuilderProps) {
     },
   }
 
-  function handleIncomingMessage(event: MessageEvent) {
-    const receivedMessage = JSON.parse(event.data)
-    setMessages((prev) => [...prev, receivedMessage])
+  function handleIncomingMessage(message: Message) {
+    setMessages((prev) => [...prev, message])
   }
 
   useEffect(() => {
@@ -121,7 +120,7 @@ export default function PromptBuilder(props: PromptBuilderProps) {
               key={message.id}
               ws={inputCapturer}
               sender={props.sender}
-              message={message}
+              messages={message}
               supportedElements={props.supportedElements}
             />
           )

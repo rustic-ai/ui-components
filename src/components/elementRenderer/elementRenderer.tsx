@@ -1,39 +1,34 @@
 import Typography from '@mui/material/Typography'
 import React from 'react'
 
-import type {
-  ComponentMap,
-  Sender,
-  ThreadableMessage,
-  WebSocketClient,
-} from '../types'
+import type { ComponentMap, Message, Sender, WebSocketClient } from '../types'
 
 interface ElementRendererProps {
   sender: Sender
   ws: WebSocketClient
-  message: ThreadableMessage
+  messages: Message[]
   supportedElements: ComponentMap
 }
 
 const ElementRenderer = (props: ElementRendererProps) => {
-  const MaybeElement = props.supportedElements[props.message.format]
+  const rootMessage = props.messages[0]
+  const updateMessages = props.messages.slice(1)
 
+  const MaybeElement = props.supportedElements[rootMessage.format]
   return (
     <>
       {MaybeElement ? (
         React.createElement(MaybeElement, {
           sender: props.sender,
           ws: props.ws,
-          messageId: props.message.id,
-          conversationId: props.message.conversationId,
-          ...props.message.data,
-          ...(props.message.threadMessagesData && {
-            updatedData: props.message.threadMessagesData,
-          }),
+          messageId: rootMessage.id,
+          conversationId: rootMessage.conversationId,
+          ...rootMessage.data,
+          updatedData: updateMessages.map((message) => message.data),
         })
       ) : (
         <Typography variant="body2">
-          Unsupported element format: {props.message.format}
+          Unsupported element format: {rootMessage.format}
         </Typography>
       )}
     </>
