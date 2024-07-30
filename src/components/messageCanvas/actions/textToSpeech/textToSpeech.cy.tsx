@@ -1,8 +1,8 @@
-import type { ThreadableMessage } from '../../../types' // Adjust if needed
+import type { Message } from '../../../types' // Adjust if needed
 import TextToSpeech from './textToSpeech'
 
 describe('TextToSpeech Component', () => {
-  const mockMessage: ThreadableMessage = {
+  const mockMessage: Message = {
     id: '1',
     timestamp: '2020-01-02T00:00:00.000Z',
     conversationId: 'lkd9vc',

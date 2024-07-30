@@ -6,23 +6,23 @@ import Stack from '@mui/material/Stack'
 import React, { forwardRef, type ReactNode } from 'react'
 
 import Timestamp from '../timestamp/timestamp'
-import type { ThreadableMessage } from '../types'
+import type { Message } from '../types'
 
 export interface MessageContainerProps {
   /** A function that returns a React element to display sender details, like names and/or avatars. */
-  getProfileComponent?: (message: ThreadableMessage) => ReactNode
+  getProfileComponent?: (message: Message) => ReactNode
   /** A function that returns a single React element which may be composed of several actions supported for the message, such as editing, copying, and deleting, etc.
    * In case no actions are applicable or available for a particular message, the function may return `undefined`.
    * This approach offers flexibility in tailoring message interactions to specific application requirements.
    * To define individual message actions, developers can extend the `Action` component's functionality.
    * One such example is the `CopyText` component.
    */
-  getActionsComponent?: (message: ThreadableMessage) => ReactNode | undefined
+  getActionsComponent?: (message: Message) => ReactNode | undefined
 }
 
 export interface MessageCanvasProps extends MessageContainerProps {
-  /** Message information to be displayed. Please see the `MessageSpace` docs for more information about the `ThreadableMessage` interface. */
-  message: ThreadableMessage
+  /** Message information to be displayed. Please see the `MessageSpace` docs for more information about the `Message` interface. */
+  message: Message
   /** React component to be displayed in the message canvas. */
   children: ReactNode
 }

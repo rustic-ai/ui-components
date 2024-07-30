@@ -9,6 +9,7 @@ import {
   Image,
   MarkedMarkdown,
   MarkedStreamingMarkdown,
+  type Message,
   Multipart,
   OpenLayersMap,
   RechartsTimeSeries,
@@ -16,7 +17,6 @@ import {
   StreamingText,
   Table,
   Text,
-  type ThreadableMessage,
   Video,
   YoutubeVideo,
 } from '..'
@@ -45,7 +45,7 @@ const meta: Meta<React.ComponentProps<typeof MessageSpace>> = {
 
 export default meta
 
-function getProfileIcon(message: ThreadableMessage) {
+function getProfileIcon(message: Message) {
   if (message.sender.name?.toLowerCase().includes('agent')) {
     return <Icon name="smart_toy" />
   } else {
@@ -53,7 +53,7 @@ function getProfileIcon(message: ThreadableMessage) {
   }
 }
 
-function getProfileIconAndName(message: ThreadableMessage) {
+function getProfileIconAndName(message: Message) {
   return (
     <>
       {getProfileIcon(message)}
@@ -68,9 +68,9 @@ meta.argTypes = {
   messages: {
     table: {
       type: {
-        summary: 'Array of ThreadableMessage.\n',
+        summary: 'Array of Message.\n',
         detail:
-          'ThreadableMessage extends the Message interface which has the following fields:\n' +
+          'Message interface has the following fields:\n' +
           '  id: A string representing the unique identifier of the message.\n' +
           '  timestamp: A string representing the timestamp of the message.\n' +
           '  sender: An object representing the sender of the message. Refer to the `sender` prop.\n' +
@@ -81,10 +81,7 @@ meta.argTypes = {
           '  threadId: An optional string representing the identifier of the thread to which this message belongs.\n' +
           '  priority: An optional string representing the priority of the message.\n' +
           '  taggedParticipants: An optional array of strings representing the participants tagged in the message.\n' +
-          '  topic: An optional string representing the identifier of the topic associated with the message.\n' +
-          'Other than the fields described above, ThreadableMessage also has the following fields:\n' +
-          '  lastThreadMessage: An optional object of Message interface representing the last message in the thread.\n' +
-          '  threadMessagesData: An optional array of objects of type MessageData, which can contain any key-value pairs.',
+          '  topic: An optional string representing the identifier of the topic associated with the message.\n',
       },
     },
   },
@@ -477,7 +474,7 @@ export const Default = {
       multipart: Multipart,
     },
     getProfileComponent: getProfileIconAndName,
-    getActionsComponent: (message: ThreadableMessage) => {
+    getActionsComponent: (message: Message) => {
       const copyButton = message.format === 'text' && (
         <CopyText message={message} />
       )

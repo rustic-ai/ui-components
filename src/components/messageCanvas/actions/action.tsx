@@ -5,13 +5,13 @@ import Tooltip from '@mui/material/Tooltip'
 import type { ReactNode } from 'react'
 import React from 'react'
 
-import type { ThreadableMessage } from '../../types'
+import type { Message } from '../../types'
 
 interface ActionProps {
   label: string
-  message: ThreadableMessage
+  message: Message
   icon: ReactNode
-  onClick: (message: ThreadableMessage) => void
+  onClick: (message: Message) => void
 }
 
 export default function Action(props: ActionProps) {

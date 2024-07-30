@@ -85,7 +85,7 @@ meta.argTypes = {
     type: 'function',
     table: {
       type: {
-        summary: '(message: ThreadableMessage) => ReactNode',
+        summary: '(message: Message) => ReactNode',
       },
     },
   },

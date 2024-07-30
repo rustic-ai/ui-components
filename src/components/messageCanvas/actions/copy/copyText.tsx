@@ -1,18 +1,18 @@
 import React, { useState } from 'react'
 
 import Icon from '../../../icon/icon'
-import type { ThreadableMessage } from '../../../types'
+import type { Message } from '../../../types'
 import Action from '../index'
 
 export interface CopyTextProps {
-  message: ThreadableMessage
+  message: Message
 }
 
 export default function CopyText(props: CopyTextProps) {
   const [tooltipContent, setTooltipContent] = useState('Copy text')
   const twoSeconds = 2000
 
-  function handleOnClick(message: ThreadableMessage) {
+  function handleOnClick(message: Message) {
     if (message.data.text) {
       navigator.clipboard
         .writeText(message.data.text)

@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 
 import Icon from '../../../icon/icon'
-import type { ThreadableMessage } from '../../../types'
+import type { Message } from '../../../types'
 import Action from '../index'
 
 export interface TextToSpeechProps {
-  message: ThreadableMessage
+  message: Message
 }
 
 export default function TextToSpeech(props: TextToSpeechProps) {
