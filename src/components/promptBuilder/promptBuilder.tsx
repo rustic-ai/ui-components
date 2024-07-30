@@ -120,7 +120,7 @@ export default function PromptBuilder(props: PromptBuilderProps) {
               key={message.id}
               ws={inputCapturer}
               sender={props.sender}
-              messages={message}
+              messages={[message]}
               supportedElements={props.supportedElements}
             />
           )
