@@ -53,7 +53,7 @@ meta.argTypes = {
           'send: (msg: Message) => void\n' +
           'close: () => void\n' +
           'reconnect: () => void\n' +
-          'onReceive?:  (handler: (event: MessageEvent) => void) => void\n',
+          'onReceive?:  (handler: (message: Message) => void) => void',
       },
     },
   },

@@ -90,7 +90,11 @@ meta.argTypes = {
       type: {
         summary: 'WebSocketClient',
         detail:
-          'send: (message: Message) => void\nclose: () => void\nreconnect: () => void\n',
+          'A websocket client with supports the following methods:\n' +
+          'send: (msg: Message) => void\n' +
+          'close: () => void\n' +
+          'reconnect: () => void\n' +
+          'onReceive?: (handler: (message: Message) => void) => void',
       },
     },
   },
