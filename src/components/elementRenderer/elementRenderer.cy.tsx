@@ -1,4 +1,5 @@
 import React from 'react'
+import { v4 as getUUID } from 'uuid'
 
 import {
   supportedViewports,
@@ -89,17 +90,37 @@ describe('ElementRenderer', () => {
           messages={[
             {
               ...sampleMessage,
-              data: { text: 'Test' },
+              data: { text: 'This' },
               format: 'streamingText',
             },
             {
-              id: '2',
+              id: getUUID(),
               timestamp: '2020-01-02T00:00:00.000Z',
               sender: testUser,
               conversationId: 'lkd9vc',
               topic: 'default',
               threadId: '1',
-              data: { text: ' Text' },
+              data: { text: ' is' },
+              format: 'streamingText',
+            },
+            {
+              id: getUUID(),
+              timestamp: '2020-01-02T00:00:00.000Z',
+              sender: testUser,
+              conversationId: 'lkd9vc',
+              topic: 'default',
+              threadId: '1',
+              data: { text: ' streaming' },
+              format: 'streamingText',
+            },
+            {
+              id: getUUID(),
+              timestamp: '2020-01-02T00:00:00.000Z',
+              sender: testUser,
+              conversationId: 'lkd9vc',
+              topic: 'default',
+              threadId: '1',
+              data: { text: ' text.' },
               format: 'streamingText',
             },
           ]}
@@ -107,7 +128,7 @@ describe('ElementRenderer', () => {
           ws={mockWsClient}
         />
       )
-      cy.get('p').should('contain.text', 'Test Text')
+      cy.get('p').should('contain.text', 'This is streaming text.')
     })
 
     it(`renders a message for an unsupported format on ${viewport} screen`, () => {

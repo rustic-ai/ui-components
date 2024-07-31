@@ -24,7 +24,9 @@ const ElementRenderer = (props: ElementRendererProps) => {
           messageId: rootMessage.id,
           conversationId: rootMessage.conversationId,
           ...rootMessage.data,
-          updatedData: updateMessages.map((message) => message.data),
+          ...(updateMessages.length > 0 && {
+            updatedData: updateMessages.map((message) => message.data),
+          }),
         })
       ) : (
         <Typography variant="body2">
