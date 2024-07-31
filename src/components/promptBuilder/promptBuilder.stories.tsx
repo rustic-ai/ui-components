@@ -14,10 +14,10 @@ import { v4 as getUUID } from 'uuid'
 
 import TextInput from '../input/textInput/textInput'
 import MessageSpace from '../messageSpace/messageSpace'
+import { getMockWebSocketClient, sendMessageToClient } from '../mockWebSocket'
 import Question from '../question/question'
 import Text from '../text/text'
 import type { Message, QuestionProps } from '../types'
-import { getMockWebSocketClient, sendMessageToClient } from './mockWebSocket'
 import PromptBuilder from './promptBuilder'
 
 const meta: Meta<React.ComponentProps<typeof PromptBuilder>> = {

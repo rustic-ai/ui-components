@@ -1,7 +1,7 @@
 import { type Client, WebSocket } from 'mock-socket'
 import { v4 as getUUID } from 'uuid'
 
-import type { Message, MessageData, WebSocketClient } from '../types'
+import type { Message, MessageData, WebSocketClient } from './types'
 
 const serverDelay = 500
 
@@ -25,24 +25,36 @@ export function sendMessageToClient(
 }
 
 export function getMockWebSocketClient(webSocketUrl: string): WebSocketClient {
-  let ws = new WebSocket(webSocketUrl)
+  let ws: WebSocket | null = null
+  const connect = (): WebSocket => {
+    const socket = new WebSocket(webSocketUrl)
+    socket.onopen = () => {}
 
+    return socket
+  }
+  ws = connect()
   return {
     send: (message: Message) => {
-      ws.send(JSON.stringify(message))
+      if (ws) {
+        ws.send(JSON.stringify(message))
+      }
     },
     close: () => {
-      ws.close()
+      if (ws) {
+        ws.close()
+      }
     },
     reconnect: () => {
-      if (ws.readyState === WebSocket.CLOSED) {
-        ws = new WebSocket(webSocketUrl)
+      if (ws && ws.readyState === WebSocket.CLOSED) {
+        ws = connect()
       }
     },
     onReceive: (handler: (message: Message) => void) => {
-      ws.onmessage = (event) => {
-        const receivedMessage = JSON.parse(event.data)
-        handler(receivedMessage)
+      if (ws) {
+        ws.onmessage = (event) => {
+          const receivedMessage = JSON.parse(event.data)
+          handler(receivedMessage)
+        }
       }
     },
   }

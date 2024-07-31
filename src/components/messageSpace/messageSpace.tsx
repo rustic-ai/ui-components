@@ -146,21 +146,6 @@ export default function MessageSpace(props: MessageSpaceProps) {
     scrollDownIfNeeded()
   }, [areVideosLoaded])
 
-  function scrollToLastMessage() {
-    if (getVideoStatus()) {
-      const lastMessage = scrollEndRef.current
-
-      if (lastMessage) {
-        // Use setTimeout to delay smooth scrolling
-        setTimeout(() => {
-          lastMessage.scrollIntoView({ block: 'start', inline: 'nearest' })
-        }, 0)
-      }
-    } else {
-      setTimeout(scrollToLastMessage, 1)
-    }
-  }
-
   useEffect(() => {
     const hasNewMessage =
       previousMessagesLength !== 0 &&
@@ -168,7 +153,7 @@ export default function MessageSpace(props: MessageSpaceProps) {
 
     if (isScrolledToBottom && hasNewMessage) {
       hideScrollButton()
-      scrollToLastMessage()
+      scrollDownIfNeeded()
     }
   }, [isScrolledToBottom, Object.keys(chatMessages).length])
 
@@ -181,7 +166,7 @@ export default function MessageSpace(props: MessageSpaceProps) {
     })
 
     setChatMessages(messageDict)
-  }, [props.messages])
+  }, [props.messages?.length])
 
   function handleIncomingMessage(message: Message) {
     setChatMessages((prevMessages) =>
