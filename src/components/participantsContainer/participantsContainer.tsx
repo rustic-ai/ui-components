@@ -16,7 +16,6 @@ import { useState } from 'react'
 
 import { capitalizeFirstLetter } from '../helper'
 import Icon from '../icon/icon'
-import { type Participant, ParticipantRole, ParticipantType } from '../types'
 
 export interface ParticipantsContainerProps {
   participants: Participant[]
@@ -24,6 +23,23 @@ export interface ParticipantsContainerProps {
   isParticipantListOpen: boolean
   /** Callback function to close the participants modal. */
   onClose: () => void
+}
+
+export enum ParticipantRole {
+  Owner = 'owner',
+  Member = 'member',
+}
+
+export enum ParticipantType {
+  Human = 'human',
+  Agent = 'agent',
+}
+
+export interface Participant {
+  id: string
+  displayName: string
+  participantRole: ParticipantRole
+  participantType: ParticipantType
 }
 
 function ParticipantList(props: {

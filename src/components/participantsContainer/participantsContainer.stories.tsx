@@ -4,9 +4,10 @@ import Button from '@mui/material/Button'
 import type { Meta, StoryFn } from '@storybook/react'
 import React, { useState } from 'react'
 
-import { ParticipantRole, ParticipantType } from '../types'
 import ParticipantsContainer, {
+  ParticipantRole,
   type ParticipantsContainerProps,
+  ParticipantType,
 } from './participantsContainer'
 
 const meta: Meta<React.ComponentProps<typeof ParticipantsContainer>> = {
