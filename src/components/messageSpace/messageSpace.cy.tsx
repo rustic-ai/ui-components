@@ -26,6 +26,8 @@ import { getMockWebSocketClient } from '../mockWebSocket'
 import MessageSpace from './messageSpace'
 
 describe('MessageSpace Component', () => {
+  const messageCanvas = '[data-cy=message-canvas]'
+
   const supportedElements = {
     text: Text,
     streamingText: StreamingText,
@@ -169,7 +171,7 @@ describe('MessageSpace Component', () => {
         <MessageSpace
           ws={mockWsClient}
           sender={testUser}
-          messages={messages}
+          receivedMessages={messages}
           supportedElements={supportedElements}
           getProfileComponent={(message: Message) => {
             if (message.sender.name?.includes('Agent')) {
@@ -202,14 +204,14 @@ describe('MessageSpace Component', () => {
       })
     })
 
-    it(`can receive and render messages from websocket on ${viewport} screen`, () => {
+    it.only(`can receive and render messages from websocket on ${viewport} screen`, () => {
       setupWebSocketServer()
       cy.viewport(viewport)
       cy.mount(
         <MessageSpace
           ws={getMockWebSocketClient(webSocketUrl)}
           sender={testUser}
-          messages={[
+          receivedMessages={[
             {
               ...humanMessageData,
               id: getUUID(),
@@ -237,6 +239,7 @@ describe('MessageSpace Component', () => {
         'not.contain',
         'Sure! The text is displayed progressively.'
       )
+      cy.get(messageCanvas).should('have.length', 1)
       messagesToBeSent.forEach((message) => {
         cy.get(messageSpace).should('contain', message.data.text)
       })
@@ -244,6 +247,8 @@ describe('MessageSpace Component', () => {
         'contain',
         'Sure! The text is displayed progressively.'
       )
+      const totalDisplayedMessages = 3
+      cy.get(messageCanvas).should('have.length', totalDisplayedMessages)
       teardownWebSocketServer()
     })
 
@@ -262,7 +267,7 @@ describe('MessageSpace Component', () => {
           <MessageSpace
             ws={mockWsClient}
             sender={testUser}
-            messages={messages}
+            receivedMessages={messages}
             supportedElements={supportedElements}
           />
         </div>

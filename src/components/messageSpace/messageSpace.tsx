@@ -18,7 +18,8 @@ export interface MessageSpaceProps extends MessageContainerProps {
   sender: Sender
   /** A component map contains message formats as keys and their corresponding React components as values. */
   supportedElements: ComponentMap
-  messages?: Message[]
+  /** Messages received before the component was mounted. These messages are rendered along with new messages received from the websocket. */
+  receivedMessages?: Message[]
   /** Text label for scroll down button. Default value is 'scroll down'. */
   scrollDownLabel?: string
 }
@@ -35,13 +36,28 @@ function getCombinedMessages(
   messages: { [key: string]: Message[] },
   message: Message
 ) {
-  const key = message.format.includes('update') ? message.threadId : message.id
+  let key = message.format.includes('update') ? message.threadId : message.id
+
   if (key) {
+    const newMessages = { ...messages }
     const existingMessages = messages[key] || []
-    const newMessages = {
-      ...messages,
-      [key]: existingMessages.concat(message),
+    const originalMessage = existingMessages[0]
+
+    // Check if sender is the same for update messages
+    if (
+      message.format.includes('update') &&
+      originalMessage &&
+      originalMessage.sender.id !== message.sender.id
+    ) {
+      key = message.id
     }
+
+    if (!newMessages[key]) {
+      newMessages[key] = []
+    }
+
+    newMessages[key] = newMessages[key].concat(message)
+
     return newMessages
   } else {
     return messages
@@ -51,7 +67,7 @@ function getCombinedMessages(
 /**
  The `MessageSpace` component uses `MessageCanvas` and `ElementRenderer` to render a list of messages. It serves as a container for individual message items, each encapsulated within a `MessageCanvas` for consistent styling and layout. It can receive and process messages to dynamically update the displayed content.
 
- The `MessageSpace` component can combine update messages with the original message and render them as a single message. For this to work, the `threadId` of the update message must match the `id` of the original message, and the format of the update message must include 'update'.
+ The `MessageSpace` component can combine update messages with the original message and render them as a single message. For this to work, the `threadId` of the update message must match the `id` of the original message, and the format of the update message should be prefixed with 'update'. For example, if the original message format is 'streamingText', the update message format should be 'updateStreamingText'.
  
  Note: For more information about the `getActionsComponent` and `getProfileComponent` fields, refer to the [MessageCanvas' docs](http://localhost:6006/?path=/docs/rustic-ui-message-canvas-message-canvas--docs).
 */
@@ -80,14 +96,6 @@ export default function MessageSpace(props: MessageSpaceProps) {
     timeoutRef.current = setTimeout(() => {
       setIsScrollButtonHidden(false)
     }, hideScrollButtonDuration)
-  }
-
-  function handleScrollDown() {
-    scrollEndRef.current?.scrollIntoView({
-      behavior: 'smooth',
-      block: 'end',
-    })
-    hideScrollButton()
   }
 
   function getVideoStatus() {
@@ -128,7 +136,7 @@ export default function MessageSpace(props: MessageSpaceProps) {
     }
   }, [isScrolledToBottom])
 
-  function scrollDownIfNeeded() {
+  function scrollDown() {
     if (getVideoStatus()) {
       const container = containerRef.current
       setAreVideosLoaded(true)
@@ -140,12 +148,12 @@ export default function MessageSpace(props: MessageSpaceProps) {
         }, 0)
       }
     } else {
-      setTimeout(scrollDownIfNeeded, 1)
+      setTimeout(scrollDown, 1)
     }
   }
 
   useEffect(() => {
-    scrollDownIfNeeded()
+    scrollDown()
   }, [areVideosLoaded])
 
   useEffect(() => {
@@ -155,20 +163,20 @@ export default function MessageSpace(props: MessageSpaceProps) {
 
     if (isScrolledToBottom && hasNewMessage) {
       hideScrollButton()
-      scrollDownIfNeeded()
+      scrollDown()
     }
   }, [isScrolledToBottom, Object.keys(chatMessages).length])
 
   useEffect(() => {
     let messageDict: { [messageId: string]: Message[] } = {}
 
-    props.messages?.forEach((message) => {
+    props.receivedMessages?.forEach((message) => {
       const newMessageDict = getCombinedMessages(messageDict, message)
       messageDict = newMessageDict
     })
 
     setChatMessages(messageDict)
-  }, [props.messages?.length])
+  }, [props.receivedMessages?.length])
 
   function handleIncomingMessage(message: Message) {
     setChatMessages((prevMessages) =>
@@ -214,7 +222,7 @@ export default function MessageSpace(props: MessageSpaceProps) {
           variant="rusticSecondary"
           className="rustic-scroll-down-button"
           size="medium"
-          onClick={handleScrollDown}
+          onClick={scrollDown}
           label={
             <>
               {props.scrollDownLabel}

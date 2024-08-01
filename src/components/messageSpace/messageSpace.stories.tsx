@@ -65,7 +65,7 @@ function getProfileIconAndName(message: Message) {
 }
 
 meta.argTypes = {
-  messages: {
+  receivedMessages: {
     table: {
       type: {
         summary: 'Array of Message.\n',
@@ -86,6 +86,8 @@ meta.argTypes = {
     },
   },
   ws: {
+    description:
+      'WebSocket connection to send and receive messages to and from a backend. The onReceive prop will override the default handler once it is set. If you need to use the WebSocket for purposes other than chat, you will need to create a separate WebSocket connection.',
     table: {
       type: {
         summary: 'WebSocketClient',
@@ -203,7 +205,7 @@ export const Default = {
   args: {
     ws: { send: () => {} },
     sender: humanMessageData.sender,
-    messages: [
+    receivedMessages: [
       {
         ...humanMessageData,
         id: getUUID(),

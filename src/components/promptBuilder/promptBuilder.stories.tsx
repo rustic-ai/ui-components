@@ -301,7 +301,7 @@ export const Default = {
               ws={boilerplateWs}
               sender={user}
               supportedElements={{ text: Text }}
-              messages={messageSpaceMessages}
+              receivedMessages={messageSpaceMessages}
               getProfileComponent={(message) => {
                 return <>{message.sender.name}</>
               }}
