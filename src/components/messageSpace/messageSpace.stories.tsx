@@ -9,6 +9,7 @@ import {
   Image,
   MarkedMarkdown,
   MarkedStreamingMarkdown,
+  type Message,
   Multipart,
   OpenLayersMap,
   RechartsTimeSeries,
@@ -16,7 +17,6 @@ import {
   StreamingText,
   Table,
   Text,
-  type ThreadableMessage,
   Video,
   YoutubeVideo,
 } from '..'
@@ -45,7 +45,7 @@ const meta: Meta<React.ComponentProps<typeof MessageSpace>> = {
 
 export default meta
 
-function getProfileIcon(message: ThreadableMessage) {
+function getProfileIcon(message: Message) {
   if (message.sender.name?.toLowerCase().includes('agent')) {
     return <Icon name="smart_toy" />
   } else {
@@ -53,7 +53,7 @@ function getProfileIcon(message: ThreadableMessage) {
   }
 }
 
-function getProfileIconAndName(message: ThreadableMessage) {
+function getProfileIconAndName(message: Message) {
   return (
     <>
       {getProfileIcon(message)}
@@ -65,12 +65,12 @@ function getProfileIconAndName(message: ThreadableMessage) {
 }
 
 meta.argTypes = {
-  messages: {
+  receivedMessages: {
     table: {
       type: {
-        summary: 'Array of ThreadableMessage.\n',
+        summary: 'Array of Message.\n',
         detail:
-          'ThreadableMessage extends the Message interface which has the following fields:\n' +
+          'Message interface has the following fields:\n' +
           '  id: A string representing the unique identifier of the message.\n' +
           '  timestamp: A string representing the timestamp of the message.\n' +
           '  sender: An object representing the sender of the message. Refer to the `sender` prop.\n' +
@@ -81,19 +81,22 @@ meta.argTypes = {
           '  threadId: An optional string representing the identifier of the thread to which this message belongs.\n' +
           '  priority: An optional string representing the priority of the message.\n' +
           '  taggedParticipants: An optional array of strings representing the participants tagged in the message.\n' +
-          '  topic: An optional string representing the identifier of the topic associated with the message.\n' +
-          'Other than the fields described above, ThreadableMessage also has the following fields:\n' +
-          '  lastThreadMessage: An optional object of Message interface representing the last message in the thread.\n' +
-          '  threadMessagesData: An optional array of objects of type MessageData, which can contain any key-value pairs.',
+          '  topic: An optional string representing the identifier of the topic associated with the message.\n',
       },
     },
   },
   ws: {
+    description:
+      'WebSocket connection to send and receive messages to and from a backend. The onReceive prop will override the default handler once it is set. If you need to use the WebSocket for purposes other than chat, you will need to create a separate WebSocket connection.',
     table: {
       type: {
         summary: 'WebSocketClient',
         detail:
-          'send: (message: Message) => void\nclose: () => void\nreconnect: () => void\n',
+          'A websocket client with supports the following methods:\n' +
+          'send: (msg: Message) => void\n' +
+          'close: () => void\n' +
+          'reconnect: () => void\n' +
+          'onReceive?: (handler: (message: Message) => void) => void',
       },
     },
   },
@@ -197,12 +200,12 @@ const tableData = [
 ]
 
 const chartColors = ['#648FFF', '#785EF0', '#DC267F', '#FE6100', '#FFB000']
-
+const streamingMarkdownRootMessageId = getUUID()
 export const Default = {
   args: {
     ws: { send: () => {} },
     sender: humanMessageData.sender,
-    messages: [
+    receivedMessages: [
       {
         ...humanMessageData,
         id: getUUID(),
@@ -214,11 +217,21 @@ export const Default = {
       },
       {
         ...agentMessageData,
-        id: getUUID(),
+        id: streamingMarkdownRootMessageId,
         timestamp: '2024-01-02T00:01:00.000Z',
-        format: 'markdown',
+        format: 'streamingMarkdown',
         data: {
-          text: '# Title\n\n---\n\n ## Subtitle\n\nThis is a paragraph. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.\n\n- This is an **inline notation**\n- This is a *inline notation*.\n- This is a _inline notation_.\n- This is a __inline notation__.\n- This is a ~~inline notation~~.\n\n```\nconst string = "Hello World"\nconst number = 123\n```\n\n> This is a blockquote.\n\n1. Item 1\n2. Item 2\n3. Item 3\n\n| Column 1 | Column 2 | Column 3 |\n| -------- | -------- | -------- |\n| Item 1   | Item 2   | Item 3   |',
+          text: '# Title\n\n---\n\n ## Subtitle',
+        },
+      },
+      {
+        ...agentMessageData,
+        id: getUUID(),
+        timestamp: '2024-01-02T00:02:01.000Z',
+        format: 'updateStreamingMarkdown',
+        threadId: streamingMarkdownRootMessageId,
+        data: {
+          text: '\n\nThis is a paragraph. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.\n\n- This is an **inline notation**\n- This is a *inline notation*.\n- This is a _inline notation_.\n- This is a __inline notation__.\n- This is a ~~inline notation~~.\n\n```\nconst string = "Hello World"\nconst number = 123\n```\n\n> This is a blockquote.\n\n1. Item 1\n2. Item 2\n3. Item 3\n\n| Column 1 | Column 2 | Column 3 |\n| -------- | -------- | -------- |\n| Item 1   | Item 2   | Item 3   |',
         },
       },
       {
@@ -467,7 +480,7 @@ export const Default = {
       multipart: Multipart,
     },
     getProfileComponent: getProfileIconAndName,
-    getActionsComponent: (message: ThreadableMessage) => {
+    getActionsComponent: (message: Message) => {
       const copyButton = message.format === 'text' && (
         <CopyText message={message} />
       )

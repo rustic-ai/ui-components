@@ -1,9 +1,11 @@
 import Typography from '@mui/material/Typography'
 import React from 'react'
 
-import { ElementRenderer, MarkedMarkdown, type ThreadableMessage } from '..'
+import ElementRenderer from '../elementRenderer'
 import Icon from '../icon/icon'
+import MarkedMarkdown from '../markdown'
 import Text from '../text/text'
+import type { Message } from '../types'
 import CopyText from './actions/copy/copyText'
 import TextToSpeech from './actions/textToSpeech/textToSpeech'
 import MessageCanvas from './messageCanvas'
@@ -111,7 +113,7 @@ const elementRendererString = `<ElementRenderer
       supportedElements={{ text: Text }}
     />`
 
-const profileString = `(message: ThreadableMessage) => {
+const profileString = `(message: Message) => {
     <>
       {getProfileIcon(message)}
       <Typography variant="body1" color="text.secondary">
@@ -120,7 +122,7 @@ const profileString = `(message: ThreadableMessage) => {
     </>
   }`
 
-function getProfileIcon(message: ThreadableMessage) {
+function getProfileIcon(message: Message) {
   if (message.sender.name?.includes('agent')) {
     return <Icon name="smart_toy" />
   } else {
@@ -128,7 +130,7 @@ function getProfileIcon(message: ThreadableMessage) {
   }
 }
 
-function getProfileName(message: ThreadableMessage) {
+function getProfileName(message: Message) {
   return (
     <Typography variant="body1" color="text.secondary">
       {message.sender.name}
@@ -136,7 +138,7 @@ function getProfileName(message: ThreadableMessage) {
   )
 }
 
-function getProfileIconAndName(message: ThreadableMessage) {
+function getProfileIconAndName(message: Message) {
   return (
     <>
       {getProfileIcon(message)}
@@ -149,7 +151,7 @@ export const WithProfileIcon = {
   args: {
     children: (
       <ElementRenderer
-        message={messageFromHuman}
+        messages={[messageFromHuman]}
         supportedElements={{ text: Text }}
         {...commonElementRendererProps}
       />
@@ -175,7 +177,7 @@ export const NoIcon = {
   args: {
     children: (
       <ElementRenderer
-        message={messageFromAgent}
+        messages={[messageFromAgent]}
         supportedElements={{ text: Text }}
         {...commonElementRendererProps}
       />
@@ -201,14 +203,14 @@ export const WithCopyIcon = {
   args: {
     children: (
       <ElementRenderer
-        message={messageFromHuman}
+        messages={[messageFromHuman]}
         supportedElements={{ text: Text }}
         {...commonElementRendererProps}
       />
     ),
     message: messageFromHuman,
     getProfileComponent: getProfileIconAndName,
-    getActionsComponent: (message: ThreadableMessage) => {
+    getActionsComponent: (message: Message) => {
       const copyButton = message.format === 'text' && (
         <CopyText message={message} />
       )
@@ -222,7 +224,7 @@ export const WithCopyIcon = {
       source: {
         code: `<MessageCanvas
   getProfileComponent={${profileString}}
-  getActionsComponent={(message: ThreadableMessage) => {
+  getActionsComponent={(message: Message) => {
     const copyButton = message.format === 'text' && <CopyText message={message} />
     if (copyButton) {
       return <>{copyButton}</>
@@ -241,14 +243,14 @@ export const WithTextToSpeech = {
   args: {
     children: (
       <ElementRenderer
-        message={markdownMessage}
+        messages={[markdownMessage]}
         supportedElements={{ markdown: MarkedMarkdown }}
         {...commonElementRendererProps}
       />
     ),
     message: markdownMessage,
     getProfileComponent: getProfileIconAndName,
-    getActionsComponent: (message: ThreadableMessage) => {
+    getActionsComponent: (message: Message) => {
       return (
         <>
           <TextToSpeech message={message} />
@@ -265,7 +267,7 @@ export const WithTextToSpeech = {
       source: {
         code: `<MessageCanvas
   getProfileComponent={${profileString}}
-  getActionsComponent={(message: ThreadableMessage) => {
+  getActionsComponent={(message: Message) => {
     const copyButton = message.format === 'text' && <CopyText message={message} />
     if (copyButton) {
       return <>{copyButton}</>

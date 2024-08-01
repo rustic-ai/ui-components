@@ -1,7 +1,7 @@
 import { Server } from 'mock-socket'
 
+import { getMockWebSocketClient, sendMessageToClient } from '../mockWebSocket'
 import Question from '../question/question'
-import { getMockWebSocketClient, sendMessageToClient } from './mockWebSocket'
 import PromptBuilder from './promptBuilder'
 
 const webSocketUrl = 'ws://localhost:8081'

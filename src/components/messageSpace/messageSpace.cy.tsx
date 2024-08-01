@@ -1,5 +1,6 @@
 import 'cypress-real-events'
 
+import { Server } from 'mock-socket'
 import { v4 as getUUID } from 'uuid'
 
 import {
@@ -21,9 +22,12 @@ import {
   YoutubeVideo,
 } from '..'
 import Icon from '../icon/icon'
+import { getMockWebSocketClient } from '../mockWebSocket'
 import MessageSpace from './messageSpace'
 
 describe('MessageSpace Component', () => {
+  const messageCanvas = '[data-cy=message-canvas]'
+
   const supportedElements = {
     text: Text,
     streamingText: StreamingText,
@@ -80,7 +84,80 @@ describe('MessageSpace Component', () => {
   ]
 
   const messageSpace = '[data-cy=message-space]'
+  const webSocketUrl = 'ws://localhost:8082'
+  const streamingTextRootMessageId = getUUID()
+  const messagesToBeSent = [
+    {
+      ...humanMessageData,
+      id: getUUID(),
+      timestamp: new Date().toISOString(),
+      format: 'text',
+      data: {
+        text: 'Could you show me an example of the streaming text component?',
+      },
+    },
+    {
+      ...agentMessageData,
+      id: streamingTextRootMessageId,
+      timestamp: new Date().toISOString(),
+      format: 'streamingText',
+      data: {
+        text: 'Sure!',
+      },
+    },
+    {
+      ...agentMessageData,
+      id: getUUID(),
+      threadId: streamingTextRootMessageId,
+      timestamp: new Date().toISOString(),
+      format: 'updateStreamingText',
+      data: {
+        text: ' The text',
+      },
+    },
+    {
+      ...agentMessageData,
+      id: streamingTextRootMessageId,
+      threadId: streamingTextRootMessageId,
+      timestamp: new Date().toISOString(),
+      format: 'updateStreamingText',
+      data: {
+        text: ' is displayed',
+      },
+    },
+    {
+      ...agentMessageData,
+      id: streamingTextRootMessageId,
+      threadId: streamingTextRootMessageId,
+      timestamp: new Date().toISOString(),
+      format: 'updateStreamingText',
+      data: {
+        text: ' progressively.',
+      },
+    },
+  ]
 
+  let server: Server | null
+
+  const setupWebSocketServer = () => {
+    server = new Server(webSocketUrl)
+    const serverDelay = 50
+    server.on('connection', (socket) => {
+      messagesToBeSent.forEach((message, index) => {
+        setTimeout(
+          () => socket.send(JSON.stringify(message)),
+          serverDelay + index * serverDelay
+        )
+      })
+    })
+  }
+
+  const teardownWebSocketServer = () => {
+    if (server) {
+      server.stop()
+      server = null
+    }
+  }
   supportedViewports.forEach((viewport) => {
     it(`renders correctly with provided messages on ${viewport} screen`, () => {
       const mockWsClient = {
@@ -94,7 +171,7 @@ describe('MessageSpace Component', () => {
         <MessageSpace
           ws={mockWsClient}
           sender={testUser}
-          messages={messages}
+          receivedMessages={messages}
           supportedElements={supportedElements}
           getProfileComponent={(message: Message) => {
             if (message.sender.name?.includes('Agent')) {
@@ -127,6 +204,54 @@ describe('MessageSpace Component', () => {
       })
     })
 
+    it.only(`can receive and render messages from websocket on ${viewport} screen`, () => {
+      setupWebSocketServer()
+      cy.viewport(viewport)
+      cy.mount(
+        <MessageSpace
+          ws={getMockWebSocketClient(webSocketUrl)}
+          sender={testUser}
+          receivedMessages={[
+            {
+              ...humanMessageData,
+              id: getUUID(),
+              timestamp: '2024-01-02T00:00:00.000Z',
+              format: 'text',
+              data: {
+                text: 'Existing message',
+              },
+            },
+          ]}
+          supportedElements={supportedElements}
+          getProfileComponent={(message: Message) => {
+            if (message.sender.name?.includes('Agent')) {
+              return <Icon name="smart_toy" />
+            } else {
+              return <Icon name="account_circle" />
+            }
+          }}
+        />
+      )
+      const messageSpace = '[data-cy=message-space]'
+      cy.get(messageSpace).should('exist')
+      cy.get(messageSpace).should('contain', 'Existing message')
+      cy.get(messageSpace).should(
+        'not.contain',
+        'Sure! The text is displayed progressively.'
+      )
+      cy.get(messageCanvas).should('have.length', 1)
+      messagesToBeSent.forEach((message) => {
+        cy.get(messageSpace).should('contain', message.data.text)
+      })
+      cy.get(messageSpace).should(
+        'contain',
+        'Sure! The text is displayed progressively.'
+      )
+      const totalDisplayedMessages = 3
+      cy.get(messageCanvas).should('have.length', totalDisplayedMessages)
+      teardownWebSocketServer()
+    })
+
     it(`scrolls to bottom when "Go to bottom" button is clicked on ${viewport} screen`, () => {
       const waitTime = 500
 
@@ -142,7 +267,7 @@ describe('MessageSpace Component', () => {
           <MessageSpace
             ws={mockWsClient}
             sender={testUser}
-            messages={messages}
+            receivedMessages={messages}
             supportedElements={supportedElements}
           />
         </div>

@@ -25,11 +25,6 @@ export interface Message {
   topic?: string
 }
 
-export interface ThreadableMessage extends Message {
-  lastThreadMessage?: Message
-  threadMessagesData?: MessageData[]
-}
-
 export interface ComponentMap {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: React.ComponentType<any>
@@ -39,7 +34,7 @@ export interface WebSocketClient {
   send: (message: Message) => void
   close: () => void
   reconnect: () => void
-  onReceive?: (handler: (event: MessageEvent) => void) => void
+  onReceive?: (handler: (message: Message) => void) => void
 }
 
 export enum ParticipantRole {

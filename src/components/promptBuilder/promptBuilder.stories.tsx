@@ -14,10 +14,10 @@ import { v4 as getUUID } from 'uuid'
 
 import TextInput from '../input/textInput/textInput'
 import MessageSpace from '../messageSpace/messageSpace'
+import { getMockWebSocketClient, sendMessageToClient } from '../mockWebSocket'
 import Question from '../question/question'
 import Text from '../text/text'
 import type { Message, QuestionProps } from '../types'
-import { getMockWebSocketClient, sendMessageToClient } from './mockWebSocket'
 import PromptBuilder from './promptBuilder'
 
 const meta: Meta<React.ComponentProps<typeof PromptBuilder>> = {
@@ -53,7 +53,7 @@ meta.argTypes = {
           'send: (msg: Message) => void\n' +
           'close: () => void\n' +
           'reconnect: () => void\n' +
-          'onReceive?:  (handler: (event: MessageEvent) => void) => void\n',
+          'onReceive?:  (handler: (message: Message) => void) => void',
       },
     },
   },
@@ -85,7 +85,7 @@ meta.argTypes = {
     type: 'function',
     table: {
       type: {
-        summary: '(message: ThreadableMessage) => ReactNode',
+        summary: '(message: Message) => ReactNode',
       },
     },
   },
@@ -301,7 +301,7 @@ export const Default = {
               ws={boilerplateWs}
               sender={user}
               supportedElements={{ text: Text }}
-              messages={messageSpaceMessages}
+              receivedMessages={messageSpaceMessages}
               getProfileComponent={(message) => {
                 return <>{message.sender.name}</>
               }}
