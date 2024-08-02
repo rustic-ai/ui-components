@@ -37,23 +37,6 @@ export interface WebSocketClient {
   onReceive?: (handler: (message: Message) => void) => void
 }
 
-export enum ParticipantRole {
-  Owner = 'owner',
-  Member = 'member',
-}
-
-export enum ParticipantType {
-  Human = 'human',
-  Agent = 'agent',
-}
-
-export interface Participant {
-  id: string
-  displayName: string
-  participantRole: ParticipantRole
-  participantType: ParticipantType
-}
-
 export interface DataFormat {
   /** Optional title. */
   title?: string

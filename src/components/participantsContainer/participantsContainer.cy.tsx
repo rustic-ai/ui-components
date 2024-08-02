@@ -1,7 +1,7 @@
 /* eslint-disable no-magic-numbers */
 import { supportedViewports } from '../../../cypress/support/variables'
 import { ParticipantsContainer } from '..'
-import { ParticipantRole, ParticipantType } from '../types'
+import { ParticipantRole, ParticipantType } from './participantsContainer'
 
 describe('ParticipantsContainer', () => {
   const participantList = '[data-cy=participant-list]'
