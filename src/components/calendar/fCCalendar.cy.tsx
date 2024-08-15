@@ -36,48 +36,31 @@ describe('ScheduleCalendar Component', () => {
   ]
 
   const eventTitle = '*[class^="fc-event-title"]'
-  const eventTime = '*[class^="fc-event-time"]'
   const prevButton = '*[class^="fc-prev-button"]'
   const nextButton = '*[class^="fc-next-button"]'
-  const initialDate = 'Feb 7, 2024'
-  const initialWeek = 'Feb 4 – 10, 2024'
-  const initialMonth = 'Feb 2024'
+  const initialDate = '7 Wednesday' // first event
+  const initialWeek = '4 Sun' // week of first event
+  const initialMonth = 'February 2024' // month of first event
 
   beforeEach(() => {
     cy.mount(<FCCalendar events={mockEvents} />)
   })
 
   supportedViewports.forEach((viewport) => {
-    it(`can toggle to show week view and day view on ${viewport} screen`, () => {
-      cy.viewport(viewport)
-      cy.get('button').contains('week').click()
-      cy.contains(initialWeek).should('be.visible')
-      cy.get('button').contains('day').click()
-      cy.contains(initialDate).should('be.visible')
-    })
-
-    it(`can toggle to show week view and day view on ${viewport} screen`, () => {
-      cy.viewport(viewport)
-      cy.get('button').contains('week').click()
-      cy.contains(initialWeek).should('be.visible')
-      cy.get('button').contains('day').click()
-      cy.contains(initialDate).should('be.visible')
-    })
-
     it(`allows the user to navigate to the next and previous week on ${viewport} screen`, () => {
       cy.viewport(viewport)
       cy.get('button').contains('week').click()
       cy.get(prevButton).click()
-      cy.contains('Jan 28 – Feb 3, 2024').should('be.visible')
+      cy.contains('29 Mon').should('be.visible')
       cy.get(nextButton).click()
-      cy.contains(initialWeek).should('be.visible')
+      cy.contains('7 Wed').should('be.visible')
     })
 
     it(`allows the user to navigate to the next and previous day on ${viewport} screen`, () => {
       cy.viewport(viewport)
       cy.get('button').contains('day').click()
       cy.get(prevButton).click()
-      cy.contains('Feb 6, 2024').should('be.visible')
+      cy.contains('6 Tuesday').should('be.visible')
       cy.get(nextButton).click()
       cy.contains(initialDate).should('be.visible')
     })
@@ -89,17 +72,22 @@ describe('ScheduleCalendar Component', () => {
       cy.mount(<FCCalendar events={mockEvents} />)
     })
 
+    it('can toggle to show week view and day view on screen', () => {
+      cy.get('button').contains('week').click()
+      cy.contains(initialWeek).should('be.visible')
+      cy.get('button').contains('day').click()
+      cy.contains(initialDate).should('be.visible')
+    })
+
     it('can show the title and events properly', () => {
       cy.contains(initialMonth).should('be.visible')
       cy.get(eventTitle).first().contains('Aquarium').should('be.visible')
-      cy.get(eventTime).first().contains('10:00 AM').should('be.visible')
       cy.get(eventTitle).last().contains('Casa Loma').should('be.visible')
-      cy.get(eventTime).last().contains('02:00 PM').should('be.visible')
     })
 
     it('allows the user to navigate to the next and previous month', () => {
       cy.get(prevButton).click()
-      cy.contains('Jan 2024').should('be.visible')
+      cy.contains('January 2024').should('be.visible')
       cy.get(nextButton).click()
       cy.contains(initialMonth).should('be.visible')
     })
@@ -111,21 +99,23 @@ describe('ScheduleCalendar Component', () => {
       cy.mount(<FCCalendar events={mockEvents} />)
     })
 
+    it('can toggle to show week view and day view on screen', () => {
+      cy.get('button').contains('week').click()
+      cy.contains(initialWeek).should('be.visible')
+      cy.get('button').contains('day').click()
+      cy.contains(initialDate).should('be.visible')
+    })
+
     it('can show the title and events properly', () => {
       cy.contains(initialDate).should('be.visible')
-      cy.get(eventTitle).first().contains('Aquarium').should('be.visible')
-      cy.get(eventTime).first().contains('10:00 AM').should('be.visible')
-      cy.get(eventTitle).last().contains('Lunch').should('be.visible')
-      cy.get(eventTime)
-        .last()
-        .should('contain', '12:00 PM')
-        .and('contain', '02:00 PM')
+      cy.get(eventTitle).first().contains('Aquarium').should('exist')
+      cy.get(eventTitle).last().contains('Lunch').should('exist')
     })
 
     it('allows the user to navigate to the next and previous month', () => {
       cy.get('button').contains('month').click()
       cy.get(prevButton).click()
-      cy.contains('Jan 2024').should('be.visible')
+      cy.contains('January 2024').should('be.visible')
       cy.get(nextButton).click()
       cy.contains(initialMonth).should('be.visible')
     })

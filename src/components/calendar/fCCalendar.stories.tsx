@@ -49,6 +49,7 @@ export const Default = {
       {
         start: '2024-02-08T12:00:00',
         end: '2024-02-08T14:00:00',
+        title: 'Lunch',
       },
       {
         start: '2024-02-09T14:00:00',
