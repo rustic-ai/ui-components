@@ -38,3 +38,7 @@
 .rustic-base-input .rustic-send-button {
   margin: 10px 8px;
 }
+
+.rustic-base-input .rustic-input-actions {
+  display: flex;
+}
