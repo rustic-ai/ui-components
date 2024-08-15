@@ -38,7 +38,7 @@ const meta: Meta<React.FC<InputProps>> = {
   },
   decorators: [
     (Story: StoryFn) => (
-      <div style={{ width: 'clamp(250px, 25vw, 500px)' }}>
+      <div style={{ width: 'clamp(250px, 50vw, 500px)' }}>
         <Story />
       </div>
     ),
