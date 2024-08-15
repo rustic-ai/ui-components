@@ -19,7 +19,6 @@ function getYesterdayDate() {
 }
 
 const yesterday = getYesterdayDate()
-const now = new Date()
 
 export const Default = {
   args: {
@@ -27,7 +26,7 @@ export const Default = {
   },
 }
 
-export const OverADayAgo = {
+export const ThisYear = {
   args: {
     timestamp: yesterday,
   },
@@ -36,11 +35,5 @@ export const OverADayAgo = {
 export const NotThisYear = {
   args: {
     timestamp: '2022-11-26T23:25:44Z',
-  },
-}
-
-export const TimeAgo = {
-  args: {
-    timestamp: now,
   },
 }

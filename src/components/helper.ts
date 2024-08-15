@@ -1,24 +1,9 @@
 /* eslint-disable no-magic-numbers */
-import pluralize from 'pluralize'
 
 export function calculateTimeDiffInSeconds(isoDate: string): number {
   const currentDate = new Date()
   const convertedDate = new Date(isoDate)
   return Math.floor((currentDate.getTime() - convertedDate.getTime()) / 1000)
-}
-
-export function calculateTimeAgo(isoDate: string): string {
-  const timeDifference = calculateTimeDiffInSeconds(isoDate)
-
-  if (timeDifference < 60) {
-    return `${pluralize('second', timeDifference, true)} ago`
-  } else if (timeDifference < 3600) {
-    const minutes = Math.floor(timeDifference / 60)
-    return `${pluralize('minute', minutes, true)} ago`
-  } else {
-    const hours = Math.floor(timeDifference / 3600)
-    return `${pluralize('hour', hours, true)} ago`
-  }
 }
 
 export function formatDateAndTime(isoDateTimeInUtc: string): string {
@@ -50,14 +35,6 @@ export function formatDateAndTime(isoDateTimeInUtc: string): string {
     dateAndTimeConnector +
     convertedDate.toLocaleTimeString(userLocale, timeOptions)
   return formattedDateTime
-}
-
-export function formatMessageTimestamp(isoDate: string): string {
-  const timeDifference = calculateTimeDiffInSeconds(isoDate)
-
-  return timeDifference < 86400
-    ? calculateTimeAgo(isoDate)
-    : formatDateAndTime(isoDate)
 }
 
 export const capitalizeFirstLetter = (str: string): string => {
