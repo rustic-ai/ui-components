@@ -1,7 +1,7 @@
 import Typography from '@mui/material/Typography'
 import React from 'react'
 
-import { formatMessageTimestamp } from '../helper'
+import { formatDateAndTime } from '../helper'
 
 export interface TimestampProps {
   /** Timestamp in ISO 8601 format. */
@@ -16,7 +16,7 @@ const Timestamp = (props: TimestampProps) => {
       color="text.secondary"
       className="rustic-timestamp"
     >
-      {formatMessageTimestamp(props.timestamp)}
+      {formatDateAndTime(props.timestamp)}
     </Typography>
   )
 }
