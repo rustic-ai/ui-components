@@ -1,20 +1,34 @@
-.rustic-fc-calendar .fc-event {
-  overflow: hidden;
+.rustic-fc-calendar {
+  padding: 16px;
+}
+
+.rustic-fc-calendar .fc-event-title {
+  text-overflow: ellipsis;
 }
 
 .rustic-fc-calendar .fc-button {
-  font-size: 12px;
-  padding: 2px 4px;
+  padding: 4px 8px;
 }
 
-.rustic-fc-calendar .fc-toolbar-title {
-  font-size: 16px;
-  padding-inline: 8px;
-  text-align: center;
+.rustic-fc-calendar
+  .fc
+  .fc-button-primary:not(:disabled).fc-button-active:focus,
+.rustic-fc-calendar .fc .fc-button-primary:focus,
+.rustic-fc-calendar .fc .fc-button-primary:not(:disabled):active:focus {
+  box-shadow: none;
 }
 
 @media (max-width: 900px) {
-  .rustic-fc-calendar {
-    font-size: 12px;
+  .rustic-fc-calendar .fc-toolbar {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    align-items: flex-start;
+  }
+
+  .rustic-fc-calendar .fc-toolbar .fc-toolbar-chunk:last-child {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
   }
 }

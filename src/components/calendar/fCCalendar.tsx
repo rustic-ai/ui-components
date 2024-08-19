@@ -2,6 +2,7 @@ import './fCCalendar.css'
 
 import dayGridPlugin from '@fullcalendar/daygrid'
 import FullCalendar from '@fullcalendar/react'
+import timeGridPlugin from '@fullcalendar/timegrid'
 import Box from '@mui/material/Box'
 import { useTheme } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
@@ -37,35 +38,72 @@ export default function FCCalendar(props: CalendarData) {
     if (isDesktop) {
       return 'dayGridMonth'
     } else {
-      return 'dayGridDay'
+      return 'timeGridDay'
     }
   }
 
   return (
-    <Box className="rustic-fc-calendar">
+    <Box
+      className="rustic-fc-calendar"
+      sx={{
+        border: `1px solid ${theme.palette.divider}`,
+        borderRadius: `${theme.shape.borderRadius}px`,
+        '.fc .fc-toolbar-title': {
+          ...theme.typography.h6,
+        },
+        '.fc .fc-scrollgrid-liquid': {
+          borderRadius: `${theme.shape.borderRadius}px`,
+        },
+        '.fc td': {
+          borderRadius: `0 0 ${theme.shape.borderRadius}px ${theme.shape.borderRadius}px`,
+        },
+        '.fc .fc-scrollgrid-section-header > th': {
+          borderRadius: `${theme.shape.borderRadius}px ${theme.shape.borderRadius}px 0 0`,
+        },
+        '.fc .fc-button, .fc .fc-button:active': {
+          color: theme.palette.primary.main,
+          backgroundColor: theme.palette.background.paper,
+          border: `1px solid ${theme.palette.divider}`,
+          borderRadius: `${theme.shape.borderRadius}px`,
+          '&:hover': {
+            backgroundColor: theme.palette.secondary.light,
+            border: `1px solid ${theme.palette.divider}`,
+          },
+        },
+        '.fc .fc-button-group .fc-button.fc-button-active': {
+          backgroundColor: theme.palette.secondary.main,
+          border: `1px solid ${theme.palette.divider}`,
+        },
+        '.fc a, .fc .fc-event-title, .fc .fc-button, .fc .fc-timegrid-slot': {
+          ...theme.typography.caption,
+        },
+      }}
+    >
       <FullCalendar
-        plugins={[dayGridPlugin]}
+        plugins={[timeGridPlugin, dayGridPlugin]}
         initialView={getDefaultInitialView()}
         headerToolbar={{
-          left: 'prev,next',
-          center: 'title',
-          right: 'dayGridMonth,dayGridWeek,dayGridDay',
+          left: 'title',
+          right: 'prev,next dayGridMonth,timeGridWeek,timeGridDay',
         }}
-        eventTimeFormat={{
-          hour: '2-digit',
-          minute: '2-digit',
-        }}
-        initialDate={props.events[0].start}
-        events={props.events.map(transformEvent)}
+        eventColor={theme.palette.secondary.main}
+        displayEventTime={false}
+        titleFormat={{ year: 'numeric', month: 'long' }}
         views={{
           dayGridMonth: {
-            titleFormat: { year: 'numeric', month: 'short' },
+            dayHeaderFormat: { weekday: isDesktop ? 'long' : 'narrow' },
           },
-          dayGridWeek: {},
-          dayGridDay: {
-            titleFormat: { year: 'numeric', month: 'short', day: 'numeric' },
+          timeGridWeek: {
+            dayHeaderFormat: {
+              weekday: 'short',
+              day: 'numeric',
+            },
           },
+          timeGridDay: { dayHeaderFormat: { weekday: 'long', day: 'numeric' } },
         }}
+        allDaySlot={false}
+        initialDate={props.events[0].start}
+        events={props.events.map(transformEvent)}
       />
     </Box>
   )

@@ -45,9 +45,10 @@
     "@finos/perspective-viewer": "2.10.1",
     "@finos/perspective-viewer-d3fc": "2.10.1",
     "@finos/perspective-viewer-datagrid": "2.10.1",
-    "@fullcalendar/core": "6.1.10",
-    "@fullcalendar/daygrid": "6.1.10",
-    "@fullcalendar/react": "6.1.10",
+    "@fullcalendar/core": "6.1.15",
+    "@fullcalendar/daygrid": "6.1.15",
+    "@fullcalendar/react": "6.1.15",
+    "@fullcalendar/timegrid": "6.1.15",
     "@mui/material": "5.15.7",
     "@mui/styled-engine-sc": "5.14.11",
     "@mui/system": "5.15.8",
@@ -180,6 +181,9 @@
       "optional": true
     },
     "@fullcalendar/react": {
+      "optional": true
+    },
+    "@fullcalendar/timegrid": {
       "optional": true
     },
     "axios": {
