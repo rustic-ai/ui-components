@@ -10,6 +10,14 @@
   padding: 4px 8px;
 }
 
+.rustic-fc-calendar
+  .fc
+  .fc-button-primary:not(:disabled).fc-button-active:focus,
+.rustic-fc-calendar .fc .fc-button-primary:focus,
+.rustic-fc-calendar .fc .fc-button-primary:not(:disabled):active:focus {
+  box-shadow: none;
+}
+
 @media (max-width: 900px) {
   .rustic-fc-calendar .fc-toolbar {
     display: flex;
