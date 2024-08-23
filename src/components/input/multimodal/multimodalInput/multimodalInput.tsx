@@ -78,6 +78,7 @@ export default function MultimodalInput(props: MultimodalInputProps) {
       className="rustic-multimodal-input"
       sx={{
         border: `1px solid ${theme.palette.action.disabled}`,
+        borderRadius: `${theme.shape.borderRadius}px`,
         ':focus-within': {
           borderColor: theme.palette.secondary.main,
         },
