@@ -2,6 +2,7 @@ import './multimodalInput.css'
 import '../../../../index.css'
 
 import Box from '@mui/material/Box'
+import { useTheme } from '@mui/material/styles'
 import { useEffect, useRef, useState } from 'react'
 import React from 'react'
 import { v4 as getUUID } from 'uuid'
@@ -34,6 +35,7 @@ export default function MultimodalInput(props: MultimodalInputProps) {
   const [errorMessagesContainer, setErrorMessagesContainer] =
     useState<HTMLDivElement>()
   const inputRef = useRef<HTMLDivElement>(null)
+  const theme = useTheme()
   const hasAddedFiles = filesInfo.length > 0
 
   function handleFileUpdates(action: 'add' | 'remove', fileName: string) {
@@ -72,7 +74,16 @@ export default function MultimodalInput(props: MultimodalInputProps) {
   }
 
   return (
-    <Box className="rustic-multimodal-input">
+    <Box
+      className="rustic-multimodal-input"
+      sx={{
+        border: `1px solid ${theme.palette.action.disabled}`,
+        borderRadius: `${theme.shape.borderRadius}px`,
+        ':focus-within': {
+          borderColor: theme.palette.secondary.main,
+        },
+      }}
+    >
       <BaseInput
         {...props}
         send={handleSendMessage}

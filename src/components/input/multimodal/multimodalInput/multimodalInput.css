@@ -26,3 +26,11 @@
 .rustic-bottom-buttons {
   padding: 8px;
 }
+
+.rustic-multimodal-input .rustic-error-container {
+  margin: 8px 16px;
+}
+
+.rustic-multimodal-input .rustic-input-field {
+  border: none;
+}
