@@ -111,7 +111,7 @@
     "typescript": "5.3.3",
     "uuid": "10.0.0",
     "vega-embed": "6.25.0",
-    "webpack": "5.89.0",
+    "webpack": "5.94.0",
     "webpack-cli": "5.1.4",
     "webpack-node-externals": "3.0.0"
   },
