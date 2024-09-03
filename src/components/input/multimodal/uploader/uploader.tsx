@@ -314,7 +314,12 @@ function Uploader(props: UploaderProps) {
             <IconButton
               component="span"
               aria-label="Upload file"
-              color="primary"
+              sx={{
+                color: 'primary.light',
+                '&:hover': {
+                  color: 'primary.main',
+                },
+              }}
             >
               <span className="material-symbols-rounded">upload_2</span>
             </IconButton>
