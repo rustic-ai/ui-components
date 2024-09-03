@@ -26,7 +26,7 @@ function transformEvent(event: CalendarEvent) {
  * FullCalendar libraries are not bundled, so please install the following packages using npm:
  *
  * ```typescript
- * npm i @fullcalendar/core @fullcalendar/daygrid @fullcalendar/react
+ * npm i @fullcalendar/core @fullcalendar/daygrid @fullcalendar/react @fullcalendar/timegrid
  * ```
  *
  * **Note**: On mobile screens, the calendar will default to the day view, offering users a detailed perspective of events for the selected day. Conversely, on larger screens, such as desktops or tablets, the calendar will default to the month view, offering users an overview of events scheduled throughout the month. */
