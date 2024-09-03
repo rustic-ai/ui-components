@@ -55,7 +55,7 @@ export function transformTableData(
  * Note: [Perspective](https://perspective.finos.org/) libraries are not bundled, so they must be included in the application's build process:
  *
  * ```typescript
- * npm i @finos/perspective @finos/perspective-viewer @finos/perspective-viewer-d3fc @finos/perspective-viewer-datagrid
+ * npm i @finos/perspective@^2.10.1 @finos/perspective-viewer@^2.10.1 @finos/perspective-viewer-d3fc@^2.10.1 @finos/perspective-viewer-datagrid@^2.10.1
  * ```
  */
 function PerspectiveViz(props: TableData) {
