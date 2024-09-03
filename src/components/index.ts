@@ -1,6 +1,7 @@
 import FCCalendar from './calendar/fCCalendar'
 import CodeSnippet from './codeSnippet/codeSnippet'
 import ElementRenderer from './elementRenderer/elementRenderer'
+import Icon from './icon/icon'
 import Image from './image/image'
 import MultimodalInput from './input/multimodal/multimodalInput/multimodalInput'
 import Uploader from './input/multimodal/uploader/uploader'
@@ -38,6 +39,7 @@ export {
   CopyText,
   ElementRenderer,
   FCCalendar,
+  Icon,
   Image,
   MarkedMarkdown,
   MarkedStreamingMarkdown,
