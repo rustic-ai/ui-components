@@ -42,6 +42,24 @@ declare module '@mui/material/Chip' {
   }
 }
 
+declare module '@mui/material/styles' {
+  interface TypographyVariants {
+    body1Bold: React.CSSProperties
+  }
+
+  // allow configuration using `createTheme`
+  interface TypographyVariantsOptions {
+    body1Bold?: React.CSSProperties
+  }
+}
+
+// Update the Typography's variant prop options
+declare module '@mui/material/Typography' {
+  interface TypographyPropsVariantOverrides {
+    body1Bold: true
+  }
+}
+
 const baseTheme = createTheme({
   shape: {
     borderRadius: 16,
@@ -59,7 +77,7 @@ const baseTheme = createTheme({
       fontStyle: 'normal',
       fontWeight: 300,
       fontSize: '59px',
-      letterSpacing: '-0.5px',
+      letterSpacing: '-2px',
       lineHeight: 1.2,
     },
     h3: {
@@ -73,7 +91,7 @@ const baseTheme = createTheme({
       fontStyle: 'normal',
       fontWeight: 400,
       fontSize: '33px',
-      letterSpacing: '0.25px',
+      letterSpacing: '0px',
       lineHeight: 1.235,
     },
     h5: {
@@ -87,42 +105,49 @@ const baseTheme = createTheme({
       fontStyle: 'normal',
       fontWeight: 500,
       fontSize: '20px',
-      letterSpacing: '0.15px',
+      letterSpacing: '0px',
       lineHeight: 1.6,
     },
     body1: {
       fontStyle: 'normal',
       fontWeight: 400,
       fontSize: '16px',
-      letterSpacing: '0.5px',
+      letterSpacing: '0px',
+      lineHeight: 1.5,
+    },
+    body1Bold: {
+      fontStyle: 'normal',
+      fontWeight: 600,
+      fontSize: '16px',
+      letterSpacing: '0px',
       lineHeight: 1.5,
     },
     body2: {
       fontStyle: 'normal',
       fontWeight: 400,
       fontSize: '14px',
-      letterSpacing: '0.25px',
+      letterSpacing: '0px',
       lineHeight: 1.43,
     },
     subtitle1: {
       fontStyle: 'normal',
       fontWeight: 400,
       fontSize: '16px',
-      letterSpacing: '0.15px',
+      letterSpacing: '0px',
       lineHeight: 1.75,
     },
     subtitle2: {
       fontStyle: 'normal',
       fontWeight: 500,
       fontSize: '14px',
-      letterSpacing: '0.1px',
+      letterSpacing: '0px',
       lineHeight: 1.57,
     },
     overline: {
       fontStyle: 'normal',
       fontWeight: 400,
       fontSize: '10px',
-      letterSpacing: '1.5px',
+      letterSpacing: '0px',
       lineHeight: 1.5,
       textTransform: 'uppercase',
     },
@@ -130,11 +155,12 @@ const baseTheme = createTheme({
       fontStyle: 'normal',
       fontWeight: 400,
       fontSize: '12px',
-      letterSpacing: '0.4px',
+      letterSpacing: '0px',
       lineHeight: 1.66,
     },
     button: {
       textTransform: 'none',
+      fontWeight: 400,
     },
   },
   palette: {
@@ -412,7 +438,7 @@ let rusticLightTheme = createTheme(
           {
             props: { variant: 'rusticPrimary', size: 'small' },
             style: {
-              borderRadius: '8px',
+              borderRadius: '16px',
               ...smallButtonAndChipStyle,
               ...lightModePrimaryButtonBasestyle,
             },
@@ -420,7 +446,7 @@ let rusticLightTheme = createTheme(
           {
             props: { variant: 'rusticPrimary', size: 'medium' },
             style: {
-              borderRadius: '12px',
+              borderRadius: '24px',
               ...mediumButtonAndChipStyle,
               ...lightModePrimaryButtonBasestyle,
             },
@@ -428,7 +454,7 @@ let rusticLightTheme = createTheme(
           {
             props: { variant: 'rusticPrimary', size: 'large' },
             style: {
-              borderRadius: '16px',
+              borderRadius: '32px',
               ...largeButtonAndChipStyle,
               ...lightModePrimaryButtonBasestyle,
             },
@@ -436,7 +462,7 @@ let rusticLightTheme = createTheme(
           {
             props: { variant: 'rusticSecondary', size: 'small' },
             style: {
-              borderRadius: '8px',
+              borderRadius: '16px',
               '&:hover': {
                 border: `1px solid ${blackColor}`,
                 background: whiteColor,
@@ -448,7 +474,7 @@ let rusticLightTheme = createTheme(
           {
             props: { variant: 'rusticSecondary', size: 'medium' },
             style: {
-              borderRadius: '12px',
+              borderRadius: '24px',
               '&:hover': {
                 border: `2px solid ${blackColor}`,
                 background: whiteColor,
@@ -460,7 +486,7 @@ let rusticLightTheme = createTheme(
           {
             props: { variant: 'rusticSecondary', size: 'large' },
             style: {
-              borderRadius: '16px',
+              borderRadius: '32px',
               '&:hover': {
                 border: `2px solid ${blackColor}`,
                 background: whiteColor,
