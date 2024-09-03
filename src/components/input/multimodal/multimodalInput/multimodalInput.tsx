@@ -82,6 +82,7 @@ export default function MultimodalInput(props: MultimodalInputProps) {
         ':focus-within': {
           borderColor: theme.palette.secondary.main,
         },
+        background: theme.palette.background.paper,
       }}
     >
       <BaseInput

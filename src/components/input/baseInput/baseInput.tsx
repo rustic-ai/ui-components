@@ -145,7 +145,10 @@ function BaseInputElement(
         data-cy="record-button"
         onClick={handleToggleSpeechToText}
         size="small"
-        sx={{ color: speechToTextIconColor }}
+        sx={{
+          color: speechToTextIconColor,
+          '&:hover': { color: 'primary.main' },
+        }}
       >
         <Icon name={speechToTextIconName} />
       </IconButton>
@@ -357,7 +360,7 @@ function BaseInputElement(
               aria-label="send message"
               onClick={handleSendMessage}
               disabled={isSendDisabled}
-              color="primary"
+              color="secondary"
             >
               <Icon name="send" />
             </IconButton>

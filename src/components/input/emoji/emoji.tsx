@@ -86,7 +86,12 @@ function Emoji(props: EmojiProps) {
           ref={buttonRef}
           onClick={handleButtonClick}
           data-cy="emoji-button"
-          sx={{ color: props.buttonColor }}
+          sx={{
+            color: 'primary.light',
+            '&:hover': {
+              color: 'primary.main',
+            },
+          }}
         >
           <Icon name="Mood" />
         </IconButton>
