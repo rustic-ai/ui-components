@@ -3,8 +3,9 @@ import Plot from 'react-plotly.js'
 import type {PlotlyGraphData} from "./plotlyGraph.types";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/system/Box";
-
-/** The `PlotlyGraph` component enables interactive charts and maps using [Plotly](https://plotly.com/javascript/).
+/** The `PlotlyGraph` component enables interactive charts and maps using [Plotly](https://plotly.com/javascript/),
+ *  offering rich features such as zooming, panning, and downloading graphs. It supports customization of graph
+ *  parameters and configurations to suit various visualization needs.
  *
  * Note: Required dependencies are not bundled, so please install them using npm:
  *
@@ -12,7 +13,7 @@ import Box from "@mui/system/Box";
  * npm i react-plotly.js plotly.js
  * ```
  */
-export function PlotlyGraph(props: PlotlyGraphData) {
+function PlotlyGraph(props: PlotlyGraphData) {
 
     const additionalConfig = {
         displaylogo: false,
@@ -24,7 +25,7 @@ export function PlotlyGraph(props: PlotlyGraphData) {
     plotParams.config = {...plotParams.config, ...additionalConfig}
 
     return (
-        <Box mt={1} className={'rustic-plotly-container'} data-cy="plotly">
+        <Box className={'rustic-plotly-container'} data-cy="plotly">
             {props.title && <Typography variant="h6">{props.title}</Typography>}
             {props.description && (
                 <Typography variant="body1">{props.description}</Typography>
@@ -33,3 +34,5 @@ export function PlotlyGraph(props: PlotlyGraphData) {
         </Box>
     )
 }
+
+export default PlotlyGraph

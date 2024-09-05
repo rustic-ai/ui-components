@@ -1,10 +1,10 @@
 import type {Meta, StoryFn} from '@storybook/react'
 import React from 'react'
 
-import {PlotlyGraph} from './plotlyGraph'
+import PlotlyGraph from './plotlyGraph'
 import type {PlotlyGraphData} from "./plotlyGraph.types";
 
-const meta: Meta<React.ComponentProps<PlotlyGraphData>> = {
+const meta: Meta<React.ComponentType<PlotlyGraphData>> = {
     title: 'Rustic UI/Visualization/PlotlyGraph',
     component: PlotlyGraph,
     tags: ['autodocs'],
