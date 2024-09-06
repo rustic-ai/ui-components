@@ -30,6 +30,7 @@ import YoutubeVideo from './video/youtubeVideo'
 import RechartsTimeSeries from './visualization/chart/rechartsTimeSeries'
 import MermaidViz from './visualization/mermaidViz/mermaidViz'
 import PerspectiveViz from './visualization/perspectiveViz/perspectiveViz'
+import PlotlyGraph from './visualization/plotlyGraph/plotlyGraph'
 import VegaLiteViz from './visualization/vegaLiteViz/vegaLiteViz'
 import Weather from './weather/weather'
 
@@ -54,6 +55,7 @@ export {
   PerspectiveViz,
   PopoverMenu,
   PromptBuilder,
+  PlotlyGraph,
   Question,
   RechartsTimeSeries,
   Sound,
@@ -74,3 +76,4 @@ export * from '../rusticTheme'
 export * from './types'
 export * from './visualization/mermaidViz/mermaidViz.types'
 export * from './visualization/vegaLiteViz/vegaLiteViz.types'
+export * from './visualization/plotlyGraph/plotlyGraph.types'
