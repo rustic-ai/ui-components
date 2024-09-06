@@ -1,7 +1,5 @@
-import type { VisualizationSpec } from 'vega-embed'
-
 import { supportedViewports } from '../../../../cypress/support/variables'
-import {PlotlyGraph} from "./plotlyGraph";
+import PlotlyGraph from "./plotlyGraph"
 
 describe('PlotlyGraph', () => {
   beforeEach(() => {
