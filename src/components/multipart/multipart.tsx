@@ -16,9 +16,9 @@ export default function Multipart(props: MultipartProps) {
   function renderFiles() {
     const files = props.files.map((file, index) => {
       return (
-        <FilePreview file={file} key={index}>
+        <FilePreview file={file} showFullName={props.showFullName} key={index}>
           {file.url && (
-            <Tooltip title="Download">
+            <Tooltip title="Download" className="rustic-shift-to-right-by-8">
               <IconButton
                 component="a"
                 href={file.url}

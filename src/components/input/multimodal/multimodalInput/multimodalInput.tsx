@@ -102,6 +102,7 @@ export default function MultimodalInput(props: MultimodalInputProps) {
             messageId={messageId}
             filePreviewsContainer={filePreviewsContainer}
             errorMessagesContainer={errorMessagesContainer}
+            showFullName={props.showFullName}
           />
         </Box>
       </BaseInput>

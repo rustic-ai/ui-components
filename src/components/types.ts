@@ -226,6 +226,8 @@ export interface MultipartProps extends MultipartData {
    * which viewer component should be used to open and display the file within the modal.
    */
   supportedViewers?: { [key: string]: React.ComponentType<{ url: string }> }
+  /** Setting this to true will display long file names in full. If set to false, long names will be shortened. */
+  showFullName?: boolean
 }
 
 export interface BaseInputProps {
@@ -278,6 +280,8 @@ export interface UploaderProps {
   maxFileCount?: number
   /** The maximum size for each uploaded file, in bytes. */
   maxFileSize?: number
+  /** Setting this to true will display long file names in full. If set to false, long names will be shortened. */
+  showFullName?: boolean
 }
 
 export type MultimodalInputProps = TextInputProps &
