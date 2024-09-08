@@ -252,7 +252,11 @@ function Uploader(props: UploaderProps) {
   const filePreviews = (
     <Box className="rustic-files rustic-padding-16">
       {addedFiles.map((file, index) => (
-        <FilePreview file={{ name: file.name }} key={index}>
+        <FilePreview
+          file={{ name: file.name }}
+          showFullName={props.showFullName}
+          key={index}
+        >
           <Box className="rustic-flex-center">
             {file.loadingProgress < maximumLoadingProgress && (
               <LinearProgress
@@ -267,7 +271,7 @@ function Uploader(props: UploaderProps) {
                 data-cy="delete-button"
                 color="primary"
                 onClick={() => handleDelete(file, index)}
-                className="rustic-delete-button"
+                className="rustic-delete-button rustic-shift-to-right-by-8"
                 aria-label="cancel file upload"
               >
                 <span className="material-symbols-rounded">cancel</span>

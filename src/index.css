@@ -31,3 +31,7 @@ code {
 .rustic-align-self-center {
   align-self: center;
 }
+
+.rustic-shift-to-right-by-8 {
+  margin-right: -8px;
+}

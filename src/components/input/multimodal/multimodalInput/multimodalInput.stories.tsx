@@ -125,6 +125,13 @@ multiModalInputMeta.argTypes = {
       type: { summary: 'number' },
     },
   },
+  showFullName: {
+    description:
+      'Optional props. Setting this to `true` will display long file names in full. If set to `false`, long names will be shortened.',
+    table: {
+      type: { summary: 'boolean' },
+    },
+  },
 }
 
 export default multiModalInputMeta

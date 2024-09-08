@@ -2,10 +2,17 @@
   position: relative;
   display: flex;
   align-items: center;
-  padding: 8px 8px 8px 16px;
+  padding: 8px 16px;
   justify-content: space-between;
-  width: 220px;
   height: 56px;
+}
+
+.rustic-fixed-file-preview-width {
+  width: 220px;
+}
+
+.rustic-flexible-file-preview-width {
+  min-width: 220px;
 }
 
 .rustic-file-preview-modal {

@@ -17,6 +17,7 @@ import type { FileData } from '../types'
 export interface FilePreviewProps {
   file: FileData
   supportedViewers?: { [key: string]: React.ComponentType<{ url: string }> }
+  showFullName?: boolean
 }
 
 const supportedViewers: {
@@ -53,17 +54,26 @@ export default function FilePreview(
     fileType && props.supportedViewers ? props.supportedViewers[fileType] : null
   const hasModalContent = !!ModalContentComponent
 
+  const filePreviewWidthStyle = props.showFullName
+    ? 'rustic-flexible-file-preview-width'
+    : 'rustic-fixed-file-preview-width'
+  const filePreviewCursorStyle = hasModalContent ? ' rustic-cursor-pointer' : ''
+  const FilePreviewClassName = `rustic-file-preview ${filePreviewWidthStyle}${filePreviewCursorStyle}`
+
+  const fileName = props.showFullName
+    ? props.file.name
+    : shortenString(props.file.name, maximumFileNameLength)
   return (
     <>
       <Card
-        className={`rustic-file-preview${hasModalContent ? ' rustic-cursor-pointer' : ''}`}
+        className={FilePreviewClassName}
         data-cy="file-preview"
         variant="outlined"
         sx={{ boxShadow: theme.shadows[1] }}
         onClick={handleFileClick}
       >
         <Typography variant="subtitle2" data-cy="file-name">
-          {shortenString(props.file.name, maximumFileNameLength)}
+          {fileName}
         </Typography>
         <div onClick={(e) => e.stopPropagation()}>{props.children}</div>
       </Card>

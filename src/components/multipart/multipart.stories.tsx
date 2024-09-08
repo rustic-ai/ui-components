@@ -52,3 +52,14 @@ export const FileWithURL = {
     ],
   },
 }
+
+export const FilesWithLongName = {
+  args: {
+    text: 'This is a multipart message with text',
+    showFullName: true,
+    files: [
+      { name: 'File example with really long name.pdf' },
+      { name: 'Short name example.pdf' },
+    ],
+  },
+}
