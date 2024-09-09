@@ -332,7 +332,10 @@ function BaseInputElement(
             size="small"
             InputProps={{
               endAdornment: (
-                <InputAdornment position="end">
+                <InputAdornment
+                  position="end"
+                  className="rustic-input-adornment"
+                >
                   <Emoji
                     onEmojiClick={handleEmojiClick}
                     buttonColor={featureButtonColor}
