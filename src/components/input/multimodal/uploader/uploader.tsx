@@ -197,14 +197,19 @@ function Uploader(props: UploaderProps) {
       }
     }
 
-    const uploadUrl = `${props.uploadFileEndpoint}?message-id=${props.messageId}`
+    const uploadUrl = `${props.uploadFileEndpoint}`
+      .replaceAll('fileName', fileName)
+      .replaceAll('messageId', props.messageId)
+
     axios
       .post(uploadUrl, formData, {
         onUploadProgress: handleUploadProgress,
         signal: controller.signal,
       })
       .then((response) => {
-        handleSuccessfulUpload(response.data, newAddedFile.id)
+        if (response.data.fileId) {
+          handleSuccessfulUpload(response.data, newAddedFile.id)
+        }
       })
       .catch((error) => {
         props.onFileUpdate('remove', fileName)
@@ -225,7 +230,10 @@ function Uploader(props: UploaderProps) {
     }
     props.onFileUpdate('remove', fileName)
     if (file.loadingProgress === maximumLoadingProgress) {
-      const deleteUrl = `${props.deleteFileEndpoint}?message-id=${props.messageId}&file-id=${file.id}`
+      const deleteUrl = `${props.deleteFileEndpoint}`
+        .replaceAll('fileName', fileName)
+        .replaceAll('messageId', props.messageId)
+        .replaceAll('fileId', file.id)
 
       axios
         .delete(deleteUrl)
