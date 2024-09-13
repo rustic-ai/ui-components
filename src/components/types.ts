@@ -282,6 +282,8 @@ export interface UploaderProps {
   maxFileSize?: number
   /** Setting this to true will display long file names in full. If set to false, long names will be shortened. */
   showFullName?: boolean
+  /** A function that can be used to define additional data to be sent along with the file upload. */
+  getUploadData?: (fileName: string) => { [key: string]: any }
 }
 
 export type MultimodalInputProps = TextInputProps &

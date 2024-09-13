@@ -175,6 +175,15 @@ function Uploader(props: UploaderProps) {
 
     const fileName = getFileName(file)
     const updatedFile = new File([file], fileName, { type: file.type })
+
+    if (props.getUploadData) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const extraData: { [key: string]: any } = props.getUploadData(fileName)
+      Object.keys(extraData).map((key) => {
+        formData.append(key, extraData[key])
+      })
+    }
+
     formData.append('file', updatedFile)
     const temporaryFileId = getUUID()
     const newAddedFile = {
