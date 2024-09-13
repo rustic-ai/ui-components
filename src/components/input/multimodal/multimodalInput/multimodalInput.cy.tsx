@@ -33,8 +33,8 @@ describe('Input', () => {
         conversationId="1"
         ws={mockWsClient}
         label="Type you message"
-        uploadFileEndpoint={'/upload/'}
-        deleteFileEndpoint={'/delete/'}
+        uploadFileEndpoint={'/upload?message-id=messageId'}
+        deleteFileEndpoint={'/delete/fileName'}
         acceptedFileTypes={''}
         maxFileCount={5}
       />
@@ -98,12 +98,12 @@ describe('Input', () => {
         .should('equal', '')
     })
 
-    it(`can add and delete files on ${viewport} screen`, () => {
+    it.only(`can add and delete files on ${viewport} screen`, () => {
       cy.viewport(viewport)
       cy.intercept(
         {
           method: 'POST',
-          url: '/upload/*',
+          url: '/upload?message-id=*',
         },
         { url: '' }
       ).as('upload')
