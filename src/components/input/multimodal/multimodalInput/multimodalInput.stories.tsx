@@ -182,7 +182,7 @@ export const PDFAndImageOnly = {
     ...Default.args,
     acceptedFileTypes: 'image/*,.pdf',
     getUploadData: () => {
-      return { file_meta: { userId: 'testUserId' } }
+      return { userId: 'testUserId' }
     },
   },
 }
