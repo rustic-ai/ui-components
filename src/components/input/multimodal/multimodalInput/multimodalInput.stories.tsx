@@ -132,6 +132,13 @@ multiModalInputMeta.argTypes = {
       type: { summary: 'boolean' },
     },
   },
+  getUploadData: {
+    description:
+      'Optional props. A function that can be used to define additional data to be sent along with the file upload.',
+    table: {
+      type: { summary: '(fileName: string) => { [key: string]: any }' },
+    },
+  },
 }
 
 export default multiModalInputMeta
@@ -174,6 +181,9 @@ export const PDFAndImageOnly = {
   args: {
     ...Default.args,
     acceptedFileTypes: 'image/*,.pdf',
+    getUploadData: () => {
+      return { userId: 'testUserId' }
+    },
   },
 }
 

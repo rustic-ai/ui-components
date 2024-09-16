@@ -103,6 +103,7 @@ export default function MultimodalInput(props: MultimodalInputProps) {
             filePreviewsContainer={filePreviewsContainer}
             errorMessagesContainer={errorMessagesContainer}
             showFullName={props.showFullName}
+            getUploadData={props.getUploadData}
           />
         </Box>
       </BaseInput>

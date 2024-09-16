@@ -1,4 +1,5 @@
 import 'cypress-real-events'
+import 'cypress-intercept-formdata'
 
 import {
   supportedViewports,
@@ -37,6 +38,9 @@ describe('Input', () => {
         deleteFileEndpoint={'/delete/fileName'}
         acceptedFileTypes={''}
         maxFileCount={5}
+        getUploadData={() => {
+          return { userId: testUser.id }
+        }}
       />
     )
   })
@@ -98,7 +102,7 @@ describe('Input', () => {
         .should('equal', '')
     })
 
-    it.only(`can add and delete files on ${viewport} screen`, () => {
+    it(`can add and delete files on ${viewport} screen`, () => {
       cy.viewport(viewport)
       cy.intercept(
         {
@@ -127,12 +131,29 @@ describe('Input', () => {
       cy.get(fileName).should('contain', 'videoCaption...')
     })
 
+    it(`allows adding extra data when uploading files on ${viewport} screen`, () => {
+      cy.viewport(viewport)
+
+      cy.intercept(
+        {
+          method: 'POST',
+          url: '/upload?message-id=*',
+        },
+        { url: '' }
+      ).as('upload')
+      cy.get('input[type=file]').selectFile([imageFile], {
+        force: true,
+      })
+      cy.wait('@upload').interceptFormData((formData) => {
+        expect(formData['userId']).to.eq(testUser.id)
+      })
+    })
     it(`allows adding the same file after deleting it on ${viewport} screen`, () => {
       cy.viewport(viewport)
       cy.intercept(
         {
           method: 'POST',
-          url: '/upload/*',
+          url: '/upload?message-id=*',
         },
         { url: '' }
       ).as('upload')
@@ -170,14 +191,14 @@ describe('Input', () => {
           label="Type you message"
           maxFileCount={2}
           acceptedFileTypes={''}
-          uploadFileEndpoint={'/upload/'}
-          deleteFileEndpoint={'/delete/'}
+          uploadFileEndpoint={'/upload'}
+          deleteFileEndpoint={'/delete'}
         />
       )
       cy.intercept(
         {
           method: 'POST',
-          url: '/upload/*',
+          url: '/upload',
         },
         { url: '' }
       ).as('upload')
@@ -196,7 +217,7 @@ describe('Input', () => {
         cy.intercept(
           {
             method: 'DELETE',
-            url: '/delete/*',
+            url: '/delete',
           },
           {}
         ).as('delete')
@@ -285,8 +306,8 @@ describe('Input', () => {
             reconnect: cy.stub(),
           }}
           label="Type you message"
-          uploadFileEndpoint={'/upload/'}
-          deleteFileEndpoint={'/delete/'}
+          uploadFileEndpoint={'/upload'}
+          deleteFileEndpoint={'/delete'}
           acceptedFileTypes={''}
         />
       )
@@ -294,7 +315,7 @@ describe('Input', () => {
       cy.intercept(
         {
           method: 'POST',
-          url: '/upload/*',
+          url: '/upload',
         },
         {
           statusCode: 500,
