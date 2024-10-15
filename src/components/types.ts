@@ -358,3 +358,10 @@ export interface PromptBuilderProps
   /** Function called when quitting the prompt builder. A confirmation modal will appear when the user clicks on the "Quit" button. The user will be given an option to quit or continue building the prompt. The function will be called upon confirmation of quitting. */
   onCancel: () => void
 }
+
+export interface FormFormat extends DataFormat {
+  /** schema describing the form fields */
+  schema: any
+}
+
+export interface DynamicFormProps extends FormFormat, ConversationProps {}

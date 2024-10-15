@@ -1,6 +1,6 @@
 {
   "name": "@rustic-ai/ui-components",
-  "version": "0.0.26",
+  "version": "0.0.27",
   "keywords": [
     "rustic-ai",
     "conversational-ui"
@@ -113,6 +113,9 @@
     "ts-loader": "9.5.1",
     "ts-node": "10.9.2",
     "typescript": "5.3.3",
+    "uniforms": "4.0.0-alpha.6",
+    "uniforms-bridge-json-schema": "4.0.0-alpha.6",
+    "uniforms-mui": "4.0.0-alpha.6",
     "uuid": "10.0.0",
     "vega-embed": "6.25.0",
     "webpack": "5.94.0",
@@ -151,6 +154,9 @@
     "react-plotly.js": "^2.6.0",
     "recharts": "^2.10.3",
     "uuid": "^10.0.0",
+    "uniforms": "^4.0.0-alpha.6",
+    "uniforms-bridge-json-schema": "^4.0.0-alpha.6",
+    "uniforms-mui": "^4.0.0-alpha.6",
     "vega-embed": "^6.25.0"
   },
   "peerDependenciesMeta": {
@@ -230,6 +236,15 @@
       "optional": true
     },
     "uuid": {
+      "optional": true
+    },
+    "uniforms": {
+      "optional": true
+    },
+    "uniforms-bridge-json-schema": {
+      "optional": true
+    },
+    "uniforms-mui": {
       "optional": true
     },
     "vega-embed": {
