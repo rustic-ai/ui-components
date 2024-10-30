@@ -1,12 +1,17 @@
 import './perspectiveViz.css'
-import '@finos/perspective-viewer'
+import '@finos/perspective-viewer/dist/esm/perspective-viewer.inline.js'
 import '@finos/perspective-viewer-datagrid'
 import '@finos/perspective-viewer-d3fc'
 import '@finos/perspective-viewer/dist/css/pro.css'
 import '@finos/perspective-viewer/dist/css/pro-dark.css'
 
-import perspective, { type ViewConfig } from '@finos/perspective'
-import type { HTMLPerspectiveViewerElement } from '@finos/perspective-viewer'
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import perspective from '@finos/perspective/dist/esm/perspective.inline.js'
+import type { Client, Table } from '@finos/perspective/dist/pkg/perspective-js'
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import type { HTMLPerspectiveViewerElement } from '@finos/perspective-viewer/dist/esm/perspective-viewer.inline.js'
 import { useTheme } from '@mui/material/styles'
 import Typography from '@mui/material/Typography'
 import Stack from '@mui/system/Stack'
@@ -41,10 +46,10 @@ export function transformTableData(
 ) {
   const headerMap = createHeaderMap(headers)
   return originalData.map((record) => {
-    const newData: Record<string, Array<string | number>> = {}
+    const newData: Record<string, string | number> = {}
     for (const [key, value] of Object.entries(record)) {
       const newKey = headerMap[key] || key
-      newData[newKey] = [value]
+      newData[newKey] = value
     }
     return newData
   })
@@ -151,7 +156,7 @@ function PerspectiveViz(props: TableData) {
     })
   }
 
-  function transformTableConfig(config: TableConfig): ViewConfig {
+  function transformTableConfig(config: TableConfig) {
     const { groupBy, splitBy, aggregates, sort, filter, columns } = config
 
     const formattedSortConfig = sort?.map((sortItem) => {
@@ -184,35 +189,36 @@ function PerspectiveViz(props: TableData) {
   const transformedConfig = props.config && transformTableConfig(props.config)
 
   useEffect(() => {
-    const worker = perspective.worker()
-    worker
-      .table(transformTableData(props.data, props.headers))
-      .then((table) => {
-        const viewer = viewerRef.current
-        if (viewer) {
-          viewer
-            .load(table)
-            .then(() => {
-              viewer.restore({
-                ...transformedConfig,
-                theme: perspectiveTheme,
-                title: props.title,
-                settings: false,
-              })
-              if (viewer.shadowRoot) {
-                const sheet = new CSSStyleSheet()
-                sheet.replaceSync(perspectiveVizAdditionalStyles)
-                viewer.shadowRoot.adoptedStyleSheets.push(sheet)
-              }
+    const viewer: HTMLPerspectiveViewerElement = viewerRef.current
+    if (viewer) {
+      perspective
+        .worker()
+        .then((worker: Client) => {
+          worker
+            .table(transformTableData(props.data, props.headers))
+            .then((table: Table) => {
+              viewer.load(table).then(() =>
+                viewer
+                  .restore({
+                    ...transformedConfig,
+                    theme: perspectiveTheme,
+                    title: props.title,
+                    settings: false,
+                  })
+                  .then(() => {
+                    if (viewer.shadowRoot) {
+                      const sheet = new CSSStyleSheet()
+                      sheet.replaceSync(perspectiveVizAdditionalStyles)
+                      viewer.shadowRoot.adoptedStyleSheets.push(sheet)
+                    }
+                  })
+              )
             })
-            .catch(() => {
-              setHasError(true)
-            })
-        }
-      })
-      .catch(() => {
-        setHasError(true)
-      })
+        })
+        .catch(() => {
+          setHasError(true)
+        })
+    }
   }, [props.data, perspectiveTheme])
 
   if (hasError) {

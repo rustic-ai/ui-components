@@ -6,13 +6,16 @@ describe('transformData function', () => {
       { name: 'Alice', age: 30 },
       { name: 'Bob', age: 25 },
     ]
-
+    const headers = [
+      { dataKey: 'name', label: 'Name' },
+      { dataKey: 'age', label: 'Age' },
+    ]
     const expectedOutput = [
-      { name: ['Alice'], age: [inputArray[0].age] },
-      { name: ['Bob'], age: [inputArray[1].age] },
+      { Name: 'Alice', Age: inputArray[0].age },
+      { Name: 'Bob', Age: inputArray[1].age },
     ]
 
-    const result = transformTableData(inputArray)
+    const result = transformTableData(inputArray, headers)
     expect(result).to.deep.equal(expectedOutput)
   })
 })
