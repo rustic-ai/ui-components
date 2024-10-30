@@ -189,40 +189,36 @@ function PerspectiveViz(props: TableData) {
   const transformedConfig = props.config && transformTableConfig(props.config)
 
   useEffect(() => {
-    const loadTable = () => {
-      const viewer = viewerRef.current
-      if (viewer) {
-        perspective
-          .worker()
-          .then((worker: Client) =>
-            worker.table(transformTableData(props.data, props.headers))
-          )
-          .then((table: Table) => {
-            viewer
-              .load(table)
-              .then(() =>
-                viewer.restore({
-                  ...transformedConfig,
-                  theme: perspectiveTheme,
-                  title: props.title,
-                  settings: false,
-                })
+    const viewer: HTMLPerspectiveViewerElement = viewerRef.current
+    if (viewer) {
+      perspective
+        .worker()
+        .then((worker: Client) => {
+          worker
+            .table(transformTableData(props.data, props.headers))
+            .then((table: Table) => {
+              viewer.load(table).then(() =>
+                viewer
+                  .restore({
+                    ...transformedConfig,
+                    theme: perspectiveTheme,
+                    title: props.title,
+                    settings: false,
+                  })
+                  .then(() => {
+                    if (viewer.shadowRoot) {
+                      const sheet = new CSSStyleSheet()
+                      sheet.replaceSync(perspectiveVizAdditionalStyles)
+                      viewer.shadowRoot.adoptedStyleSheets.push(sheet)
+                    }
+                  })
               )
-              .then(() => {
-                if (viewer.shadowRoot) {
-                  const sheet = new CSSStyleSheet()
-                  sheet.replaceSync(perspectiveVizAdditionalStyles)
-                  viewer.shadowRoot.adoptedStyleSheets.push(sheet)
-                }
-              })
-          })
-          .catch(() => {
-            setHasError(true)
-          })
-      }
+            })
+        })
+        .catch(() => {
+          setHasError(true)
+        })
     }
-
-    loadTable()
   }, [props.data, perspectiveTheme])
 
   if (hasError) {
