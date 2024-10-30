@@ -8,6 +8,7 @@ import '@finos/perspective-viewer/dist/css/pro-dark.css'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import perspective from '@finos/perspective/dist/esm/perspective.inline.js'
+import type { Client, Table } from '@finos/perspective/dist/pkg/perspective-js'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import type { HTMLPerspectiveViewerElement } from '@finos/perspective-viewer/dist/esm/perspective-viewer.inline.js'
@@ -188,30 +189,36 @@ function PerspectiveViz(props: TableData) {
   const transformedConfig = props.config && transformTableConfig(props.config)
 
   useEffect(() => {
-    const loadTable = async () => {
-      try {
-        const worker = await perspective.worker()
-        const table = await worker.table(
-          transformTableData(props.data, props.headers)
-        )
-        const viewer = viewerRef.current
-
-        if (viewer) {
-          await viewer.load(table) // Await the load call
-          await viewer.restore({
-            ...transformedConfig,
-            theme: perspectiveTheme,
-            title: props.title,
-            settings: false,
+    const loadTable = () => {
+      const viewer = viewerRef.current
+      if (viewer) {
+        perspective
+          .worker()
+          .then((worker: Client) =>
+            worker.table(transformTableData(props.data, props.headers))
+          )
+          .then((table: Table) => {
+            viewer
+              .load(table)
+              .then(() =>
+                viewer.restore({
+                  ...transformedConfig,
+                  theme: perspectiveTheme,
+                  title: props.title,
+                  settings: false,
+                })
+              )
+              .then(() => {
+                if (viewer.shadowRoot) {
+                  const sheet = new CSSStyleSheet()
+                  sheet.replaceSync(perspectiveVizAdditionalStyles)
+                  viewer.shadowRoot.adoptedStyleSheets.push(sheet)
+                }
+              })
           })
-          if (viewer.shadowRoot) {
-            const sheet = new CSSStyleSheet()
-            sheet.replaceSync(perspectiveVizAdditionalStyles)
-            viewer.shadowRoot.adoptedStyleSheets.push(sheet)
-          }
-        }
-      } catch (error) {
-        setHasError(true)
+          .catch(() => {
+            setHasError(true)
+          })
       }
     }
 
