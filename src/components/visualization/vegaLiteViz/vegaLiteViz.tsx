@@ -9,15 +9,16 @@ import React, { useEffect, useRef, useState } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { default as VegaEmbed } from 'vega-embed'
 
+import MarkedMarkdown from '../../markdown/markedMarkdown'
 import PopoverMenu, { type PopoverMenuItem } from '../../menu/popoverMenu'
 import type { VegaLiteData } from './vegaLiteViz.types'
 
 /** The `VegaLiteViz` component is a versatile tool for visualizing data using the Vega-Lite grammar. With support for various graphic types, it empowers users to create engaging and informative data visualizations effortlessly.
  *
- * Note: `vega-embed` is not bundled, so please install the following package using npm:
+ * Note: `vega-embed`, `marked` and `dompurify` are not bundled, so please install the following packages using npm:
  *
  * ```typescript
- * npm i vega-embed
+ * npm i vega-embed marked dompurify
  * ```
  */
 function VegaLiteViz(props: VegaLiteData) {
@@ -134,9 +135,7 @@ function VegaLiteViz(props: VegaLiteData) {
         </Box>
 
         {props.title && <Typography variant="h6">{props.title}</Typography>}
-        {props.description && (
-          <Typography variant="body1">{props.description}</Typography>
-        )}
+        {props.description && <MarkedMarkdown text={props.description} />}
         <Box textAlign="center" mt={1}>
           {typeof props.spec.title === 'string' && (
             <Typography variant="subtitle2">{props.spec.title}</Typography>

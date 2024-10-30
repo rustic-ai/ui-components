@@ -628,7 +628,7 @@ export const WeatherPlot = {
 export const IsotypeGrid = {
   args: {
     title: 'Isotype Grid',
-    description: 'Drag region to select.',
+    description: '**Drag region to select**.',
     spec: {
       $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
       width: 'container',
