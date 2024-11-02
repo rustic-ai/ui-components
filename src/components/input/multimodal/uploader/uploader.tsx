@@ -12,7 +12,9 @@ import { createPortal } from 'react-dom'
 import { v4 as getUUID } from 'uuid'
 
 import FilePreview from '../../../filePreview/filePreview'
-import type { UploaderProps } from '../../../types'
+import Icon from '../../../icon'
+import PopoverMenu from '../../../menu/popoverMenu'
+import type { UploaderProps, UploadOption } from '../../../types'
 
 const maximumLoadingProgress = 100
 
@@ -56,6 +58,10 @@ export function getFileSizeAbbrev(bytes: number): string {
 function Uploader(props: UploaderProps) {
   const [addedFiles, setAddedFiles] = useState<FileInfo[]>([])
   const [errorMessages, setErrorMessages] = useState<string[]>([])
+  const [additionalMetadata, setAdditionalMetadata] = useState<{
+    [key: string]: any
+  }>({})
+
   const fileNamesRef = useRef<{ [key: string]: number }>({})
   const inputId = getUUID()
 
@@ -176,11 +182,19 @@ function Uploader(props: UploaderProps) {
     const fileName = getFileName(file)
     const updatedFile = new File([file], fileName, { type: file.type })
 
-    if (props.getUploadData) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const extraData: { [key: string]: any } = props.getUploadData(fileName)
-      Object.keys(extraData).map((key) => {
-        formData.append(key, extraData[key])
+    if (props.getUploadData || additionalMetadata) {
+      const generalMetadata = props.getUploadData
+        ? props.getUploadData(fileName)
+        : {}
+
+      const combinedData = { ...generalMetadata, ...additionalMetadata }
+
+      Object.keys(combinedData).forEach((key) => {
+        const value = combinedData[key]
+        formData.append(
+          key,
+          typeof value === 'object' ? JSON.stringify(value) : value
+        )
       })
     }
 
@@ -327,25 +341,52 @@ function Uploader(props: UploaderProps) {
     }
   }
 
+  function handleMenuClick(option: UploadOption) {
+    setAdditionalMetadata(option.metadata)
+    const fileInput = document.getElementById(inputId) as HTMLInputElement
+    if (fileInput) {
+      fileInput.accept = option.acceptedFileTypes || props.acceptedFileTypes
+    }
+
+    fileInput.click()
+  }
+
+  const menuItems = props.uploadOptions?.map((option) => {
+    return {
+      label: option.label,
+      onClick: () => handleMenuClick(option),
+      startDecorator: option.iconName && <Icon name={option.iconName} />,
+    }
+  })
+
   return (
     <>
       <Box className="rustic-uploader">
         <label htmlFor={inputId} data-cy="upload-button">
-          <Tooltip title="Upload">
-            <IconButton
-              component="span"
-              aria-label="Upload file"
-              sx={{
-                color: 'primary.light',
-                '&:hover': {
-                  color: 'primary.main',
-                },
-              }}
-            >
-              <span className="material-symbols-rounded">upload_2</span>
-            </IconButton>
-          </Tooltip>
+          {menuItems?.length ? (
+            <PopoverMenu
+              ariaLabel="Upload"
+              icon={<Icon name="upload_2" />}
+              menuItems={menuItems}
+            />
+          ) : (
+            <Tooltip title="Upload">
+              <IconButton
+                component="span"
+                aria-label="Upload file"
+                sx={{
+                  color: 'primary.light',
+                  '&:hover': {
+                    color: 'primary.main',
+                  },
+                }}
+              >
+                <span className="material-symbols-rounded">upload_2</span>
+              </IconButton>
+            </Tooltip>
+          )}
         </label>
+
         <input
           type="file"
           id={inputId}

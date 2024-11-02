@@ -261,6 +261,13 @@ export interface TextInputProps
   ws: WebSocketClient
 }
 
+export interface UploadOption {
+  label: string
+  metadata: { [key: string]: any }
+  acceptedFileTypes?: string
+  iconName?: string
+}
+
 export interface UploaderProps {
   /** The types of files that are allowed to be selected for upload. For safety reasons, only allow file types that can be handled by your server. Avoid accepting executable file types like .exe, .bat, or .msi. For more information, refer to the [mdn web docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file#unique_file_type_specifiers). */
   acceptedFileTypes: string
@@ -284,6 +291,8 @@ export interface UploaderProps {
   showFullName?: boolean
   /** A function that can be used to define additional data to be sent along with the file upload. */
   getUploadData?: (fileName: string) => { [key: string]: any }
+  /** Defines the available options for file upload, displayed within a popover menu. If no options are provided, an upload icon button will be displayed by default.*/
+  uploadOptions?: UploadOption[]
 }
 
 export type MultimodalInputProps = TextInputProps &
