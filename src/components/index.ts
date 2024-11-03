@@ -1,5 +1,6 @@
 import FCCalendar from './calendar/fCCalendar'
 import CodeSnippet from './codeSnippet/codeSnippet'
+import { UniformsForm } from './dynamicForm'
 import ElementRenderer from './elementRenderer/elementRenderer'
 import Icon from './icon/icon'
 import Image from './image/image'
@@ -66,6 +67,7 @@ export {
   TextToSpeech,
   Timestamp,
   Uploader,
+  UniformsForm,
   VegaLiteViz,
   Video,
   Weather,
