@@ -49,7 +49,7 @@ export default function UniformsForm(props: DynamicFormProps) {
       timestamp: currentTime,
       sender: props.sender,
       conversationId: props.conversationId,
-      format: 'generic_json',
+      format: 'formResponse',
       data: model,
       inReplyTo: props.messageId,
     }
