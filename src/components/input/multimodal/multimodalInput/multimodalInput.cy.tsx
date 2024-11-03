@@ -41,6 +41,20 @@ describe('Input', () => {
         getUploadData={() => {
           return { userId: testUser.id }
         }}
+        uploadOptions={[
+          {
+            label: 'Upload Excel Sheet',
+            iconName: 'request_quote',
+            metadata: { file_meta: '{"uploadedBy":"id","category":"Finance"}' },
+          },
+          {
+            label: 'Upload Video',
+            iconName: 'movie',
+            metadata: { file_meta: '{"uploadedBy":"id","category": "Video"}' },
+            acceptedFileTypes:
+              '.mp4, .mov, .avi, .mkv, .wmv, .flv, .webm, .m4v',
+          },
+        ]}
       />
     )
   })
@@ -331,6 +345,35 @@ describe('Input', () => {
           'Failed to upload image-component-example.png. Please try again later'
         )
         cy.get(fileName).should('not.exist')
+      })
+    })
+
+    it(`displays upload options correctly on ${viewport} screen`, () => {
+      cy.viewport(viewport)
+      cy.get(uploadButton).click()
+      cy.contains('Upload Excel Sheet').should('be.visible')
+      cy.contains('Upload Video').should('be.visible')
+    })
+
+    it('uploads file with correct metadata', () => {
+      cy.viewport(viewport)
+
+      cy.intercept(
+        {
+          method: 'POST',
+          url: '/upload?message-id=*',
+        },
+        { url: '' }
+      ).as('upload')
+      cy.get(uploadButton).click()
+      cy.contains('Upload Video').click()
+      cy.get('input[type=file]').selectFile([videoFile], {
+        force: true,
+      })
+      cy.wait('@upload').interceptFormData((formData) => {
+        expect(formData['file_meta']).to.eq(
+          '{"uploadedBy":"id","category": "Video"}'
+        )
       })
     })
   })

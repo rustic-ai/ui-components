@@ -139,6 +139,21 @@ multiModalInputMeta.argTypes = {
       type: { summary: '(fileName: string) => { [key: string]: any }' },
     },
   },
+  uploadOptions: {
+    description:
+      'Optional props. Defines the available options for file upload, displayed within a popover menu. If no options are provided, an upload icon button will be displayed by default.',
+    table: {
+      type: {
+        summary: 'An array of UploadOption.\n',
+        detail:
+          'Each UploadOption has the following fields:\n' +
+          '  label: The text label displayed for the upload option, shown in the popover menu.\n' +
+          '  metadata: Metadata associated with this upload option, provided as key-value pairs. This data is typically sent along with the uploaded file to provide additional context or configuration.\n' +
+          '  acceptedFileTypes: Optional props. Specifies the types of files accepted for this upload option, formatted as a comma-separated string. If not provided, acceptedFileTypes for the entire component will be applied. \n' +
+          '  iconName: Optional props. The name of the Material Symbol to display alongside this upload option.',
+      },
+    },
+  },
 }
 
 export default multiModalInputMeta
@@ -182,7 +197,7 @@ export const PDFAndImageOnly = {
     ...Default.args,
     acceptedFileTypes: 'image/*,.pdf',
     getUploadData: () => {
-      return { userId: 'testUserId' }
+      return { file_meta: '{ "uploadedBy": "testId" }' }
     },
   },
 }
@@ -205,5 +220,28 @@ export const SpeechToText = {
   args: {
     ...Default.args,
     enableSpeechToText: true,
+  },
+}
+
+export const HasMenu = {
+  args: {
+    ...Default.args,
+    acceptedFileTypes: '.xlsx, .xls, .csv',
+    getUploadData: () => {
+      return { file_meta: '{ "uploadedBy": "testId" }' }
+    },
+    uploadOptions: [
+      {
+        label: 'Upload Excel Sheet',
+        iconName: 'request_quote',
+        metadata: { file_meta: '{"uploadedBy":"id","category":"Finance"}' },
+      },
+      {
+        label: 'Upload Video',
+        iconName: 'movie',
+        metadata: { file_meta: '{"uploadedBy":"id","category": "Video"}' },
+        acceptedFileTypes: '.mp4, .mov, .avi, .mkv, .wmv, .flv, .webm, .m4v',
+      },
+    ],
   },
 }
