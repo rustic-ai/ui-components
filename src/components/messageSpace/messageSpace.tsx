@@ -36,7 +36,15 @@ function getCombinedMessages(
   messages: { [key: string]: Message[] },
   message: Message
 ) {
-  let key = message.format.includes('update') ? message.threadId : message.id
+  let key
+
+  if (message.format.includes('update')) {
+    key = message.threadId
+  } else if (message.format.includes('Response')) {
+    key = message.inReplyTo
+  } else {
+    key = message.id
+  }
 
   if (key) {
     const newMessages = { ...messages }

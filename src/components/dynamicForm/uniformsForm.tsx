@@ -1,12 +1,12 @@
-import Ajv, {type JSONSchemaType } from 'ajv'
-import React from 'react'
-import { JSONSchemaBridge } from 'uniforms-bridge-json-schema'
-import { AutoForm } from 'uniforms-mui'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
-import type {DynamicFormProps, Message} from "../types";
-import {v4 as getUUID} from "uuid";
+import Ajv, { type JSONSchemaType } from 'ajv'
+import React, { useEffect, useState } from 'react'
+import { JSONSchemaBridge } from 'uniforms-bridge-json-schema'
+import { AutoForm } from 'uniforms-mui'
+import { v4 as getUUID } from 'uuid'
 
+import type { DynamicFormProps, Message } from '../types'
 
 /**
  * The `UniformsForm` component provides a user interface for rendering a dynamic form using [uniforms](https://uniforms.tools/) and sending the response as a message on the websocket.
@@ -19,6 +19,14 @@ import {v4 as getUUID} from "uuid";
  * ```
  */
 export default function UniformsForm(props: DynamicFormProps) {
+  const [data, setData] = useState(props.data)
+
+  useEffect(() => {
+    if (props.updatedData && props.updatedData.length > 0) {
+      setData(props.updatedData[props.updatedData.length - 1].data)
+    }
+  }, [props.updatedData])
+
   const ajv = new Ajv({
     allErrors: true,
     useDefaults: true,
@@ -41,7 +49,7 @@ export default function UniformsForm(props: DynamicFormProps) {
     validator: schemaValidator,
   })
 
-  function handleSubmit(model:any) {
+  function handleSubmit(model: any) {
     const currentTime = new Date().toISOString()
 
     const formattedMessage: Message = {
@@ -53,17 +61,22 @@ export default function UniformsForm(props: DynamicFormProps) {
       data: model,
       inReplyTo: props.messageId,
     }
-
+    setData(model)
     props.ws.send(formattedMessage)
   }
 
   return (
-      <Box className="rustic-form">
-        {props.title && <Typography variant="h6">{props.title}</Typography>}
-        {props.description && (
-            <Typography variant="body1">{props.description}</Typography>
-        )}
-        <AutoForm schema={bridge} onSubmit={(model)=>handleSubmit(model)}/>
-      </Box>
+    <Box className="rustic-form">
+      {props.title && <Typography variant="h6">{props.title}</Typography>}
+      {props.description && (
+        <Typography variant="body1">{props.description}</Typography>
+      )}
+      <AutoForm
+        schema={bridge}
+        onSubmit={(model) => handleSubmit(model)}
+        model={data}
+        disabled={!!data}
+      />
+    </Box>
   )
 }

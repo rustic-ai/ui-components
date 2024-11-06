@@ -371,6 +371,9 @@ export interface PromptBuilderProps
 export interface FormFormat extends DataFormat {
   /** schema describing the form fields */
   schema: any
+  /** Input values for the form fields */
+  data?: any
 }
 
-export interface DynamicFormProps extends FormFormat, ConversationProps {}
+export type FormData = FormFormat & Updates<FormFormat>
+export interface DynamicFormProps extends FormData, ConversationProps {}
