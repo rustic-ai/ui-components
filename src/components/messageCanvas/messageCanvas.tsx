@@ -41,9 +41,11 @@ function MessageCanvasElement(
 ) {
   const theme = useTheme()
 
+  const messageInfo = props.inReplyTo ? props.inReplyTo : props.message
+
   return (
     <Stack
-      id={props.message.id}
+      id={messageInfo.id}
       className="rustic-message-canvas"
       data-cy="message-canvas"
       ref={ref}
@@ -54,8 +56,8 @@ function MessageCanvasElement(
         spacing={1}
         className="rustic-header"
       >
-        {props.getProfileComponent && props.getProfileComponent(props.message)}
-        <Timestamp timestamp={props.message.timestamp} />
+        {props.getProfileComponent && props.getProfileComponent(messageInfo)}
+        <Timestamp timestamp={messageInfo.timestamp} />
       </Stack>
       {props.getActionsComponent &&
         props.getActionsComponent(props.message) && (
@@ -64,7 +66,7 @@ function MessageCanvasElement(
             className="rustic-message-actions-container"
             sx={{ boxShadow: theme.shadows[1] }}
           >
-            {props.getActionsComponent(props.message)}
+            {props.getActionsComponent(messageInfo)}
           </Card>
         )}
       <Card variant="outlined" className="rustic-message-container">
@@ -75,8 +77,8 @@ function MessageCanvasElement(
             color="text.secondary"
             className="rustic-footer"
           >
-            Submitted by {props.inReplyTo.sender.name} at&nbsp;
-            <Timestamp timestamp={props.inReplyTo.timestamp} />
+            Submitted by {props.message.sender.name} at&nbsp;
+            <Timestamp timestamp={props.message.timestamp} />
           </Typography>
         )}
       </Card>
