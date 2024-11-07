@@ -3,6 +3,7 @@ import './messageCanvas.css'
 import { useTheme } from '@mui/material'
 import Card from '@mui/material/Card'
 import Stack from '@mui/material/Stack'
+import Typography from '@mui/material/Typography'
 import React, { forwardRef, type ReactNode } from 'react'
 
 import Timestamp from '../timestamp/timestamp'
@@ -23,6 +24,8 @@ export interface MessageContainerProps {
 export interface MessageCanvasProps extends MessageContainerProps {
   /** Message information to be displayed. Please see the `MessageSpace` docs for more information about the `Message` interface. */
   message: Message
+  /** The initial message being responded to. Please see the `MessageSpace` docs for more information about the `Message` interface. */
+  inReplyTo?: Message
   /** React component to be displayed in the message canvas. */
   children: ReactNode
 }
@@ -45,7 +48,12 @@ function MessageCanvasElement(
       data-cy="message-canvas"
       ref={ref}
     >
-      <Stack direction="row" alignItems="center" spacing={1}>
+      <Stack
+        direction="row"
+        alignItems="center"
+        spacing={1}
+        className="rustic-header"
+      >
         {props.getProfileComponent && props.getProfileComponent(props.message)}
         <Timestamp timestamp={props.message.timestamp} />
       </Stack>
@@ -61,6 +69,16 @@ function MessageCanvasElement(
         )}
       <Card variant="outlined" className="rustic-message-container">
         {props.children}
+        {props.inReplyTo && (
+          <Typography
+            variant="caption"
+            color="text.secondary"
+            className="rustic-footer"
+          >
+            Submitted by {props.inReplyTo.sender.name} at&nbsp;
+            <Timestamp timestamp={props.inReplyTo.timestamp} />
+          </Typography>
+        )}
       </Card>
     </Stack>
   )

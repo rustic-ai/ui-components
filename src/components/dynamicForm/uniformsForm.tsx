@@ -22,10 +22,10 @@ export default function UniformsForm(props: DynamicFormProps) {
   const [data, setData] = useState(props.data)
 
   useEffect(() => {
-    if (props.updatedData && props.updatedData.length > 0) {
-      setData(props.updatedData[props.updatedData.length - 1].data)
+    if (props.data) {
+      setData(props.data)
     }
-  }, [props.updatedData])
+  }, [props.data])
 
   const ajv = new Ajv({
     allErrors: true,
