@@ -19,6 +19,7 @@ import {
   StreamingText,
   Table,
   Text,
+  UniformsForm,
   YoutubeVideo,
 } from '..'
 import Icon from '../icon/icon'
@@ -39,6 +40,7 @@ describe('MessageSpace Component', () => {
     youtubeVideo: YoutubeVideo,
     table: Table,
     calendar: FCCalendar,
+    form: UniformsForm,
   }
 
   const conversationId = '1'
@@ -204,7 +206,7 @@ describe('MessageSpace Component', () => {
       })
     })
 
-    it.only(`can receive and render messages from websocket on ${viewport} screen`, () => {
+    it(`can receive and render messages from websocket on ${viewport} screen`, () => {
       setupWebSocketServer()
       cy.viewport(viewport)
       cy.mount(
@@ -284,6 +286,74 @@ describe('MessageSpace Component', () => {
           cy.contains('message 3').should('be.visible')
         })
       })
+    })
+
+    it(`renders form response correctly on ${viewport} screen`, () => {
+      const mockWsClient = {
+        send: cy.stub(),
+        close: cy.stub(),
+        reconnect: cy.stub(),
+      }
+
+      cy.viewport(viewport)
+      cy.mount(
+        <MessageSpace
+          ws={mockWsClient}
+          sender={testUser}
+          receivedMessages={[
+            {
+              ...agentMessageData,
+              id: 'formId',
+              timestamp: '2024-01-02T00:01:00.000Z',
+              format: 'form',
+              data: {
+                title: 'Choose the days',
+                schema: {
+                  title: 'Address',
+                  type: 'object',
+                  properties: {
+                    city: { type: 'string' },
+                    state: { type: 'string' },
+                    street: { type: 'string' },
+                    zip: { type: 'string', pattern: '[0-9]{5}' },
+                  },
+                  required: ['street', 'zip', 'state'],
+                },
+              },
+            },
+            {
+              ...humanMessageData,
+              id: getUUID(),
+              timestamp: '2024-01-02T00:12:00.000Z',
+              inReplyTo: 'formId',
+              format: 'formResponse',
+              data: {
+                data: {
+                  city: 'Vancouver',
+                  state: 'BC',
+                  street: '1575 W Georgia St',
+                  zip: 'V6G 2V3',
+                },
+              },
+            },
+          ]}
+          supportedElements={supportedElements}
+          getProfileComponent={(message: Message) => {
+            if (message.sender.name?.includes('Agent')) {
+              return <Icon name="smart_toy" />
+            } else {
+              return <Icon name="account_circle" />
+            }
+          }}
+        />
+      )
+      const messageSpace = '[data-cy=message-space]'
+      cy.get(messageSpace).should('exist')
+      cy.get(messageSpace)
+        .find('input')
+        .first()
+        .should('have.value', 'Vancouver')
+      cy.get(messageSpace).find('input').last().should('have.value', 'V6G 2V3')
     })
   })
 })

@@ -3,6 +3,7 @@ import './messageCanvas.css'
 import { useTheme } from '@mui/material'
 import Card from '@mui/material/Card'
 import Stack from '@mui/material/Stack'
+import Typography from '@mui/material/Typography'
 import React, { forwardRef, type ReactNode } from 'react'
 
 import Timestamp from '../timestamp/timestamp'
@@ -23,6 +24,8 @@ export interface MessageContainerProps {
 export interface MessageCanvasProps extends MessageContainerProps {
   /** Message information to be displayed. Please see the `MessageSpace` docs for more information about the `Message` interface. */
   message: Message
+  /** The initial message being responded to. Please see the `MessageSpace` docs for more information about the `Message` interface. */
+  inReplyTo?: Message
   /** React component to be displayed in the message canvas. */
   children: ReactNode
 }
@@ -38,16 +41,23 @@ function MessageCanvasElement(
 ) {
   const theme = useTheme()
 
+  const messageInfo = props.inReplyTo ? props.inReplyTo : props.message
+
   return (
     <Stack
-      id={props.message.id}
+      id={messageInfo.id}
       className="rustic-message-canvas"
       data-cy="message-canvas"
       ref={ref}
     >
-      <Stack direction="row" alignItems="center" spacing={1}>
-        {props.getProfileComponent && props.getProfileComponent(props.message)}
-        <Timestamp timestamp={props.message.timestamp} />
+      <Stack
+        direction="row"
+        alignItems="center"
+        spacing={1}
+        className="rustic-header"
+      >
+        {props.getProfileComponent && props.getProfileComponent(messageInfo)}
+        <Timestamp timestamp={messageInfo.timestamp} />
       </Stack>
       {props.getActionsComponent &&
         props.getActionsComponent(props.message) && (
@@ -56,11 +66,21 @@ function MessageCanvasElement(
             className="rustic-message-actions-container"
             sx={{ boxShadow: theme.shadows[1] }}
           >
-            {props.getActionsComponent(props.message)}
+            {props.getActionsComponent(messageInfo)}
           </Card>
         )}
       <Card variant="outlined" className="rustic-message-container">
         {props.children}
+        {props.inReplyTo && (
+          <Typography
+            variant="caption"
+            color="text.secondary"
+            className="rustic-footer"
+          >
+            Submitted by {props.message.sender.name} at&nbsp;
+            <Timestamp timestamp={props.message.timestamp} />
+          </Typography>
+        )}
       </Card>
     </Stack>
   )

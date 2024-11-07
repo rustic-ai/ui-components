@@ -36,32 +36,51 @@ function getCombinedMessages(
   messages: { [key: string]: Message[] },
   message: Message
 ) {
-  let key = message.format.includes('update') ? message.threadId : message.id
+  let key
 
-  if (key) {
-    const newMessages = { ...messages }
-    const existingMessages = messages[key] || []
-    const originalMessage = existingMessages[0]
-
-    // Check if sender is the same for update messages
-    if (
-      message.format.includes('update') &&
-      originalMessage &&
-      originalMessage.sender.id !== message.sender.id
-    ) {
-      key = message.id
-    }
-
-    if (!newMessages[key]) {
-      newMessages[key] = []
-    }
-
-    newMessages[key] = newMessages[key].concat(message)
-
-    return newMessages
+  if (message.format.includes('update')) {
+    key = message.threadId
+  } else if (message.format.includes('Response')) {
+    key = message.inReplyTo
   } else {
+    key = message.id
+  }
+
+  if (!key) {
     return messages
   }
+
+  const newMessages = { ...messages }
+  const existingMessages = newMessages[key] || []
+  const originalMessage = existingMessages[0]
+
+  if (
+    message.format.includes('update') &&
+    originalMessage &&
+    originalMessage.sender.id !== message.sender.id
+  ) {
+    key = message.id
+  }
+
+  // Initialize the key in newMessages if it doesn't exist
+  if (!newMessages[key]) {
+    newMessages[key] = []
+  }
+
+  // For Response messages, merge data with the original message
+  if (message.format.includes('Response') && originalMessage) {
+    newMessages[key] = [
+      {
+        ...originalMessage,
+        data: { ...originalMessage.data, ...message.data },
+      },
+      message,
+    ]
+  } else {
+    newMessages[key] = [...newMessages[key], message]
+  }
+
+  return newMessages
 }
 
 /**
@@ -198,11 +217,16 @@ export default function MessageSpace(props: MessageSpaceProps) {
     >
       {Object.keys(chatMessages).map((key, index) => {
         const messages = chatMessages[key]
-        const lastestMessage = messages[messages.length - 1]
+        const latestMessage = messages[messages.length - 1]
+        const hasResponse = latestMessage.format.includes('Response')
+        const inReplyTo = hasResponse && {
+          inReplyTo: messages[0],
+        }
         return (
           <MessageCanvas
             key={key}
-            message={lastestMessage}
+            message={latestMessage}
+            {...inReplyTo}
             getActionsComponent={props.getActionsComponent}
             getProfileComponent={props.getProfileComponent}
             ref={index === currentMessagesLength - 1 ? scrollEndRef : null}
@@ -210,7 +234,7 @@ export default function MessageSpace(props: MessageSpaceProps) {
             <ElementRenderer
               ws={props.ws}
               sender={props.sender}
-              messages={messages}
+              messages={hasResponse ? [messages[0]] : messages}
               supportedElements={props.supportedElements}
             />
           </MessageCanvas>

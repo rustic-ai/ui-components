@@ -17,6 +17,7 @@ import {
   StreamingText,
   Table,
   Text,
+  UniformsForm,
   Video,
   YoutubeVideo,
 } from '..'
@@ -462,6 +463,41 @@ export const Default = {
           files: [{ name: 'imageExample.png' }, { name: 'pdfExample.pdf' }],
         },
       },
+      {
+        ...agentMessageData,
+        id: 'formId',
+        timestamp: '2024-01-02T00:21:00.000Z',
+        format: 'form',
+        data: {
+          title: 'Choose the days',
+          schema: {
+            title: 'Address',
+            type: 'object',
+            properties: {
+              city: { type: 'string' },
+              state: { type: 'string' },
+              street: { type: 'string' },
+              zip: { type: 'string', pattern: '[0-9]{5}' },
+            },
+            required: ['street', 'zip', 'state'],
+          },
+        },
+      },
+      {
+        ...humanMessageData,
+        id: getUUID(),
+        timestamp: '2024-01-02T00:21:00.000Z',
+        format: 'formResponse',
+        inReplyTo: 'formId',
+        data: {
+          data: {
+            city: 'Vancouver',
+            state: 'BC',
+            street: '1575 W Georgia St',
+            zip: 'V6G 2V3',
+          },
+        },
+      },
     ],
     supportedElements: {
       text: Text,
@@ -478,6 +514,7 @@ export const Default = {
       sound: Sound,
       video: Video,
       multipart: Multipart,
+      form: UniformsForm,
     },
     getProfileComponent: getProfileIconAndName,
     getActionsComponent: (message: Message) => {

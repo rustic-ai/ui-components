@@ -16,12 +16,18 @@
   align-items: center;
 }
 
-.rustic-message-canvas .rustic-timestamp {
+.rustic-message-canvas .rustic-header .rustic-timestamp {
   margin-left: 16px;
 }
 
 .rustic-message-canvas:hover .rustic-message-actions-container {
   opacity: 1;
+}
+
+.rustic-message-canvas .rustic-footer {
+  display: flex;
+  flex: 1;
+  justify-content: flex-end;
 }
 
 @media (max-width: 900px) {
@@ -30,7 +36,7 @@
     top: unset;
   }
 
-  .rustic-message-canvas .rustic-timestamp {
+  .rustic-message-canvas .rustic-header .rustic-timestamp {
     display: flex;
     flex: 1;
     justify-content: flex-end;
