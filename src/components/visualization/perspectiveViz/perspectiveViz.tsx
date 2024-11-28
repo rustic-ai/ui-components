@@ -121,28 +121,37 @@ function PerspectiveViz(props: TableData) {
   }
   
   /* Button and Icon Colors */
-  span.button {
-    color: ${rusticTheme.palette.primary.main} !important;
+  #status_bar .hover-target:hover .button>span {
+    display:none !important;
   }
   
-  span.button:hover:before {
-    background-color: ${rusticTheme.palette.primary.main} !important;
+  #status_bar .hover-target.modal-target .button>span {
+    display:none !important;
   }
   
-  .button select:hover, .button:hover, .psp-expression-editor__button:hover, 
+  .button select:hover, .psp-expression-editor__button:hover, 
   .sidebar_close_button_inner:hover {
     background-color: ${rusticTheme.palette.primary.light} !important;
-  }
-  
-  /* Enable Scrolling */
-  #plugin_selector_container.open, #status_bar, #menu-bar, #app_panel {
-    overflow: scroll !important;
   }
   
   /* Hide unused buttons */
   #debug_open_button.sidebar_close_button, .reset-default-style-disabled, 
   .expression-edit-button, #theme, #status, #status_bar .input-sizer {
     display: none !important;
+  }
+  
+  #status_bar .hover-target:hover, #status_bar .hover-target.modal-target {
+    height: fit-content !important;
+  }
+
+  /* Enable Scrolling */
+  #plugin_selector_container.open, #status_bar, #menu-bar, #app_panel {
+    overflow: auto !important;
+  }
+
+  #settings_button:hover {
+    color: ${rusticTheme.palette.primary.contrastText} !important;
+    background-color: ${rusticTheme.palette.primary.main} !important;
   }
   `
 
