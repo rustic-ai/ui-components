@@ -80,7 +80,7 @@ function Uploader(props: UploaderProps) {
     ])
   }
 
-  function handleFilesChange(event: React.ChangeEvent<HTMLInputElement>) {
+  function handleFilesChange(event: React.ChangeEvent<HTMLInputElement>): void {
     setErrorMessages([])
 
     const files = event.target.files && Array.from(event.target.files)
@@ -104,7 +104,7 @@ function Uploader(props: UploaderProps) {
     event.target.value = ''
   }
 
-  function handleFile(file: File) {
+  function handleFile(file: File): void {
     const isFileSizeExceedingLimit =
       props.maxFileSize && file.size > props.maxFileSize
 
@@ -119,7 +119,7 @@ function Uploader(props: UploaderProps) {
     fileName: string,
     fileId: string,
     errorData: any
-  ) {
+  ): void {
     fileNamesRef.current = {
       ...fileNamesRef.current,
       [fileName]: fileNamesRef.current[fileName]--,
@@ -127,7 +127,7 @@ function Uploader(props: UploaderProps) {
     handleFailedUpload(fileName, fileId, errorData)
   }
 
-  function updateProgress(loadedPercentage: number, id: string) {
+  function updateProgress(loadedPercentage: number, id: string): void {
     setAddedFiles((prevFiles) => {
       const updatedFiles = prevFiles.map((file) => {
         if (file.id === id) {
@@ -142,7 +142,7 @@ function Uploader(props: UploaderProps) {
     })
   }
 
-  function handleSuccessfulUpload(res: { fileId: string }, id: string) {
+  function handleSuccessfulUpload(res: { fileId: string }, id: string): void {
     setAddedFiles((existingFiles) => {
       const index = existingFiles.findIndex((file) => file.id === id)
       if (index !== -1) {
@@ -161,7 +161,7 @@ function Uploader(props: UploaderProps) {
     fileName: string,
     id: string,
     response?: { message?: string }
-  ) {
+  ): void {
     setErrorMessages((prevMessages) => [
       ...prevMessages,
       `Failed to upload ${fileName}. ${response?.message || ''}`,
@@ -169,7 +169,7 @@ function Uploader(props: UploaderProps) {
     setAddedFiles((prev) => prev.filter((file) => file.id !== id))
   }
 
-  function getFileName(file: File) {
+  function getFileName(file: File): string {
     let fileName = file.name
     const fileNameCount = fileNamesRef.current[fileName]
 
@@ -187,7 +187,7 @@ function Uploader(props: UploaderProps) {
     return fileName
   }
 
-  function uploadFile(file: File) {
+  function uploadFile(file: File): void {
     const formData = new FormData()
     const controller = new AbortController()
 
@@ -330,7 +330,7 @@ function Uploader(props: UploaderProps) {
     uploadFile()
   }
 
-  function handleDelete(file: FileInfo, index: number) {
+  function handleDelete(file: FileInfo, index: number): void {
     setErrorMessages([])
     const fileName = file.name
     fileNamesRef.current = {
@@ -419,7 +419,7 @@ function Uploader(props: UploaderProps) {
   function renderContentWithRef(
     content: JSX.Element,
     domNode?: HTMLDivElement | null
-  ) {
+  ): JSX.Element {
     if (domNode) {
       return createPortal(content, domNode)
     } else {
@@ -427,7 +427,7 @@ function Uploader(props: UploaderProps) {
     }
   }
 
-  function handleMenuClick(option: UploadOption) {
+  function handleMenuClick(option: UploadOption): void {
     setAdditionalMetadata(option.metadata)
     const fileInput = document.getElementById(inputId) as HTMLInputElement
     if (fileInput) {
