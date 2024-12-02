@@ -236,7 +236,36 @@ function Uploader(props: UploaderProps) {
       .replaceAll('fileName', fileName)
       .replaceAll('messageId', props.messageId)
 
-    function uploadFile() {
+    function generateNewFileName(): Promise<string> {
+      const extensionIndex = fileName.lastIndexOf('.')
+      const baseName = fileName.substring(0, extensionIndex)
+      const extension = fileName.substring(extensionIndex)
+      // Create a regex to match files with the same base name and extract numbers from them
+      const regex = new RegExp(
+        `^${baseName.replace('.', '\\.')}(\\(\\d+\\))?${extension}$`,
+        'i'
+      )
+      if (props.listFiles) {
+        return props.listFiles().then((existingFiles) => {
+          let maxNumber = 0
+
+          for (const file of existingFiles) {
+            if (regex.test(file)) {
+              const match = file.match(regex)
+              const num =
+                match && match[1] ? parseInt(match[1].slice(1, -1), 10) : 0
+              maxNumber = Math.max(maxNumber, num)
+            }
+          }
+
+          return `${baseName}(${maxNumber + 1})${extension}`
+        })
+      } else {
+        return Promise.resolve(fileName)
+      }
+    }
+
+    function uploadFile(): Promise<void> {
       return axios
         .post(uploadUrl, formData, {
           onUploadProgress: handleUploadProgress,
@@ -254,32 +283,12 @@ function Uploader(props: UploaderProps) {
             props.onFileUpdate('remove', updatedFile.name)
           }
           const conflictStatusCode = 409
-          if (error.response.status === conflictStatusCode && props.listFiles) {
-            props
-              .listFiles()
-              .then((res) => {
-                const extensionIndex = fileName.lastIndexOf('.')
-                const baseName = fileName.substring(0, extensionIndex)
-                const extension = fileName.substring(extensionIndex)
-                // Create a regex to match files with the same base name and extract numbers from them
-                const regex = new RegExp(
-                  `^${baseName.replace('.', '\\.')}(\\(\\d+\\))?${extension}$`,
-                  'i'
-                )
-                let maxNumber = 0
-
-                for (const file of res) {
-                  if (regex.test(file)) {
-                    const match = file.match(regex)
-                    const num =
-                      match && match[1]
-                        ? parseInt(match[1].slice(1, -1), 10)
-                        : 0
-                    maxNumber = Math.max(maxNumber, num)
-                  }
-                }
-
-                const newFileName = `${baseName}(${maxNumber + 1})${extension}`
+          if (
+            error.response?.status === conflictStatusCode &&
+            props.listFiles
+          ) {
+            generateNewFileName()
+              .then((newFileName) => {
                 props.onFileUpdate('add', newFileName)
 
                 const newFile = new File([file], newFileName, {
