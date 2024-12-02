@@ -105,6 +105,7 @@ export default function MultimodalInput(props: MultimodalInputProps) {
             showFullName={props.showFullName}
             getUploadData={props.getUploadData}
             uploadOptions={props.uploadOptions}
+            listFiles={props.listFiles}
           />
         </Box>
       </BaseInput>

@@ -115,6 +115,18 @@ function Uploader(props: UploaderProps) {
     }
   }
 
+  function cleanupFailedUpload(
+    fileName: string,
+    fileId: string,
+    errorData: any
+  ) {
+    fileNamesRef.current = {
+      ...fileNamesRef.current,
+      [fileName]: fileNamesRef.current[fileName]--,
+    }
+    handleFailedUpload(fileName, fileId, errorData)
+  }
+
   function updateProgress(loadedPercentage: number, id: string) {
     setAddedFiles((prevFiles) => {
       const updatedFiles = prevFiles.map((file) => {
@@ -224,24 +236,89 @@ function Uploader(props: UploaderProps) {
       .replaceAll('fileName', fileName)
       .replaceAll('messageId', props.messageId)
 
-    axios
-      .post(uploadUrl, formData, {
-        onUploadProgress: handleUploadProgress,
-        signal: controller.signal,
-      })
-      .then((response) => {
-        if (response.data.fileId) {
-          handleSuccessfulUpload(response.data, newAddedFile.id)
-        }
-      })
-      .catch((error) => {
-        props.onFileUpdate('remove', fileName)
-        fileNamesRef.current = {
-          ...fileNamesRef.current,
-          [fileName]: fileNamesRef.current[file.name]--,
-        }
-        handleFailedUpload(file.name, newAddedFile.id, error.response?.data)
-      })
+    function uploadFile() {
+      return axios
+        .post(uploadUrl, formData, {
+          onUploadProgress: handleUploadProgress,
+          signal: controller.signal,
+        })
+        .then((response) => {
+          if (response.data.fileId) {
+            handleSuccessfulUpload(response.data, newAddedFile.id)
+          }
+        })
+        .catch((error) => {
+          //need to get the latest file name from the formData
+          const updatedFile = formData.get('file')
+          if (updatedFile instanceof File && updatedFile.name) {
+            props.onFileUpdate('remove', updatedFile.name)
+          }
+          const conflictStatusCode = 409
+          if (error.response.status === conflictStatusCode && props.listFiles) {
+            props
+              .listFiles()
+              .then((res) => {
+                const extensionIndex = fileName.lastIndexOf('.')
+                const baseName = fileName.substring(0, extensionIndex)
+                const extension = fileName.substring(extensionIndex)
+                // Create a regex to match files with the same base name and extract numbers from them
+                const regex = new RegExp(
+                  `^${baseName.replace('.', '\\.')}(\\(\\d+\\))?${extension}$`,
+                  'i'
+                )
+                let maxNumber = 0
+
+                for (const file of res) {
+                  if (regex.test(file)) {
+                    const match = file.match(regex)
+                    const num =
+                      match && match[1]
+                        ? parseInt(match[1].slice(1, -1), 10)
+                        : 0
+                    maxNumber = Math.max(maxNumber, num)
+                  }
+                }
+
+                const newFileName = `${baseName}(${maxNumber + 1})${extension}`
+                props.onFileUpdate('add', newFileName)
+
+                const newFile = new File([file], newFileName, {
+                  type: file.type,
+                })
+
+                formData.set('file', newFile)
+
+                setAddedFiles((prev) => {
+                  return prev.map((file) => {
+                    if (file.id === temporaryFileId) {
+                      return {
+                        ...file,
+                        name: newFileName,
+                        loadingProgress: 0,
+                      }
+                    }
+                    return file
+                  })
+                })
+                uploadFile()
+              })
+              .catch(() => {
+                cleanupFailedUpload(
+                  file.name,
+                  newAddedFile.id,
+                  error.response?.data
+                )
+              })
+          } else {
+            cleanupFailedUpload(
+              file.name,
+              newAddedFile.id,
+              error.response?.data
+            )
+          }
+        })
+    }
+    uploadFile()
   }
 
   function handleDelete(file: FileInfo, index: number) {

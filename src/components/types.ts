@@ -293,6 +293,8 @@ export interface UploaderProps {
   getUploadData?: (fileName: string) => { [key: string]: any }
   /** Defines the available options for file upload, displayed within a popover menu. If no options are provided, an upload icon button will be displayed by default.*/
   uploadOptions?: UploadOption[]
+  /** A function to fetch and format existing file names when a file upload fails due to a conflict error (HTTP status code 409). The returned value will be used to determine a unique file name by appending an incremented number to the base name.  */
+  listFiles?: () => Promise<string[]>
 }
 
 export type MultimodalInputProps = TextInputProps &
