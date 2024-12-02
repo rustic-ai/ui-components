@@ -1,4 +1,5 @@
 import type { Meta, StoryFn } from '@storybook/react'
+import axios from 'axios'
 import React from 'react'
 import { v4 as getUUID } from 'uuid'
 
@@ -20,6 +21,40 @@ const multiModalInputMeta: Meta<React.ComponentProps<typeof MultimodalInput>> =
           status: 200,
           response: { fileId: getUUID() },
           delay: 1000,
+        },
+        {
+          url: 'http://localhost:8080/:messageId/files',
+          method: 'GET',
+          status: 200,
+          response: [
+            {
+              id: 'T7eVTLcNUtKGLC8R3iZAVr',
+              name: 'test.xlsx',
+              metadata: {
+                content_length: 117496,
+                uploaded_at: '2024-11-29T20:04:35.480280+00:00',
+              },
+              url: 'test.xlsx',
+              mimetype:
+                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+              encoding: null,
+              on_filesystem: true,
+            },
+            {
+              id: 'T7eVTLcNUtKGLC8R3iZAVd',
+              name: 'test(1).xlsx',
+              metadata: {
+                content_length: 117496,
+                uploaded_at: '2024-11-30T20:04:35.480280+00:00',
+              },
+              url: 'test1.xlsx',
+              mimetype:
+                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+              encoding: null,
+              on_filesystem: true,
+            },
+          ],
+          delay: 200,
         },
         {
           url: 'http://localhost:8080/files/:fileName',
@@ -154,6 +189,13 @@ multiModalInputMeta.argTypes = {
       },
     },
   },
+  listFiles: {
+    description:
+      'Optional props. A function to fetch and format existing file names when a file upload fails due to a conflict error (HTTP status code 409). The returned value will be used to determine a unique file name by appending an incremented number to the base name.',
+    table: {
+      type: { summary: 'Promise<string[]>' },
+    },
+  },
 }
 
 export default multiModalInputMeta
@@ -185,10 +227,16 @@ export const Default = {
         )
       },
     },
+    listFiles: () => {
+      return axios.get(`http://localhost:8080/123/files`).then((res) => {
+        const fileNames = res.data.map((file: any) => file.name)
+        return fileNames
+      })
+    },
     uploadFileEndpoint: 'http://localhost:8080/upload?message-id=:messageId',
     deleteFileEndpoint: 'http://localhost:8080/files/fileName',
     acceptedFileTypes:
-      'image/*,.pdf,.doc,.docx,application/x-iwork-pages-sffpages',
+      'image/*,.pdf,.doc,.docx,.xlsx,application/x-iwork-pages-sffpages',
   },
 }
 

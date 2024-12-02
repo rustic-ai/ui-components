@@ -1,6 +1,8 @@
 import 'cypress-real-events'
 import 'cypress-intercept-formdata'
 
+import axios from 'axios'
+
 import {
   supportedViewports,
   testUser,
@@ -345,6 +347,93 @@ describe('Input', () => {
           'Failed to upload image-component-example.png. Please try again later'
         )
         cy.get(fileName).should('not.exist')
+      })
+    })
+
+    it(`should handle 409 conflict error by fetching file list and updating the file name on ${viewport} screen`, () => {
+      cy.viewport(viewport)
+      cy.mount(
+        <MultimodalInput
+          sender={testUser}
+          conversationId="1"
+          ws={{
+            send: cy.stub(),
+            close: cy.stub(),
+            reconnect: cy.stub(),
+          }}
+          label="Type your message"
+          uploadFileEndpoint={'/upload'}
+          deleteFileEndpoint={'/delete'}
+          acceptedFileTypes={''}
+          showFullName
+          listFiles={() => {
+            return axios.get('/1/files').then((res) => {
+              const fileNames = res.data.map((file: any) => file.name)
+              return fileNames
+            })
+          }}
+        />
+      )
+
+      // Use a counter to track upload attempts
+      let uploadAttempt = 0
+
+      cy.intercept('POST', '/upload', (req) => {
+        req.reply((res) => {
+          if (uploadAttempt === 0) {
+            // First upload: return 409 error
+            uploadAttempt++
+            res.send({
+              statusCode: 409,
+              body: { message: 'Cannot upload file with the same name' },
+            })
+          } else {
+            res.send({
+              statusCode: 200,
+              body: {},
+            })
+          }
+        })
+      }).as('upload')
+
+      // Intercept GET request to fetch the file list
+      cy.intercept('GET', '/1/files', {
+        statusCode: 200,
+        body: [
+          {
+            id: 'T7eVTLcNUtKGLC8R3iZAVr',
+            name: 'image-component-example.png',
+            metadata: {
+              content_length: 117496,
+              uploaded_at: '2024-11-29T20:04:35.480280+00:00',
+            },
+            url: 'image-component-example.png',
+            mimetype: 'image/png',
+            encoding: null,
+            on_filesystem: true,
+          },
+          {
+            id: 'T7eVTLcNUtKGLC8R3iZAVd',
+            name: 'image-component-example(1).png',
+            metadata: {
+              content_length: 117496,
+              uploaded_at: '2024-11-30T20:04:35.480280+00:00',
+            },
+            url: 'image-component-example(1).png',
+            mimetype: 'image/png',
+            encoding: null,
+            on_filesystem: true,
+          },
+        ],
+      }).as('fetchFiles')
+
+      cy.get('input[type=file]').selectFile(imageFile, { force: true })
+
+      cy.wait('@upload')
+
+      cy.wait('@fetchFiles')
+      cy.wait('@upload').then(() => {
+        cy.contains('image-component-example(2).png')
       })
     })
 
