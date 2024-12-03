@@ -61,7 +61,6 @@ declare module '@mui/material/Typography' {
 }
 
 const baseTheme = createTheme({
-  cssVariables: true,
   shape: {
     borderRadius: 16,
   },
