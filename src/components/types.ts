@@ -324,6 +324,24 @@ export interface QuestionFormat extends DataFormat {
 
 export interface QuestionProps extends QuestionFormat, ConversationProps {}
 
+export interface PromptsFormat {
+  /** A list of prompt strings for users to select from. These prompts will be displayed as interactive elements in the UI. */
+  prompts: string[]
+  /**
+   * The display position of the prompts container relative to the chat interface.
+   * When used within the `MessageSpace` component, the default is 'top' if not explicitly set.
+   * - 'top': Prompts are displayed at the top alongside other messages.
+   * - 'bottom': Prompts are displayed at the bottom of the chat interface.
+   */
+  position?: 'top' | 'bottom'
+  /** An optional className to apply to the prompts container. */
+  className?: string
+}
+
+export interface PromptsProps
+  extends PromptsFormat,
+    Omit<ConversationProps, 'messageId'> {}
+
 export interface PDFViewerProps {
   /** The url of the PDF file to be displayed. */
   url: string

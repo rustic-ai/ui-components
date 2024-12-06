@@ -103,6 +103,8 @@ export default function MessageSpace(props: MessageSpaceProps) {
   const [chatMessages, setChatMessages] = useState<{
     [messageId: string]: Message[]
   }>({})
+  const [latestBottomPromptsMessage, setLatestBottomPromptsMessage] =
+    useState<Message>()
   const currentMessagesLength = Object.keys(chatMessages).length
   const previousMessagesLength = usePrevious(currentMessagesLength)
   const hideScrollButtonDuration = 2000
@@ -188,16 +190,30 @@ export default function MessageSpace(props: MessageSpaceProps) {
 
   useEffect(() => {
     let messageDict: { [messageId: string]: Message[] } = {}
+    let latestBottomPrompt: Message | undefined
 
     props.receivedMessages?.forEach((message) => {
+      if (message.format === 'prompts' && message.data?.position === 'bottom') {
+        latestBottomPrompt = message
+        return // Skip adding this message to `chatMessages`
+      }
+
       const newMessageDict = getCombinedMessages(messageDict, message)
       messageDict = newMessageDict
     })
 
     setChatMessages(messageDict)
+
+    if (latestBottomPrompt) {
+      setLatestBottomPromptsMessage(latestBottomPrompt)
+    }
   }, [props.receivedMessages?.length])
 
   function handleIncomingMessage(message: Message) {
+    if (message.format === 'prompts' && message.data?.position === 'bottom') {
+      setLatestBottomPromptsMessage(message)
+    }
+
     setChatMessages((prevMessages) =>
       getCombinedMessages(prevMessages, message)
     )
@@ -210,49 +226,73 @@ export default function MessageSpace(props: MessageSpaceProps) {
   }, [])
 
   return (
-    <Box
-      ref={containerRef}
-      data-cy="message-space"
-      className="rustic-message-space"
-    >
-      {Object.keys(chatMessages).map((key, index) => {
-        const messages = chatMessages[key]
-        const latestMessage = messages[messages.length - 1]
-        const hasResponse = latestMessage.format.includes('Response')
-        const inReplyTo = hasResponse && {
-          inReplyTo: messages[0],
-        }
-        return (
-          <MessageCanvas
-            key={key}
-            message={latestMessage}
-            {...inReplyTo}
-            getActionsComponent={props.getActionsComponent}
-            getProfileComponent={props.getProfileComponent}
-            ref={index === currentMessagesLength - 1 ? scrollEndRef : null}
-          >
-            <ElementRenderer
-              ws={props.ws}
-              sender={props.sender}
-              messages={hasResponse ? [messages[0]] : messages}
-              supportedElements={props.supportedElements}
-            />
-          </MessageCanvas>
-        )
-      })}
-      {!isScrolledToBottom && !isScrollButtonHidden && (
-        <Chip
-          data-cy="scroll-down-button"
-          variant="rusticSecondary"
-          className="rustic-scroll-down-button"
-          size="medium"
-          onClick={scrollDown}
-          label={
-            <>
-              {props.scrollDownLabel}
-              <Icon name="arrow_downward" />
-            </>
+    <Box className="rustic-message-space">
+      <Box
+        ref={containerRef}
+        data-cy="message-space"
+        className="rustic-message-container"
+      >
+        {Object.keys(chatMessages).map((key, index) => {
+          const messages = chatMessages[key]
+          const latestMessage = messages[messages.length - 1]
+          const hasResponse = latestMessage.format.includes('Response')
+          const inReplyTo = hasResponse && {
+            inReplyTo: messages[0],
           }
+          if (latestMessage.format === 'prompts') {
+            return (
+              <div
+                ref={index === currentMessagesLength - 1 ? scrollEndRef : null}
+              >
+                <ElementRenderer
+                  ws={props.ws}
+                  sender={props.sender}
+                  messages={hasResponse ? [messages[0]] : messages}
+                  supportedElements={props.supportedElements}
+                />
+              </div>
+            )
+          }
+          return (
+            <MessageCanvas
+              key={key}
+              message={latestMessage}
+              {...inReplyTo}
+              getActionsComponent={props.getActionsComponent}
+              getProfileComponent={props.getProfileComponent}
+              ref={index === currentMessagesLength - 1 ? scrollEndRef : null}
+            >
+              <ElementRenderer
+                ws={props.ws}
+                sender={props.sender}
+                messages={hasResponse ? [messages[0]] : messages}
+                supportedElements={props.supportedElements}
+              />
+            </MessageCanvas>
+          )
+        })}
+        {!isScrolledToBottom && !isScrollButtonHidden && (
+          <Chip
+            data-cy="scroll-down-button"
+            variant="rusticSecondary"
+            className="rustic-scroll-down-button"
+            size="medium"
+            onClick={scrollDown}
+            label={
+              <>
+                {props.scrollDownLabel}
+                <Icon name="arrow_downward" />
+              </>
+            }
+          />
+        )}
+      </Box>
+      {latestBottomPromptsMessage && (
+        <ElementRenderer
+          ws={props.ws}
+          sender={props.sender}
+          messages={[latestBottomPromptsMessage]}
+          supportedElements={props.supportedElements}
         />
       )}
     </Box>

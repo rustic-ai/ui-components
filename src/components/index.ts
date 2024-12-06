@@ -22,6 +22,7 @@ import Multipart from './multipart/multipart'
 import ParticipantsContainer from './participantsContainer/participantsContainer'
 import PDFViewer from './pdfViewer/pdfViewer'
 import PromptBuilder from './promptBuilder/promptBuilder'
+import Prompts from './prompts/prompts'
 import Question from './question/question'
 import Table from './table/table'
 import StreamingText from './text/streamingText'
@@ -54,9 +55,10 @@ export {
   ParticipantsContainer,
   PDFViewer,
   PerspectiveViz,
+  PlotlyGraph,
   PopoverMenu,
   PromptBuilder,
-  PlotlyGraph,
+  Prompts,
   Question,
   RechartsTimeSeries,
   Sound,
@@ -66,8 +68,8 @@ export {
   TextInput,
   TextToSpeech,
   Timestamp,
-  Uploader,
   UniformsForm,
+  Uploader,
   VegaLiteViz,
   Video,
   Weather,
@@ -77,5 +79,5 @@ export {
 export * from '../rusticTheme'
 export * from './types'
 export * from './visualization/mermaidViz/mermaidViz.types'
-export * from './visualization/vegaLiteViz/vegaLiteViz.types'
 export * from './visualization/plotlyGraph/plotlyGraph.types'
+export * from './visualization/vegaLiteViz/vegaLiteViz.types'

@@ -265,7 +265,7 @@ describe('MessageSpace Component', () => {
 
       cy.viewport(viewport)
       cy.mount(
-        <div style={{ height: '200px' }}>
+        <div style={{ height: '200px', display: 'flex' }}>
           <MessageSpace
             ws={mockWsClient}
             sender={testUser}
