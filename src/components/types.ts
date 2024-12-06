@@ -329,11 +329,11 @@ export interface PromptsFormat {
   prompts: string[]
   /**
    * The display position of the prompts container relative to the chat interface.
-   * When used within the `MessageSpace` component, the default is 'top' if not explicitly set.
-   * - 'top': Prompts are displayed at the top alongside other messages.
-   * - 'bottom': Prompts are displayed at the bottom of the chat interface.
+   * When used within the `MessageSpace` component, the default is 'hoverOverInput' if not explicitly set.
+   * - 'inConversation': Prompts are displayed at the top alongside other messages.
+   * - 'hoverOverInput': Prompts are displayed above the input field, positioned at the bottom of the chat interface.
    */
-  position?: 'top' | 'bottom'
+  position?: 'inConversation' | 'hoverOverInput'
   /** An optional className to apply to the prompts container. */
   className?: string
 }

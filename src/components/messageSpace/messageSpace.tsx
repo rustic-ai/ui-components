@@ -192,9 +192,16 @@ export default function MessageSpace(props: MessageSpaceProps) {
     let messageDict: { [messageId: string]: Message[] } = {}
     let latestBottomPrompt: Message | undefined
 
-    props.receivedMessages?.forEach((message) => {
-      if (message.format === 'prompts' && message.data?.position === 'bottom') {
-        latestBottomPrompt = message
+    props.receivedMessages?.forEach((message, index) => {
+      if (
+        message.format === 'prompts' &&
+        message.data?.position !== 'inConversation'
+      ) {
+        if (index === props.receivedMessages!.length - 1) {
+          setLatestBottomPromptsMessage(message)
+        } else {
+          setLatestBottomPromptsMessage(undefined)
+        }
         return // Skip adding this message to `chatMessages`
       }
 
@@ -210,13 +217,17 @@ export default function MessageSpace(props: MessageSpaceProps) {
   }, [props.receivedMessages?.length])
 
   function handleIncomingMessage(message: Message) {
-    if (message.format === 'prompts' && message.data?.position === 'bottom') {
+    if (
+      message.format === 'prompts' &&
+      message.data?.position !== 'inConversation'
+    ) {
       setLatestBottomPromptsMessage(message)
+    } else {
+      setLatestBottomPromptsMessage(undefined)
+      setChatMessages((prevMessages) =>
+        getCombinedMessages(prevMessages, message)
+      )
     }
-
-    setChatMessages((prevMessages) =>
-      getCombinedMessages(prevMessages, message)
-    )
   }
 
   useEffect(() => {

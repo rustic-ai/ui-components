@@ -28,13 +28,13 @@ meta.argTypes = {
   },
   position: {
     description:
-      'The display position of the prompts container relative to the chat interface. When used within the `MessageSpace` component, the default is `top` if not explicitly set.',
+      'The display position of the prompts container relative to the chat interface. When used within the `MessageSpace` component, the default is `hoverOverInput` if not explicitly set.',
     table: {
       type: {
-        summary: 'top | bottom',
+        summary: 'inConversation | hoverOverInput',
         detail:
-          'top: Prompts are displayed at the top alongside other messages\n' +
-          'name: Prompts are displayed at the bottom of the chat interface.',
+          'inConversation: Prompts are displayed at the top alongside other messages\n' +
+          'hoverOverInput: Prompts are displayed above the input field, positioned at the bottom of the chat interface. It will only be displayed if it is the latest message.',
       },
     },
   },
@@ -82,12 +82,13 @@ export const Default = {
           },
           data: {
             prompts: [
-              'What can you help me with?',
-              'Summarize a document for me',
-              'How do you handle security?',
+              'What are the key steps to starting a new project?',
+              'Generate a short poem about a rainy day.',
+              'Having trouble with your device? Let me know the issue.',
+              'How can I optimize my budget?',
             ],
-            position: 'bottom',
-            className: 'rustic-commands',
+            position: 'inConversation',
+            className: 'rustic-prompts',
           },
           format: 'prompts',
         },
@@ -101,13 +102,11 @@ export const Default = {
           },
           data: {
             prompts: [
-              'What are the key steps to starting a new project?',
-              'Generate a short poem about a rainy day.',
-              'Having trouble with your device? Let me know the issue.',
-              'How can I optimize my budget?',
+              'What can you help me with?',
+              'Summarize a document for me',
+              'How do you handle security?',
             ],
-            position: 'top',
-            className: 'rustic-prompts',
+            className: 'rustic-commands',
           },
           format: 'prompts',
         },
