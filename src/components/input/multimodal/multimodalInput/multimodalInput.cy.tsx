@@ -368,8 +368,13 @@ describe('Input', () => {
           showFullName
           listFiles={() => {
             return axios.get('/1/files').then((res) => {
-              const fileNames = res.data.map((file: any) => file.name)
-              return fileNames
+              const fileData = res.data.map((file: any) => {
+                return {
+                  name: file.name,
+                  url: file.url,
+                }
+              })
+              return fileData
             })
           }}
         />

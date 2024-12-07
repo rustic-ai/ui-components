@@ -191,9 +191,15 @@ multiModalInputMeta.argTypes = {
   },
   listFiles: {
     description:
-      'Optional props. A function to fetch and format existing file names when a file upload fails due to a conflict error (HTTP status code 409). The returned value will be used to determine a unique file name by appending an incremented number to the base name.',
+      'Optional props. A function to fetch and format existing file data when a file upload fails due to a conflict error (HTTP status code 409). The returned value will be used to determine a unique file name by appending an incremented number to the base name.',
     table: {
-      type: { summary: 'Promise<string[]>' },
+      type: {
+        summary: 'Promise<FileData[]>',
+        detail:
+          'Each FileData has the following fields:\n' +
+          '  name: The name of the file.\n' +
+          '  url: Optional props. The url of the file.',
+      },
     },
   },
 }
@@ -229,8 +235,13 @@ export const Default = {
     },
     listFiles: () => {
       return axios.get(`http://localhost:8080/123/files`).then((res) => {
-        const fileNames = res.data.map((file: any) => file.name)
-        return fileNames
+        const fileData = res.data.map((file: any) => {
+          return {
+            name: file.name,
+            url: file.url,
+          }
+        })
+        return fileData
       })
     },
     uploadFileEndpoint: 'http://localhost:8080/upload?message-id=:messageId',

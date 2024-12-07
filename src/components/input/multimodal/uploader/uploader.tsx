@@ -250,8 +250,8 @@ function Uploader(props: UploaderProps) {
           let maxNumber = 0
 
           for (const file of existingFiles) {
-            if (regex.test(file)) {
-              const match = file.match(regex)
+            if (regex.test(file.name)) {
+              const match = file.name.match(regex)
               const num =
                 match && match[1] ? parseInt(match[1].slice(1, -1), 10) : 0
               maxNumber = Math.max(maxNumber, num)
