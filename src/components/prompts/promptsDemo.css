@@ -1,0 +1,30 @@
+.rustic-demo-in-conversation {
+  gap: 16px;
+  margin: 16px auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  justify-content: center;
+  width: fit-content;
+}
+
+.rustic-demo-in-conversation .rustic-prompt {
+  padding: 16px;
+  height: 100%;
+  text-align: center;
+  max-width: 312px;
+  border-radius: 16px;
+  box-shadow: none;
+  border: 1px solid #e1d9d5;
+}
+
+.rustic-demo-in-conversation .rustic-prompt:hover {
+  background-color: #ff692814;
+}
+
+.rustic-demo-hover-over-input {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin: 16px auto;
+  justify-content: center;
+}

@@ -103,8 +103,7 @@ export default function MessageSpace(props: MessageSpaceProps) {
   const [chatMessages, setChatMessages] = useState<{
     [messageId: string]: Message[]
   }>({})
-  const [latestBottomPromptsMessage, setLatestBottomPromptsMessage] =
-    useState<Message>()
+
   const currentMessagesLength = Object.keys(chatMessages).length
   const previousMessagesLength = usePrevious(currentMessagesLength)
   const hideScrollButtonDuration = 2000
@@ -190,44 +189,19 @@ export default function MessageSpace(props: MessageSpaceProps) {
 
   useEffect(() => {
     let messageDict: { [messageId: string]: Message[] } = {}
-    let latestBottomPrompt: Message | undefined
 
-    props.receivedMessages?.forEach((message, index) => {
-      if (
-        message.format === 'prompts' &&
-        message.data?.position !== 'inConversation'
-      ) {
-        if (index === props.receivedMessages!.length - 1) {
-          setLatestBottomPromptsMessage(message)
-        } else {
-          setLatestBottomPromptsMessage(undefined)
-        }
-        return // Skip adding this message to `chatMessages`
-      }
-
+    props.receivedMessages?.forEach((message) => {
       const newMessageDict = getCombinedMessages(messageDict, message)
       messageDict = newMessageDict
     })
 
     setChatMessages(messageDict)
-
-    if (latestBottomPrompt) {
-      setLatestBottomPromptsMessage(latestBottomPrompt)
-    }
   }, [props.receivedMessages?.length])
 
   function handleIncomingMessage(message: Message) {
-    if (
-      message.format === 'prompts' &&
-      message.data?.position !== 'inConversation'
-    ) {
-      setLatestBottomPromptsMessage(message)
-    } else {
-      setLatestBottomPromptsMessage(undefined)
-      setChatMessages((prevMessages) =>
-        getCombinedMessages(prevMessages, message)
-      )
-    }
+    setChatMessages((prevMessages) =>
+      getCombinedMessages(prevMessages, message)
+    )
   }
 
   useEffect(() => {
@@ -235,6 +209,27 @@ export default function MessageSpace(props: MessageSpaceProps) {
       props.ws.onReceive(handleIncomingMessage)
     }
   }, [])
+
+  function renderBottomPrompts(chatMessages: {
+    [messageId: string]: Message[]
+  }) {
+    const allMessages = Object.values(chatMessages).flat()
+    const lastMessage = allMessages[allMessages.length - 1]
+    if (
+      lastMessage?.format === 'prompts' &&
+      lastMessage?.data?.position !== 'inConversation'
+    ) {
+      return (
+        <ElementRenderer
+          ws={props.ws}
+          sender={props.sender}
+          messages={[lastMessage]}
+          supportedElements={props.supportedElements}
+        />
+      )
+    }
+    return null
+  }
 
   return (
     <Box className="rustic-message-space">
@@ -250,9 +245,14 @@ export default function MessageSpace(props: MessageSpaceProps) {
           const inReplyTo = hasResponse && {
             inReplyTo: messages[0],
           }
-          if (latestMessage.format === 'prompts') {
+          if (latestMessage.format !== 'prompts') {
             return (
-              <div
+              <MessageCanvas
+                key={key}
+                message={latestMessage}
+                {...inReplyTo}
+                getActionsComponent={props.getActionsComponent}
+                getProfileComponent={props.getProfileComponent}
                 ref={index === currentMessagesLength - 1 ? scrollEndRef : null}
               >
                 <ElementRenderer
@@ -261,26 +261,27 @@ export default function MessageSpace(props: MessageSpaceProps) {
                   messages={hasResponse ? [messages[0]] : messages}
                   supportedElements={props.supportedElements}
                 />
-              </div>
+              </MessageCanvas>
             )
+          } else {
+            if (latestMessage.data?.position === 'inConversation') {
+              return (
+                <div
+                  key={key}
+                  ref={
+                    index === currentMessagesLength - 1 ? scrollEndRef : null
+                  }
+                >
+                  <ElementRenderer
+                    ws={props.ws}
+                    sender={props.sender}
+                    messages={hasResponse ? [messages[0]] : messages}
+                    supportedElements={props.supportedElements}
+                  />
+                </div>
+              )
+            }
           }
-          return (
-            <MessageCanvas
-              key={key}
-              message={latestMessage}
-              {...inReplyTo}
-              getActionsComponent={props.getActionsComponent}
-              getProfileComponent={props.getProfileComponent}
-              ref={index === currentMessagesLength - 1 ? scrollEndRef : null}
-            >
-              <ElementRenderer
-                ws={props.ws}
-                sender={props.sender}
-                messages={hasResponse ? [messages[0]] : messages}
-                supportedElements={props.supportedElements}
-              />
-            </MessageCanvas>
-          )
         })}
         {!isScrolledToBottom && !isScrollButtonHidden && (
           <Chip
@@ -298,14 +299,7 @@ export default function MessageSpace(props: MessageSpaceProps) {
           />
         )}
       </Box>
-      {latestBottomPromptsMessage && (
-        <ElementRenderer
-          ws={props.ws}
-          sender={props.sender}
-          messages={[latestBottomPromptsMessage]}
-          supportedElements={props.supportedElements}
-        />
-      )}
+      {renderBottomPrompts(chatMessages)}
     </Box>
   )
 }

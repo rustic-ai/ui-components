@@ -3,6 +3,7 @@ import axios from 'axios'
 import React from 'react'
 import { v4 as getUUID } from 'uuid'
 
+import { conversationIdDescription } from '../../../sharedDescription'
 import type { FileData, Message } from '../../../types'
 import meta from '../../textInput/textInput.stories'
 import MultimodalInput from './multimodalInput'
@@ -78,12 +79,7 @@ const multiModalInputMeta: Meta<React.ComponentProps<typeof MultimodalInput>> =
 
 multiModalInputMeta.argTypes = {
   ...meta.argTypes,
-  conversationId: {
-    description: 'Id of the current conversation.',
-    table: {
-      type: { summary: 'string' },
-    },
-  },
+  conversationId: conversationIdDescription,
   uploadFileEndpoint: {
     description:
       'The API endpoint for sending a POST multipart-form request. If the JSON response includes a `fileId` property, it can be used to delete the file later. Path placeholders like `fileName` and `messageId`, will be automatically replaced with the actual file name and message ID.',

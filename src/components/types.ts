@@ -327,13 +327,6 @@ export interface QuestionProps extends QuestionFormat, ConversationProps {}
 export interface PromptsFormat {
   /** A list of prompt strings for users to select from. These prompts will be displayed as interactive elements in the UI. */
   prompts: string[]
-  /**
-   * The display position of the prompts container relative to the chat interface.
-   * When used within the `MessageSpace` component, the default is 'hoverOverInput' if not explicitly set.
-   * - 'inConversation': Prompts are displayed at the top alongside other messages.
-   * - 'hoverOverInput': Prompts are displayed above the input field, positioned at the bottom of the chat interface.
-   */
-  position?: 'inConversation' | 'hoverOverInput'
   /** An optional className to apply to the prompts container. */
   className?: string
 }

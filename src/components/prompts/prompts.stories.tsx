@@ -1,3 +1,5 @@
+import './promptsDemo.css'
+
 import Divider from '@mui/material/Divider'
 import Typography from '@mui/material/Typography'
 import type { Meta } from '@storybook/react/*'
@@ -6,6 +8,11 @@ import React from 'react'
 import { v4 as getUUID } from 'uuid'
 
 import MessageSpace from '../messageSpace/messageSpace'
+import {
+  conversationIdDescription,
+  senderDescription,
+  wsDescription,
+} from '../sharedDescription'
 import Text from '../text/text'
 import type { Message } from '../types'
 import Prompts from './prompts'
@@ -21,54 +28,50 @@ const meta: Meta<React.ComponentProps<typeof Prompts>> = {
 
 export default meta
 meta.argTypes = {
-  conversationId: {
-    description:
-      'Id of the current conversation. This value will be set automatically if the component is rendered with `ElementRenderer` or `MessageSpace`.',
-    type: 'string',
-  },
-  position: {
-    description:
-      'The display position of the prompts container relative to the chat interface. When used within the `MessageSpace` component, the default is `hoverOverInput` if not explicitly set.',
-    table: {
-      type: {
-        summary: 'inConversation | hoverOverInput',
-        detail:
-          'inConversation: Prompts are displayed at the top alongside other messages\n' +
-          'hoverOverInput: Prompts are displayed above the input field, positioned at the bottom of the chat interface. It will only be displayed if it is the latest message.',
-      },
-    },
-  },
-  sender: {
-    description:
-      'Current user. This value will be set automatically if the component is rendered with `ElementRenderer` or `MessageSpace`.',
-    table: {
-      type: {
-        summary: 'Sender',
-        detail:
-          'id: String representing sender id.\n' +
-          'name: Optional string of sender name.',
-      },
-    },
-  },
-  ws: {
-    description:
-      'WebSocket connection to send and receive messages to and from a backend. The onReceive prop will override the default handler once it is set. If you need to use the WebSocket for purposes other than chat, you will need to create a separate WebSocket connection.',
-    table: {
-      type: {
-        summary: 'WebSocketClient',
-        detail:
-          'A websocket client with supports the following methods:\n' +
-          'send: (msg: Message) => void\n' +
-          'close: () => void\n' +
-          'reconnect: () => void\n' +
-          'onReceive?: (handler: (message: Message) => void) => void',
-      },
-    },
-  },
+  conversationId: conversationIdDescription,
+  sender: senderDescription,
+  ws: wsDescription,
 }
 const user = { name: 'Some User', id: 'gahjqj19' }
 
 export const Default = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'The example below assigns different classNames for `inConversation` and `hoverOverInput` prompts. Below are the extra stylings added to the prompts:\n\n' +
+          '```css\n' +
+          '.rustic-demo-in-conversation {\n' +
+          '  gap: 16px;\n' +
+          '  margin: 16px auto;\n' +
+          '  display: grid;\n' +
+          '  grid-template-columns: 1fr 1fr;\n' +
+          '  justify-content: center;\n' +
+          '  width: fit-content;\n' +
+          '}\n\n' +
+          '.rustic-demo-in-conversation .rustic-prompt {\n' +
+          '  padding: 16px;\n' +
+          '  height: 100%;\n' +
+          '  text-align: center;\n' +
+          '  max-width: 312px;\n' +
+          '  border-radius: 16px;\n' +
+          '  box-shadow: none;\n' +
+          '  border: 1px solid #e1d9d5;\n' +
+          '}\n\n' +
+          '.rustic-demo-in-conversation .rustic-prompt:hover {\n' +
+          '  background-color: #ff692814;\n' +
+          '}\n\n' +
+          '.rustic-demo-hover-over-input {\n' +
+          '  display: flex;\n' +
+          '  flex-wrap: wrap;\n' +
+          '  gap: 16px;\n' +
+          '  margin: 16px auto;\n' +
+          '  justify-content: center;\n' +
+          '}\n' +
+          '```',
+      },
+    },
+  },
   decorators: [
     () => {
       const [messages, setMessages] = useState<Message[]>([
@@ -88,7 +91,7 @@ export const Default = {
               'How can I optimize my budget?',
             ],
             position: 'inConversation',
-            className: 'rustic-prompts',
+            className: 'rustic-demo-in-conversation',
           },
           format: 'prompts',
         },
@@ -106,7 +109,7 @@ export const Default = {
               'Summarize a document for me',
               'How do you handle security?',
             ],
-            className: 'rustic-commands',
+            className: 'rustic-demo-hover-over-input',
           },
           format: 'prompts',
         },
