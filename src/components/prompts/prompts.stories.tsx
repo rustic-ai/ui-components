@@ -8,11 +8,6 @@ import React from 'react'
 import { v4 as getUUID } from 'uuid'
 
 import MessageSpace from '../messageSpace/messageSpace'
-import {
-  conversationIdDescription,
-  senderDescription,
-  wsDescription,
-} from '../sharedDescription'
 import Text from '../text/text'
 import type { Message } from '../types'
 import Prompts from './prompts'
@@ -24,14 +19,17 @@ const meta: Meta<React.ComponentProps<typeof Prompts>> = {
   parameters: {
     layout: 'centered',
   },
+  argTypes: {
+    position: {
+      table: {
+        disable: true,
+      },
+    },
+  },
 }
 
 export default meta
-meta.argTypes = {
-  conversationId: conversationIdDescription,
-  sender: senderDescription,
-  ws: wsDescription,
-}
+
 const user = { name: 'Some User', id: 'gahjqj19' }
 
 export const Default = {

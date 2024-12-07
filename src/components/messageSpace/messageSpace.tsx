@@ -232,11 +232,11 @@ export default function MessageSpace(props: MessageSpaceProps) {
   }
 
   return (
-    <Box className="rustic-message-space">
+    <Box className="rustic-message-space" data-cy="message-space">
       <Box
         ref={containerRef}
-        data-cy="message-space"
         className="rustic-message-container"
+        data-cy="message-container"
       >
         {Object.keys(chatMessages).map((key, index) => {
           const messages = chatMessages[key]

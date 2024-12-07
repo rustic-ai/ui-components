@@ -12,6 +12,7 @@ describe('Prompts', () => {
     prompts,
     conversationId: '1',
     sender: testUser,
+    messageId: '1',
   }
 
   beforeEach(() => {
