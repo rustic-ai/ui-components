@@ -71,6 +71,7 @@ export const Default = {
     sender: { id: '169snlk9n', name: 'Some User' },
     conversationId: '1',
     placeholder: 'Type your message',
+    emojiDataSource: '/emoji/data.json',
     send: (message: Message) => alert(`Message sent: ${message.data.text}`),
   },
 }

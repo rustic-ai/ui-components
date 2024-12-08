@@ -25,6 +25,7 @@ describe('TextInput', () => {
 
       cy.mount(
         <TextInput
+          emojiDataSource="/emoji/data.json"
           sender={testUser}
           conversationId="1"
           ws={mockWsClient}
@@ -100,9 +101,9 @@ describe('TextInput', () => {
         cy.get(emojiMenu).should('exist')
         cy.get(`${emojiMenu} li`)
           .first()
-          .should('contain.text', '🙇 person bowing')
+          .should('contain.text', '👏 clapping hands')
           .click()
-        cy.get('textarea').invoke('val').should('equal', '🙇')
+        cy.get('textarea').invoke('val').should('equal', '👏')
       })
 
       it(`should convert text in ':text:' format to emoji on ${viewport} screen`, () => {

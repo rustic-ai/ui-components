@@ -14,6 +14,7 @@ import Icon from '../../icon/icon'
 interface EmojiProps {
   onEmojiClick: (emoji: string) => void
   buttonColor?: string
+  dataSource?: string
 }
 
 function Emoji(props: EmojiProps) {
@@ -47,7 +48,9 @@ function Emoji(props: EmojiProps) {
       import('emoji-picker-element')
         .then((module) => {
           const Picker = module.Picker
-          const picker = new Picker()
+          const picker = new Picker({
+            dataSource: props.dataSource,
+          })
           const themeClass = theme.palette.mode === 'dark' ? 'dark' : 'light'
           picker.classList.add(themeClass)
 
