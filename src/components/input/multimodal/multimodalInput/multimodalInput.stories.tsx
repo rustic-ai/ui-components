@@ -198,12 +198,27 @@ multiModalInputMeta.argTypes = {
       },
     },
   },
+  maximumEmojiSearchResults: {
+    description:
+      'Specifies the maximum number of emoji search results to display when the user enters a search query. The search query is triggered when the user types in a format like `:text`.',
+    table: {
+      type: { summary: 'number' },
+      defaultValue: { summary: '5' },
+    },
+  },
+  emojiDataSource: {
+    description: 'URL to fetch the emoji data from.',
+    table: {
+      type: { summary: 'string' },
+    },
+  },
 }
 
 export default multiModalInputMeta
 
 export const Default = {
   args: {
+    emojiDataSource: '/emoji/data.json',
     sender: { id: '17shblx8nxk', name: 'Some User' },
     conversationId: '1',
     placeholder: 'Type your message',
