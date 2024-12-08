@@ -324,6 +324,17 @@ export interface QuestionFormat extends DataFormat {
 
 export interface QuestionProps extends QuestionFormat, ConversationProps {}
 
+export interface PromptsFormat {
+  /** A list of prompt strings for users to select from. These prompts will be displayed as interactive elements in the UI. */
+  prompts: string[]
+  position?: 'inConversation' | 'hoverOverInput'
+}
+
+export interface PromptsProps extends PromptsFormat, ConversationProps {
+  /** An optional className to apply to the prompts container. */
+  className?: string
+}
+
 export interface PDFViewerProps {
   /** The url of the PDF file to be displayed. */
   url: string

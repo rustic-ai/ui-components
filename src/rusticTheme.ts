@@ -260,8 +260,8 @@ const lightModePrimaryButtonBasestyle = {
   '&:hover': {
     background: lightModePrimaryLightColor,
   },
-  '&:focus': {
-    border: `4px solid ${lightModePrimaryLightColor}`,
+  '&:active': {
+    outline: `2px solid ${lightModePrimaryLightColor}`,
   },
   ...lightModeDisabledButtonStyling,
 }
@@ -271,8 +271,8 @@ const lightModeSecondaryButtonBasestyle = {
   background: whiteColor,
   color: lightModeTextPrimaryColor,
   border: `1px solid ${lightModePrimaryLightColor}`,
-  '&:focus': {
-    border: `4px solid ${lightModePrimaryLightColor}`,
+  '&:active': {
+    outline: `2px solid ${lightModePrimaryLightColor}`,
   },
   ...lightModeDisabledButtonStyling,
 }
@@ -294,8 +294,8 @@ const lightModePrimaryChipBasestyle = {
     border: `1px solid ${lightModePrimaryBorder}`,
     background: lightModePrimaryHoverColor,
   },
-  '&:focus': {
-    border: `3px solid ${lightModePrimaryBorder}`,
+  '&:active': {
+    outline: `2px solid ${lightModePrimaryBorder}`,
     background: lightModePrimaryFocusColor,
   },
   '&.Mui-disabled': {
@@ -317,9 +317,10 @@ const lightModePrimaryChipBasestyle = {
 const lightModeSecondaryChipBasestyle = {
   background: whiteColor,
   color: lightModeTextPrimaryColor,
+  boxSizing: 'border-box',
   border: `1px solid ${secondaryLightColor}`,
-  '&:focus': {
-    border: `4px solid ${secondaryLightColor}`,
+  '&:active': {
+    outline: `2px solid ${secondaryLightColor}`,
   },
   '&.Mui-disabled': {
     border: `1px solid ${secondaryLightColor}`,
@@ -594,8 +595,8 @@ const darkModePrimaryButtonBasestyle = {
   '&:hover': {
     background: darkModePrimaryLightColor,
   },
-  '&:focus': {
-    border: `4px solid ${darkModePrimaryLightColor}`,
+  '&:active': {
+    outline: `2px solid ${darkModePrimaryLightColor}`,
   },
   ...darkModeDisabledButtonStyling,
 }
@@ -605,8 +606,8 @@ const darkModeSecondaryButtonBasestyle = {
   background: darkModePaperColor,
   color: whiteColor,
   border: `1px solid ${darkModePrimaryLightColor}`,
-  '&:focus': {
-    border: `4px solid ${darkModePrimaryLightColor}`,
+  '&:active': {
+    outline: `2px solid ${darkModePrimaryLightColor}`,
   },
   ...darkModeDisabledButtonStyling,
 }
@@ -619,8 +620,8 @@ const darkModePrimaryChipBasestyle = {
     border: `1px solid ${darkModePrimaryBorderColor}`,
     background: darkModePrimaryHoverColor,
   },
-  '&:focus': {
-    border: `4px solid ${darkModePrimaryLightColor}`,
+  '&:active': {
+    outline: `2px solid ${darkModePrimaryLightColor}`,
     background: darkModePrimaryFocusColor,
   },
   '&.Mui-disabled': {
@@ -643,8 +644,8 @@ const darkModeSecondaryChipBasestyle = {
   background: darkModePaperColor,
   color: whiteColor,
   border: `1px solid ${secondaryLightColor}`,
-  '&:focus': {
-    border: `4px solid ${secondaryLightColor}`,
+  '&:active': {
+    outline: `2px solid ${secondaryLightColor}`,
   },
   '&.Mui-disabled': {
     background: darkModePaperColor,

@@ -1,6 +1,7 @@
 import type { Meta, StoryFn } from '@storybook/react'
 import React from 'react'
 
+import { wsDescription } from '../../sharedDescription'
 import type { BaseInputProps, WebSocketClient } from '../../types'
 import type { Message } from '../../types'
 import BaseInput from '../baseInput/baseInput'
@@ -47,22 +48,7 @@ const meta: Meta<React.FC<InputProps>> = {
 
 meta.argTypes = {
   ...meta.argTypes,
-  ws: {
-    type: { name: 'string', required: true },
-    description:
-      'WebSocket connection to send and receive messages to and from a backend.',
-    table: {
-      type: {
-        summary: 'WebSocketClient\n',
-        detail:
-          'A websocket client with supports the following methods:\n' +
-          'send: (msg: Message) => void\n' +
-          'close: () => void\n' +
-          'reconnect: () => void\n' +
-          'onReceive?: (handler: (message: Message) => void) => void',
-      },
-    },
-  },
+  ws: wsDescription,
   sender: {
     description: 'The sender of the message.',
     type: { name: 'object', required: true, value: {} },

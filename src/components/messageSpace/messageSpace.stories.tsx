@@ -33,7 +33,9 @@ const meta: Meta<React.ComponentProps<typeof MessageSpace>> = {
   decorators: [
     (Story: StoryFn) => {
       return (
-        <div style={{ height: '500px' }}>
+        <div
+          style={{ height: '500px', display: 'flex', flexDirection: 'column' }}
+        >
           <Story />
         </div>
       )

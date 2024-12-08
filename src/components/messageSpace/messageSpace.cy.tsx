@@ -15,6 +15,7 @@ import {
   MarkedStreamingMarkdown,
   type Message,
   OpenLayersMap,
+  Prompts,
   RechartsTimeSeries,
   StreamingText,
   Table,
@@ -41,6 +42,7 @@ describe('MessageSpace Component', () => {
     table: Table,
     calendar: FCCalendar,
     form: UniformsForm,
+    prompts: Prompts,
   }
 
   const conversationId = '1'
@@ -86,6 +88,8 @@ describe('MessageSpace Component', () => {
   ]
 
   const messageSpace = '[data-cy=message-space]'
+  const messageContainer = '[data-cy=message-container]'
+
   const webSocketUrl = 'ws://localhost:8082'
   const streamingTextRootMessageId = getUUID()
   const messagesToBeSent = [
@@ -265,7 +269,7 @@ describe('MessageSpace Component', () => {
 
       cy.viewport(viewport)
       cy.mount(
-        <div style={{ height: '200px' }}>
+        <div style={{ height: '200px', display: 'flex' }}>
           <MessageSpace
             ws={mockWsClient}
             sender={testUser}
@@ -277,7 +281,7 @@ describe('MessageSpace Component', () => {
 
       cy.get('p').contains('message 3').should('be.visible')
       cy.get(messageSpace).contains('message 1').should('not.be.visible')
-      cy.get(messageSpace).scrollTo('top', { duration: 500 })
+      cy.get(messageContainer).scrollTo('top', { duration: 500 })
       cy.wait(waitTime)
       cy.get('[data-cy=scroll-down-button]').should('be.visible').realClick()
 
@@ -354,6 +358,95 @@ describe('MessageSpace Component', () => {
         .first()
         .should('have.value', 'Vancouver')
       cy.get(messageSpace).find('input').last().should('have.value', 'V6G 2V3')
+    })
+
+    it(`renders prompts properly in the correct position on ${viewport} screen`, () => {
+      cy.viewport(viewport)
+      const mockWsClient = {
+        send: cy.stub(),
+        close: cy.stub(),
+        reconnect: cy.stub(),
+      }
+      cy.mount(
+        <div style={{ height: '200px', display: 'flex' }}>
+          <MessageSpace
+            ws={mockWsClient}
+            sender={testUser}
+            receivedMessages={[
+              ...messages,
+              {
+                id: getUUID(),
+                format: 'prompts',
+                conversationId: conversationId,
+                timestamp: new Date().toISOString(),
+                data: {
+                  prompts: ['top prompt'],
+                  position: 'inConversation',
+                },
+                sender: botUser,
+              },
+              {
+                id: getUUID(),
+                format: 'prompts',
+                conversationId: conversationId,
+                timestamp: new Date().toISOString(),
+                data: {
+                  prompts: ['bottom prompt'],
+                },
+                sender: botUser,
+              },
+            ]}
+            supportedElements={supportedElements}
+          />
+        </div>
+      )
+      cy.get(messageContainer).should('contain', 'top prompt')
+      cy.get(messageSpace).contains('bottom prompt')
+      cy.get(messageContainer).should('not.contain', 'bottom prompt')
+    })
+
+    it(`only renders bottom prompts when it's the last message in the receivedMessages on ${viewport} screen`, () => {
+      cy.viewport(viewport)
+      const mockWsClient = {
+        send: cy.stub(),
+        close: cy.stub(),
+        reconnect: cy.stub(),
+      }
+      cy.mount(
+        <div style={{ height: '200px', display: 'flex' }}>
+          <MessageSpace
+            ws={mockWsClient}
+            sender={testUser}
+            receivedMessages={[
+              ...messages,
+              {
+                id: getUUID(),
+                format: 'prompts',
+                conversationId: conversationId,
+                timestamp: new Date().toISOString(),
+                data: {
+                  prompts: ['bottom prompt'],
+                },
+                sender: botUser,
+              },
+              {
+                id: getUUID(),
+                format: 'prompts',
+                conversationId: conversationId,
+                timestamp: new Date().toISOString(),
+                data: {
+                  prompts: ['top prompt'],
+                  position: 'inConversation',
+                },
+                sender: botUser,
+              },
+            ]}
+            supportedElements={supportedElements}
+          />
+        </div>
+      )
+      cy.get(messageContainer).should('contain', 'top prompt')
+      cy.get(messageSpace).should('not.contain', 'bottom prompt')
     })
   })
 })

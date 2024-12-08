@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 
 import Icon from '../icon/icon'
 import MessageCanvas from '../messageCanvas/messageCanvas'
+import { senderDescription, wsDescription } from '../sharedDescription'
 import Text from '../text/text'
 import type { Message } from '../types'
 import Question from './question'
@@ -27,29 +28,8 @@ const meta: Meta<React.ComponentProps<typeof Question>> = {
 }
 
 meta.argTypes = {
-  ws: {
-    table: {
-      type: {
-        summary: 'WebSocketClient',
-        detail:
-          'A websocket client with supports the following methods:\n' +
-          'send: (msg: Message) => void\n' +
-          'close: () => void\n' +
-          'reconnect: () => void\n' +
-          'onReceive?: (handler: (message: Message) => void) => void',
-      },
-    },
-  },
-  sender: {
-    table: {
-      type: {
-        summary: 'Sender',
-        detail:
-          'id: String representing sender id.\n' +
-          'name: Optional string of sender name.',
-      },
-    },
-  },
+  ws: wsDescription,
+  sender: senderDescription,
 }
 
 export default meta
