@@ -206,19 +206,14 @@ multiModalInputMeta.argTypes = {
       defaultValue: { summary: '5' },
     },
   },
-  emojiDataSource: {
-    description: 'URL to fetch the emoji data from.',
-    table: {
-      type: { summary: 'string' },
-    },
-  },
 }
 
 export default multiModalInputMeta
 
 export const Default = {
   args: {
-    emojiDataSource: '/emoji/data.json',
+    emojiDataSource:
+      '/node_modules/emoji-picker-element-data/en/emojibase/data.json',
     sender: { id: '17shblx8nxk', name: 'Some User' },
     conversationId: '1',
     placeholder: 'Type your message',

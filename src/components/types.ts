@@ -253,7 +253,7 @@ export interface BaseInputProps {
   enableSpeechToText?: boolean
   /** Specifies the maximum number of emoji search results to display when the user enters a search query. The search query is triggered when the user types in a format like `:text`. */
   maximumEmojiSearchResults?: number
-  /** URL to fetch the emoji data from */
+  /** URL to fetch the emoji data from. You need to host the emoji data by yourself. If not provided, the default url will be used. */
   emojiDataSource?: string
 }
 

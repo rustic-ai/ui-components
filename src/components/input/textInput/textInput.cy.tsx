@@ -25,7 +25,7 @@ describe('TextInput', () => {
 
       cy.mount(
         <TextInput
-          emojiDataSource="/emoji/data.json"
+          emojiDataSource="https://cdn.jsdelivr.net/npm/emoji-picker-element-data@^1/it/cldr/data.json"
           sender={testUser}
           conversationId="1"
           ws={mockWsClient}
@@ -101,16 +101,19 @@ describe('TextInput', () => {
         cy.get(emojiMenu).should('exist')
         cy.get(`${emojiMenu} li`)
           .first()
-          .should('contain.text', '👏 clapping hands')
+          .should(
+            'contain.text',
+            '😃 faccina con un gran sorriso e occhi spalancati'
+          )
           .click()
-        cy.get('textarea').invoke('val').should('equal', '👏')
+        cy.get('textarea').invoke('val').should('equal', '😃')
       })
 
       it(`should convert text in ':text:' format to emoji on ${viewport} screen`, () => {
         cy.viewport(viewport)
 
-        cy.get(textInput).type(':apple:')
-        cy.get('textarea').invoke('val').should('equal', '🍎')
+        cy.get(textInput).type(':polpo:')
+        cy.get('textarea').invoke('val').should('equal', '🐙')
       })
     })
   })
