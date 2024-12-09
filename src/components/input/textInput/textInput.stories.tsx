@@ -49,6 +49,17 @@ const meta: Meta<React.FC<InputProps>> = {
 meta.argTypes = {
   ...meta.argTypes,
   ws: wsDescription,
+  emojiDataSource: {
+    description:
+      'URL to fetch the emoji data from. You need to host the emoji data by yourself. If not provided, the default url will be used.',
+    table: {
+      type: { summary: 'string' },
+      defaultValue: {
+        summary:
+          'https://cdn.jsdelivr.net/npm/emoji-picker-element-data@^1/en/emojibase/data.json',
+      },
+    },
+  },
   sender: {
     description: 'The sender of the message.',
     type: { name: 'object', required: true, value: {} },
@@ -71,6 +82,8 @@ export const Default = {
     sender: { id: '169snlk9n', name: 'Some User' },
     conversationId: '1',
     placeholder: 'Type your message',
+    emojiDataSource:
+      '/node_modules/emoji-picker-element-data/en/emojibase/data.json',
     send: (message: Message) => alert(`Message sent: ${message.data.text}`),
   },
 }

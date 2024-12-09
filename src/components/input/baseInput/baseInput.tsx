@@ -45,15 +45,13 @@ function showEmojiInfo(emoji: EmojiInfo) {
   }
 }
 
-const database = new Database()
-
 /**
  * The `TextInput` component enables users to input text messages and send them over a WebSocket connection. It provides functionality for sending messages with a sender, timestamp, and conversation ID. The component integrates with the [emoji-picker-element](https://www.npmjs.com/package/emoji-picker-element) library to allow users to easily add emojis to their messages. The emoji picker can be customized through CSS variables. For detailed customization options, refer to the [emoji-picker-element documentation](https://www.npmjs.com/package/emoji-picker-element#css-variables).
  *
- * `emoji-picker-element` and `uuid` are not bundled, so please install the following packages using npm:
+ * `emoji-picker-element`, `emoji-picker-element-data` and `uuid` are not bundled, so please install the following packages using npm:
  *
  * ```typescript
- * npm i emoji-picker-element uuid
+ * npm i emoji-picker-element emoji-picker-element-data uuid
  * ```
  *
  */
@@ -70,6 +68,7 @@ function BaseInputElement(
   const [isEmojiMenuShown, setIsEmojiMenuShown] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
 
+  const database = new Database({ dataSource: props.emojiDataSource })
   const isEmptyMessage = !messageText.trim().length
   const isSendDisabled = isEmptyMessage && !props.isSendEnabled
 
@@ -337,6 +336,7 @@ function BaseInputElement(
                   className="rustic-input-adornment"
                 >
                   <Emoji
+                    dataSource={props.emojiDataSource}
                     onEmojiClick={handleEmojiClick}
                     buttonColor={featureButtonColor}
                   />

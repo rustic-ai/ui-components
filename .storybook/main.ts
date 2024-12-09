@@ -1,5 +1,5 @@
 import type { StorybookConfig } from '@storybook/react-webpack5'
-
+const path = require('path')
 const config: StorybookConfig = {
   stories: ['../src/**/*.stories.@(tsx)', '../docs/*.mdx'],
   addons: [
@@ -27,6 +27,15 @@ const config: StorybookConfig = {
   core: {
     disableTelemetry: true, // 👈 Disables telemetry
   },
-  staticDirs: ['../public'],
+  staticDirs: [
+    '../public',
+    {
+      from: path.resolve(
+        __dirname,
+        '../node_modules/emoji-picker-element-data'
+      ),
+      to: '/node_modules/emoji-picker-element-data',
+    },
+  ],
 }
 export default config
