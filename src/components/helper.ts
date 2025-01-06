@@ -1,5 +1,7 @@
 /* eslint-disable no-magic-numbers */
 
+import type { ChatCompletionRequest, Content } from './types'
+
 export function calculateTimeDiffInSeconds(isoDate: string): number {
   const currentDate = new Date()
   const convertedDate = new Date(isoDate)
@@ -146,9 +148,10 @@ export function shortenString(str: string, maxLength: number) {
   return str.substring(0, maxLength - 3) + '...'
 }
 
-export const getDayFromUnixTime = (
-  unixTime: number
-): { shortName: string; fullName: string } => {
+export function getDayFromUnixTime(unixTime: number): {
+  shortName: string
+  fullName: string
+} {
   const daysOfWeek: { [short: string]: string } = {
     Sun: 'Sunday',
     Mon: 'Monday',
@@ -168,4 +171,37 @@ export const getDayFromUnixTime = (
   const dayOfWeekFull = daysOfWeek[dayOfWeekShort]
 
   return { shortName: dayOfWeekShort, fullName: dayOfWeekFull }
+}
+
+export function toChatRequest(
+  msg?: string,
+  files?: string[]
+): ChatCompletionRequest {
+  if (
+    (!msg && ((files && files.length === 0) || !files)) ||
+    msg?.trim().length === 0
+  ) {
+    throw new Error('At least one of text or file urls is required')
+  } else {
+    let content: Content[] = []
+    if (msg && msg?.trim().length) {
+      content.push({
+        type: 'text',
+        text: msg,
+      })
+    }
+    if (files && files.length > 0) {
+      for (let i = 0; i < files?.length; i++) {
+        content.push({
+          type: 'file_url',
+          file_url: {
+            url: files[i],
+          },
+        })
+      }
+    }
+    return {
+      messages: [{ content: content, role: 'user' }],
+    }
+  }
 }

@@ -1,7 +1,7 @@
 import React from 'react'
 
-import { supportedViewports } from '../../../cypress/support/variables'
-import { setPdfWorkerSrc } from '../pdfViewer/pdfViewer'
+import { supportedViewports } from '../../../../cypress/support/variables'
+import { setPdfWorkerSrc } from '../../pdfViewer/pdfViewer'
 import Multipart from './multipart'
 
 setPdfWorkerSrc('/files/pdf.worker.mjs')

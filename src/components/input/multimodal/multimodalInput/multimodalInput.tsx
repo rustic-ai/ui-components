@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from 'react'
 import React from 'react'
 import { v4 as getUUID } from 'uuid'
 
+import { toChatRequest } from '../../../helper'
 import type { FileData, Message, MultimodalInputProps } from '../../../types'
 import BaseInput from '../../baseInput/baseInput'
 import Uploader from '../uploader/uploader'
@@ -64,8 +65,11 @@ export default function MultimodalInput(props: MultimodalInputProps) {
   function handleSendMessage(formattedMessage: Message): void {
     if (hasAddedFiles) {
       formattedMessage.id = messageId
-      formattedMessage.format = 'filesWithText'
-      formattedMessage.data.files = filesInfo
+      formattedMessage.format = 'ChatCompletionRequest'
+      formattedMessage.data = toChatRequest(
+        formattedMessage.data.text,
+        filesInfo.map((file) => `${file.url}`)
+      )
     }
 
     props.ws.send(formattedMessage)

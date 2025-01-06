@@ -30,7 +30,7 @@ const meta: Meta<React.FC<InputProps>> = {
           )
           textInputCode = textInputCode.replaceAll(
             'send={() => {}}',
-            'ws:{send: (message: Message) => alert(`Message sent: ${message.data.text}`)}'
+            'ws:{send: (message: Message) => alert(`Message sent: ${message.data.messages[0].content[0].text}`)}'
           )
           return textInputCode
         },
@@ -84,7 +84,7 @@ export const Default = {
     placeholder: 'Type your message',
     emojiDataSource:
       '/node_modules/emoji-picker-element-data/en/emojibase/data.json',
-    send: (message: Message) => alert(`Message sent: ${message.data.text}`),
+    send: (message: Message) => alert(`Message sent: ${message.data.messages[0].content[0].text}`),
   },
 }
 

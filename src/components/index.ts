@@ -18,7 +18,8 @@ import Action from './messageCanvas/actions/index'
 import TextToSpeech from './messageCanvas/actions/textToSpeech/textToSpeech'
 import MessageCanvas from './messageCanvas/messageCanvas'
 import MessageSpace from './messageSpace/messageSpace'
-import Multipart from './multipart/multipart'
+import ChatCompletion from './multipart/chatCompletion/chatCompletion'
+import Multipart from './multipart/multipart/multipart'
 import ParticipantsContainer from './participantsContainer/participantsContainer'
 import PDFViewer from './pdfViewer/pdfViewer'
 import PromptBuilder from './promptBuilder/promptBuilder'
@@ -38,6 +39,7 @@ import Weather from './weather/weather'
 
 export {
   Action,
+  ChatCompletion,
   CodeSnippet,
   CopyText,
   ElementRenderer,
@@ -77,7 +79,7 @@ export {
 }
 
 export * from '../rusticTheme'
-export * from './types'
-export * from './visualization/mermaidViz/mermaidViz.types'
-export * from './visualization/plotlyGraph/plotlyGraph.types'
-export * from './visualization/vegaLiteViz/vegaLiteViz.types'
+export type * from './types'
+export type * from './visualization/mermaidViz/mermaidViz.types'
+export type * from './visualization/plotlyGraph/plotlyGraph.types'
+export type * from './visualization/vegaLiteViz/vegaLiteViz.types'
