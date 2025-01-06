@@ -148,9 +148,10 @@ export function shortenString(str: string, maxLength: number) {
   return str.substring(0, maxLength - 3) + '...'
 }
 
-export function getDayFromUnixTime (
-  unixTime: number
-): { shortName: string; fullName: string }{
+export function getDayFromUnixTime(unixTime: number): {
+  shortName: string
+  fullName: string
+} {
   const daysOfWeek: { [short: string]: string } = {
     Sun: 'Sunday',
     Mon: 'Monday',
@@ -172,9 +173,15 @@ export function getDayFromUnixTime (
   return { shortName: dayOfWeekShort, fullName: dayOfWeekFull }
 }
 
-export function toChatRequest(msg?: string, files?: string[]): ChatCompletionRequest {
-  if (!msg && ((files && files.length === 0) || !files) || msg?.trim().length === 0) {
-    throw new Error('Atleast one of text or file urls are required')
+export function toChatRequest(
+  msg?: string,
+  files?: string[]
+): ChatCompletionRequest {
+  if (
+    (!msg && ((files && files.length === 0) || !files)) ||
+    msg?.trim().length === 0
+  ) {
+    throw new Error('At least one of text or file urls is required')
   } else {
     let content: Content[] = []
     if (msg && msg?.trim().length) {
@@ -188,13 +195,13 @@ export function toChatRequest(msg?: string, files?: string[]): ChatCompletionReq
         content.push({
           type: 'file_url',
           file_url: {
-            url: files[i]
-          }
+            url: files[i],
+          },
         })
       }
     }
     return {
-      messages: [{content: content, role: 'user'}]
+      messages: [{ content: content, role: 'user' }],
     }
   }
 }

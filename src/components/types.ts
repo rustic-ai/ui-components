@@ -404,15 +404,15 @@ export interface ContentTextPart extends ContentBase {
   text: string
 }
 
-export interface ContentPartImage extends ContentBase {
+export interface ContentImagePart extends ContentBase {
   type: 'image_url'
   image_url: {
     url: string
-    detail: string
+    detail?: string
   }
 }
 
-export interface ContentPartAudio extends ContentBase {
+export interface ContentAudioPart extends ContentBase {
   type: 'input_audio'
   input_audio: {
     data: string
@@ -429,11 +429,12 @@ export interface ContentFilePart extends ContentBase {
 
 export type Content =
   | ContentTextPart
-  | ContentPartImage
-  | ContentPartAudio
+  | ContentImagePart
+  | ContentAudioPart
   | ContentFilePart
 
 export interface ChatCompletionRequest {
+  /** A list of messages combined into a single displayable message. Supports various content types, including text, images, audio, and files. */
   messages: { content: string | Content[]; role: string }[]
 }
 

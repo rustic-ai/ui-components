@@ -1,13 +1,16 @@
+import '../../../index.css'
+import '../multipart/multipart.css'
+
 import Box from '@mui/material/Box'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import React from 'react'
 
-import FilePreview from '../filePreview/filePreview'
-import Icon from '../icon'
-import Sound from '../media/audio/sound'
-import Text from '../text'
-import type { ChatCompletionProps, Content } from '../types'
+import FilePreview from '../../filePreview/filePreview'
+import Icon from '../../icon'
+import Sound from '../../media/audio/sound'
+import Text from '../../text'
+import type { ChatCompletionProps, Content } from '../../types'
 
 function getFileName(fileUrl: string): string {
   const url = new URL(fileUrl)
@@ -16,12 +19,20 @@ function getFileName(fileUrl: string): string {
   return filename as string
 }
 
+/**
+ * The `ChatCompletion` component provides a flexible message interface
+ * that supports both textual content and file attachments within a single message.
+ * Its data structure closely mirrors OpenAI's [ChatCompletionRequest](https://platform.openai.com/docs/api-reference/chat),
+ * eliminating the need for data conversion to the Chat Completion format.
+ */
+
 export default function ChatCompletion(props: ChatCompletionProps) {
   function renderContentArray(contentArray: Content[]) {
     const files: Array<JSX.Element> = []
     let textContent: string = ''
     const audioContent: Array<JSX.Element> = []
     contentArray.map((cnt) => {
+      // To-do: handle other types e.g. input_audio
       if (cnt.type === 'text') {
         textContent += cnt.text
       } else if (cnt.type.endsWith('_url')) {
@@ -45,17 +56,12 @@ export default function ChatCompletion(props: ChatCompletionProps) {
           </FilePreview>
         )
         files.push(preview)
-      } else if (cnt.type === 'input_audio') {
-        const soundSrc = `data:audio/${cnt.input_audio.format};base64,${cnt.input_audio.data}`
-        audioContent.push(<Sound src={soundSrc} />)
       }
     })
     return (
       <>
         {textContent.length > 0 && <Text text={textContent} />}
-        {audioContent.length > 0 && <Box>{audioContent}</Box>}
-        {audioContent.length > 0 ||
-          (files.length > 0 && <Box className="rustic-files">{files}</Box>)}
+        {files.length > 0 && <Box className="rustic-files">{files}</Box>}
       </>
     )
   }

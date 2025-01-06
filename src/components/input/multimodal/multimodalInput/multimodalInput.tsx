@@ -66,12 +66,10 @@ export default function MultimodalInput(props: MultimodalInputProps) {
     if (hasAddedFiles) {
       formattedMessage.id = messageId
       formattedMessage.format = 'ChatCompletionRequest'
-      if (filesInfo) {
-        formattedMessage.data = toChatRequest(
-          formattedMessage.data.text,
-          filesInfo.map((file) => `${file.url}`)
-        )
-      }
+      formattedMessage.data = toChatRequest(
+        formattedMessage.data.text,
+        filesInfo.map((file) => `${file.url}`)
+      )
     }
 
     props.ws.send(formattedMessage)

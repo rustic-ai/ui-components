@@ -10,27 +10,26 @@ export const Default = {
   args: {
     messages: [
       {
-        "content": [
+        content: [
           {
-            "type": "text",
-            "text": "textual content"
+            type: 'text',
+            text: 'textual content',
           },
           {
-            type: "image_url",
+            type: 'image_url',
             image_url: {
               url: `${window.location.origin}/images/image-component-example.png`,
-            }
+            },
           },
           {
-            "type": "file_url",
-            "file_url": {
+            type: 'file_url',
+            file_url: {
               url: `${window.location.origin}/files/pdfExample.pdf`,
-            }
-          }
+            },
+          },
         ],
-        "role": "user"
-      }
-    ]
+        role: 'user',
+      },
+    ],
   },
 }
-
