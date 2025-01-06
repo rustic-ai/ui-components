@@ -1,3 +1,5 @@
+import type React from 'react'
+
 import type { MessageSpaceProps } from './messageSpace/messageSpace'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -197,6 +199,7 @@ export interface MediaFormat extends DataFormat {
   transcript?: string
 }
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface AudioFormat extends MediaFormat {}
 
 export interface VideoFormat extends MediaFormat {
@@ -391,3 +394,57 @@ export interface FormFormat extends DataFormat {
 }
 
 export interface DynamicFormProps extends FormFormat, ConversationProps {}
+
+interface ContentBase {
+  type: 'text' | 'image_url' | 'input_audio' | 'file_url'
+}
+
+export interface ContentTextPart extends ContentBase {
+  type: 'text'
+  text: string
+}
+
+export interface ContentPartImage extends ContentBase {
+  type: 'image_url'
+  image_url: {
+    url: string
+    detail: string
+  }
+}
+
+export interface ContentPartAudio extends ContentBase {
+  type: 'input_audio'
+  input_audio: {
+    data: string
+    format: string
+  }
+}
+
+export interface ContentFilePart extends ContentBase {
+  type: 'file_url'
+  file_url: {
+    url: string
+  }
+}
+
+export type Content =
+  | ContentTextPart
+  | ContentPartImage
+  | ContentPartAudio
+  | ContentFilePart
+
+export interface ChatCompletionRequest {
+  messages: { content: string | Content[]; role: string }[]
+}
+
+export interface ChatCompletionProps extends DataFormat, ChatCompletionRequest {
+  /**
+   * An object mapping file extensions to their respective viewer components.
+   * Each key represents a file type (e.g., 'pdf', 'jpg'), and the corresponding value is a React component
+   * that takes a `url` prop and renders the appropriate viewer for that file type. This prop is used to decide
+   * which viewer component should be used to open and display the file within the modal.
+   */
+  supportedViewers?: { [key: string]: React.ComponentType<{ url: string }> }
+  /** Setting this to true will display long file names in full. If set to false, long names will be shortened. */
+  showFullName?: boolean
+}

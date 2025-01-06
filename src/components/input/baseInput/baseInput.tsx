@@ -16,6 +16,7 @@ import { type ForwardedRef, forwardRef, useRef, useState } from 'react'
 import React from 'react'
 import { v4 as getUUID } from 'uuid'
 
+import { toChatRequest } from '../../helper'
 import Icon from '../../icon/icon'
 import type { BaseInputProps, Message } from '../../types'
 import Emoji from '../emoji/emoji'
@@ -207,8 +208,8 @@ function BaseInputElement(
       timestamp: currentTime,
       sender: props.sender,
       conversationId: props.conversationId,
-      format: 'text',
-      data: { text: messageText },
+      format: 'ChatCompletionRequest',
+      data: toChatRequest(messageText),
     }
 
     props.send(formattedMessage)
@@ -219,7 +220,9 @@ function BaseInputElement(
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>): void {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault()
-      !isSendDisabled && handleSendMessage()
+      if (!isSendDisabled) {
+        handleSendMessage()
+      }
     }
   }
 
@@ -329,25 +332,27 @@ function BaseInputElement(
             inputRef={inputRef}
             color="secondary"
             size="small"
-            InputProps={{
-              endAdornment: (
-                <InputAdornment
-                  position="end"
-                  className="rustic-input-adornment"
-                >
-                  <Emoji
-                    dataSource={props.emojiDataSource}
-                    onEmojiClick={handleEmojiClick}
-                    buttonColor={featureButtonColor}
-                  />
-                  {props.enableSpeechToText && speechToTextButtonAdornment}
-                </InputAdornment>
-              ),
-            }}
-            InputLabelProps={{
-              className: !isFocused ? 'rustic-input-label' : '',
-              sx: {
-                backgroundColor: 'background.paper',
+            slotProps={{
+              input: {
+                endAdornment: (
+                  <InputAdornment
+                    position="end"
+                    className="rustic-input-adornment"
+                  >
+                    <Emoji
+                      dataSource={props.emojiDataSource}
+                      onEmojiClick={handleEmojiClick}
+                      buttonColor={featureButtonColor}
+                    />
+                    {props.enableSpeechToText && speechToTextButtonAdornment}
+                  </InputAdornment>
+                ),
+              },
+              inputLabel: {
+                className: !isFocused ? 'rustic-input-label' : '',
+                sx: {
+                  backgroundColor: 'background.paper',
+                },
               },
             }}
           />
