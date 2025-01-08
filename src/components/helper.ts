@@ -175,33 +175,27 @@ export function getDayFromUnixTime(unixTime: number): {
 
 export function toChatRequest(
   msg?: string,
-  files?: string[]
+  files?: { url: string; name?: string }[]
 ): ChatCompletionRequest {
-  if (
-    (!msg && ((files && files.length === 0) || !files)) ||
-    msg?.trim().length === 0
-  ) {
-    throw new Error('At least one of text or file urls is required')
-  } else {
-    let content: Content[] = []
-    if (msg && msg?.trim().length) {
+  const content: Content[] = []
+  if (msg && msg?.trim().length) {
+    content.push({
+      type: 'text',
+      text: msg,
+    })
+  }
+  if (files && files.length > 0) {
+    for (let i = 0; i < files?.length; i++) {
       content.push({
-        type: 'text',
-        text: msg,
+        type: 'file_url',
+        file_url: {
+          url: files[i].url,
+          name: files[i].name,
+        },
       })
     }
-    if (files && files.length > 0) {
-      for (let i = 0; i < files?.length; i++) {
-        content.push({
-          type: 'file_url',
-          file_url: {
-            url: files[i],
-          },
-        })
-      }
-    }
-    return {
-      messages: [{ content: content, role: 'user' }],
-    }
+  }
+  return {
+    messages: [{ content: content, role: 'user' }],
   }
 }

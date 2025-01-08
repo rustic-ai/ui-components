@@ -72,7 +72,11 @@ export default function FilePreview(
         sx={{ boxShadow: theme.shadows[1] }}
         onClick={handleFileClick}
       >
-        <Typography variant="subtitle2" data-cy="file-name">
+        <Typography
+          variant="subtitle2"
+          data-cy="file-name"
+          className="rustic-file-preview-name"
+        >
           {fileName}
         </Typography>
         <div onClick={(e) => e.stopPropagation()}>{props.children}</div>
@@ -104,4 +108,5 @@ export default function FilePreview(
 
 FilePreview.defaultProps = {
   supportedViewers: supportedViewers,
+  showFullName: true,
 }

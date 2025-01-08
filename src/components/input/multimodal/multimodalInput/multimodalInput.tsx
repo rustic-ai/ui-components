@@ -29,7 +29,11 @@ __How does file upload work?__
 * ```
 */
 export default function MultimodalInput(props: MultimodalInputProps) {
-  const [filesInfo, setFilesInfo] = useState<FileData[]>([])
+  //use fileList to keep track of files order and number of files
+  const [filesInfo, setFilesInfo] = useState<{
+    uploaded: { name: string; url: string }[]
+    fileList: FileData[]
+  }>({ uploaded: [], fileList: [] })
   const [messageId, setMessageId] = useState(getUUID())
   const [filePreviewsContainer, setFilePreviewsContainer] =
     useState<HTMLDivElement>()
@@ -37,13 +41,47 @@ export default function MultimodalInput(props: MultimodalInputProps) {
     useState<HTMLDivElement>()
   const inputRef = useRef<HTMLDivElement>(null)
   const theme = useTheme()
-  const hasAddedFiles = filesInfo.length > 0
+  const isUploadFinished =
+    filesInfo.uploaded.length === filesInfo.fileList.length &&
+    filesInfo.uploaded.length > 0
 
-  function handleFileUpdates(action: 'add' | 'remove', fileName: string) {
+  function handleFileUpdates(
+    action: 'add' | 'remove' | 'update',
+    fileName: string,
+    url?: string
+  ) {
     if (action === 'add') {
-      setFilesInfo((prev) => [...prev, { name: fileName }])
+      setFilesInfo((prev) => ({
+        ...prev,
+        fileList: [...prev.fileList, { name: fileName }],
+      }))
+    } else if (action === 'update') {
+      if (!url) {
+        console.error("URL is required for the 'update' action")
+        return
+      }
+
+      setFilesInfo((prev) => {
+        const pendingIndex = prev.fileList.findIndex(
+          (file) => file.name === fileName
+        )
+
+        const updatedUploaded = [
+          ...prev.uploaded.slice(0, pendingIndex),
+          { name: fileName, url },
+          ...prev.uploaded.slice(pendingIndex),
+        ]
+
+        return {
+          ...prev,
+          uploaded: updatedUploaded,
+        }
+      })
     } else {
-      setFilesInfo((prev) => prev.filter((file) => file.name !== fileName))
+      setFilesInfo((prev) => ({
+        uploaded: prev.uploaded.filter((file) => file.name !== fileName),
+        fileList: prev.fileList.filter((file) => file.name !== fileName),
+      }))
     }
   }
 
@@ -63,18 +101,20 @@ export default function MultimodalInput(props: MultimodalInputProps) {
   })
 
   function handleSendMessage(formattedMessage: Message): void {
-    if (hasAddedFiles) {
+    if (isUploadFinished) {
       formattedMessage.id = messageId
-      formattedMessage.format = 'ChatCompletionRequest'
+      formattedMessage.format = 'chatCompletionRequest'
       formattedMessage.data = toChatRequest(
         formattedMessage.data.text,
-        filesInfo.map((file) => `${file.url}`)
+        filesInfo.uploaded.map((file) => {
+          return { url: file.url, name: file.name }
+        })
       )
     }
 
     props.ws.send(formattedMessage)
     setMessageId(getUUID())
-    setFilesInfo([])
+    setFilesInfo({ uploaded: [], fileList: [] })
   }
 
   return (
@@ -92,7 +132,7 @@ export default function MultimodalInput(props: MultimodalInputProps) {
       <BaseInput
         {...props}
         send={handleSendMessage}
-        isSendEnabled={hasAddedFiles}
+        isSendEnabled={isUploadFinished}
         ref={inputRef}
       >
         <Box className="rustic-bottom-buttons">

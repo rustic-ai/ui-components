@@ -40,6 +40,7 @@ describe('Input', () => {
         deleteFileEndpoint={'/delete/fileName'}
         acceptedFileTypes={''}
         maxFileCount={5}
+        showFullName={false}
         getUploadData={() => {
           return { userId: testUser.id }
         }}
@@ -204,6 +205,7 @@ describe('Input', () => {
             close: cy.stub(),
             reconnect: cy.stub(),
           }}
+          showFullName={false}
           label="Type you message"
           maxFileCount={2}
           acceptedFileTypes={''}
@@ -289,6 +291,7 @@ describe('Input', () => {
             close: cy.stub(),
             reconnect: cy.stub(),
           }}
+          showFullName={false}
           label="Type you message"
           uploadFileEndpoint={'/upload/'}
           deleteFileEndpoint={'/delete/'}
@@ -321,6 +324,7 @@ describe('Input', () => {
             close: cy.stub(),
             reconnect: cy.stub(),
           }}
+          showFullName={false}
           label="Type you message"
           uploadFileEndpoint={'/upload'}
           deleteFileEndpoint={'/delete'}
@@ -365,7 +369,6 @@ describe('Input', () => {
           uploadFileEndpoint={'/upload'}
           deleteFileEndpoint={'/delete'}
           acceptedFileTypes={''}
-          showFullName
           listFiles={() => {
             return axios.get('/1/files').then((res) => {
               const fileData = res.data.map((file: any) => {

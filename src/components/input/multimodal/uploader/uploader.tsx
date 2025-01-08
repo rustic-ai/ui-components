@@ -240,9 +240,9 @@ function Uploader(props: UploaderProps) {
       const extensionIndex = fileName.lastIndexOf('.')
       const baseName = fileName.substring(0, extensionIndex)
       const extension = fileName.substring(extensionIndex)
-      // Create a regex to match files with the same base name and extract numbers from them
+      // Create a regex to match files with the same base name and extract numbers from them. Escape all special characters e.g. +?*.
       const regex = new RegExp(
-        `^${baseName.replace('.', '\\.')}(\\(\\d+\\))?${extension}$`,
+        `^${baseName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(\\(\\d+\\))?${extension}$`,
         'i'
       )
       if (props.listFiles) {
@@ -272,6 +272,10 @@ function Uploader(props: UploaderProps) {
           signal: controller.signal,
         })
         .then((response) => {
+          const fileData = formData.get('file')
+          if (response.data.url && fileData instanceof File && fileData.name) {
+            props.onFileUpdate('update', fileData.name, response.data.url)
+          }
           if (response.data.fileId) {
             handleSuccessfulUpload(response.data, newAddedFile.id)
           }

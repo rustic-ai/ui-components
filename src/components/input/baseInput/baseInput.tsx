@@ -208,7 +208,7 @@ function BaseInputElement(
       timestamp: currentTime,
       sender: props.sender,
       conversationId: props.conversationId,
-      format: 'ChatCompletionRequest',
+      format: 'chatCompletionRequest',
       data: toChatRequest(messageText),
     }
 

@@ -15,6 +15,10 @@
   min-width: 220px;
 }
 
+.rustic-file-preview-name {
+  margin-right: 8px;
+}
+
 .rustic-file-preview-modal {
   width: 90vw;
   height: 90vh;

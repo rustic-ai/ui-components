@@ -20,7 +20,10 @@ const multiModalInputMeta: Meta<React.ComponentProps<typeof MultimodalInput>> =
           url: 'http://localhost:8080/upload?message-id=:messageId',
           method: 'POST',
           status: 200,
-          response: { fileId: getUUID() },
+          response: {
+            fileId: getUUID(),
+            url: 'http://localhost:8080/files/test.xlsx',
+          },
           delay: 1000,
         },
         {
@@ -35,7 +38,7 @@ const multiModalInputMeta: Meta<React.ComponentProps<typeof MultimodalInput>> =
                 content_length: 117496,
                 uploaded_at: '2024-11-29T20:04:35.480280+00:00',
               },
-              url: 'test.xlsx',
+              url: 'http://localhost:8080/files/test.xlsx',
               mimetype:
                 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
               encoding: null,
@@ -48,7 +51,7 @@ const multiModalInputMeta: Meta<React.ComponentProps<typeof MultimodalInput>> =
                 content_length: 117496,
                 uploaded_at: '2024-11-30T20:04:35.480280+00:00',
               },
-              url: 'test1.xlsx',
+              url: 'http://localhost:8080/files/test1.xlsx',
               mimetype:
                 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
               encoding: null,
@@ -159,6 +162,7 @@ multiModalInputMeta.argTypes = {
   showFullName: {
     description:
       'Optional props. Setting this to `true` will display long file names in full. If set to `false`, long names will be shortened.',
+    defaultValue: { summary: true },
     table: {
       type: { summary: 'boolean' },
     },

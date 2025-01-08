@@ -8,7 +8,6 @@ import React from 'react'
 
 import FilePreview from '../../filePreview/filePreview'
 import Icon from '../../icon'
-import Sound from '../../media/audio/sound'
 import Text from '../../text'
 import type { ChatCompletionProps, Content } from '../../types'
 
@@ -30,7 +29,6 @@ export default function ChatCompletion(props: ChatCompletionProps) {
   function renderContentArray(contentArray: Content[]) {
     const files: Array<JSX.Element> = []
     let textContent: string = ''
-    const audioContent: Array<JSX.Element> = []
     contentArray.map((cnt) => {
       // To-do: handle other types e.g. input_audio
       if (cnt.type === 'text') {
@@ -38,7 +36,13 @@ export default function ChatCompletion(props: ChatCompletionProps) {
       } else if (cnt.type.endsWith('_url')) {
         // @ts-expect-error field name is dynamic
         const fileUrl: string = cnt[cnt.type].url
-        const file = { url: fileUrl, name: getFileName(fileUrl) }
+
+        const file = {
+          url: fileUrl,
+          // @ts-expect-error field name is dynamic
+          name: cnt[cnt.type].name || getFileName(fileUrl),
+        }
+
         const preview = (
           <FilePreview file={file} showFullName={props.showFullName}>
             {file.url && (

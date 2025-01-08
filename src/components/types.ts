@@ -276,14 +276,18 @@ export interface UploadOption {
 export interface UploaderProps {
   /** The types of files that are allowed to be selected for upload. For safety reasons, only allow file types that can be handled by your server. Avoid accepting executable file types like .exe, .bat, or .msi. For more information, refer to the [mdn web docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file#unique_file_type_specifiers). */
   acceptedFileTypes: string
-  /** The API endpoint where files will be uploaded. File id will be appended to the end of API endpoint. */
+  /** The API endpoint where files will be uploaded. File id will be appended to the end of API endpoint. The response should include the URL of the uploaded file, and the send button will not be enabled until all files have been uploaded. */
   uploadFileEndpoint: string
   /** The API endpoint to delete/cancel uploaded files. File id will be appended to the end of API endpoint. */
   deleteFileEndpoint: string
   /** Used in the API request to link the file with the message that's going to be sent. */
   messageId: string
-  /** A function to handle changes in the file list. The parent component should use this to track file names and handle submit accordingly. */
-  onFileUpdate: (action: 'add' | 'remove', fileName: string) => void
+  /** A function to handle changes in the file list. The parent component should use this to track file names and handle submit accordingly. Url is only required for the 'update' action. */
+  onFileUpdate: (
+    action: 'add' | 'remove' | 'update',
+    fileName: string,
+    url?: string
+  ) => void
   /** Optional HTML div where the errors should be shown. */
   errorMessagesContainer?: HTMLDivElement
   /** Optional HTML div where the filePreviews should be shown. */
@@ -424,6 +428,7 @@ export interface ContentFilePart extends ContentBase {
   type: 'file_url'
   file_url: {
     url: string
+    name?: string
   }
 }
 
@@ -434,7 +439,7 @@ export type Content =
   | ContentFilePart
 
 export interface ChatCompletionRequest {
-  /** A list of messages combined into a single displayable message. Supports various content types, including text, images, audio, and files. */
+  /** A list of messages combined into a single displayable message. Supports various content types, including text, images and files. */
   messages: { content: string | Content[]; role: string }[]
 }
 
