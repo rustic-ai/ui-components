@@ -20,7 +20,10 @@ const multiModalInputMeta: Meta<React.ComponentProps<typeof MultimodalInput>> =
           url: 'http://localhost:8080/upload?message-id=:messageId',
           method: 'POST',
           status: 200,
-          response: { fileId: getUUID() },
+          response: {
+            fileId: getUUID(),
+            url: 'test.xlsx',
+          },
           delay: 1000,
         },
         {
@@ -159,6 +162,7 @@ multiModalInputMeta.argTypes = {
   showFullName: {
     description:
       'Optional props. Setting this to `true` will display long file names in full. If set to `false`, long names will be shortened.',
+    defaultValue: { summary: true },
     table: {
       type: { summary: 'boolean' },
     },

@@ -104,4 +104,5 @@ export default function FilePreview(
 
 FilePreview.defaultProps = {
   supportedViewers: supportedViewers,
+  showFullName: true,
 }

@@ -5,6 +5,9 @@ const meta = {
   component: Multipart,
   tags: ['autodocs'],
   argTypes: {
+    showFullName: {
+      defaultValue: { summary: true },
+    },
     files: {
       table: {
         type: {
