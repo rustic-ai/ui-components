@@ -1,6 +1,7 @@
 .rustic-demo-in-conversation {
   gap: 16px;
-  margin: 16px 8px;
+  margin: 16px auto;
+  max-width: 90%;
   display: grid;
   grid-template-columns: 1fr 1fr;
   justify-content: center;
@@ -14,7 +15,6 @@
   max-width: 312px;
   border-radius: 16px;
   box-shadow: none;
-  border: 1px solid #e1d9d5;
 }
 
 .rustic-demo-hover-over-input {
