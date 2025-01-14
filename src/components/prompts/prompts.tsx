@@ -1,7 +1,7 @@
 import './prompts.css'
 
 import Box from '@mui/material/Box'
-import Chip from '@mui/material/Chip'
+import Button from '@mui/material/Button'
 import React from 'react'
 import { v4 as getUUID } from 'uuid'
 
@@ -33,14 +33,16 @@ export default function Prompts(props: PromptsProps) {
 
   const buttonList = props.prompts.map((prompt, index) => {
     return (
-      <Chip
+      <Button
         key={index}
         onClick={() => handleSubmitResponse(prompt)}
         color="secondary"
+        variant="outlined"
         size="small"
         className="rustic-prompt"
-        label={prompt}
-      ></Chip>
+      >
+        {prompt}
+      </Button>
     )
   })
 

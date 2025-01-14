@@ -174,6 +174,13 @@ multiModalInputMeta.argTypes = {
       type: { summary: '(fileName: string) => { [key: string]: any }' },
     },
   },
+  getUploadHeaders: {
+    description:
+      'Optional props. A function that can be used to define headers to be sent along with the file upload.',
+    table: {
+      type: { summary: '() => Promise<{headers: {Authorization: string}}>' },
+    },
+  },
   uploadOptions: {
     description:
       'Optional props. Defines the available options for file upload, displayed within a popover menu. If no options are provided, an upload icon button will be displayed by default.',
@@ -258,6 +265,12 @@ export const Default = {
     deleteFileEndpoint: 'http://localhost:8080/files/fileName',
     acceptedFileTypes:
       'image/*,.pdf,.doc,.docx,.xlsx,application/x-iwork-pages-sffpages',
+    getUploadHeaders: () =>
+      Promise.resolve({
+        headers: {
+          Authorization: 'Bearer example-token',
+        },
+      }),
   },
 }
 
