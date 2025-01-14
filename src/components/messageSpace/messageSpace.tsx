@@ -286,7 +286,7 @@ export default function MessageSpace(props: MessageSpaceProps) {
         {!isScrolledToBottom && !isScrollButtonHidden && (
           <Chip
             data-cy="scroll-down-button"
-            variant="rusticSecondary"
+            color="secondary"
             className="rustic-scroll-down-button"
             size="medium"
             onClick={scrollDown}
