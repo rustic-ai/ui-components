@@ -36,7 +36,7 @@ export default function Prompts(props: PromptsProps) {
       <Chip
         key={index}
         onClick={() => handleSubmitResponse(prompt)}
-        variant="rusticSecondary"
+        color="secondary"
         size="small"
         className="rustic-prompt"
         label={prompt}

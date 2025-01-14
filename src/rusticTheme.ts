@@ -47,9 +47,11 @@ declare module '@mui/material/Typography' {
   }
 }
 
+type Colors = Record<'lightMode' | 'darkMode', Record<string, string>>
+
 function generatePalette(
   modeColors: Record<string, string>
-): Record<string, any> {
+): Record<string, string> {
   const palette: Record<string, any> = {}
 
   Object.keys(modeColors).forEach((key) => {
@@ -70,8 +72,8 @@ function generatePalette(
 
 const colors = {
   lightMode: {
-    commonBlack: '#FFFFFF',
-    commonWhite: '#000000',
+    commonBlack: '#000000',
+    commonWhite: '#FFFFFF',
     divider: '#E1D9D5',
     backgroundPaper: '#FFFFFF',
     backgroundDefault: '#F4F4F4',
@@ -79,7 +81,7 @@ const colors = {
     textSecondary: '#4E443F',
     textDisabled: '#727272',
     actionActive: 'rgba(0, 0, 0, 0.56)',
-    actionHover: 'rgba(0, 0, 0, 0.8)',
+    actionHover: 'rgba(0, 0, 0, 0.08)',
     actionSelected: 'rgba(0, 0, 0, 0.16)',
     actionFocus: 'rgba(0, 0, 0, 0.12)',
     actionDisabledBackground: 'rgba(0, 0, 0, 0.12)',
@@ -120,8 +122,8 @@ const colors = {
     infoContrastText: '#000000',
   },
   darkMode: {
-    commonBlack: '#FFFFFF',
-    commonWhite: '#000000',
+    commonBlack: '#000000',
+    commonWhite: '#FFFFFF',
     divider: '#E1D9D5',
     backgroundPaper: '#202020',
     backgroundDefault: '#2C2C2C',
@@ -195,7 +197,10 @@ const largeButtonAndChipStyle = {
   minHeight: '64px',
 }
 
-export function generateTheme(mode: 'light' | 'dark'): ThemeOptions {
+export function generateTheme(
+  mode: 'light' | 'dark',
+  colors: Colors
+): ThemeOptions {
   const modeColors = mode === 'light' ? colors.lightMode : colors.darkMode
   return {
     shape: {
@@ -474,8 +479,8 @@ export function generateTheme(mode: 'light' | 'dark'): ThemeOptions {
   }
 }
 
-let rusticLightTheme = createTheme(generateTheme('light'))
-let rusticDarkTheme = createTheme(generateTheme('dark'))
+let rusticLightTheme = createTheme(generateTheme('light', colors))
+let rusticDarkTheme = createTheme(generateTheme('dark', colors))
 
 rusticLightTheme = responsiveFontSizes(rusticLightTheme)
 rusticDarkTheme = responsiveFontSizes(rusticDarkTheme)
