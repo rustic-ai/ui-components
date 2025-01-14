@@ -300,6 +300,12 @@ export interface UploaderProps {
   showFullName?: boolean
   /** A function that can be used to define additional data to be sent along with the file upload. */
   getUploadData?: (fileName: string) => { [key: string]: any }
+  /** A function that can be used to get the headers for the file upload requests. */
+  getUploadHeaders?: () => Promise<{
+    headers: {
+      Authorization: string
+    }
+  }>
   /** Defines the available options for file upload, displayed within a popover menu. If no options are provided, an upload icon button will be displayed by default.*/
   uploadOptions?: UploadOption[]
   /** A function to fetch and format existing file data when a file upload fails due to a conflict error (HTTP status code 409). The returned value will be used to determine a unique file name by appending an incremented number to the base name.  */

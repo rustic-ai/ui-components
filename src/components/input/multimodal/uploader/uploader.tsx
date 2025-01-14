@@ -71,6 +71,10 @@ function Uploader(props: UploaderProps) {
     fileNamesRef.current = {}
   }, [props.messageId])
 
+  const headersPromise = props.getUploadHeaders
+    ? props.getUploadHeaders()
+    : Promise.resolve({ headers: {} })
+
   function rejectFile(fileName: string) {
     setErrorMessages((prevMessages) => [
       ...prevMessages,
@@ -266,70 +270,77 @@ function Uploader(props: UploaderProps) {
     }
 
     function uploadFile(): Promise<void> {
-      return axios
-        .post(uploadUrl, formData, {
-          onUploadProgress: handleUploadProgress,
-          signal: controller.signal,
-        })
-        .then((response) => {
-          const fileData = formData.get('file')
-          if (response.data.url && fileData instanceof File && fileData.name) {
-            props.onFileUpdate('update', fileData.name, response.data.url)
-          }
-          if (response.data.fileId) {
-            handleSuccessfulUpload(response.data, newAddedFile.id)
-          }
-        })
-        .catch((error) => {
-          //need to get the latest file name from the formData
-          const updatedFile = formData.get('file')
-          if (updatedFile instanceof File && updatedFile.name) {
-            props.onFileUpdate('remove', updatedFile.name)
-          }
-          const conflictStatusCode = 409
-          if (
-            error.response?.status === conflictStatusCode &&
-            props.listFiles
-          ) {
-            generateNewFileName()
-              .then((newFileName) => {
-                props.onFileUpdate('add', newFileName)
+      return headersPromise.then((headers) => {
+        return axios
+          .post(uploadUrl, formData, {
+            ...headers,
+            onUploadProgress: handleUploadProgress,
+            signal: controller.signal,
+          })
+          .then((response) => {
+            const fileData = formData.get('file')
+            if (
+              response.data.url &&
+              fileData instanceof File &&
+              fileData.name
+            ) {
+              props.onFileUpdate('update', fileData.name, response.data.url)
+            }
+            if (response.data.fileId) {
+              handleSuccessfulUpload(response.data, newAddedFile.id)
+            }
+          })
+          .catch((error) => {
+            //need to get the latest file name from the formData
+            const updatedFile = formData.get('file')
+            if (updatedFile instanceof File && updatedFile.name) {
+              props.onFileUpdate('remove', updatedFile.name)
+            }
+            const conflictStatusCode = 409
+            if (
+              error.response?.status === conflictStatusCode &&
+              props.listFiles
+            ) {
+              generateNewFileName()
+                .then((newFileName) => {
+                  props.onFileUpdate('add', newFileName)
 
-                const newFile = new File([file], newFileName, {
-                  type: file.type,
-                })
-
-                formData.set('file', newFile)
-
-                setAddedFiles((prev) => {
-                  return prev.map((file) => {
-                    if (file.id === temporaryFileId) {
-                      return {
-                        ...file,
-                        name: newFileName,
-                        loadingProgress: 0,
-                      }
-                    }
-                    return file
+                  const newFile = new File([file], newFileName, {
+                    type: file.type,
                   })
+
+                  formData.set('file', newFile)
+
+                  setAddedFiles((prev) => {
+                    return prev.map((file) => {
+                      if (file.id === temporaryFileId) {
+                        return {
+                          ...file,
+                          name: newFileName,
+                          loadingProgress: 0,
+                        }
+                      }
+                      return file
+                    })
+                  })
+                  uploadFile()
                 })
-                uploadFile()
-              })
-              .catch(() => {
-                cleanupFailedUpload(
-                  file.name,
-                  newAddedFile.id,
-                  error.response?.data
-                )
-              })
-          } else {
-            cleanupFailedUpload(
-              file.name,
-              newAddedFile.id,
-              error.response?.data
-            )
-          }
-        })
+                .catch(() => {
+                  cleanupFailedUpload(
+                    file.name,
+                    newAddedFile.id,
+                    error.response?.data
+                  )
+                })
+            } else {
+              cleanupFailedUpload(
+                file.name,
+                newAddedFile.id,
+                error.response?.data
+              )
+            }
+          })
+      })
     }
     uploadFile()
   }
@@ -348,18 +359,20 @@ function Uploader(props: UploaderProps) {
         .replaceAll('messageId', props.messageId)
         .replaceAll('fileId', file.id)
 
-      axios
-        .delete(deleteUrl)
-        .then(() => {
-          return setAddedFiles((prev) => prev.filter((_, i) => i !== index))
-        })
-        .catch(() => {
-          props.onFileUpdate('add', fileName)
-          return setErrorMessages((prevMessages) => [
-            ...prevMessages,
-            `Failed to delete ${fileName}. Please try again.`,
-          ])
-        })
+      headersPromise.then((headers) => {
+        axios
+          .delete(deleteUrl, { ...headers })
+          .then(() => {
+            return setAddedFiles((prev) => prev.filter((_, i) => i !== index))
+          })
+          .catch(() => {
+            props.onFileUpdate('add', fileName)
+            return setErrorMessages((prevMessages) => [
+              ...prevMessages,
+              `Failed to delete ${fileName}. Please try again.`,
+            ])
+          })
+      })
     } else {
       file.abortController.abort()
       setAddedFiles((prev) => prev.filter((_file, i) => i !== index))

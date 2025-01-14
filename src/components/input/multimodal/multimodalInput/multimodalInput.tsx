@@ -150,6 +150,7 @@ export default function MultimodalInput(props: MultimodalInputProps) {
             getUploadData={props.getUploadData}
             uploadOptions={props.uploadOptions}
             listFiles={props.listFiles}
+            getUploadHeaders={props.getUploadHeaders}
           />
         </Box>
       </BaseInput>

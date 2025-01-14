@@ -17,11 +17,6 @@
   border: 1px solid #e1d9d5;
 }
 
-.rustic-demo-in-conversation .rustic-prompt:hover {
-  background-color: #ff692814;
-  color: #000000;
-}
-
 .rustic-demo-hover-over-input {
   display: flex;
   flex-wrap: wrap;
