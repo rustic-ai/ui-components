@@ -1,6 +1,6 @@
 .rustic-demo-in-conversation {
   gap: 16px;
-  margin: 16px auto;
+  margin: 16px 8px;
   display: grid;
   grid-template-columns: 1fr 1fr;
   justify-content: center;
@@ -19,6 +19,7 @@
 
 .rustic-demo-in-conversation .rustic-prompt:hover {
   background-color: #ff692814;
+  color: #000000;
 }
 
 .rustic-demo-hover-over-input {

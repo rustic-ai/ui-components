@@ -132,7 +132,8 @@ export default function PromptBuilder(props: PromptBuilderProps) {
   function renderNextQuestionButton() {
     return (
       <Button
-        variant="rusticSecondary"
+        variant="outlined"
+        color="secondary"
         endIcon={<Icon name="chevron_right" />}
         onClick={handleNextQuestion}
         disabled={!lastInputMessage}
@@ -147,7 +148,8 @@ export default function PromptBuilder(props: PromptBuilderProps) {
   function renderGenerateButton() {
     return (
       <Button
-        variant="rusticPrimary"
+        variant="contained"
+        color="primary"
         onClick={handleGeneratePrompts}
         disabled={isLoading}
         aria-disabled={isLoading}
@@ -161,7 +163,8 @@ export default function PromptBuilder(props: PromptBuilderProps) {
   function renderQuitButton() {
     return (
       <Button
-        variant="rusticSecondary"
+        variant="outlined"
+        color="secondary"
         startIcon={<Icon name="close" />}
         onClick={() => setIsAttemptingToQuit(true)}
         data-cy="quit-button"
@@ -226,7 +229,8 @@ export default function PromptBuilder(props: PromptBuilderProps) {
           disableSpacing
         >
           <Button
-            variant="rusticSecondary"
+            variant="outlined"
+            color="secondary"
             startIcon={<Icon name="close" />}
             onClick={handleQuit}
             data-cy="confirm-quit-button"
@@ -234,7 +238,8 @@ export default function PromptBuilder(props: PromptBuilderProps) {
             Quit
           </Button>
           <Button
-            variant="rusticPrimary"
+            variant="contained"
+            color="primary"
             onClick={() => setIsAttemptingToQuit(false)}
             data-cy="continue-build-button"
           >

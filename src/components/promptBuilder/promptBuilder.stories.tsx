@@ -192,7 +192,8 @@ function CustomTextInput(props: Omit<QuestionProps, 'options'>) {
       <Button
         onClick={handleSendMessage}
         disabled={isSubmitted || !messageText.trim()}
-        variant="rusticSecondary"
+        variant="outlined"
+        color="secondary"
         size="small"
       >
         Submit
@@ -277,7 +278,7 @@ export const Default = {
         } else {
           return (
             <Chip
-              variant="rusticSecondary"
+              color="secondary"
               label="Build a prompt"
               onClick={() => setIsPromptBuilderOpen(true)}
             />

@@ -55,7 +55,7 @@ export default function Question(props: QuestionProps) {
       <Chip
         key={index}
         onClick={() => handleSubmitResponse(option)}
-        variant="rusticSecondary"
+        color="secondary"
         size="small"
         sx={selectedOption === option ? selectedStyles : {}}
         className="rustic-option"
