@@ -48,7 +48,7 @@ export default function Prompts(props: PromptsProps) {
             border: `1px solid ${theme.palette.divider}`,
           }),
           '&:hover': {
-            color: theme.palette.primary.main,
+            color: theme.palette.text.primary,
             backgroundColor: theme.palette.primary.hover,
           },
         }}
