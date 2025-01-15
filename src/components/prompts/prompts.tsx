@@ -1,7 +1,8 @@
 import './prompts.css'
 
 import Box from '@mui/material/Box'
-import Button from '@mui/material/Button'
+import Chip from '@mui/material/Chip'
+import useTheme from '@mui/system/useTheme'
 import React from 'react'
 import { v4 as getUUID } from 'uuid'
 
@@ -16,6 +17,8 @@ The `position` property determines where the prompts are displayed and can be on
 - `hoverOverInput` (default): Prompts are displayed above the input field at the bottom of the chat interface. Note that prompts with this position will only appear if they are part of the last message in the message list.
  */
 export default function Prompts(props: PromptsProps) {
+  const theme = useTheme()
+
   function handleSubmitResponse(response: string | number) {
     const currentTime = new Date().toISOString()
 
@@ -33,16 +36,24 @@ export default function Prompts(props: PromptsProps) {
 
   const buttonList = props.prompts.map((prompt, index) => {
     return (
-      <Button
+      <Chip
         key={index}
         onClick={() => handleSubmitResponse(prompt)}
         color="secondary"
-        variant="outlined"
         size="small"
         className="rustic-prompt"
-      >
-        {prompt}
-      </Button>
+        sx={{
+          backgroundColor: theme.palette.background.paper,
+          ...(props.position === 'inConversation' && {
+            border: `1px solid ${theme.palette.divider}`,
+          }),
+          '&:hover': {
+            color: theme.palette.text.primary,
+            backgroundColor: theme.palette.primary.hover,
+          },
+        }}
+        label={prompt}
+      />
     )
   })
 

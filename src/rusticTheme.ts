@@ -90,7 +90,7 @@ const colors = {
     primaryLight: 'rgba(45, 40, 37, 0.60)',
     primaryDark: '#000000',
     primaryContrastText: '#FFFFFF',
-    primaryHover: 'rgba(45, 40, 37, 0.8)',
+    primaryHover: 'rgba(45, 40, 37, 0.08)',
     primarySelected: 'rgba(45, 40, 37, 0.16)',
     primaryFocus: 'rgba(45, 40, 37, 0.12)',
     primaryFocusVisible: 'rgba(45, 40, 37, 0.30)',
@@ -99,7 +99,7 @@ const colors = {
     secondaryDark: '#E54500',
     secondaryLight: 'rgba(255, 105, 40, 0.60)',
     secondaryContrast: '#FFFFFF',
-    secondaryHover: 'rgba(255, 105, 40, 0.8)',
+    secondaryHover: 'rgba(255, 105, 40, 0.08)',
     secondarySelected: 'rgba(255, 105, 40, 0.16)',
     secondaryFocus: 'rgba(255, 105, 40, 0.12)',
     secondaryFocusVisible: 'rgba(255, 105, 40, 0.30)',
@@ -141,15 +141,15 @@ const colors = {
     primaryDark: '#FFFFFF',
     primaryContrastText: 'rgba(0, 0, 0, 0.87)',
     primaryOutlinedBorder: 'rgba(255, 252, 251, 0.50)',
-    primaryFocusColor: 'rgba(255, 252, 251, 0.12)',
+    primaryFocus: 'rgba(255, 252, 251, 0.12)',
     primaryFocusVisible: 'rgba(255, 252, 251, 0.30)',
-    primaryHover: 'rgba(255, 252, 251, 0.8)',
+    primaryHover: 'rgba(255, 252, 251, 0.08)',
     primarySelected: 'rgba(255, 252, 251, 0.16)',
     secondaryMain: '#FF6928',
     secondaryDark: '#E54500',
     secondaryLight: 'rgba(255, 105, 40, 0.60)',
     secondaryContrastText: 'rgba(0, 0, 0, 0.87)',
-    secondaryHover: 'rgba(255, 105, 40, 0.8)',
+    secondaryHover: 'rgba(255, 105, 40, 0.08)',
     secondarySelected: 'rgba(255, 105, 40, 0.16)',
     secondaryFocus: 'rgba(255, 105, 40, 0.12)',
     secondaryFocusVisible: 'rgba(255, 105, 40, 0.30)',
@@ -202,6 +202,20 @@ export function generateTheme(
   colors: Colors
 ): ThemeOptions {
   const modeColors = mode === 'light' ? colors.lightMode : colors.darkMode
+
+  function generateTooltipStyles() {
+    if (mode === 'light') {
+      return {
+        backgroundColor: modeColors.commonBlack,
+        color: modeColors.commonWhite,
+      }
+    } else {
+      return {
+        backgroundColor: modeColors.commonWhite,
+        color: modeColors.commonBlack,
+      }
+    }
+  }
   return {
     shape: {
       borderRadius: 16,
@@ -325,10 +339,7 @@ export function generateTheme(
     components: {
       MuiTooltip: {
         styleOverrides: {
-          tooltip: {
-            backgroundColor: modeColors.primaryMain,
-            color: modeColors.primaryContrastText,
-          },
+          tooltip: generateTooltipStyles(),
         },
       },
       MuiTableCell: {
