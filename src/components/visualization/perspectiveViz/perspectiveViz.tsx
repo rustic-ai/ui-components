@@ -8,7 +8,11 @@ import '@finos/perspective-viewer/dist/css/pro-dark.css'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import perspective from '@finos/perspective/dist/esm/perspective.inline.js'
-import type { Client, Table } from '@finos/perspective/dist/pkg/perspective-js'
+import type {
+  Client,
+  Table,
+  View,
+} from '@finos/perspective/dist/pkg/perspective-js'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import type { HTMLPerspectiveViewerElement } from '@finos/perspective-viewer/dist/esm/perspective-viewer.inline.js'
@@ -204,11 +208,12 @@ function PerspectiveViz(props: TableData) {
         return worker.table(transformTableData(props.data, props.headers))
       })
       .then((table: Table) => {
-        if (viewerRef.current) {
-          viewerRef.current
+        const viewer = viewerRef.current
+        if (viewer) {
+          viewer
             .load(table)
             .then(() => {
-              viewerRef.current
+              viewer
                 .restore({
                   ...transformedConfig,
                   theme: perspectiveTheme,
@@ -216,10 +221,20 @@ function PerspectiveViz(props: TableData) {
                   settings: false,
                 })
                 .then(() => {
-                  if (viewerRef.current.shadowRoot) {
+                  if (!props.config?.expandAll) {
+                    viewer.getView().then((view: View) =>
+                      view
+                        .set_depth(props.config?.expansionDepth || 0)
+                        .then(() => {
+                          viewer.resize()
+                        })
+                    )
+                  }
+
+                  if (viewer.shadowRoot) {
                     const sheet = new CSSStyleSheet()
                     sheet.replaceSync(perspectiveVizAdditionalStyles)
-                    viewerRef.current.shadowRoot.adoptedStyleSheets.push(sheet)
+                    viewer.shadowRoot.adoptedStyleSheets.push(sheet)
                   }
                 })
             })
