@@ -176,6 +176,7 @@ export type TableConfig = {
   aggregates?: { [columnName: string]: TableAggregateOption }
   sort?: TableSort[]
   filter?: TableFilter[]
+  expansionDepth?: number
 }
 
 export interface TableFormat extends VisualizationFormat {

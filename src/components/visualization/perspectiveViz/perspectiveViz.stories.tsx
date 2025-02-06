@@ -38,6 +38,10 @@ meta.argTypes = {
         summary: 'TableConfig.',
         detail:
           'TableConfig has the following optional fields:\n' +
+          '  expansionDepth: A number that specifies how \n' +
+          '    many levels deep the pivot table should expand\n' +
+          '    initially. By default, all of the rows are \n' +
+          '    expanded. Larger numbers expand more levels.\n' +
           '  columns: An array of data key strings used to\n' +
           '    specify the columns to be included and their\n' +
           '    order. If not provided, all columns from the\n' +
@@ -193,6 +197,24 @@ export const PivotTable = {
       splitBy: ['category', 'subCategory'],
       aggregates: { sales: 'any', profit: 'any' },
       columns: ['sales', 'profit'],
+    },
+    headers: tableHeaders,
+    title: 'Superstore Table',
+    description:
+      "This table displays data for sales and profit under each category. It's also grouped based on regions and states, making it useful for comparison purposes.",
+  },
+  decorators,
+}
+
+export const ExpandOneLevel = {
+  args: {
+    data: generateFakeData(100),
+    config: {
+      groupBy: ['region', 'state'],
+      splitBy: ['category', 'subCategory'],
+      aggregates: { sales: 'any', profit: 'any' },
+      columns: ['sales', 'profit'],
+      expansionDepth: 0,
     },
     headers: tableHeaders,
     title: 'Superstore Table',
