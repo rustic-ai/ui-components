@@ -221,13 +221,12 @@ function PerspectiveViz(props: TableData) {
                   settings: false,
                 })
                 .then(() => {
-                  if (!props.config?.expandAll) {
+                  const expansionDepth = props.config?.expansionDepth
+                  if (typeof expansionDepth === 'number') {
                     viewer.getView().then((view: View) =>
-                      view
-                        .set_depth(props.config?.expansionDepth || 0)
-                        .then(() => {
-                          viewer.resize()
-                        })
+                      view.set_depth(expansionDepth).then(() => {
+                        viewer.resize()
+                      })
                     )
                   }
 

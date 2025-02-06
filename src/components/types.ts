@@ -176,7 +176,6 @@ export type TableConfig = {
   aggregates?: { [columnName: string]: TableAggregateOption }
   sort?: TableSort[]
   filter?: TableFilter[]
-  expandAll?: boolean
   expansionDepth?: number
 }
 
