@@ -46,3 +46,18 @@
 .rustic-base-input .rustic-input-adornment {
   align-self: start;
 }
+
+.rustic-member-item {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.rustic-member-item .rustic-input-avatar {
+  width: 16px;
+  height: 16px;
+}
+
+.rustic-suggestion-menu ul {
+  padding: 0;
+}

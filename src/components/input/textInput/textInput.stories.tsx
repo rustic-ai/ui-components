@@ -1,7 +1,7 @@
 import type { Meta, StoryFn } from '@storybook/react'
 import React from 'react'
 
-import { wsDescription } from '../../sharedDescription'
+import { getMembersDescription, wsDescription } from '../../sharedDescription'
 import type { BaseInputProps, WebSocketClient } from '../../types'
 import type { Message } from '../../types'
 import BaseInput from '../baseInput/baseInput'
@@ -49,6 +49,7 @@ const meta: Meta<React.FC<InputProps>> = {
 meta.argTypes = {
   ...meta.argTypes,
   ws: wsDescription,
+  getMembers: getMembersDescription,
   emojiDataSource: {
     description:
       'URL to fetch the emoji data from. You need to host the emoji data by yourself. If not provided, the default url will be used.',
@@ -84,7 +85,22 @@ export const Default = {
     placeholder: 'Type your message',
     emojiDataSource:
       '/node_modules/emoji-picker-element-data/en/emojibase/data.json',
-    send: (message: Message) => alert(`Message sent: ${message.data.messages[0].content[0].text}`),
+    send: (message: Message) =>
+      alert(`Message sent: ${message.data.messages[0].content[0].text}`),
+    getMembers: () =>
+      Promise.resolve([
+        {
+          displayName: 'Amy',
+          icon: 'https://api.dicebear.com/9.x/avataaars/svg?seed=Amy',
+        },
+        {
+          displayName: 'Anna',
+          icon: 'https://api.dicebear.com/9.x/avataaars/svg?seed=Anna',
+        },
+        {
+          displayName: 'Andrew',
+        },
+      ]),
   },
 }
 

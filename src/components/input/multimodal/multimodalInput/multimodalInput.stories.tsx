@@ -3,7 +3,10 @@ import axios from 'axios'
 import React from 'react'
 import { v4 as getUUID } from 'uuid'
 
-import { conversationIdDescription } from '../../../sharedDescription'
+import {
+  conversationIdDescription,
+  getMembersDescription,
+} from '../../../sharedDescription'
 import type { FileData, Message } from '../../../types'
 import meta from '../../textInput/textInput.stories'
 import MultimodalInput from './multimodalInput'
@@ -217,6 +220,7 @@ multiModalInputMeta.argTypes = {
       defaultValue: { summary: '5' },
     },
   },
+  getMembers: getMembersDescription,
 }
 
 export default multiModalInputMeta
@@ -271,6 +275,20 @@ export const Default = {
           Authorization: 'Bearer example-token',
         },
       }),
+    getMembers: () =>
+      Promise.resolve([
+        {
+          displayName: 'Amy',
+          icon: 'https://api.dicebear.com/9.x/avataaars/svg?seed=Amy',
+        },
+        {
+          displayName: 'Anna',
+          icon: 'https://api.dicebear.com/9.x/avataaars/svg?seed=Anna',
+        },
+        {
+          displayName: 'Andrew',
+        },
+      ]),
   },
 }
 

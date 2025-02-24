@@ -1,5 +1,6 @@
 import './baseInput.css'
 
+import Avatar from '@mui/material/Avatar'
 import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
 import IconButton from '@mui/material/IconButton'
@@ -18,8 +19,19 @@ import { v4 as getUUID } from 'uuid'
 
 import { toChatRequest } from '../../helper'
 import Icon from '../../icon/icon'
-import type { BaseInputProps, Message } from '../../types'
+import type { BaseInputProps, Member, Message } from '../../types'
 import Emoji from '../emoji/emoji'
+
+type SuggestionMenuProps = {
+  items: any[]
+  isOpen: boolean
+  onClose: () => void
+  onSelect: (item: any) => void
+  renderItem: (item: any) => React.ReactNode
+  anchorEl: HTMLInputElement
+  selectedIndex: number
+  dataCy?: string
+}
 
 const speechRecognitionErrors = {
   'no-speech':
@@ -46,6 +58,49 @@ function showEmojiInfo(emoji: EmojiInfo) {
   }
 }
 
+function showMemberInfo(member: Member) {
+  return (
+    <Box className="rustic-member-item">
+      <Avatar src={member.icon} className="rustic-input-avatar" />
+      <Typography variant="body1Bold">{member.displayName}</Typography>
+    </Box>
+  )
+}
+
+function SuggestionMenu({
+  items,
+  isOpen,
+  onClose,
+  onSelect,
+  renderItem,
+  anchorEl,
+  selectedIndex,
+  dataCy,
+}: SuggestionMenuProps) {
+  return (
+    <Popover
+      disableAutoFocus
+      open={isOpen && items.length > 0}
+      anchorEl={anchorEl}
+      onClose={onClose}
+      anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+      transformOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+      className="rustic-suggestion-menu"
+    >
+      <MenuList data-cy={dataCy}>
+        {items.map((item, index) => (
+          <MenuItem
+            key={index}
+            onClick={() => onSelect(item)}
+            selected={index === selectedIndex}
+          >
+            {renderItem(item)}
+          </MenuItem>
+        ))}
+      </MenuList>
+    </Popover>
+  )
+}
 /**
  * The `TextInput` component enables users to input text messages and send them over a WebSocket connection. It provides functionality for sending messages with a sender, timestamp, and conversation ID. The component integrates with the [emoji-picker-element](https://www.npmjs.com/package/emoji-picker-element) library to allow users to easily add emojis to their messages. The emoji picker can be customized through CSS variables. For detailed customization options, refer to the [emoji-picker-element documentation](https://www.npmjs.com/package/emoji-picker-element#css-variables).
  *
@@ -67,6 +122,8 @@ function BaseInputElement(
   const [speechToTextError, setSpeechToTextError] = useState<string>('')
   const [emojiSearchResults, setEmojiSearchResults] = useState<EmojiInfo[]>([])
   const [isEmojiMenuShown, setIsEmojiMenuShown] = useState(false)
+  const [selectedIndex, setSelectedIndex] = useState(0)
+
   const inputRef = useRef<HTMLInputElement>(null)
 
   const database = new Database({ dataSource: props.emojiDataSource })
@@ -77,11 +134,10 @@ function BaseInputElement(
   const featureButtonColor = isFocused ? 'primary.main' : 'primary.light'
   const speechToTextIconColor = isRecording ? 'error.main' : featureButtonColor
   const speechToTextIconName = isRecording ? 'stop_circle' : 'speech_to_text'
+  const [memberSearchResults, setMemberSearchResults] = useState<Member[]>([])
+  const [isMembersMenuShown, setIsMembersMenuShown] = useState<boolean>(false)
 
-  function handleEmojiClick(
-    emoji: string,
-    shouldEmojiShortcodeBeReplaced: boolean = false
-  ) {
+  function insertTextAtCursor(insertText: string, replacePattern?: RegExp) {
     if (inputRef.current) {
       const { selectionStart, selectionEnd } = inputRef.current
 
@@ -92,28 +148,34 @@ function BaseInputElement(
         const currentText = messageText || ''
         const startText = currentText.substring(0, selectionStart)
         const endText = currentText.substring(selectionEnd)
-        let newText
 
-        if (shouldEmojiShortcodeBeReplaced) {
-          newText = startText.replace(/:(\w+)$/, emoji) + endText
+        let newText: string, newPosition: number
+
+        if (replacePattern) {
+          newText = startText.replace(replacePattern, insertText) + endText
+          newPosition = startText.replace(replacePattern, insertText).length
         } else {
-          newText = startText + emoji + endText
+          newText = startText + insertText + endText
+          newPosition = selectionStart + insertText.length
         }
 
         setMessageText(newText)
 
-        const newPosition = shouldEmojiShortcodeBeReplaced
-          ? startText.replace(/:(\w+)$/, emoji).length
-          : selectionStart + emoji.length
-
-        // focus doesn't work without setTimeout
         setTimeout(() => {
           inputRef.current?.focus()
           inputRef.current?.setSelectionRange(newPosition, newPosition)
         }, 0)
       }
     }
+  }
 
+  function handleMentionClick(name: string) {
+    insertTextAtCursor(`@${name} `, /@(\w*)$/)
+    setMemberSearchResults([])
+  }
+
+  function handleEmojiClick(emoji: string, shouldReplaceShortcode = false) {
+    insertTextAtCursor(emoji, shouldReplaceShortcode ? /:(\w+)$/ : undefined)
     setIsEmojiMenuShown(false)
   }
 
@@ -217,12 +279,69 @@ function BaseInputElement(
     setSpeechToTextError('')
   }
 
+  function updateSelectedIndex(offset: number): void {
+    if (isEmojiMenuShown) {
+      setSelectedIndex(
+        (prev) =>
+          (prev + offset + emojiSearchResults.length) %
+          emojiSearchResults.length
+      )
+    } else if (isMembersMenuShown) {
+      setSelectedIndex(
+        (prev) =>
+          (prev + offset + memberSearchResults.length) %
+          memberSearchResults.length
+      )
+    }
+  }
+
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>): void {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault()
-      if (!isSendDisabled) {
+    const isArrowDown = e.key === 'ArrowDown'
+    const isArrowUp = e.key === 'ArrowUp'
+    if (e.key === 'Enter' || e.key === 'Tab') {
+      if (!e.shiftKey) {
+        e.preventDefault()
+      }
+
+      if (
+        isEmojiMenuShown &&
+        emojiSearchResults.length > 0 &&
+        'unicode' in emojiSearchResults[selectedIndex]
+      ) {
+        handleEmojiClick(emojiSearchResults[selectedIndex].unicode, true)
+      } else if (isMembersMenuShown && memberSearchResults.length > 0) {
+        handleMentionClick(memberSearchResults[selectedIndex].displayName)
+      } else if (!e.shiftKey && !isSendDisabled) {
         handleSendMessage()
       }
+    } else if (isArrowDown || isArrowUp) {
+      e.preventDefault()
+      updateSelectedIndex(isArrowDown ? 1 : -1)
+      return
+    } else {
+      if (selectedIndex !== 0) {
+        setSelectedIndex(0)
+      }
+    }
+  }
+
+  function handleMention(text: string) {
+    const mentionMatch = text.match(/@(\w*)$/)
+    if (mentionMatch && props.getMembers) {
+      const query = mentionMatch[1].toLowerCase()
+      props.getMembers().then((members: Member[]) => {
+        const filteredMembers = members.filter((member) =>
+          member.displayName.toLowerCase().startsWith(query)
+        )
+        setMemberSearchResults(filteredMembers)
+        if (filteredMembers.length > 0) {
+          setIsMembersMenuShown(true)
+        } else {
+          setIsMembersMenuShown(false)
+        }
+      })
+    } else {
+      setMemberSearchResults([])
     }
   }
 
@@ -230,7 +349,7 @@ function BaseInputElement(
     setSpeechToTextError('')
     const newText = e.target.value
     setMessageText(newText)
-
+    handleMention(newText)
     // expression to match ':text:' format
     const closedShortcode = newText.match(/:(\w{2,}):/g)
     // expression to match ':something' format
@@ -263,7 +382,6 @@ function BaseInputElement(
       setIsEmojiMenuShown(false)
     }
   }
-
   return (
     <Box className="rustic-base-input" ref={ref} data-cy="base-input">
       <Box className="rustic-error-and-input-container">
@@ -284,35 +402,36 @@ function BaseInputElement(
             borderColor: isFocused ? 'secondary.main' : 'action.disabled',
           }}
         >
-          {emojiSearchResults.length > 0 && (
-            <Popover
-              open={isEmojiMenuShown}
+          {emojiSearchResults.length > 0 && inputRef.current && (
+            <SuggestionMenu
               anchorEl={inputRef.current}
-              onClose={() => setIsEmojiMenuShown(false)}
-              disableAutoFocus={true}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
+              items={emojiSearchResults.filter((e) => 'unicode' in e)}
+              isOpen={isEmojiMenuShown}
+              onClose={() => {
+                setIsEmojiMenuShown(false)
+                setSelectedIndex(0)
               }}
-              transformOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left',
+              onSelect={(emoji) => handleEmojiClick(emoji.unicode, true)}
+              selectedIndex={selectedIndex}
+              renderItem={showEmojiInfo}
+              dataCy="emoji-menu"
+            />
+          )}
+
+          {memberSearchResults.length > 0 && inputRef.current && (
+            <SuggestionMenu
+              anchorEl={inputRef.current}
+              items={memberSearchResults}
+              isOpen={isMembersMenuShown}
+              onClose={() => {
+                setIsMembersMenuShown(false)
+                setSelectedIndex(0)
               }}
-            >
-              <MenuList data-cy="emoji-menu">
-                {emojiSearchResults.map(
-                  (emoji, index) =>
-                    'unicode' in emoji && (
-                      <MenuItem
-                        key={index}
-                        onClick={() => handleEmojiClick(emoji.unicode, true)}
-                      >
-                        {showEmojiInfo(emoji)}
-                      </MenuItem>
-                    )
-                )}
-              </MenuList>
-            </Popover>
+              onSelect={(member) => handleMentionClick(member.displayName)}
+              renderItem={showMemberInfo}
+              selectedIndex={selectedIndex}
+              dataCy="member-menu"
+            />
           )}
 
           <TextField

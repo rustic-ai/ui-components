@@ -52,3 +52,17 @@ export const wsDescription: InputType = {
     },
   },
 }
+
+export const getMembersDescription: InputType = {
+  description:
+    'Function to fetch the list of members. The list of members will be used in the mention feature. Should return a promise that resolves to an array of members.',
+  table: {
+    type: {
+      summary: '() => Promise<Member[]>',
+      detail:
+        'Each Member has the following fields:\n' +
+        '  displayName: The name of the member.\n' +
+        "  icon: Optional property. The URL of the member's icon.",
+    },
+  },
+}

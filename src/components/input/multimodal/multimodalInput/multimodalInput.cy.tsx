@@ -10,6 +10,7 @@ import {
 import MultimodalInput from './multimodalInput'
 
 describe('Input', () => {
+  const memberMenu = '[data-cy=member-menu]'
   const textField = '[data-cy=text-field]'
   const sendButton = '[data-cy=send-button]'
   const uploadButton = '[data-cy=upload-button]'
@@ -58,6 +59,18 @@ describe('Input', () => {
               '.mp4, .mov, .avi, .mkv, .wmv, .flv, .webm, .m4v',
           },
         ]}
+        getMembers={() =>
+          Promise.resolve([
+            {
+              displayName: 'Member1',
+              icon: 'https://api.dicebear.com/9.x/avataaars/svg?seed=Amy',
+            },
+            {
+              displayName: 'Member2',
+              icon: 'https://api.dicebear.com/9.x/avataaars/svg?seed=Anna',
+            },
+          ])
+        }
       />
     )
   })
@@ -472,6 +485,17 @@ describe('Input', () => {
           '{"uploadedBy":"id","category": "Video"}'
         )
       })
+    })
+
+    it(`displays available members correctly on ${viewport} screen`, () => {
+      cy.viewport(viewport)
+      cy.get(textField).type('@M')
+      cy.get(memberMenu).should('exist')
+      cy.get(`${memberMenu} li`)
+        .first()
+        .should('contain.text', 'Member1')
+        .click()
+      cy.get('textarea').invoke('val').should('includes', '@Member1')
     })
   })
 })
