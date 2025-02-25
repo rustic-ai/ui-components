@@ -34,7 +34,7 @@ const config: StorybookConfig = {
         __dirname,
         '../node_modules/emoji-picker-element-data'
       ),
-      to: '/node_modules/emoji-picker-element-data',
+      to: 'node_modules/emoji-picker-element-data',
     },
   ],
 }

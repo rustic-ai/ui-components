@@ -84,7 +84,7 @@ export const Default = {
     conversationId: '1',
     placeholder: 'Type your message',
     emojiDataSource:
-      '/node_modules/emoji-picker-element-data/en/emojibase/data.json',
+      'node_modules/emoji-picker-element-data/en/emojibase/data.json',
     send: (message: Message) =>
       alert(`Message sent: ${message.data.messages[0].content[0].text}`),
     getMembers: () =>
