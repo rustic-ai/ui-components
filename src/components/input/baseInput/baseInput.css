@@ -50,5 +50,6 @@
 .rustic-suggestion-menu ul {
   padding: 0;
   max-height: 220px;
+  min-width: 220px;
   overflow-y: auto;
 }
