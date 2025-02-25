@@ -7,11 +7,11 @@ import {
   supportedViewports,
   testUser,
 } from '../../../../../cypress/support/variables'
-import type { Participant } from '../../../types'
+import { type Participant, ParticipantType } from '../../../types'
 import MultimodalInput from './multimodalInput'
 
 describe('Input', () => {
-  const memberMenu = '[data-cy=member-menu]'
+  const suggestionMenu = '[data-cy=suggestion-menu]'
   const textField = '[data-cy=text-field]'
   const sendButton = '[data-cy=send-button]'
   const uploadButton = '[data-cy=upload-button]'
@@ -65,12 +65,12 @@ describe('Input', () => {
             {
               displayName: 'Member1',
               icon: 'https://api.dicebear.com/9.x/avataaars/svg?seed=Amy',
-              participantType: 'human',
+              participantType: ParticipantType.Human,
             },
             {
               displayName: 'Member2',
               icon: 'https://api.dicebear.com/9.x/avataaars/svg?seed=Anna',
-              participantType: 'bot',
+              participantType: ParticipantType.Agent,
             },
           ] as Participant[])
         }
@@ -493,8 +493,8 @@ describe('Input', () => {
     it(`displays available members correctly on ${viewport} screen`, () => {
       cy.viewport(viewport)
       cy.get(textField).type('@M')
-      cy.get(memberMenu).should('exist')
-      cy.get(`${memberMenu} li`)
+      cy.get(suggestionMenu).should('exist')
+      cy.get(`${suggestionMenu} li`)
         .first()
         .should('contain.text', 'Member1')
         .click()

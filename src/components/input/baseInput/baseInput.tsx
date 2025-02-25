@@ -30,7 +30,6 @@ type SuggestionMenuProps = {
   renderItem: (item: any) => React.ReactNode
   anchorEl: HTMLInputElement
   selectedIndex: number
-  dataCy?: string
 }
 
 const speechRecognitionErrors = {
@@ -75,7 +74,6 @@ function SuggestionMenu({
   renderItem,
   anchorEl,
   selectedIndex,
-  dataCy,
 }: SuggestionMenuProps) {
   return (
     <Popover
@@ -87,7 +85,7 @@ function SuggestionMenu({
       transformOrigin={{ vertical: 'bottom', horizontal: 'left' }}
       className="rustic-suggestion-menu"
     >
-      <MenuList data-cy={dataCy}>
+      <MenuList data-cy="suggestion-menu">
         {items.map((item, index) => (
           <MenuItem
             key={index}
@@ -416,7 +414,6 @@ function BaseInputElement(
               onSelect={(emoji) => handleEmojiClick(emoji.unicode, true)}
               selectedIndex={selectedIndex}
               renderItem={showEmojiInfo}
-              dataCy="emoji-menu"
             />
           )}
 
@@ -432,7 +429,6 @@ function BaseInputElement(
               onSelect={(member) => handleMentionClick(member.displayName)}
               renderItem={showMemberInfo}
               selectedIndex={selectedIndex}
-              dataCy="member-menu"
             />
           )}
 

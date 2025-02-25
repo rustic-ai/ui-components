@@ -13,7 +13,7 @@ describe('TextInput', () => {
   const recordButton = '[data-cy=record-button]'
   const emojiButton = '[data-cy=emoji-button]'
   const emojiPicker = '[data-cy=emoji-picker]'
-  const emojiMenu = '[data-cy=emoji-menu]'
+  const suggestionMenu = '[data-cy=suggestion-menu]'
 
   context('Regular', () => {
     beforeEach(() => {
@@ -98,8 +98,8 @@ describe('TextInput', () => {
         cy.viewport(viewport)
 
         cy.get(textInput).type(':ap')
-        cy.get(emojiMenu).should('exist')
-        cy.get(`${emojiMenu} li`)
+        cy.get(suggestionMenu).should('exist')
+        cy.get(`${suggestionMenu} li`)
           .first()
           .should(
             'contain.text',

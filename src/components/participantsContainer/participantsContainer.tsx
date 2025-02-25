@@ -109,7 +109,9 @@ function ParticipantList(props: {
                 }
                 data-cy="participant-role"
               >
-                {capitalizeFirstLetter(participant.participantRole || 'member')}
+                {capitalizeFirstLetter(
+                  participant.participantRole || ParticipantRole.Member
+                )}
               </Typography>
             </ListItem>
           )
