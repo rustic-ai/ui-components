@@ -60,6 +60,7 @@ function createRandomParticipants(numberOfParticipants: number) {
     participants.push({
       id: `${i}`,
       displayName: `someUser${i}`,
+      icon: `https://api.dicebear.com/9.x/avataaars/svg?seed=someUser${i}`,
       participantRole: i === 1 ? ParticipantRole.Owner : ParticipantRole.Member,
       participantType:
         i % 2 === 0 ? ParticipantType.Agent : ParticipantType.Human,

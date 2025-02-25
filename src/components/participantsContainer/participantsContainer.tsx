@@ -1,5 +1,7 @@
 import './participantsContainer.css'
+import '../../index.css'
 
+import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
 import DialogTitle from '@mui/material/DialogTitle'
@@ -98,9 +100,16 @@ function ParticipantList(props: {
               className="rustic-participant-list-item"
               data-cy="participant-list-item"
             >
-              <Typography variant="subtitle2">
-                {participant.displayName}
-              </Typography>
+              <Box className="rustic-participant-profile">
+                <Avatar
+                  src={participant.icon}
+                  className="rustic-participant-avatar"
+                />
+                <Typography variant="subtitle2">
+                  {participant.displayName}
+                </Typography>
+              </Box>
+
               <Typography
                 variant={
                   participant.participantRole === ParticipantRole.Owner

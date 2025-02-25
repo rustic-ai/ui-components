@@ -1,4 +1,5 @@
 import './baseInput.css'
+import '../../../index.css'
 
 import Avatar from '@mui/material/Avatar'
 import Box from '@mui/material/Box'
@@ -59,8 +60,8 @@ function showEmojiInfo(emoji: EmojiInfo) {
 
 function showMemberInfo(member: Participant) {
   return (
-    <Box className="rustic-member-item">
-      <Avatar src={member.icon} className="rustic-input-avatar" />
+    <Box className="rustic-participant-profile">
+      <Avatar src={member.icon} className="rustic-participant-avatar" />
       <Typography variant="body1Bold">{member.displayName}</Typography>
     </Box>
   )
