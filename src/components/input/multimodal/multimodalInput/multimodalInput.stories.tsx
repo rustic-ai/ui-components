@@ -228,7 +228,7 @@ export default multiModalInputMeta
 export const Default = {
   args: {
     emojiDataSource:
-      '/node_modules/emoji-picker-element-data/en/emojibase/data.json',
+      'node_modules/emoji-picker-element-data/en/emojibase/data.json',
     sender: { id: '17shblx8nxk', name: 'Some User' },
     conversationId: '1',
     placeholder: 'Type your message',
