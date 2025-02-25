@@ -52,3 +52,22 @@ export const wsDescription: InputType = {
     },
   },
 }
+
+export const participantDetail =
+  'Each Participant has the following fields:\n' +
+  ' id: String representing the unique identifier for a participant\n' +
+  ' displayName: Name that is displayed for the participant\n' +
+  ' participantType: Type of the participant. Could be `human` or `agent`. \n' +
+  ' participantRole: Optional property. It specifies the role assigned to a participant. Could either be `owner` or `member`. The default value is `member`. \n' +
+  " icon: Optional property. A URL for the participant's icon. \n"
+
+export const getMembersDescription: InputType = {
+  description:
+    'Function to fetch the list of participants. The list of participants will be used in the mention feature. Should return a promise that resolves to an array of participants.',
+  table: {
+    type: {
+      summary: '() => Promise<Participant[]>',
+      detail: participantDetail,
+    },
+  },
+}

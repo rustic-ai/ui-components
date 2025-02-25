@@ -1,10 +1,7 @@
 import './participantsContainer.css'
 
-import ParticipantsContainer, {
-  type Participant,
-  ParticipantRole,
-  ParticipantType,
-} from './participantsContainer'
+import { type Participant, ParticipantRole, ParticipantType } from '../types'
+import ParticipantsContainer from './participantsContainer'
 
 export default ParticipantsContainer
 

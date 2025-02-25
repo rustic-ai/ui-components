@@ -4,10 +4,10 @@ import Button from '@mui/material/Button'
 import type { Meta, StoryFn } from '@storybook/react'
 import React, { useState } from 'react'
 
+import { participantDetail } from '../sharedDescription'
+import { ParticipantRole, ParticipantType } from '../types'
 import ParticipantsContainer, {
-  ParticipantRole,
   type ParticipantsContainerProps,
-  ParticipantType,
 } from './participantsContainer'
 
 const meta: Meta<React.ComponentProps<typeof ParticipantsContainer>> = {
@@ -48,12 +48,7 @@ meta.argTypes = {
     table: {
       type: {
         summary: 'Array of Participant.',
-        detail:
-          'Each Participant has the following fields:\n' +
-          ' id: String representing the unique identifier for a participant\n' +
-          ' displayName: Name that is displayed for the participant\n' +
-          ' participantRole: It specifies the role assigned to a participant. Could either be `owner` or `member`. \n' +
-          ' participantType: Type of the participant. Could be `human` or `agent`. \n',
+        detail: participantDetail,
       },
     },
   },

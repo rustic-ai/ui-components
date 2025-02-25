@@ -234,6 +234,24 @@ export interface MultipartProps extends MultipartData {
   showFullName?: boolean
 }
 
+export enum ParticipantRole {
+  Owner = 'owner',
+  Member = 'member',
+}
+
+export enum ParticipantType {
+  Human = 'human',
+  Agent = 'agent',
+}
+
+export interface Participant {
+  id: string
+  displayName: string
+  participantType: ParticipantType
+  participantRole?: ParticipantRole
+  icon?: string
+}
+
 export interface BaseInputProps {
   /** Current user. */
   sender: Sender
@@ -259,6 +277,8 @@ export interface BaseInputProps {
   maximumEmojiSearchResults?: number
   /** URL to fetch the emoji data from. You need to host the emoji data by yourself. If not provided, the default url will be used. */
   emojiDataSource?: string
+  /** Function to fetch the list of members. Should return a promise that resolves to an array of members. */
+  getMembers?: () => Promise<Participant[]>
 }
 
 export interface TextInputProps

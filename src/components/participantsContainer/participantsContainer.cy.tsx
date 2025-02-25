@@ -1,7 +1,7 @@
 /* eslint-disable no-magic-numbers */
 import { supportedViewports } from '../../../cypress/support/variables'
 import { ParticipantsContainer } from '..'
-import { ParticipantRole, ParticipantType } from './participantsContainer'
+import { ParticipantRole, ParticipantType } from '../types'
 
 describe('ParticipantsContainer', () => {
   const participantList = '[data-cy=participant-list]'
@@ -30,7 +30,6 @@ describe('ParticipantsContainer', () => {
       <ParticipantsContainer
         participants={createRandomParticipants(5)} // creates 2 humans and 3 agents
         isParticipantListOpen={true}
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
         onClose={() => {}}
       />
     )
@@ -68,7 +67,6 @@ describe('ParticipantsContainer', () => {
         <ParticipantsContainer
           participants={createRandomParticipants(9)} // creates 4 humans and 5 agents
           isParticipantListOpen={true}
-          // eslint-disable-next-line @typescript-eslint/no-empty-function
           onClose={() => {}}
         />
       )
