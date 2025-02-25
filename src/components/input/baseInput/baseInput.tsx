@@ -19,7 +19,7 @@ import { v4 as getUUID } from 'uuid'
 
 import { toChatRequest } from '../../helper'
 import Icon from '../../icon/icon'
-import type { BaseInputProps, Member, Message } from '../../types'
+import type { BaseInputProps, Message, Participant } from '../../types'
 import Emoji from '../emoji/emoji'
 
 type SuggestionMenuProps = {
@@ -58,7 +58,7 @@ function showEmojiInfo(emoji: EmojiInfo) {
   }
 }
 
-function showMemberInfo(member: Member) {
+function showMemberInfo(member: Participant) {
   return (
     <Box className="rustic-member-item">
       <Avatar src={member.icon} className="rustic-input-avatar" />
@@ -134,7 +134,9 @@ function BaseInputElement(
   const featureButtonColor = isFocused ? 'primary.main' : 'primary.light'
   const speechToTextIconColor = isRecording ? 'error.main' : featureButtonColor
   const speechToTextIconName = isRecording ? 'stop_circle' : 'speech_to_text'
-  const [memberSearchResults, setMemberSearchResults] = useState<Member[]>([])
+  const [memberSearchResults, setMemberSearchResults] = useState<Participant[]>(
+    []
+  )
   const [isMembersMenuShown, setIsMembersMenuShown] = useState<boolean>(false)
 
   function insertTextAtCursor(insertText: string, replacePattern?: RegExp) {
@@ -329,7 +331,7 @@ function BaseInputElement(
     const mentionMatch = text.match(/@(\w*)$/)
     if (mentionMatch && props.getMembers) {
       const query = mentionMatch[1].toLowerCase()
-      props.getMembers().then((members: Member[]) => {
+      props.getMembers().then((members: Participant[]) => {
         const filteredMembers = members.filter((member) =>
           member.displayName.toLowerCase().startsWith(query)
         )

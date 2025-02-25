@@ -7,6 +7,7 @@ import {
   supportedViewports,
   testUser,
 } from '../../../../../cypress/support/variables'
+import type { Participant } from '../../../types'
 import MultimodalInput from './multimodalInput'
 
 describe('Input', () => {
@@ -64,12 +65,14 @@ describe('Input', () => {
             {
               displayName: 'Member1',
               icon: 'https://api.dicebear.com/9.x/avataaars/svg?seed=Amy',
+              participantType: 'human',
             },
             {
               displayName: 'Member2',
               icon: 'https://api.dicebear.com/9.x/avataaars/svg?seed=Anna',
+              participantType: 'bot',
             },
-          ])
+          ] as Participant[])
         }
       />
     )
