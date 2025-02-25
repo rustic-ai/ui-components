@@ -35,3 +35,14 @@ code {
 .rustic-shift-to-right-by-8 {
   margin-right: -8px;
 }
+
+.rustic-participant-profile {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.rustic-participant-profile .rustic-participant-avatar {
+  width: 16px;
+  height: 16px;
+}
