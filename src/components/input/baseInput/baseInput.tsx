@@ -13,7 +13,10 @@ import TextField from '@mui/material/TextField'
 import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
 import { Database } from 'emoji-picker-element'
-import type { Emoji as EmojiInfo } from 'emoji-picker-element/shared'
+import type {
+  Emoji as EmojiInfo,
+  NativeEmoji,
+} from 'emoji-picker-element/shared'
 import { type ForwardedRef, forwardRef, useRef, useState } from 'react'
 import React from 'react'
 import { v4 as getUUID } from 'uuid'
@@ -309,7 +312,8 @@ function BaseInputElement(
         emojiSearchResults.length > 0 &&
         'unicode' in emojiSearchResults[selectedIndex]
       ) {
-        handleEmojiClick(emojiSearchResults[selectedIndex].unicode, true)
+        const selectedEmoji = emojiSearchResults[selectedIndex] as NativeEmoji
+        handleEmojiClick(selectedEmoji.unicode, true)
       } else if (isMembersMenuShown && memberSearchResults.length > 0) {
         handleMentionClick(memberSearchResults[selectedIndex].displayName)
       } else if (!e.shiftKey && !isSendDisabled) {
