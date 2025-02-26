@@ -1,3 +1,4 @@
+/* eslint-disable cypress/no-unnecessary-waiting */
 import {
   supportedViewports,
   testUser,
@@ -14,7 +15,7 @@ describe('TextInput', () => {
   const emojiButton = '[data-cy=emoji-button]'
   const emojiPicker = '[data-cy=emoji-picker]'
   const suggestionMenu = '[data-cy=suggestion-menu]'
-
+  const emojiTestWaitTime = 20
   context('Regular', () => {
     beforeEach(() => {
       const mockWsClient = {
@@ -95,9 +96,10 @@ describe('TextInput', () => {
       })
 
       it(`should show relevant emojis when user types shortcode and emoji can be added to the text input on ${viewport} screen`, () => {
+        cy.wait(emojiTestWaitTime)
         cy.viewport(viewport)
+        cy.get(textInput).should('be.visible').type(':ap')
 
-        cy.get(textInput).type(':ap')
         cy.get(suggestionMenu).should('exist')
         cy.get(`${suggestionMenu} li`)
           .first()
@@ -110,6 +112,7 @@ describe('TextInput', () => {
       })
 
       it(`should convert text in ':text:' format to emoji on ${viewport} screen`, () => {
+        cy.wait(emojiTestWaitTime)
         cy.viewport(viewport)
 
         cy.get(textInput).type(':polpo:')
