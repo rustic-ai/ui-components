@@ -39,7 +39,9 @@ function Emoji(props: EmojiProps) {
   }
 
   function handleEmojiClick(event: EmojiClickEvent) {
-    event.detail.unicode && props.onEmojiClick(event.detail.unicode)
+    if (event.detail.unicode) {
+      props.onEmojiClick(event.detail.unicode)
+    }
     handleEmojiPickerClose()
   }
 
