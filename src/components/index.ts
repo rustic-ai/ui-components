@@ -80,6 +80,7 @@ export {
 
 export * from '../rusticTheme'
 export type * from './types'
+export { ParticipantRole, ParticipantType } from './types'
 export type * from './visualization/mermaidViz/mermaidViz.types'
 export type * from './visualization/plotlyGraph/plotlyGraph.types'
 export type * from './visualization/vegaLiteViz/vegaLiteViz.types'
