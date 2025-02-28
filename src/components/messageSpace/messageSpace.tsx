@@ -91,7 +91,10 @@ function getCombinedMessages(
  Note: For more information about the `getActionsComponent` and `getProfileComponent` fields, refer to the [MessageCanvas' docs](http://localhost:6006/?path=/docs/rustic-ui-message-canvas-message-canvas--docs).
 */
 
-export default function MessageSpace(props: MessageSpaceProps) {
+export default function MessageSpace({
+  scrollDownLabel = 'Scroll down',
+  ...props
+}: MessageSpaceProps) {
   const scrollEndRef = useRef<HTMLDivElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const timeoutRef = useRef<NodeJS.Timeout>()
@@ -292,7 +295,7 @@ export default function MessageSpace(props: MessageSpaceProps) {
             onClick={scrollDown}
             label={
               <>
-                {props.scrollDownLabel}
+                {scrollDownLabel}
                 <Icon name="arrow_downward" />
               </>
             }
@@ -302,8 +305,4 @@ export default function MessageSpace(props: MessageSpaceProps) {
       {renderBottomPrompts(chatMessages)}
     </Box>
   )
-}
-
-MessageSpace.defaultProps = {
-  scrollDownLabel: 'Scroll down',
 }

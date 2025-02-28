@@ -1,4 +1,3 @@
-/* eslint-disable no-magic-numbers */
 import './timeIndicator.css'
 
 import Box from '@mui/material/Box'
@@ -13,13 +12,16 @@ interface TimeIndicatorProps {
   style?: 'wide' | 'condensed'
 }
 
-export default function TimeIndicator(props: TimeIndicatorProps) {
+export default function TimeIndicator({
+  style = 'condensed',
+  ...props
+}: TimeIndicatorProps) {
   const formattedElapsedTime = formatDurationTime(props.elapsedTimeInSeconds)
   const formattedDuration = formatDurationTime(props.durationTimeInSeconds)
 
   const formattedTimeDisplay = `${formattedElapsedTime} / ${formattedDuration}`
 
-  if (props.style === 'wide') {
+  if (style === 'wide') {
     return (
       <Box className="rustic-time-container">
         <Typography variant="overline">{formattedElapsedTime}</Typography>
@@ -33,8 +35,4 @@ export default function TimeIndicator(props: TimeIndicatorProps) {
       </Typography>
     )
   }
-}
-
-TimeIndicator.defaultProps = {
-  style: 'condensed',
 }

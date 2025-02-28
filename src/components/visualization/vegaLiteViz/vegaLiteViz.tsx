@@ -21,7 +21,12 @@ import type { VegaLiteData } from './vegaLiteViz.types'
  * npm i vega-embed marked dompurify
  * ```
  */
-function VegaLiteViz(props: VegaLiteData) {
+function VegaLiteViz({
+  theme = {
+    dark: 'dark' as const,
+  },
+  ...props
+}: VegaLiteData) {
   const chartRef = useRef<HTMLDivElement>(null)
   const [hasError, setHasError] = useState<boolean>(false)
 
@@ -74,7 +79,7 @@ function VegaLiteViz(props: VegaLiteData) {
       const options = {
         config: { font: defaultFont },
         ...props.options,
-        theme: isDarkTheme ? props.theme?.dark : props.theme?.light,
+        theme: isDarkTheme ? theme.dark : theme.light,
         tooltip: tooltipOptions,
         actions: false,
       }
@@ -151,9 +156,3 @@ function VegaLiteViz(props: VegaLiteData) {
 }
 
 export default VegaLiteViz
-
-VegaLiteViz.defaultProps = {
-  theme: {
-    dark: 'dark' as const,
-  },
-}

@@ -12,6 +12,8 @@ import type { FileData, Message, MultimodalInputProps } from '../../../types'
 import BaseInput from '../../baseInput/baseInput'
 import Uploader from '../uploader/uploader'
 
+const twoMB = 2097152
+
 /** The `MultimodalInput` component  is designed to serve as a foundation for accommodating diverse input modes in conversational apps. Currently, it supports sending text as well as files. The text messages, are directly sent via the WebSocket while for files, it uses a combination of HTTP APIs and the WebSocket.
  
 __How does file upload work?__
@@ -28,7 +30,11 @@ __How does file upload work?__
 * npm i emoji-picker-element emoji-picker-element-data uuid
 * ```
 */
-export default function MultimodalInput(props: MultimodalInputProps) {
+export default function MultimodalInput({
+  maxFileSize = twoMB,
+  maxFileCount = 1,
+  ...props
+}: MultimodalInputProps) {
   //use fileList to keep track of files order and number of files
   const [filesInfo, setFilesInfo] = useState<{
     uploaded: { name: string; url: string }[]
@@ -138,8 +144,8 @@ export default function MultimodalInput(props: MultimodalInputProps) {
         <Box className="rustic-bottom-buttons">
           <Uploader
             acceptedFileTypes={props.acceptedFileTypes}
-            maxFileCount={props.maxFileCount}
-            maxFileSize={props.maxFileSize}
+            maxFileCount={maxFileCount}
+            maxFileSize={maxFileSize}
             uploadFileEndpoint={props.uploadFileEndpoint}
             deleteFileEndpoint={props.deleteFileEndpoint}
             onFileUpdate={handleFileUpdates}
@@ -156,14 +162,4 @@ export default function MultimodalInput(props: MultimodalInputProps) {
       </BaseInput>
     </Box>
   )
-}
-
-const twoMB = 2097152
-
-MultimodalInput.defaultProps = {
-  multiline: true,
-  fullWidth: true,
-  maxRows: 6,
-  maxFileSize: twoMB,
-  maxFileCount: 1,
 }

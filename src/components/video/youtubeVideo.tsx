@@ -24,7 +24,10 @@ export interface YoutubeVideoProps {
  * npm i dompurify
  * ```
  */
-export default function YoutubeVideo(props: YoutubeVideoProps) {
+export default function YoutubeVideo({
+  title = 'Embedded video',
+  ...props
+}: YoutubeVideoProps) {
   const sanitizedYoutubeVideoId = DOMPurify.sanitize(props.youtubeVideoId)
 
   return (
@@ -32,13 +35,9 @@ export default function YoutubeVideo(props: YoutubeVideoProps) {
       {...getSizeStyles(props.width, props.height)}
       data-cy="youtube-video-iframe"
       src={`https://www.youtube.com/embed/${sanitizedYoutubeVideoId}`}
-      title={props.title}
+      title={title}
       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
       loading="lazy"
     />
   )
-}
-
-YoutubeVideo.defaultProps = {
-  title: 'Embedded video',
 }
