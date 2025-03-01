@@ -8,7 +8,7 @@ import type { TextData } from '../types'
 
 export function convertMarkdownToHtml(text: string): string {
   const textWithoutZeroWidthSpaces = text.replace(/^[\u200B-\u200F\uFEFF]/, '')
-  const parsedText = marked.parse(textWithoutZeroWidthSpaces)
+  const parsedText = marked.parse(textWithoutZeroWidthSpaces, { async: false })
   const sanitizedText = DOMPurify.sanitize(parsedText)
 
   return sanitizedText
