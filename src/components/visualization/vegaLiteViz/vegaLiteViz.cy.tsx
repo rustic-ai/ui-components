@@ -23,6 +23,9 @@ describe('VegaLiteViz', () => {
             y: { field: 'b', type: 'quantitative' },
           },
         }}
+        theme={{
+          dark: 'dark',
+        }}
       />
     )
   })
@@ -60,7 +63,14 @@ describe('VegaLiteViz', () => {
 
     it(`displays an error message if the spec is wrong on ${viewport} screen`, () => {
       cy.viewport(viewport)
-      cy.mount(<VegaLiteViz spec={invalidSpec} />)
+      cy.mount(
+        <VegaLiteViz
+          spec={invalidSpec}
+          theme={{
+            dark: 'dark',
+          }}
+        />
+      )
       cy.get('p').contains('Failed to load the chart.')
     })
   })

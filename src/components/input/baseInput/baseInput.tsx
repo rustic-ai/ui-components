@@ -35,7 +35,8 @@ type SuggestionMenuProps = {
   anchorEl: HTMLInputElement
   selectedIndex: number
 }
-
+const defaultMaxRows = 6
+const defaultMaxEmojiSearchResults = 5
 const speechRecognitionErrors = {
   'no-speech':
     'No speech detected. Check your microphone volume and try again.',
@@ -114,7 +115,14 @@ function SuggestionMenu({
  *
  */
 function BaseInputElement(
-  props: React.PropsWithChildren<BaseInputProps>,
+  {
+    multiline = true,
+    fullWidth = true,
+    maxRows = defaultMaxRows,
+    enableSpeechToText = false,
+    maximumEmojiSearchResults = defaultMaxEmojiSearchResults,
+    ...props
+  }: React.PropsWithChildren<BaseInputProps>,
   ref: ForwardedRef<HTMLDivElement>
 ) {
   const [messageText, setMessageText] = useState<string>('')
@@ -188,9 +196,7 @@ function BaseInputElement(
       .getEmojiBySearchQuery(query)
       .then((results) => {
         if (results.length) {
-          setEmojiSearchResults(
-            results.slice(0, props.maximumEmojiSearchResults)
-          )
+          setEmojiSearchResults(results.slice(0, maximumEmojiSearchResults))
           setIsEmojiMenuShown(true)
         } else {
           setEmojiSearchResults([])
@@ -444,9 +450,9 @@ function BaseInputElement(
             value={messageText}
             label={props.label}
             placeholder={props.placeholder}
-            maxRows={props.maxRows}
-            multiline={props.multiline}
-            fullWidth={props.fullWidth}
+            maxRows={maxRows}
+            multiline={multiline}
+            fullWidth={fullWidth}
             onKeyDown={handleKeyDown}
             onChange={handleOnChange}
             onFocus={() => setIsFocused(true)}
@@ -466,7 +472,7 @@ function BaseInputElement(
                       onEmojiClick={handleEmojiClick}
                       buttonColor={featureButtonColor}
                     />
-                    {props.enableSpeechToText && speechToTextButtonAdornment}
+                    {enableSpeechToText && speechToTextButtonAdornment}
                   </InputAdornment>
                 ),
               },
@@ -502,13 +508,5 @@ function BaseInputElement(
 }
 
 const BaseInput = forwardRef(BaseInputElement)
-
-BaseInput.defaultProps = {
-  multiline: true,
-  fullWidth: true,
-  maxRows: 6,
-  enableSpeechToText: false,
-  maximumEmojiSearchResults: 5,
-}
 
 export default BaseInput

@@ -20,16 +20,18 @@ export interface FilePreviewProps {
   showFullName?: boolean
 }
 
-const supportedViewers: {
+const defaultSupportedViewers: {
   [key: string]: React.ComponentType<{ url: string }>
 } = {
   pdf: PDFViewer,
   // Add more mappings as needed for different file types
 }
 
-export default function FilePreview(
-  props: React.PropsWithChildren<FilePreviewProps>
-) {
+export default function FilePreview({
+  supportedViewers = defaultSupportedViewers,
+  showFullName = true,
+  ...props
+}: React.PropsWithChildren<FilePreviewProps>) {
   const theme = useTheme()
   const maximumFileNameLength = 15
 
@@ -51,16 +53,16 @@ export default function FilePreview(
 
   const fileType = props.file.url && getFileType(props.file.url)
   const ModalContentComponent =
-    fileType && props.supportedViewers ? props.supportedViewers[fileType] : null
+    fileType && supportedViewers ? supportedViewers[fileType] : null
   const hasModalContent = !!ModalContentComponent
 
-  const filePreviewWidthStyle = props.showFullName
+  const filePreviewWidthStyle = showFullName
     ? 'rustic-flexible-file-preview-width'
     : 'rustic-fixed-file-preview-width'
   const filePreviewCursorStyle = hasModalContent ? ' rustic-cursor-pointer' : ''
   const FilePreviewClassName = `rustic-file-preview ${filePreviewWidthStyle}${filePreviewCursorStyle}`
 
-  const fileName = props.showFullName
+  const fileName = showFullName
     ? props.file.name
     : shortenString(props.file.name, maximumFileNameLength)
   return (
@@ -104,9 +106,4 @@ export default function FilePreview(
       )}
     </>
   )
-}
-
-FilePreview.defaultProps = {
-  supportedViewers: supportedViewers,
-  showFullName: true,
 }

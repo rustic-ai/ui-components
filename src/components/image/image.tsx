@@ -10,7 +10,10 @@ import { getSizeStyles } from '../helper'
 import type { ImageFormat } from '../types'
 
 /** The `Image` component facilitates the display of images, providing loading indication and error handling capabilities. It supports customization of image dimensions and alternative text, ensuring accessibility and a seamless user experience. Supported image formats: jpeg, png, gif, svg, webp, AVIF, APNG. */
-export default function Image(props: ImageFormat) {
+export default function Image({
+  alt = 'An image is displayed',
+  ...props
+}: ImageFormat) {
   const [isLoading, setIsLoading] = useState(true)
   const [errorMessage, setErrorMessage] = useState<string>('')
 
@@ -29,7 +32,7 @@ export default function Image(props: ImageFormat) {
       <img
         {...getSizeStyles(props.width, props.height)}
         src={props.src}
-        alt={props.alt}
+        alt={alt}
         onError={handleImageError}
         onLoad={() => {
           setIsLoading(false)
@@ -42,8 +45,4 @@ export default function Image(props: ImageFormat) {
       )}
     </figure>
   )
-}
-
-Image.defaultProps = {
-  alt: 'An image is displayed',
 }

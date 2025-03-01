@@ -106,7 +106,9 @@ function showAllDatasets(yAxisFields: string[]) {
 function areAllDatasetsVisible(datasetsVisibility: { [key: string]: boolean }) {
   return Object.values(datasetsVisibility).every((value) => value === true)
 }
-
+const defaultMinChartWidth = 200
+const defaultMaxHeight = 600
+const defaultYAxisLabelWidth = 30
 /** The `RechartsTimeSeries` component integrates the [Recharts](https://recharts.org/en-US/api) library to facilitate the visualization of time-based data through various chart types such as line charts, bar charts, and area charts. It supports customizations for reference lines, tooltips, and chart type toggling, providing a flexible and interactive data representation solution.
  *
  * Note: `Recharts` is not bundled, so please install the following package using npm:
@@ -115,7 +117,15 @@ function areAllDatasetsVisible(datasetsVisibility: { [key: string]: boolean }) {
  * npm i recharts
  * ```
  */
-function RechartsTimeSeries(props: RechartsTimeSeriesProps) {
+function RechartsTimeSeries({
+  minChartWidth = defaultMinChartWidth,
+  maxHeight = defaultMaxHeight,
+  yAxisLabelWidth = defaultYAxisLabelWidth,
+  // eslint-disable-next-line no-magic-numbers
+  aspectRatio = 16 / 9,
+  disableChartTypeToggle = false,
+  ...props
+}: RechartsTimeSeriesProps) {
   const [timeSeriesType, setTimeSeriesType] = useState<TimeSeriesType>(
     props.defaultChartType || 'line'
   )
@@ -143,7 +153,11 @@ function RechartsTimeSeries(props: RechartsTimeSeriesProps) {
   const TimeSeriesParentComponent = TimeSeriesComponents[timeSeriesType]
 
   function handleChartTypeToggle(event?: React.MouseEvent<HTMLElement>) {
-    anchorEl ? setAnchorEl(null) : event && setAnchorEl(event.currentTarget)
+    if (anchorEl) {
+      setAnchorEl(null)
+    } else if (event) {
+      setAnchorEl(event.currentTarget)
+    }
   }
 
   function handleChartTypeClick(chartType: TimeSeriesType) {
@@ -295,7 +309,7 @@ function RechartsTimeSeries(props: RechartsTimeSeriesProps) {
         className="rustic-recharts-time-series"
         data-cy={`${timeSeriesType}-chart`}
       >
-        {!props.disableChartTypeToggle && (
+        {!disableChartTypeToggle && (
           <FormControl className="rustic-recharts-time-series-chart-toggle">
             <IconButton
               aria-label="chart options"
@@ -363,10 +377,10 @@ function RechartsTimeSeries(props: RechartsTimeSeriesProps) {
           )}
 
           <ResponsiveContainer
-            aspect={props.aspectRatio}
+            aspect={aspectRatio}
             width={props.width}
-            maxHeight={props.maxHeight}
-            minWidth={props.minChartWidth}
+            maxHeight={maxHeight}
+            minWidth={minChartWidth}
           >
             <TimeSeriesParentComponent
               data={timeSeries}
@@ -381,7 +395,7 @@ function RechartsTimeSeries(props: RechartsTimeSeriesProps) {
               />
               <YAxis
                 domain={['auto', 'auto']}
-                width={props.yAxisLabelWidth}
+                width={yAxisLabelWidth}
                 tickFormatter={props.yAxisTickFormatter}
                 stroke={theme.palette.text.primary}
               />
@@ -431,15 +445,6 @@ function RechartsTimeSeries(props: RechartsTimeSeriesProps) {
       </Box>
     )
   }
-}
-
-RechartsTimeSeries.defaultProps = {
-  minChartWidth: 200,
-  maxHeight: 600,
-  yAxisLabelWidth: 30,
-  // eslint-disable-next-line no-magic-numbers
-  aspectRatio: 16 / 9,
-  disableChartTypeToggle: false,
 }
 
 export default RechartsTimeSeries

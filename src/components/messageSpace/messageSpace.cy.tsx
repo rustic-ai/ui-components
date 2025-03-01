@@ -282,6 +282,7 @@ describe('MessageSpace Component', () => {
       cy.get('p').contains('message 3').should('be.visible')
       cy.get(messageSpace).contains('message 1').should('not.be.visible')
       cy.get(messageContainer).scrollTo('top', { duration: 500 })
+      // eslint-disable-next-line cypress/no-unnecessary-waiting
       cy.wait(waitTime)
       cy.get('[data-cy=scroll-down-button]').should('be.visible').realClick()
 

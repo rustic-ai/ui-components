@@ -1,4 +1,3 @@
-/* eslint-disable no-magic-numbers */
 import 'cypress-real-events'
 
 import {
@@ -61,7 +60,8 @@ describe('MessageCanvas', () => {
         cy.get(messageCanvas).realHover()
       }
 
-      cy.get('[data-cy=copy-text-button]').focus().realClick()
+      cy.get('[data-cy=copy-text-button]').focus()
+      cy.get('[data-cy=copy-text-button]').realClick()
       cy.window().then((win) => {
         win.navigator.clipboard.readText().then((text) => {
           expect(text).to.eq('Hello World')
