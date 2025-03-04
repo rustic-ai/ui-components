@@ -26,7 +26,7 @@ function getFileName(fileUrl: string): string {
  */
 
 export default function ChatCompletion(props: ChatCompletionProps) {
-  function renderContentArray(contentArray: Content[]) {
+  function renderContentArray(contentArray: Content[], index: number) {
     const files: Array<JSX.Element> = []
     let textContent: string = ''
     contentArray.map((cnt) => {
@@ -63,20 +63,20 @@ export default function ChatCompletion(props: ChatCompletionProps) {
       }
     })
     return (
-      <>
+      <React.Fragment key={index}>
         {textContent.length > 0 && <Text text={textContent} />}
         {files.length > 0 && <Box className="rustic-files">{files}</Box>}
-      </>
+      </React.Fragment>
     )
   }
 
   return (
     <Box className="rustic-multipart">
-      {props.messages.map((msg) => {
+      {props.messages.map((msg, index) => {
         if (typeof msg.content === 'string') {
-          return <Text text={msg.content} />
+          return <Text text={msg.content} key={index} />
         } else {
-          return renderContentArray(msg.content)
+          return renderContentArray(msg.content, index)
         }
       })}
     </Box>

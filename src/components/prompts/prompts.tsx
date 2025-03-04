@@ -6,6 +6,7 @@ import useTheme from '@mui/system/useTheme'
 import React from 'react'
 import { v4 as getUUID } from 'uuid'
 
+import { toChatRequest } from '../helper'
 import type { Message, PromptsProps } from '../types'
 
 /** The `Prompts` component renders a list of actionable prompts that users can click to send a predefined message.
@@ -27,8 +28,8 @@ export default function Prompts(props: PromptsProps) {
       timestamp: currentTime,
       sender: props.sender,
       conversationId: props.conversationId,
-      format: 'text',
-      data: { text: response },
+      format: 'chatCompletionRequest',
+      data: toChatRequest(response.toString()),
     }
 
     props.ws.send(formattedMessage)

@@ -42,10 +42,14 @@ describe('Prompts', () => {
       cy.get('@sendStub').should(
         'be.calledWith',
         Cypress.sinon.match({
-          data: { text: prompts[0] },
+          data: {
+            messages: [
+              { content: [{ type: 'text', text: prompts[0] }], role: 'user' },
+            ],
+          },
           conversationId: commonProps.conversationId,
           sender: commonProps.sender,
-          format: 'text',
+          format: 'chatCompletionRequest',
         })
       )
     })

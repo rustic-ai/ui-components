@@ -90,8 +90,11 @@ export const InMessageSpace = {
               args={{
                 ...Default.args,
                 ws: {
-                  send: (selection: Message) =>
-                    setSelectedOption(selection.data.text),
+                  send: (selection: Message) => {
+                    return setSelectedOption(
+                      selection.data.messages[0].content[0].text
+                    )
+                  },
                 },
               }}
             />
@@ -104,9 +107,14 @@ export const InMessageSpace = {
                   sender: user,
                   timestamp: new Date().toISOString(),
                   conversationId: '1',
-                  format: 'text',
+                  format: 'chatCompletionRequest',
                   data: {
-                    text: selectedOption,
+                    messages: [
+                      {
+                        content: { type: 'text', text: selectedOption },
+                        role: 'user',
+                      },
+                    ],
                   },
                 }}
                 getProfileComponent={() => getProfileIconAndName(user.name)}

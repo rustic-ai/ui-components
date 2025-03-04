@@ -8,6 +8,7 @@ import Typography from '@mui/material/Typography'
 import React, { useState } from 'react'
 import { v4 as getUUID } from 'uuid'
 
+import { toChatRequest } from '../helper'
 import type { Message, QuestionProps } from '../types'
 
 /**
@@ -36,8 +37,8 @@ export default function Question(props: QuestionProps) {
       timestamp: currentTime,
       sender: props.sender,
       conversationId: props.conversationId,
-      format: 'text',
-      data: { text: response },
+      format: 'chatCompletionRequest',
+      data: toChatRequest(response.toString()),
       inReplyTo: props.messageId,
     }
 
