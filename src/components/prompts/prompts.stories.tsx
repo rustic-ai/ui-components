@@ -8,7 +8,7 @@ import React from 'react'
 import { v4 as getUUID } from 'uuid'
 
 import MessageSpace from '../messageSpace/messageSpace'
-import Text from '../text/text'
+import ChatCompletion from '../multipart/chatCompletion'
 import type { Message } from '../types'
 import Prompts from './prompts'
 
@@ -137,7 +137,10 @@ export const Default = {
             getProfileComponent={(msg) => (
               <Typography variant="caption">{msg.sender.name}</Typography>
             )}
-            supportedElements={{ text: Text, prompts: Prompts }}
+            supportedElements={{
+              chatCompletionRequest: ChatCompletion,
+              prompts: Prompts,
+            }}
           />
         </div>
       )
