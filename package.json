@@ -1,6 +1,6 @@
 {
   "name": "@rustic-ai/ui-components",
-  "version": "0.0.37",
+  "version": "0.0.38",
   "keywords": [
     "rustic-ai",
     "conversational-ui"
@@ -267,6 +267,10 @@
     "test:interactive": "LANG='en-US' TZ='America/Vancouver' cypress open",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rustic-ai/ui-components.git"
   },
   "browserslist": {
     "production": [
