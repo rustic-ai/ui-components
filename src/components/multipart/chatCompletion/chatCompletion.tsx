@@ -44,7 +44,11 @@ export default function ChatCompletion(props: ChatCompletionProps) {
         }
 
         const preview = (
-          <FilePreview file={file} showFullName={props.showFullName}>
+          <FilePreview
+            file={file}
+            showFullName={props.showFullName}
+            getAuthHeaders={props.getAuthHeaders}
+          >
             {file.url && (
               <Tooltip title="Download" className="rustic-shift-to-right-by-8">
                 <IconButton
