@@ -7,6 +7,7 @@ import Typography from '@mui/material/Typography'
 import { Box } from '@mui/system'
 import React, { useEffect, useRef, useState } from 'react'
 
+import MarkedMarkdown from '../../markdown/markedMarkdown'
 import type { VideoFormat } from '../../types'
 import {
   MoveTenSecondsButton,
@@ -304,7 +305,6 @@ export default function Video(props: VideoFormat) {
           className="rustic-video-loading-spinner"
         />
       )}
-
       <Box
         ref={videoContainerRef}
         className="rustic-video-screen"
@@ -329,6 +329,7 @@ export default function Video(props: VideoFormat) {
         {renderControls()}
       </Box>
       {!isFullscreen && renderTranscript()}
+      {props.description && <MarkedMarkdown text={props.description} />}
     </Box>
   )
 }

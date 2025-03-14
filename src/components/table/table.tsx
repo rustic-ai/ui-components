@@ -16,6 +16,7 @@ import React, { useState } from 'react'
 
 import { capitalizeFirstLetter } from '../helper'
 import Icon from '../icon/icon'
+import MarkedMarkdown from '../markdown/markedMarkdown'
 import type { TableData, TableHeader } from '../types'
 
 const paginationThreshold = 10
@@ -136,9 +137,7 @@ export default function Table(props: TableData) {
         </Typography>
       )}
       {props.description && (
-        <Typography variant="body1" data-cy="table-description">
-          {props.description}
-        </Typography>
+        <MarkedMarkdown text={props.description} data-cy="table-description" />
       )}
       <TableContainer className="rustic-table-container">
         <MuiTable

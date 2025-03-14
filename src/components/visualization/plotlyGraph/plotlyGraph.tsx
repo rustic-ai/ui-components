@@ -1,8 +1,10 @@
-import React from 'react';
+import Typography from '@mui/material/Typography'
+import Box from '@mui/system/Box'
+import React from 'react'
 import Plot from 'react-plotly.js'
-import type {PlotlyGraphData} from "./plotlyGraph.types";
-import Typography from "@mui/material/Typography";
-import Box from "@mui/system/Box";
+
+import MarkedMarkdown from '../../markdown/markedMarkdown'
+import type { PlotlyGraphData } from './plotlyGraph.types'
 /** The `PlotlyGraph` component enables interactive charts and maps using [Plotly](https://plotly.com/javascript/),
  *  offering rich features such as zooming, panning, and downloading graphs. It supports customization of graph
  *  parameters and configurations to suit various visualization needs.
@@ -14,25 +16,22 @@ import Box from "@mui/system/Box";
  * ```
  */
 function PlotlyGraph(props: PlotlyGraphData) {
+  const additionalConfig = {
+    displaylogo: false,
+    responsive: true,
+    editable: false,
+  }
 
-    const additionalConfig = {
-        displaylogo: false,
-        responsive: true,
-        editable: false,
-    }
+  const plotParams = { ...props.plotParams, className: 'rustic-plotly' }
+  plotParams.config = { ...plotParams.config, ...additionalConfig }
 
-    const plotParams = {...props.plotParams, className: 'rustic-plotly'}
-    plotParams.config = {...plotParams.config, ...additionalConfig}
-
-    return (
-        <Box className={'rustic-plotly-container'} data-cy="plotly">
-            {props.title && <Typography variant="h6">{props.title}</Typography>}
-            {props.description && (
-                <Typography variant="body1">{props.description}</Typography>
-            )}
-            <Plot {...plotParams}></Plot>
-        </Box>
-    )
+  return (
+    <Box className={'rustic-plotly-container'} data-cy="plotly">
+      {props.title && <Typography variant="h6">{props.title}</Typography>}
+      {props.description && <MarkedMarkdown text={props.description} />}
+      <Plot {...plotParams}></Plot>
+    </Box>
+  )
 }
 
 export default PlotlyGraph

@@ -8,6 +8,7 @@ import React, { useState } from 'react'
 
 import { getDayFromUnixTime } from '../helper'
 import Icon from '../icon/icon'
+import MarkedMarkdown from '../markdown/markedMarkdown'
 import PopoverMenu from '../menu/popoverMenu'
 import type { WeatherProps } from '../types'
 
@@ -91,6 +92,8 @@ export default function Weather(props: WeatherProps) {
 
   return (
     <Card variant="outlined" className="rustic-weather">
+      {props.title && <Typography variant="h6">{props.title}</Typography>}
+      {props.description && <MarkedMarkdown text={props.description} />}
       <PopoverMenu
         ariaLabel="Temperature units"
         menuItems={[

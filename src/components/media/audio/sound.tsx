@@ -7,6 +7,7 @@ import Typography from '@mui/material/Typography'
 import { Box } from '@mui/system'
 import React, { useEffect, useRef, useState } from 'react'
 
+import MarkedMarkdown from '../../markdown/markedMarkdown'
 import type { AudioFormat } from '../../types'
 import {
   MoveTenSecondsButton,
@@ -134,7 +135,7 @@ export default function Sound(props: AudioFormat) {
           />
           <ProgressSlider mediaElement={audioRef.current} />
           {renderTitle()}
-
+          {props.description && <MarkedMarkdown text={props.description} />}
           <Box className="rustic-sound-bottom-controls">
             <Box className="rustic-sound-bottom-controls-left">
               {renderTimeControls()}
@@ -163,6 +164,7 @@ export default function Sound(props: AudioFormat) {
       return (
         <>
           {renderTitle()}
+          {props.description && <MarkedMarkdown text={props.description} />}
 
           <Box className="rustic-sound-controls">
             <ProgressSlider mediaElement={audioRef.current} />

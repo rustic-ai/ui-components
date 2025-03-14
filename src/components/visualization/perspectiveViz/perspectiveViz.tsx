@@ -21,6 +21,7 @@ import Typography from '@mui/material/Typography'
 import Stack from '@mui/system/Stack'
 import React, { useEffect, useRef, useState } from 'react'
 
+import MarkedMarkdown from '../../markdown/markedMarkdown'
 import type {
   TableConfig,
   TableData,
@@ -257,9 +258,10 @@ function PerspectiveViz(props: TableData) {
           </Typography>
         )}
         {props.description && (
-          <Typography variant="body1" data-cy="table-description">
-            {props.description}
-          </Typography>
+          <MarkedMarkdown
+            text={props.description}
+            data-cy="table-description"
+          />
         )}
         <perspective-viewer
           ref={viewerRef}

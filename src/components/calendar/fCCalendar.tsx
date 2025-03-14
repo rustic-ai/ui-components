@@ -5,9 +5,11 @@ import FullCalendar from '@fullcalendar/react'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import Box from '@mui/material/Box'
 import { useTheme } from '@mui/material/styles'
+import Typography from '@mui/material/Typography'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import React from 'react'
 
+import MarkedMarkdown from '../markdown/markedMarkdown'
 import type { CalendarData, CalendarEvent } from '../types'
 
 /** Convert CalendarEvent type to FullCalendar's Event type
@@ -79,6 +81,8 @@ export default function FCCalendar(props: CalendarData) {
         },
       }}
     >
+      {props.title && <Typography variant="h6">{props.title}</Typography>}
+      {props.description && <MarkedMarkdown text={props.description} />}
       <FullCalendar
         plugins={[timeGridPlugin, dayGridPlugin]}
         initialView={getDefaultInitialView()}
