@@ -117,13 +117,12 @@ function PDFViewer(props: PDFViewerProps) {
     })
   }
 
-  useEffect(() => {
-    if (!pdfjsLib.GlobalWorkerOptions.workerSrc) {
-      // Use a fallback if not configured
-      pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.mjs`
-    }
+  function loadPdf(headers?: Record<string, string>) {
     pdfjsLib
-      .getDocument({ url: `${props.url}` })
+      .getDocument({
+        url: props.url,
+        httpHeaders: headers,
+      })
       .promise.then((pdf) => {
         setTotalPages(pdf.numPages)
         renderPage(pdf)
@@ -131,6 +130,22 @@ function PDFViewer(props: PDFViewerProps) {
       .catch(() => {
         setHasError(true)
       })
+  }
+
+  useEffect(() => {
+    if (!pdfjsLib.GlobalWorkerOptions.workerSrc) {
+      // Use a fallback if not configured
+      pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.mjs`
+    }
+
+    if (props.getAuthHeaders) {
+      props
+        .getAuthHeaders()
+        .then((auth) => loadPdf(auth.headers))
+        .catch(() => setHasError(true))
+    } else {
+      loadPdf()
+    }
   }, [props.url, currentPage, scale])
 
   function goToPreviousPage() {

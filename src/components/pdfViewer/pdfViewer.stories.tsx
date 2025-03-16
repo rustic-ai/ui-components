@@ -1,7 +1,7 @@
 import type { StoryFn } from '@storybook/react'
 import React from 'react'
 
-import PDFViewer, {setPdfWorkerSrc} from './pdfViewer'
+import PDFViewer, { setPdfWorkerSrc } from './pdfViewer'
 
 setPdfWorkerSrc('files/pdf.worker.mjs')
 
@@ -16,6 +16,12 @@ export default {
 
 export const Default = {
   args: {
+    getAuthHeader: () =>
+      Promise.resolve({
+        headers: {
+          Authorization: 'Bearer example-token',
+        },
+      }),
     url: 'files/pdfExample.pdf',
   },
   decorators: [

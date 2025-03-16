@@ -37,6 +37,12 @@ export default meta
 
 export const Default = {
   args: {
+    getAuthHeaders: () =>
+      Promise.resolve({
+        headers: {
+          Authorization: 'Bearer example-token',
+        },
+      }),
     messages: [
       {
         content: [

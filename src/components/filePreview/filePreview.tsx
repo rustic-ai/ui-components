@@ -12,16 +12,24 @@ import React, { useState } from 'react'
 import { shortenString } from '../helper'
 import Icon from '../icon/icon'
 import PDFViewer from '../pdfViewer/pdfViewer'
-import type { FileData } from '../types'
+import type { FileData, GetAuthHeaders } from '../types'
+
+type ViewerComponent = React.ComponentType<{
+  url: string
+  getAuthHeaders?: GetAuthHeaders
+}>
 
 export interface FilePreviewProps {
   file: FileData
-  supportedViewers?: { [key: string]: React.ComponentType<{ url: string }> }
+  supportedViewers?: {
+    [key: string]: ViewerComponent
+  }
   showFullName?: boolean
+  getAuthHeaders?: GetAuthHeaders
 }
 
 const defaultSupportedViewers: {
-  [key: string]: React.ComponentType<{ url: string }>
+  [key: string]: ViewerComponent
 } = {
   pdf: PDFViewer,
   // Add more mappings as needed for different file types
@@ -65,6 +73,7 @@ export default function FilePreview({
   const fileName = showFullName
     ? props.file.name
     : shortenString(props.file.name, maximumFileNameLength)
+
   return (
     <>
       <Card
@@ -100,7 +109,12 @@ export default function FilePreview({
                 <Icon name="close" />
               </IconButton>
             </Tooltip>
-            {props.file.url && <ModalContentComponent url={props.file.url} />}
+            {props.file.url && (
+              <ModalContentComponent
+                url={props.file.url}
+                getAuthHeaders={props.getAuthHeaders}
+              />
+            )}
           </div>
         </Modal>
       )}

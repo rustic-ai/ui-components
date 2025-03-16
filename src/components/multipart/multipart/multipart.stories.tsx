@@ -53,6 +53,12 @@ export const FileWithURL = {
         url: 'files/pdfExample.pdf',
       },
     ],
+    getAuthHeaders: () =>
+      Promise.resolve({
+        headers: {
+          Authorization: 'Bearer example-token',
+        },
+      }),
   },
 }
 
