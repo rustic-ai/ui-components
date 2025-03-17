@@ -30,7 +30,7 @@
     "@mui/material": "6.1.8",
     "@mui/styled-engine-sc": "6.1.8",
     "@mui/system": "6.1.8",
-    "axios": "1.8.1",
+    "axios": "1.8.2",
     "dompurify": "3.2.4",
     "marked": "15.0.7",
     "react": "18.3.1"
@@ -145,7 +145,7 @@
     "@mui/system": "^6.1.8",
     "@types/react": "^18.2.37",
     "@types/react-dom": "^18.2.15",
-    "axios": "1.8.1",
+    "axios": "1.8.2",
     "emoji-picker-element": "^1.21.3",
     "emoji-picker-element-data": "^1.7.1",
     "mermaid": "^11.4.1",
