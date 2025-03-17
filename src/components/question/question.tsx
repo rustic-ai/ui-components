@@ -9,6 +9,7 @@ import React, { useState } from 'react'
 import { v4 as getUUID } from 'uuid'
 
 import { toChatRequest } from '../helper'
+import MarkedMarkdown from '../markdown/markedMarkdown'
 import type { Message, QuestionProps } from '../types'
 
 /**
@@ -72,14 +73,12 @@ export default function Question(props: QuestionProps) {
       {(props.title || props.description) && (
         <Box className="rustic-question-text">
           {props.title && (
-            <Typography variant="subtitle2" className="rustic-title">
+            <Typography variant="h6" className="rustic-title">
               {props.title}
             </Typography>
           )}
 
-          {props.description && (
-            <Typography variant="caption">{props.description}</Typography>
-          )}
+          {props.description && <MarkedMarkdown text={props.description} />}
         </Box>
       )}
 

@@ -3,6 +3,7 @@ import './openLayersMap.css'
 
 import Alert from '@mui/material/Alert'
 import Box from '@mui/material/Box'
+import Typography from '@mui/material/Typography'
 import TileLayer from 'ol/layer/Tile.js'
 import * as olMap from 'ol/Map.js'
 import Overlay from 'ol/Overlay.js'
@@ -13,6 +14,7 @@ import React from 'react'
 import { useEffect, useRef, useState } from 'react'
 
 import Icon from '../icon/icon'
+import MarkedMarkdown from '../markdown/markedMarkdown'
 import type { LocationFormat } from '../types'
 
 /** The `OpenLayersMap` component supports OpenStreetMap tiles where users can easily zoom in and zoom out to navigate the map effectively. The `OpenLayersMap` component uses the [OpenLayers](https://openlayers.org/en/latest/apidoc/module-ol_Map-Map.html) map library.
@@ -86,6 +88,8 @@ export default function OpenLayersMap(props: LocationFormat) {
         <Alert severity="error">{errorMessage}</Alert>
       ) : (
         <Box>
+          {props.title && <Typography variant="h6">{props.title}</Typography>}
+          {props.description && <MarkedMarkdown text={props.description} />}
           <Box data-cy="marker-container" ref={markerElement}>
             <Icon
               className="rustic-open-layers-map-marker"

@@ -8,6 +8,7 @@ import mermaid from 'mermaid'
 import React, { useEffect, useRef, useState } from 'react'
 import { v4 as getUUID } from 'uuid'
 
+import MarkedMarkdown from '../../markdown/markedMarkdown'
 import type { MermaidData } from './mermaidViz.types'
 
 /** The `MermaidViz` component leverages [Mermaid.js](https://mermaid.js.org/) to create dynamic and interactive diagrams, including flowcharts, sequence diagrams, class diagrams, and more. It is ideal for visualizing complex data and processes in a clear and structured manner.
@@ -52,12 +53,8 @@ function MermaidViz(props: MermaidData) {
 
   return (
     <Stack className={`rustic-mermaid-container`} data-cy="mermaid-container">
-      {props.title && (
-        <Typography variant="subtitle2">{props.title}</Typography>
-      )}
-      {props.description && (
-        <Typography variant="caption">{props.description}</Typography>
-      )}
+      {props.title && <Typography variant="h6">{props.title}</Typography>}
+      {props.description && <MarkedMarkdown text={props.description} />}
       <div className="rustic-mermaid" ref={mermaidRef}></div>
       {errorMessage && <Typography variant="body2">{errorMessage}</Typography>}
     </Stack>

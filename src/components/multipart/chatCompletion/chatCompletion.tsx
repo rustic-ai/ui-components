@@ -4,11 +4,12 @@ import '../multipart/multipart.css'
 import Box from '@mui/material/Box'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
+import Typography from '@mui/material/Typography'
 import React from 'react'
 
 import FilePreview from '../../filePreview/filePreview'
 import Icon from '../../icon'
-import Text from '../../text'
+import MarkedMarkdown from '../../markdown'
 import type { ChatCompletionProps, Content } from '../../types'
 
 function getFileName(fileUrl: string): string {
@@ -68,7 +69,7 @@ export default function ChatCompletion(props: ChatCompletionProps) {
     })
     return (
       <React.Fragment key={index}>
-        {textContent.length > 0 && <Text text={textContent} />}
+        {textContent.length > 0 && <MarkedMarkdown text={textContent} />}
         {files.length > 0 && <Box className="rustic-files">{files}</Box>}
       </React.Fragment>
     )
@@ -76,9 +77,15 @@ export default function ChatCompletion(props: ChatCompletionProps) {
 
   return (
     <Box className="rustic-multipart">
+      {(props.title || props.description) && (
+        <div>
+          {props.title && <Typography variant="h6">{props.title}</Typography>}
+          {props.description && <MarkedMarkdown text={props.description} />}
+        </div>
+      )}
       {props.messages.map((msg, index) => {
         if (typeof msg.content === 'string') {
-          return <Text text={msg.content} key={index} />
+          return <MarkedMarkdown text={msg.content} key={index} />
         } else {
           return renderContentArray(msg.content, index)
         }

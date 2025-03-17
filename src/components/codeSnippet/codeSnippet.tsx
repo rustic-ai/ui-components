@@ -8,6 +8,7 @@ import Typography from '@mui/material/Typography'
 import { Box } from '@mui/system'
 import React, { useEffect, useRef } from 'react'
 
+import MarkedMarkdown from '../markdown/markedMarkdown'
 import type { CodeData } from '../types'
 
 /** The `CodeSnippet` component, powered by [CodeMirror](https://codemirror.net/), enables displaying code blocks with syntax highlighting for [various programming languages](https://codemirror.net/5/mode/). For further customization of the component's theme, refer to the [styling guide](https://codemirror.net/examples/styling/) provided by the CodeMirror library.
@@ -57,11 +58,12 @@ export default function CodeSnippet(props: CodeData) {
   }, [])
 
   return (
-    <Box
-      sx={{ backgroundColor: 'background.default' }}
-      className="rustic-code-snippet"
-    >
-      <div
+    <Box>
+      {props.title && <Typography variant="h6">{props.title}</Typography>}
+      {props.description && <MarkedMarkdown text={props.description} />}
+      <Box
+        className="rustic-code-snippet"
+        sx={{ backgroundColor: 'background.default' }}
         aria-label="code snippet"
         ref={codeSnippetContainer}
         data-cy="code-block"
@@ -73,7 +75,7 @@ export default function CodeSnippet(props: CodeData) {
         >
           {props.language}
         </Typography>
-      </div>
+      </Box>
     </Box>
   )
 }

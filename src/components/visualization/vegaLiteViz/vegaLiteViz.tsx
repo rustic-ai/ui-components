@@ -15,10 +15,10 @@ import type { VegaLiteData } from './vegaLiteViz.types'
 
 /** The `VegaLiteViz` component is a versatile tool for visualizing data using the Vega-Lite grammar. With support for various graphic types, it empowers users to create engaging and informative data visualizations effortlessly.
  *
- * Note: `vega-embed`, `marked` and `dompurify` are not bundled, so please install the following packages using npm:
+ * Note: `vega-embed` is not bundled, so please install the following package using npm:
  *
  * ```typescript
- * npm i vega-embed marked dompurify
+ * npm i vega-embed
  * ```
  */
 function VegaLiteViz({

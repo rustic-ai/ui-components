@@ -1,4 +1,3 @@
-/* eslint-disable no-magic-numbers */
 import PerspectiveViz from './perspectiveViz'
 const sampleData = [
   {
@@ -46,7 +45,7 @@ describe('PerspectiveViz Component', () => {
     cy.mount(<PerspectiveViz {...data} />)
 
     cy.get('[data-cy=table-title]').should('contain', 'Superstore Sales Data')
-    cy.get('[data-cy=table-description]').should(
+    cy.get('p').should(
       'contain',
       'This table displays sales and profit data grouped by region and state, and split by category.'
     )

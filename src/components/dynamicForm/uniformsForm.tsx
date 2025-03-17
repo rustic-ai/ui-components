@@ -6,6 +6,7 @@ import { JSONSchemaBridge } from 'uniforms-bridge-json-schema'
 import { AutoForm } from 'uniforms-mui'
 import { v4 as getUUID } from 'uuid'
 
+import MarkedMarkdown from '../markdown/markedMarkdown'
 import type { DynamicFormProps, Message } from '../types'
 
 /**
@@ -68,9 +69,7 @@ export default function UniformsForm(props: DynamicFormProps) {
   return (
     <Box className="rustic-form">
       {props.title && <Typography variant="h6">{props.title}</Typography>}
-      {props.description && (
-        <Typography variant="body1">{props.description}</Typography>
-      )}
+      {props.description && <MarkedMarkdown text={props.description} />}
       <AutoForm
         schema={bridge}
         onSubmit={(model) => handleSubmit(model)}

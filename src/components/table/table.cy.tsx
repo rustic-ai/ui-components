@@ -108,10 +108,7 @@ describe('Table', () => {
     it(`renders description if provided on ${viewport} screen`, () => {
       cy.viewport(viewport)
       cy.mount(<Table description="Test Description" data={testData} />)
-      cy.get('[data-cy="table-description"]').should(
-        'contain',
-        'Test Description'
-      )
+      cy.get('p').should('contain', 'Test Description')
     })
 
     it(`renders headers based on data keys if headers props are not provided on ${viewport} screen`, () => {

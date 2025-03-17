@@ -26,6 +26,7 @@ import {
 
 import { calculateTimeDiffInDays, formatTimestampLabel } from '../../helper'
 import Icon from '../../icon/icon'
+import MarkedMarkdown from '../../markdown/markedMarkdown'
 
 export interface TimeSeriesData {
   timestamp: number
@@ -113,7 +114,7 @@ const defaultYAxisLabelWidth = 30
  *
  * Note: `Recharts` is not bundled, so please install the following package using npm:
  *
- * ```typescript
+ * ```
  * npm i recharts
  * ```
  */
@@ -359,7 +360,7 @@ function RechartsTimeSeries({
         <Box>
           {props.title && (
             <Typography
-              variant="subtitle2"
+              variant="h6"
               className="rustic-recharts-time-series-title"
               data-cy="time-series-title"
             >
@@ -367,14 +368,7 @@ function RechartsTimeSeries({
             </Typography>
           )}
 
-          {props.description && (
-            <Typography
-              variant="caption"
-              className="rustic-recharts-time-series-description"
-            >
-              {props.description}
-            </Typography>
-          )}
+          {props.description && <MarkedMarkdown text={props.description} />}
 
           <ResponsiveContainer
             aspect={aspectRatio}
