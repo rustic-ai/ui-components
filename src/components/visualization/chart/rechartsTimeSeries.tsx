@@ -110,7 +110,9 @@ function areAllDatasetsVisible(datasetsVisibility: { [key: string]: boolean }) {
 const defaultMinChartWidth = 200
 const defaultMaxHeight = 600
 const defaultYAxisLabelWidth = 30
-/** The `RechartsTimeSeries` component integrates the [Recharts](https://recharts.org/en-US/api) library to facilitate the visualization of time-based data through various chart types such as line charts, bar charts, and area charts. It supports customizations for reference lines, tooltips, and chart type toggling, providing a flexible and interactive data representation solution.
+/** > **Deprecated:** Use other visualization components instead. This component will be removed in the next release.
+ *
+ * The `RechartsTimeSeries` component integrates the [Recharts](https://recharts.org/en-US/api) library to facilitate the visualization of time-based data through various chart types such as line charts, bar charts, and area charts. It supports customizations for reference lines, tooltips, and chart type toggling, providing a flexible and interactive data representation solution.
  *
  * Note: `Recharts` is not bundled, so please install the following package using npm:
  *
