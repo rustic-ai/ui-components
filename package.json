@@ -264,6 +264,7 @@
     "type": "git",
     "url": "git+https://github.com/rustic-ai/ui-components.git"
   },
+  "homepage": "https://rustic-ai.github.io/ui-components",
   "browserslist": {
     "production": [
       ">0.2%",
