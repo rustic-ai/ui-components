@@ -260,6 +260,10 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rustic-ai/ui-components.git"
+  },
   "browserslist": {
     "production": [
       ">0.2%",
