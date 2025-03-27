@@ -59,7 +59,7 @@ export default function UniformsForm(props: DynamicFormProps) {
       sender: props.sender,
       conversationId: props.conversationId,
       format: 'formResponse',
-      data: model,
+      data: { data: model },
       inReplyTo: props.messageId,
     }
     setData(model)
