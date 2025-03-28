@@ -41,7 +41,7 @@ function getCombinedMessages(
   if (message.format.includes('update')) {
     key = message.threadId
   } else if (message.format.includes('Response')) {
-    key = message.inReplyTo
+    key = message.data.inReplyTo
   } else {
     key = message.id
   }
