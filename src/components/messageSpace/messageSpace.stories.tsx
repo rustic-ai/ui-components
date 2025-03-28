@@ -490,8 +490,8 @@ export const Default = {
         id: getUUID(),
         timestamp: '2024-01-02T00:21:00.000Z',
         format: 'formResponse',
-        inReplyTo: 'formId',
         data: {
+          inReplyTo: 'formId',
           data: {
             city: 'Vancouver',
             state: 'BC',

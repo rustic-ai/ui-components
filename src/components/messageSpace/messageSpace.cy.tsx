@@ -333,6 +333,7 @@ describe('MessageSpace Component', () => {
               inReplyTo: 'formId',
               format: 'formResponse',
               data: {
+                inReplyTo: 'formId',
                 data: {
                   city: 'Vancouver',
                   state: 'BC',
