@@ -1,10 +1,9 @@
 import type { Meta, StoryFn } from '@storybook/react'
 import React from 'react'
 
-import { getMembersDescription, wsDescription } from '../../sharedDescription'
+import { textInputDescription } from '../../sharedDescription'
 import type { BaseInputProps, WebSocketClient } from '../../types'
 import type { Message } from '../../types'
-import BaseInput from '../baseInput/baseInput'
 import TextInput from './textInput'
 
 interface InputProps extends BaseInputProps {
@@ -13,29 +12,10 @@ interface InputProps extends BaseInputProps {
 
 const meta: Meta<React.FC<InputProps>> = {
   title: 'Rustic UI/Input/Text Input',
-  component: BaseInput,
+  component: TextInput,
   tags: ['autodocs'],
   parameters: {
     layout: 'centered',
-    docs: {
-      argTypes: {
-        exclude: ['send', 'isSendEnabled'],
-      },
-      source: {
-        transform: (code: string) => {
-          let textInputCode = code.replaceAll('BaseInput', 'TextInput')
-          textInputCode = textInputCode.replaceAll(
-            '  component={() => {}}\n',
-            ''
-          )
-          textInputCode = textInputCode.replaceAll(
-            'send={() => {}}',
-            'ws:{send: (message: Message) => alert(`Message sent: ${message.data.messages[0].content[0].text}`)}'
-          )
-          return textInputCode
-        },
-      },
-    },
   },
   decorators: [
     (Story: StoryFn) => (
@@ -48,31 +28,7 @@ const meta: Meta<React.FC<InputProps>> = {
 
 meta.argTypes = {
   ...meta.argTypes,
-  ws: wsDescription,
-  getMembers: getMembersDescription,
-  emojiDataSource: {
-    description:
-      'URL to fetch the emoji data from. You need to host the emoji data by yourself. If not provided, the default url will be used.',
-    table: {
-      type: { summary: 'string' },
-      defaultValue: {
-        summary:
-          'https://cdn.jsdelivr.net/npm/emoji-picker-element-data@^1/en/emojibase/data.json',
-      },
-    },
-  },
-  sender: {
-    description: 'The sender of the message.',
-    type: { name: 'object', required: true, value: {} },
-    table: {
-      type: {
-        summary: 'Sender',
-        detail:
-          'id: String representing sender id.\n' +
-          'name: Optional string of sender name.',
-      },
-    },
-  },
+  ...textInputDescription,
 }
 
 export default meta
@@ -85,8 +41,15 @@ export const Default = {
     placeholder: 'Type your message',
     emojiDataSource:
       'node_modules/emoji-picker-element-data/en/emojibase/data.json',
-    send: (message: Message) =>
-      alert(`Message sent: ${message.data.messages[0].content[0].text}`),
+    ws: {
+      send: (message: Message) => {
+        alert(
+          'Message sent!' +
+            '\n' +
+            `Text content: ${message.data.messages[0].content[0].text}`
+        )
+      },
+    },
     getMembers: () =>
       Promise.resolve([
         {

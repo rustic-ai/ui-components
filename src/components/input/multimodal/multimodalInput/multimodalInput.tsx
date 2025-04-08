@@ -107,16 +107,13 @@ export default function MultimodalInput({
   })
 
   function handleSendMessage(formattedMessage: Message): void {
-    if (isUploadFinished) {
-      formattedMessage.id = messageId
-      formattedMessage.format = 'chatCompletionRequest'
-      formattedMessage.data = toChatRequest(
-        formattedMessage.data.text,
-        filesInfo.uploaded.map((file) => {
-          return { url: file.url, name: file.name }
-        })
-      )
-    }
+    formattedMessage.data = toChatRequest(
+      formattedMessage.data.text,
+      filesInfo.uploaded.map((file) => {
+        return { url: file.url, name: file.name }
+      })
+    )
+    formattedMessage.id = messageId
 
     props.ws.send(formattedMessage)
     setMessageId(getUUID())

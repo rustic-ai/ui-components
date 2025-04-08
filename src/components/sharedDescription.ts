@@ -71,3 +71,81 @@ export const getMembersDescription: InputType = {
     },
   },
 }
+
+export const textInputDescription: InputType = {
+  ws: wsDescription,
+  getMembers: getMembersDescription,
+  emojiDataSource: {
+    description:
+      'URL to fetch the emoji data from. You need to host the emoji data by yourself. If not provided, the default url will be used.',
+    table: {
+      type: { summary: 'string' },
+      defaultValue: {
+        summary:
+          'https://cdn.jsdelivr.net/npm/emoji-picker-element-data@^1/en/emojibase/data.json',
+      },
+    },
+  },
+  sender: {
+    description: 'The sender of the message.',
+    type: { name: 'object', required: true, value: {} },
+    table: {
+      type: {
+        summary: 'Sender',
+        detail:
+          'id: String representing sender id.\n' +
+          'name: Optional string of sender name.',
+      },
+    },
+  },
+  conversationId: conversationIdDescription,
+  label: {
+    description:
+      'Optional label text to be displayed in the input, which will then move to the top when the input is focused on. If both label and placeholder are provided, the placeholder will only be visible once the input is focused on.',
+    table: {
+      type: { summary: 'string' },
+    },
+  },
+  placeholder: {
+    description:
+      'Optional Placeholder text to be displayed in the input before user starts typing.',
+    table: {
+      type: { summary: 'string' },
+    },
+  },
+  multiline: {
+    description:
+      'Optional boolean that dictates whether `TextInput` can expand to be multiline.',
+    table: {
+      type: { summary: 'boolean' },
+    },
+  },
+  maxRows: {
+    description: 'Optional maximum number of rows to be displayed.',
+    table: {
+      type: { summary: 'number' },
+    },
+  },
+  fullWidth: {
+    description:
+      'Optional boolean that dictates whether `TextInput` takes up 100% width of the parent container.',
+    table: {
+      type: { summary: 'boolean' },
+    },
+  },
+  enableSpeechToText: {
+    description:
+      'Optional boolean to enable speech-to-text. See which browsers are supported [here](https://developer.mozilla.org/en-US/docs/Web/API/SpeechRecognition#browser_compatibility).',
+    table: {
+      type: { summary: 'boolean' },
+    },
+  },
+  maximumEmojiSearchResults: {
+    description:
+      'Specifies the maximum number of emoji search results to display when the user enters a search query. The search query is triggered when the user types in a format like `:text`.',
+    table: {
+      type: { summary: 'number' },
+      defaultValue: { summary: '5' },
+    },
+  },
+}

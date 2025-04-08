@@ -21,7 +21,6 @@ import { type ForwardedRef, forwardRef, useRef, useState } from 'react'
 import React from 'react'
 import { v4 as getUUID } from 'uuid'
 
-import { toChatRequest } from '../../helper'
 import Icon from '../../icon/icon'
 import type { BaseInputProps, Message, Participant } from '../../types'
 import Emoji from '../emoji/emoji'
@@ -281,7 +280,7 @@ function BaseInputElement(
       sender: props.sender,
       conversationId: props.conversationId,
       format: 'chatCompletionRequest',
-      data: toChatRequest(messageText),
+      data: { text: messageText },
     }
 
     props.send(formattedMessage)

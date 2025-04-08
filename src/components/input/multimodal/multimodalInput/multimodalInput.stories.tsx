@@ -3,11 +3,8 @@ import axios from 'axios'
 import React from 'react'
 import { v4 as getUUID } from 'uuid'
 
-import {
-  conversationIdDescription,
-  getMembersDescription,
-} from '../../../sharedDescription'
-import type { FileData, Message } from '../../../types'
+import { textInputDescription } from '../../../sharedDescription'
+import type { Message } from '../../../types'
 import meta from '../../textInput/textInput.stories'
 import MultimodalInput from './multimodalInput'
 
@@ -85,7 +82,7 @@ const multiModalInputMeta: Meta<React.ComponentProps<typeof MultimodalInput>> =
 
 multiModalInputMeta.argTypes = {
   ...meta.argTypes,
-  conversationId: conversationIdDescription,
+  ...textInputDescription,
   uploadFileEndpoint: {
     description:
       'The API endpoint for sending a POST multipart-form request. If the JSON response includes a `fileId` property, it can be used to delete the file later. Path placeholders like `fileName` and `messageId`, will be automatically replaced with the actual file name and message ID.',
@@ -105,47 +102,6 @@ multiModalInputMeta.argTypes = {
       'The types of files that are allowed to be selected for upload. For safety reasons, only allow file types that can be handled by your server. Avoid accepting executable file types like .exe, .bat, or .msi. For more information, refer to the [mdn web docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file#unique_file_type_specifiers).',
     table: {
       type: { summary: 'string' },
-    },
-  },
-  label: {
-    description:
-      'Optional label text to be displayed in the input, which will then move to the top when the input is focused on. If both label and placeholder are provided, the placeholder will only be visible once the input is focused on.',
-    table: {
-      type: { summary: 'string' },
-    },
-  },
-  placeholder: {
-    description:
-      'Optional Placeholder text to be displayed in the input before user starts typing.',
-    table: {
-      type: { summary: 'string' },
-    },
-  },
-  multiline: {
-    description:
-      'Optional boolean that dictates whether `TextInput` can expand to be multiline.',
-    table: {
-      type: { summary: 'boolean' },
-    },
-  },
-  maxRows: {
-    description: 'Optional maximum number of rows to be displayed.',
-    table: {
-      type: { summary: 'number' },
-    },
-  },
-  fullWidth: {
-    description:
-      'Optional boolean that dictates whether `TextInput` takes up 100% width of the parent container.',
-    table: {
-      type: { summary: 'boolean' },
-    },
-  },
-  enableSpeechToText: {
-    description:
-      'Optional boolean to enable speech-to-text. See which browsers are supported [here](https://developer.mozilla.org/en-US/docs/Web/API/SpeechRecognition#browser_compatibility).',
-    table: {
-      type: { summary: 'boolean' },
     },
   },
   maxFileCount: {
@@ -212,15 +168,6 @@ multiModalInputMeta.argTypes = {
       },
     },
   },
-  maximumEmojiSearchResults: {
-    description:
-      'Specifies the maximum number of emoji search results to display when the user enters a search query. The search query is triggered when the user types in a format like `:text`.',
-    table: {
-      type: { summary: 'number' },
-      defaultValue: { summary: '5' },
-    },
-  },
-  getMembers: getMembersDescription,
 }
 
 export default multiModalInputMeta
@@ -234,24 +181,17 @@ export const Default = {
     placeholder: 'Type your message',
     ws: {
       send: (message: Message) => {
-        let fileMessage = ''
-        let textMessage = ''
-        if (message.data.files && message.data.files.length > 0) {
-          const fileNames = message.data.files
-            .map((file: FileData) => file.name)
-            .join(', ')
-          fileMessage = `File(s): ${fileNames}`
-        }
-        if (message.data.text) {
-          textMessage = `Text content: ${message.data.text}`
-        }
-        alert(
-          'Message sent!' +
-            '\n' +
-            textMessage +
-            `${textMessage.length > 0 ? '\n' : ''}` +
-            fileMessage
-        )
+        const messages: string[] = []
+
+        message.data.messages[0].content.forEach((content: any) => {
+          if (content.type === 'text') {
+            messages.push(`Text content: ${content.text}`)
+          } else if (content.type === 'file_url') {
+            messages.push(`File: ${content.file_url.name}`)
+          }
+        })
+
+        alert('Message sent!\n' + messages.join('\n'))
       },
     },
     listFiles: () => {
