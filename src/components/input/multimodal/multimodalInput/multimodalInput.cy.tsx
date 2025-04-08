@@ -26,8 +26,9 @@ describe('Input', () => {
   const videoFile = 'public/videoExamples/videoCaptions.mp4'
 
   beforeEach(() => {
+    const sendStub = cy.stub().as('sendMessage')
     const mockWsClient = {
-      send: cy.stub(),
+      send: sendStub,
       close: cy.stub(),
       reconnect: cy.stub(),
     }
@@ -133,6 +134,63 @@ describe('Input', () => {
         .first()
         .invoke('val')
         .should('equal', '')
+    })
+
+    it(`should send message with correct content on ${viewport} screen`, () => {
+      cy.viewport(viewport)
+
+      cy.intercept(
+        {
+          method: 'POST',
+          url: '/upload?message-id=*',
+        },
+        {
+          statusCode: 200,
+          body: {
+            url: 'http://test-url.com/image-component-example.png',
+            name: 'image-component-example.png',
+          },
+        }
+      ).as('upload')
+      cy.get('input[type=file]').selectFile([imageFile], {
+        force: true,
+      })
+      cy.wait('@upload')
+      const testMessage = 'Hello, World!'
+      cy.get(textField).type(testMessage)
+      cy.get(sendButton).click()
+      cy.get('@sendMessage').then((stub) => {
+        const sendStub = stub as unknown as sinon.SinonStub
+        const sentMessage = sendStub.args[0][0]
+        expect(sentMessage).to.deep.include({
+          sender: testUser,
+          conversationId: '1',
+          format: 'chatCompletionRequest',
+          data: {
+            messages: [
+              {
+                content: [
+                  {
+                    type: 'text',
+                    text: testMessage,
+                  },
+                  {
+                    type: 'file_url',
+                    file_url: {
+                      url: 'http://test-url.com/image-component-example.png',
+                      name: 'image-component-example.png',
+                    },
+                  },
+                ],
+                role: 'user',
+              },
+            ],
+          },
+        })
+
+        expect(sentMessage.id).to.be.a('string')
+        expect(sentMessage.timestamp).to.be.a('string')
+      })
     })
 
     it(`can add and delete files on ${viewport} screen`, () => {

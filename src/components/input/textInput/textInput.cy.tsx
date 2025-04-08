@@ -18,8 +18,9 @@ describe('TextInput', () => {
   const emojiTestWaitTime = 20
   context('Regular', () => {
     beforeEach(() => {
+      const sendStub = cy.stub().as('sendMessage')
       const mockWsClient = {
-        send: cy.stub(),
+        send: sendStub,
         close: cy.stub(),
         reconnect: cy.stub(),
       }
@@ -117,6 +118,39 @@ describe('TextInput', () => {
 
         cy.get(textInput).type(':polpo:')
         cy.get('textarea').invoke('val').should('equal', '🐙')
+      })
+      it(`should send message with correct content on ${viewport} screen`, () => {
+        cy.viewport(viewport)
+
+        const testMessage = 'Hello, World!'
+        cy.get(textInput).type(testMessage)
+        cy.get(sendButton).click()
+
+        cy.get('@sendMessage').then((stub) => {
+          const sendStub = stub as unknown as sinon.SinonStub
+          const sentMessage = sendStub.args[0][0]
+          expect(sentMessage).to.deep.include({
+            sender: testUser,
+            conversationId: '1',
+            format: 'chatCompletionRequest',
+            data: {
+              messages: [
+                {
+                  content: [
+                    {
+                      type: 'text',
+                      text: testMessage,
+                    },
+                  ],
+                  role: 'user',
+                },
+              ],
+            },
+          })
+
+          expect(sentMessage.id).to.be.a('string')
+          expect(sentMessage.timestamp).to.be.a('string')
+        })
       })
     })
   })
