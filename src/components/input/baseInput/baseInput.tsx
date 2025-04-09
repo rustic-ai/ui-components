@@ -137,8 +137,6 @@ function BaseInputElement(
 
   const database = new Database({ dataSource: props.emojiDataSource })
   const isEmptyMessage = !messageText.trim().length
-  const isSendDisabled = isEmptyMessage && !props.isSendEnabled
-
   const speechToTextTooltipTitle = `${isRecording ? 'Stop' : 'Start'} speech to text`
   const featureButtonColor = isFocused ? 'primary.main' : 'primary.light'
   const speechToTextIconColor = isRecording ? 'error.main' : featureButtonColor
@@ -147,6 +145,14 @@ function BaseInputElement(
     []
   )
   const [isMembersMenuShown, setIsMembersMenuShown] = useState<boolean>(false)
+
+  function getIsSendDisabled() {
+    if (typeof props.isSendEnabled == 'boolean') {
+      return !props.isSendEnabled
+    } else {
+      return isEmptyMessage
+    }
+  }
 
   function insertTextAtCursor(insertText: string, replacePattern?: RegExp) {
     if (inputRef.current) {
@@ -321,7 +327,7 @@ function BaseInputElement(
         handleEmojiClick(selectedEmoji.unicode, true)
       } else if (isMembersMenuShown && memberSearchResults.length > 0) {
         handleMentionClick(memberSearchResults[selectedIndex].displayName)
-      } else if (!e.shiftKey && !isSendDisabled) {
+      } else if (!e.shiftKey && !getIsSendDisabled()) {
         handleSendMessage()
       }
     } else if (isArrowDown || isArrowUp) {
@@ -494,7 +500,7 @@ function BaseInputElement(
               data-cy="send-button"
               aria-label="send message"
               onClick={handleSendMessage}
-              disabled={isSendDisabled}
+              disabled={getIsSendDisabled()}
               color="secondary"
             >
               <Icon name="send" />
