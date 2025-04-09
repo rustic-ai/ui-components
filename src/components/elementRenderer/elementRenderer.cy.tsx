@@ -5,13 +5,12 @@ import {
   supportedViewports,
   testUser,
 } from '../../../cypress/support/variables'
-import { StreamingText, YoutubeVideo } from '..'
+import { StreamingText } from '..'
 import Text from '../text/text'
 import ElementRenderer from './elementRenderer'
 
 const supportedElements = {
   text: Text,
-  video: YoutubeVideo,
   streamingText: StreamingText,
 }
 
@@ -52,29 +51,6 @@ describe('ElementRenderer', () => {
         />
       )
       cy.get('p').should('contain.text', 'Test Text')
-      cy.mount(
-        <ElementRenderer
-          messages={[
-            {
-              ...sampleMessage,
-              data: { youtubeVideoId: 'MtN1YnoL46Q' },
-              format: 'video',
-            },
-          ]}
-          {...commonProps}
-          ws={mockWsClient}
-        />
-      )
-
-      const youtubeVideoIframe = '[data-cy="youtube-video-iframe"]'
-      cy.get(youtubeVideoIframe).then(($iframe) => {
-        const src = $iframe.attr('src')
-        const successStatusCode = 200
-        expect(src).to.exist
-        if (src) {
-          cy.request(src).its('status').should('equal', successStatusCode)
-        }
-      })
     })
 
     it(`renders the original message and its update messages correctly on ${viewport} screen`, () => {

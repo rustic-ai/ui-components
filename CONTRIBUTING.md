@@ -66,7 +66,7 @@ Thank you for considering contributing to Rustic UI! In our project, we maintain
 - **Component Naming**: If a component relies on another library for its main feature, prefix the component with the library name.
   - For example, our `OpenLayersMap` component is a map component that relies on the OpenLayers library.
 - **CSS Styles**: Try to avoid using MUI `sx` props for styling components and use CSS `className` instead. When doing this, be sure to prefix with `rustic`, followed by the component name in kebab-case, followed by the subcomponent.
-  - For example, use `rustic-recharts-time-series-title` for a title component within the `RechartsTimeSeries` component or `rustic-recharts-time-series` for the component itself.
+  - For example, use `rustic-table-title` for a title component within the `Table` component or `rustic-table` for the component itself.
 - **Function Naming**: Functions should have descriptive names that start with a verb and specify the type of output.
 - **Variable Naming**:
   - Prefix `maybe` to the variable name if the variable can be undefined.
