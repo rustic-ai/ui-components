@@ -16,12 +16,10 @@ import {
   type Message,
   OpenLayersMap,
   Prompts,
-  RechartsTimeSeries,
   StreamingText,
   Table,
   Text,
   UniformsForm,
-  YoutubeVideo,
 } from '..'
 import Icon from '../icon/icon'
 import { getMockWebSocketClient } from '../mockWebSocket'
@@ -36,9 +34,7 @@ describe('MessageSpace Component', () => {
     markdown: MarkedMarkdown,
     streamingMarkdown: MarkedStreamingMarkdown,
     image: Image,
-    timeSeries: RechartsTimeSeries,
     map: OpenLayersMap,
-    youtubeVideo: YoutubeVideo,
     table: Table,
     calendar: FCCalendar,
     form: UniformsForm,

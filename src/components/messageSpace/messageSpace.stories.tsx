@@ -12,14 +12,12 @@ import {
   type Message,
   Multipart,
   OpenLayersMap,
-  RechartsTimeSeries,
   Sound,
   StreamingText,
   Table,
   Text,
   UniformsForm,
   Video,
-  YoutubeVideo,
 } from '..'
 import CodeSnippet from '../codeSnippet/codeSnippet'
 import Icon from '../icon/icon'
@@ -332,26 +330,6 @@ export const Default = {
       {
         ...humanMessageData,
         id: getUUID(),
-        timestamp: '2024-01-02T00:08:00.000Z',
-        format: 'text',
-        data: {
-          text: 'Could you show me an example of the video component?',
-        },
-      },
-      {
-        ...agentMessageData,
-        id: getUUID(),
-        timestamp: '2024-01-02T00:09:00.000Z',
-        format: 'youtubeVideo',
-        data: {
-          height: '300px',
-          width: '100%',
-          youtubeVideoId: 'MtN1YnoL46Q',
-        },
-      },
-      {
-        ...humanMessageData,
-        id: getUUID(),
         timestamp: '2024-01-02T00:10:00.000Z',
         format: 'text',
         data: {
@@ -507,9 +485,7 @@ export const Default = {
       markdown: MarkedMarkdown,
       streamingMarkdown: MarkedStreamingMarkdown,
       image: Image,
-      timeSeries: RechartsTimeSeries,
       map: OpenLayersMap,
-      youtubeVideo: YoutubeVideo,
       table: Table,
       calendar: FCCalendar,
       codeSnippet: CodeSnippet,

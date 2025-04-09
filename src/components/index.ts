@@ -29,8 +29,6 @@ import Table from './table/table'
 import StreamingText from './text/streamingText'
 import Text from './text/text'
 import Timestamp from './timestamp/timestamp'
-import YoutubeVideo from './video/youtubeVideo'
-import RechartsTimeSeries from './visualization/chart/rechartsTimeSeries'
 import MermaidViz from './visualization/mermaidViz/mermaidViz'
 import PerspectiveViz from './visualization/perspectiveViz/perspectiveViz'
 import PlotlyGraph from './visualization/plotlyGraph/plotlyGraph'
@@ -62,7 +60,6 @@ export {
   PromptBuilder,
   Prompts,
   Question,
-  RechartsTimeSeries,
   Sound,
   StreamingText,
   Table,
@@ -75,7 +72,6 @@ export {
   VegaLiteViz,
   Video,
   Weather,
-  YoutubeVideo,
 }
 
 export * from '../rusticTheme'

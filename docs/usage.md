@@ -30,38 +30,6 @@ MessageList simplifies the integration of multimodal components into your applic
 
 Ensure that your data conforms to the data structure outlined in the MessageList documentation to ensure proper rendering and functionality.
 
-## Render Components Without ElementRenderer
-
-If you don't want to use `ElementRenderer` to render components, you can incorporate UI components into your application just like any other React component. Refer to Storybook for the available props you can pass to each component. Here's an example of how to use the `RechartsTimeSeries` component:
-
-```
-import { RechartsTimeSeries } from '@rustic-ai/ui-components';
-
-// Define your data and formatters
-const yourTimeSeriesData = [
-  // Your time series data
-];
-
-const yourYAxisTickFormatter = (value) => `${value}M`; // Example formatter
-const yourTooltipFormatter = (value, name) => [`${value}M`, name]; // Example formatter
-const yourChartContainerMargin = { top: 20, left: 25, right: 25, bottom: 20 }; // Example margin
-
-function YourComponent() {
-  return (
-    <RechartsTimeSeries
-      title="Your Chart Title"
-      description="Your Description"
-      timeSeries={yourTimeSeriesData}
-      yAxisTickFormatter={yourYAxisTickFormatter}
-      tooltipFormatter={yourTooltipFormatter}
-      chartContainerMargin={yourChartContainerMargin}
-    />
-  );
-}
-
-export default YourComponent;
-```
-
 ### Extending Components
 
 To extend a component, you can create a new component that inherits properties and functionality from the base component while adding new features or customizing existing behavior.
