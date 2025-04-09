@@ -48,7 +48,7 @@ export default function MultimodalInput({
   const inputRef = useRef<HTMLDivElement>(null)
   const theme = useTheme()
 
-  const hasUploadAtempts = filesInfo.fileList.length > 0
+  const hasFiles = filesInfo.fileList.length > 0
   const isUploadFinished =
     filesInfo.uploaded.length === filesInfo.fileList.length &&
     filesInfo.uploaded.length > 0
@@ -137,7 +137,7 @@ export default function MultimodalInput({
       <BaseInput
         {...props}
         send={handleSendMessage}
-        isSendEnabled={hasUploadAtempts ? isUploadFinished : undefined}
+        isSendEnabled={hasFiles ? isUploadFinished : undefined}
         ref={inputRef}
       >
         <Box className="rustic-bottom-buttons">
