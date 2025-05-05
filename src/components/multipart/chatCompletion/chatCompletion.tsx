@@ -2,15 +2,13 @@ import '../../../index.css'
 import '../multipart/multipart.css'
 
 import Box from '@mui/material/Box'
-import IconButton from '@mui/material/IconButton'
-import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
 import React from 'react'
 
 import FilePreview from '../../filePreview/filePreview'
-import Icon from '../../icon'
 import MarkedMarkdown from '../../markdown'
 import type { ChatCompletionProps, Content } from '../../types'
+import DownloadButton from '../downloadButton'
 
 function getFileName(fileUrl: string): string {
   const url = new URL(fileUrl)
@@ -51,16 +49,11 @@ export default function ChatCompletion(props: ChatCompletionProps) {
             getAuthHeaders={props.getAuthHeaders}
           >
             {file.url && (
-              <Tooltip title="Download" className="rustic-shift-to-right-by-8">
-                <IconButton
-                  component="a"
-                  href={file.url}
-                  download={file.name}
-                  data-cy="download-button"
-                >
-                  <Icon name="download" />
-                </IconButton>
-              </Tooltip>
+              <DownloadButton
+                url={file.url}
+                fileName={file.name}
+                getAuthHeaders={props.getAuthHeaders}
+              />
             )}
           </FilePreview>
         )

@@ -1,16 +1,14 @@
 import '../../../index.css'
 import './multipart.css'
 
-import IconButton from '@mui/material/IconButton'
-import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/system/Box'
 import React from 'react'
 
 import FilePreview from '../../filePreview/filePreview'
-import Icon from '../../icon/icon'
 import MarkedMarkdown from '../../markdown'
 import type { MultipartProps } from '../../types'
+import DownloadButton from '../downloadButton'
 
 /** The `Multipart` component is a versatile message format designed to accommodate both textual content and file attachments within a single message interface. */
 export default function Multipart(props: MultipartProps) {
@@ -24,16 +22,11 @@ export default function Multipart(props: MultipartProps) {
           key={index}
         >
           {file.url && (
-            <Tooltip title="Download" className="rustic-shift-to-right-by-8">
-              <IconButton
-                component="a"
-                href={file.url}
-                download={file.name}
-                data-cy="download-button"
-              >
-                <Icon name="download" />
-              </IconButton>
-            </Tooltip>
+            <DownloadButton
+              url={file.url}
+              fileName={file.name}
+              getAuthHeaders={props.getAuthHeaders}
+            />
           )}
         </FilePreview>
       )
