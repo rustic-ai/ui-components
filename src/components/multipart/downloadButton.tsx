@@ -12,25 +12,27 @@ type DownloadButtonProps = {
 }
 
 export default function DownloadButton(props: DownloadButtonProps) {
-  function handleAuthenticatedDownload() {
-    props.getAuthHeaders!()
-      .then((headersObj: Record<string, any>) => {
-        const headers = headersObj.headers
-        return fetch(props.url, { headers })
+  function handleAuthenticatedDownload(getHeadersFn: GetAuthHeaders) {
+    getHeadersFn()
+      .then((headersObj) => {
+        return fetch(props.url, { ...headersObj })
       })
       .then((response) => {
         return response.blob()
       })
       .then((blob) => {
         const downloadUrl = window.URL.createObjectURL(blob)
-        const link = document.createElement('a')
-        link.href = downloadUrl
-        link.download = props.fileName
-        document.body.appendChild(link)
-        link.click()
+        const temporaryLink = document.createElement('a')
+        temporaryLink.href = downloadUrl
+        temporaryLink.download = props.fileName
+        document.body.appendChild(temporaryLink)
+        temporaryLink.click()
 
-        document.body.removeChild(link)
+        document.body.removeChild(temporaryLink)
         window.URL.revokeObjectURL(downloadUrl)
+      })
+      .catch((error) => {
+        throw new Error('Error downloading file. ' + error.message)
       })
   }
 
@@ -38,7 +40,7 @@ export default function DownloadButton(props: DownloadButtonProps) {
     <Tooltip title="Download" className="rustic-shift-to-right-by-8">
       {props.getAuthHeaders ? (
         <IconButton
-          onClick={handleAuthenticatedDownload}
+          onClick={() => handleAuthenticatedDownload(props.getAuthHeaders!)}
           data-cy="download-button"
         >
           <Icon name="download" />
