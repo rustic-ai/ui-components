@@ -5,13 +5,15 @@ import Typography from '@mui/material/Typography'
 import Box from '@mui/system/Box'
 import Stack from '@mui/system/Stack'
 import useTheme from '@mui/system/useTheme'
+import axios from 'axios'
 import React, { useEffect, useRef, useState } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
+import * as vega from 'vega'
 import { default as VegaEmbed } from 'vega-embed'
 
 import MarkedMarkdown from '../../markdown/markedMarkdown'
 import PopoverMenu, { type PopoverMenuItem } from '../../menu/popoverMenu'
-import type { VegaLiteData } from './vegaLiteViz.types'
+import type { VegaLiteProps } from './vegaLiteViz.types'
 
 /** The `VegaLiteViz` component is a versatile tool for visualizing data using the Vega-Lite grammar. With support for various graphic types, it empowers users to create engaging and informative data visualizations effortlessly.
  *
@@ -26,13 +28,57 @@ function VegaLiteViz({
     dark: 'dark' as const,
   },
   ...props
-}: VegaLiteData) {
+}: VegaLiteProps) {
   const chartRef = useRef<HTMLDivElement>(null)
   const [hasError, setHasError] = useState<boolean>(false)
 
   const rusticTheme: Theme = useTheme()
   const isDarkTheme = rusticTheme.palette.mode === 'dark'
   const defaultFont = rusticTheme.typography.fontFamily
+
+  const customHttpLoader = (
+    url: string,
+    options: RequestInit
+  ): Promise<string> => {
+    const axiosOptions = {
+      method: (options.method as string) || 'GET',
+      headers: options.headers as Record<string, string>,
+      responseType: 'text' as const,
+      data: options.body,
+    }
+
+    let updateRequestHeaders
+
+    if (props.getAuthHeaders) {
+      updateRequestHeaders = props.getAuthHeaders().then((authData) => {
+        axiosOptions.headers = {
+          ...axiosOptions.headers,
+          ...authData.headers,
+        }
+        return axiosOptions
+      })
+    } else {
+      updateRequestHeaders = Promise.resolve(axiosOptions)
+    }
+
+    return updateRequestHeaders
+      .then((finalOptions) => {
+        return axios(url, finalOptions)
+      })
+      .then((response) => {
+        return response.data
+      })
+  }
+
+  function createLoader(): vega.Loader {
+    const loader = vega.loader()
+
+    if (props.getAuthHeaders) {
+      loader.http = customHttpLoader
+    }
+
+    return loader
+  }
 
   const tooltipStyle = {
     backgroundColor: rusticTheme.palette.primary.main,
@@ -82,6 +128,7 @@ function VegaLiteViz({
         theme: isDarkTheme ? theme.dark : theme.light,
         tooltip: tooltipOptions,
         actions: false,
+        loader: createLoader(),
       }
 
       if (!props.options?.config?.font) {

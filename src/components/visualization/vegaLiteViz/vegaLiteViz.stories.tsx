@@ -167,6 +167,12 @@ export const InvalidChart = {
 
 export const InteractiveMap = {
   args: {
+    getAuthHeaders: () =>
+      Promise.resolve({
+        headers: {
+          Authorization: 'Bearer example-token',
+        },
+      }),
     spec: {
       $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
       width: 'container',
