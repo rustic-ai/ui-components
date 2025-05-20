@@ -12,7 +12,7 @@ import type {
   Client,
   Table,
   View,
-} from '@finos/perspective/dist/wasm/perspective-js'
+} from '@finos/perspective/dist/wasm/perspective-js.js'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import type { HTMLPerspectiveViewerElement } from '@finos/perspective-viewer/dist/esm/perspective-viewer.inline.js'

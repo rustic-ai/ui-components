@@ -2,7 +2,7 @@ import './promptsDemo.css'
 
 import Divider from '@mui/material/Divider'
 import Typography from '@mui/material/Typography'
-import type { Meta } from '@storybook/react/*'
+import type { Meta } from '@storybook/react'
 import { useState } from 'react'
 import React from 'react'
 import { v4 as getUUID } from 'uuid'
