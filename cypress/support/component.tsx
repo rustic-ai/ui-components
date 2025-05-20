@@ -17,7 +17,7 @@
 
 import { StyledEngineProvider } from '@mui/material/styles'
 import ThemeProvider from '@mui/system/ThemeProvider'
-import { mount } from 'cypress/react18'
+import { mount } from 'cypress/react'
 
 import rusticTheme from '../../src/rusticTheme'
 

@@ -1,4 +1,4 @@
-import type { Meta } from '@storybook/react/*'
+import type { Meta } from '@storybook/react'
 
 import ChatCompletion from './chatCompletion'
 const meta: Meta<React.ComponentProps<typeof ChatCompletion>> = {
