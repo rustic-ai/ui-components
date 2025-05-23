@@ -10,11 +10,11 @@ To learn more about Rustic AI, visit our [website](https://rustic.ai).
 
 ## Getting Started
 
-To get started, visit the [Quick Start](https://rustic-ai.github.io/ui-components/?path=/docs/documentation-quick-start--docs) page on our Storybook.
+To get started, visit the [Quick Start](https://rustic-ai.github.io/rustic-ui-components/?path=/docs/documentation-quick-start--docs) page on our Storybook.
 
 ## Storybook
 
-Visit our [Storybook](https://rustic-ai.github.io/ui-components) for all documentation regarding components, as well as our [Theme and Styling](https://rustic-ai.github.io/ui-components/?path=/docs/documentation-theme-and-styling--docs) guide.
+Visit our [Storybook](https://rustic-ai.github.io/rustic-ui-components) for all documentation regarding components, as well as our [Theme and Styling](https://rustic-ai.github.io/rustic-ui-components/?path=/docs/documentation-theme-and-styling--docs) guide.
 
 ## Building From Source
 

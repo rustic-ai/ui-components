@@ -88,7 +88,7 @@ function getCombinedMessages(
 
  The `MessageSpace` component can combine update messages with the original message and render them as a single message. For this to work, the `threadId` of the update message must match the `id` of the original message, and the format of the update message should be prefixed with 'update'. For example, if the original message format is 'streamingText', the update message format should be 'updateStreamingText'.
  
- Note: For more information about the `getActionsComponent` and `getProfileComponent` fields, refer to the [MessageCanvas' docs](http://localhost:6006/?path=/docs/rustic-ui-message-canvas-message-canvas--docs).
+ Note: For more information about the `getActionsComponent` and `getProfileComponent` fields, refer to the [MessageCanvas' docs](https://rustic-ai.github.io/rustic-ui-components/?path=/docs/rustic-ui-message-canvas-message-canvas--docs).
 */
 
 export default function MessageSpace({
