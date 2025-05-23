@@ -1,6 +1,6 @@
 {
   "name": "@rustic-ai/ui-components",
-  "version": "0.0.43",
+  "version": "0.0.44",
   "keywords": [
     "rustic-ai",
     "conversational-ui"
@@ -254,9 +254,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/rustic-ai/ui-components.git"
+    "url": "git+https://github.com/rustic-ai/rustic-ui-components.git"
   },
-  "homepage": "https://rustic-ai.github.io/ui-components",
+  "homepage": "https://rustic-ai.github.io/rustic-ui-components",
   "browserslist": {
     "production": [
       ">0.2%",
