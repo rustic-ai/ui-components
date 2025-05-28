@@ -287,6 +287,8 @@ function BaseInputElement(
       conversationId: props.conversationId,
       format: 'chatCompletionRequest',
       data: { text: messageText },
+      inReplyTo: props.lastMsg?.id,
+      messageHistory: props.lastMsg?.messageHistory,
     }
 
     props.send(formattedMessage)

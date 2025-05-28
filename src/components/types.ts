@@ -13,6 +13,17 @@ export interface Sender {
   name?: string
 }
 
+export interface AgentTag {
+  id?: string | null
+  name?: string | null
+}
+
+export interface ProcessEntry {
+  agent: AgentTag
+  origin: string
+  result: string
+}
+
 export interface Message {
   id: string
   timestamp: string
@@ -25,6 +36,7 @@ export interface Message {
   priority?: string
   taggedParticipants?: string[]
   topic?: string
+  messageHistory?: ProcessEntry[]
 }
 
 export interface ComponentMap {
@@ -287,6 +299,8 @@ export interface BaseInputProps {
   emojiDataSource?: string
   /** Function to fetch the list of members. Should return a promise that resolves to an array of members. */
   getMembers?: () => Promise<Participant[]>
+  /** Used to set inReplyTo and messageHistory */
+  lastMsg?: Message
 }
 
 export interface TextInputProps
