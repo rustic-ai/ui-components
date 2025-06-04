@@ -123,6 +123,8 @@ export interface ImageFormat extends VisualizationFormat {
   width?: number
   /** Height rendered in pixels. */
   height?: number
+  /** A function that can be used to get the headers for the url requests. */
+  getAuthHeaders?: GetAuthHeaders
 }
 
 export interface TableHeader {
