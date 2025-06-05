@@ -3,7 +3,7 @@ import '../../index.css'
 
 import CircularProgress from '@mui/material/CircularProgress'
 import Typography from '@mui/material/Typography'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import React from 'react'
 
 import { getSizeStyles } from '../helper'
@@ -17,6 +17,32 @@ export default function Image({
 }: ImageFormat) {
   const [isLoading, setIsLoading] = useState(true)
   const [errorMessage, setErrorMessage] = useState<string>('')
+  const [objectUrl, setObjectUrl] = useState<string>('')
+
+  useEffect(() => {
+    if (props.getAuthHeaders) {
+      setIsLoading(true)
+
+      props
+        .getAuthHeaders()
+        .then((authResult) => {
+          return fetch(props.src, {
+            headers: authResult.headers,
+          })
+        })
+        .then((response) => {
+          return response.blob()
+        })
+        .then((blob) => {
+          const newObjectUrl = URL.createObjectURL(blob)
+          setObjectUrl(newObjectUrl)
+        })
+        .catch(() => {
+          setErrorMessage('Image failed to load')
+          setIsLoading(false)
+        })
+    }
+  }, [props.src, props.getAuthHeaders])
 
   function handleImageError(): void {
     setErrorMessage('Image failed to load')
@@ -31,15 +57,17 @@ export default function Image({
     <figure>
       {isLoading && <CircularProgress data-cy="spinner" />}
       {props.title && <Typography variant="h6">{props.title}</Typography>}
-      <img
-        {...getSizeStyles(props.width, props.height)}
-        src={props.src}
-        alt={alt}
-        onError={handleImageError}
-        onLoad={() => {
-          setIsLoading(false)
-        }}
-      />
+      {(!props.getAuthHeaders || objectUrl) && (
+        <img
+          {...getSizeStyles(props.width, props.height)}
+          src={props.getAuthHeaders ? objectUrl : props.src}
+          alt={alt}
+          onError={handleImageError}
+          onLoad={() => {
+            setIsLoading(false)
+          }}
+        />
+      )}
       {props.description && (
         <figcaption>
           <MarkedMarkdown text={props.description} />

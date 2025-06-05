@@ -17,6 +17,12 @@ export const Default = {
   args: {
     alt: 'A curved facade covered in white latticework',
     src: 'images/image-component-example.png',
+    getAuthHeaders: () =>
+      Promise.resolve({
+        headers: {
+          Authorization: 'Bearer example-token',
+        },
+      }),
   },
 }
 
