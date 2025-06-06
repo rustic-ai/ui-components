@@ -1,0 +1,22 @@
+.storybook-logo-container {
+  position: absolute;
+  bottom: 15px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 10px;
+  z-index: 1;
+  pointer-events: auto;
+}
+
+.storybook-logo-image {
+  max-width: 80%;
+  height: 20px;
+  cursor: pointer;
+}
+
+.storybook-scroll-padding {
+  padding-bottom: var(--scroll-padding-bottom, 30px);
+}

@@ -29,6 +29,8 @@
   },
   "include": [
     "src",
+    ".storybook/**/*.ts",
+    ".storybook/**/*.tsx",
     "cypress",
     "./cypress.d.ts",
     "cypress.config.ts",
