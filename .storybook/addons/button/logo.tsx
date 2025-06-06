@@ -4,14 +4,12 @@ const logoDataAttribute = 'data-storybook-logo-id'
 const logoId = 'storybook-sidebar-custom-logo'
 const navSelector = 'nav'
 const scrollContainerSelector = 'nav > div'
+const scrollContainerPaddingClass = 'storybook-scroll-padding'
 
 const initialCheckInterval = 100
 const uiSettleTimeout = 300
 
-const logoBottomPosition = 15
-const logoHeight = 20
 const bottomPadding = 10
-const maxLogoWidthPercent = 80
 
 const logoUrl = '/images/dragonscale-logo.svg'
 const websiteUrl = 'https://www.dragonscale.ai'
@@ -32,27 +30,12 @@ const addLogoToSidebar = () => {
 
   const logoContainer = document.createElement('div')
   logoContainer.setAttribute(logoDataAttribute, logoId)
-  logoContainer.style.cssText = `
-        position: absolute;
-        bottom: ${logoBottomPosition}px;
-        left: 0;
-        right: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding-top: ${bottomPadding}px;
-        z-index: 1;
-        pointer-events: auto;
-    `
+  logoContainer.className = 'storybook-logo-container'
 
   const logo = document.createElement('img')
   logo.src = window.location.origin + logoUrl
   logo.alt = 'Build by Dragonscale'
-  logo.style.cssText = `
-        max-width: ${maxLogoWidthPercent}%;
-        height: ${logoHeight}px;
-        cursor: pointer;
-    `
+  logo.className = 'storybook-logo-image'
 
   logo.onclick = () => {
     window.open(websiteUrl, '_blank')
@@ -66,7 +49,11 @@ const addLogoToSidebar = () => {
   ) as HTMLElement
   if (scrollContainer) {
     const logoHeight = logoContainer.offsetHeight
-    scrollContainer.style.paddingBottom = `${logoHeight + bottomPadding}px`
+    scrollContainer.classList.add(scrollContainerPaddingClass)
+    document.documentElement.style.setProperty(
+      '--scroll-padding-bottom',
+      `${logoHeight + bottomPadding}px`
+    )
   }
 
   return true
@@ -101,7 +88,10 @@ const init = () => {
           if (scrollContainer && logoContainer) {
             const currentLogoHeight = (logoContainer as HTMLElement)
               .offsetHeight
-            scrollContainer.style.paddingBottom = `${currentLogoHeight + bottomPadding}px`
+            document.documentElement.style.setProperty(
+              '--scroll-padding-bottom',
+              `${currentLogoHeight + bottomPadding}px`
+            )
           }
         }, uiSettleTimeout)
       })
