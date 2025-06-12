@@ -1,5 +1,7 @@
+/* eslint-disable storybook/no-uninstalled-addons */
 import type { StorybookConfig } from '@storybook/react-webpack5'
-const path = require('path')
+import path from 'path'
+
 const config: StorybookConfig = {
   stories: ['../src/**/*.stories.@(tsx)', '../docs/*.mdx'],
   addons: [
@@ -11,6 +13,7 @@ const config: StorybookConfig = {
       options: { transcludeMarkdown: true },
     },
     '@storybook/addon-webpack5-compiler-swc',
+    './addons/button',
   ],
   framework: {
     name: '@storybook/react-webpack5',
