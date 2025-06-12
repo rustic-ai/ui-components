@@ -374,7 +374,7 @@ export interface ConversationBaseProps {
 }
 
 export interface ConversationPropsWithOptionalWs extends ConversationBaseProps {
-  /** WebSocket connection to send and receive messages to and from a backend. This value will be set automatically if the component is rendered with `ElementRenderer` or `MessageSpace`. If not provided, the component will not be able to send or receive messages. */
+  /** WebSocket connection to send response messages to a backend. This value will be set automatically if the component is rendered with `ElementRenderer` or `MessageSpace`. If not provided, the component will not be interactive. */
   ws?: WebSocketClient
 }
 
