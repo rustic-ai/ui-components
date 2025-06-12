@@ -27,9 +27,9 @@ export const senderDescription: InputType = {
   },
 }
 
-export const wsDescription: InputType = {
+export const optionalWsDescription: InputType = {
   description:
-    'WebSocket connection to send and receive messages to and from a backend. The onReceive prop will override the default handler once it is set. If you need to use the WebSocket for purposes other than chat, you will need to create a separate WebSocket connection.',
+    'WebSocket connection to send and receive messages to and from a backend. This value will be set automatically if the component is rendered with `ElementRenderer` or `MessageSpace`. If not provided, the component may not be able to send or receive messages.',
   type: {
     name: 'object',
     value: {
@@ -38,7 +38,6 @@ export const wsDescription: InputType = {
       reconnect: { name: 'function', required: true },
       onReceive: { name: 'function', required: false },
     },
-    required: true,
   },
   table: {
     type: {
@@ -51,6 +50,13 @@ export const wsDescription: InputType = {
         'onReceive?: (handler: (message: Message) => void) => void',
     },
   },
+}
+
+export const wsDescription: InputType = {
+  ...optionalWsDescription,
+  description:
+    'WebSocket connection to send and receive messages to and from a backend. The onReceive prop will override the default handler once it is set. If you need to use the WebSocket for purposes other than chat, you will need to create a separate WebSocket connection.',
+  required: true,
 }
 
 export const participantDetail =

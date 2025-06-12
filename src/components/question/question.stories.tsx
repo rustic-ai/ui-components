@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 
 import Icon from '../icon/icon'
 import MessageCanvas from '../messageCanvas/messageCanvas'
-import { senderDescription, wsDescription } from '../sharedDescription'
+import { optionalWsDescription, senderDescription } from '../sharedDescription'
 import Text from '../text/text'
 import type { Message } from '../types'
 import Question from './question'
@@ -28,7 +28,7 @@ const meta: Meta<React.ComponentProps<typeof Question>> = {
 }
 
 meta.argTypes = {
-  ws: wsDescription,
+  ws: optionalWsDescription,
   sender: senderDescription,
 }
 
@@ -127,4 +127,15 @@ export const InMessageSpace = {
       )
     },
   ],
+}
+
+export const ReadOnly = {
+  args: {
+    sender: agent,
+    conversationId: '2',
+    messageId: '1',
+    title: 'What do you think?',
+    description: 'Choose either of the options below.',
+    options,
+  },
 }

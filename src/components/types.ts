@@ -362,9 +362,9 @@ export type MultimodalInputProps = TextInputProps &
     | 'errorMessagesContainer'
   >
 
-export interface ConversationProps {
-  /** WebSocket connection to send and receive messages to and from a backend. This value will be set automatically if the component is rendered with `ElementRenderer` or `MessageSpace`. */
-  ws: WebSocketClient
+export interface ConversationBaseProps {
+  /** WebSocket connection to send and receive messages to and from a backend. This value will be set automatically if the component is rendered with `ElementRenderer` or `MessageSpace`. If not provided, the component may not be able to send or receive messages. */
+  ws?: WebSocketClient
   /** Current user. This value will be set automatically if the component is rendered with `ElementRenderer` or `MessageSpace`. */
   sender: Sender
   /** Id of the current conversation. This value will be set automatically if the component is rendered with `ElementRenderer` or `MessageSpace`. */
@@ -373,12 +373,25 @@ export interface ConversationProps {
   messageId: string
 }
 
+export interface ConversationPropsWithOptionalWs extends ConversationBaseProps {
+  /** WebSocket connection to send and receive messages to and from a backend. This value will be set automatically if the component is rendered with `ElementRenderer` or `MessageSpace`. If not provided, the component will not be able to send or receive messages. */
+  ws?: WebSocketClient
+}
+
+export interface ConversationPropsWithMandatoryWs
+  extends ConversationBaseProps {
+  /** WebSocket connection to send and receive messages to and from a backend. This value will be set automatically if the component is rendered with `ElementRenderer` or `MessageSpace`. */
+  ws: WebSocketClient
+}
+
 export interface QuestionFormat extends DataFormat {
   /** Array of options to choose from. */
   options: (string | number)[]
 }
 
-export interface QuestionProps extends QuestionFormat, ConversationProps {}
+export interface QuestionProps
+  extends QuestionFormat,
+    ConversationPropsWithOptionalWs {}
 
 export interface PromptsFormat {
   /** A list of prompt strings for users to select from. These prompts will be displayed as interactive elements in the UI. */
@@ -386,7 +399,9 @@ export interface PromptsFormat {
   position?: 'inConversation' | 'hoverOverInput'
 }
 
-export interface PromptsProps extends PromptsFormat, ConversationProps {
+export interface PromptsProps
+  extends PromptsFormat,
+    ConversationPropsWithMandatoryWs {
   /** An optional className to apply to the prompts container. */
   className?: string
 }
@@ -446,7 +461,9 @@ export interface FormFormat extends DataFormat {
   data?: any
 }
 
-export interface DynamicFormProps extends FormFormat, ConversationProps {}
+export interface DynamicFormProps
+  extends FormFormat,
+    ConversationPropsWithOptionalWs {}
 
 interface ContentBase {
   type: 'text' | 'image_url' | 'input_audio' | 'file_url'

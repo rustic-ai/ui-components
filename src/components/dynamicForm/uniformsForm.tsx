@@ -62,7 +62,7 @@ export default function UniformsForm(props: DynamicFormProps) {
       data: { data: model, inReplyTo: props.messageId },
     }
     setData(model)
-    props.ws.send(formattedMessage)
+    props.ws?.send(formattedMessage)
   }
 
   return (
@@ -73,7 +73,7 @@ export default function UniformsForm(props: DynamicFormProps) {
         schema={bridge}
         onSubmit={(model) => handleSubmit(model)}
         model={data}
-        disabled={!!data}
+        disabled={!!data || !props.ws}
       />
     </Box>
   )

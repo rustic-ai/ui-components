@@ -43,7 +43,7 @@ export default function Question(props: QuestionProps) {
       inReplyTo: props.messageId,
     }
 
-    props.ws.send(formattedMessage)
+    props.ws?.send(formattedMessage)
   }
 
   const buttonList = props.options.map((option, index) => {
@@ -61,8 +61,8 @@ export default function Question(props: QuestionProps) {
         size="small"
         sx={selectedOption === option ? selectedStyles : {}}
         className="rustic-option"
-        disabled={!!selectedOption}
-        aria-disabled={!!selectedOption}
+        disabled={!!selectedOption || !props.ws}
+        aria-disabled={!!selectedOption || !props.ws}
         label={option}
       ></Chip>
     )
