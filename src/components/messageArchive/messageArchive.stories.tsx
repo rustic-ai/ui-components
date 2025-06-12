@@ -22,11 +22,11 @@ import {
 import CodeSnippet from '../codeSnippet/codeSnippet'
 import Icon from '../icon/icon'
 import CopyText from '../messageCanvas/actions/copy/copyText'
-import MessageSpace from './messageSpace'
+import MessageArchive from './messageArchive'
 
-const meta: Meta<React.ComponentProps<typeof MessageSpace>> = {
-  title: 'Rustic UI/Message Space/Message Space',
-  component: MessageSpace,
+const meta: Meta<React.ComponentProps<typeof MessageArchive>> = {
+  title: 'Rustic UI/Message Archive/Message Archive',
+  component: MessageArchive,
   tags: ['autodocs'],
   decorators: [
     (Story: StoryFn) => {
@@ -66,6 +66,10 @@ function getProfileIconAndName(message: Message) {
 }
 
 meta.argTypes = {
+  getActionsComponent: {
+    description:
+      "A function that returns a single React element which may be composed of several actions supported for the message, such as copying. In case no actions are applicable or available for a particular message, the function may return `undefined`. This approach offers flexibility in tailoring message interactions to specific application requirements. To define individual message actions, developers can extend the `Action` component's functionality. One such example is the `CopyText` component.",
+  },
   receivedMessages: {
     table: {
       type: {
@@ -86,32 +90,8 @@ meta.argTypes = {
       },
     },
   },
-  ws: {
-    description:
-      'WebSocket connection to send and receive messages to and from a backend. The onReceive prop will override the default handler once it is set. If you need to use the WebSocket for purposes other than chat, you will need to create a separate WebSocket connection.',
-    table: {
-      type: {
-        summary: 'WebSocketClient',
-        detail:
-          'A websocket client with supports the following methods:\n' +
-          'send: (msg: Message) => void\n' +
-          'close: () => void\n' +
-          'reconnect: () => void\n' +
-          'onReceive?: (handler: (message: Message) => void) => void',
-      },
-    },
-  },
-  sender: {
-    table: {
-      type: {
-        summary: 'Sender',
-        detail:
-          'id: String representing sender id.\n' +
-          'name: Optional string of sender name.',
-      },
-    },
-  },
 }
+
 const conversationId = '1'
 
 const agentMessageData = {
@@ -170,6 +150,7 @@ const tableData = [
 const streamingMarkdownRootMessageId = getUUID()
 export const Default = {
   args: {
+    infoMessage: 'This chat has been archived.',
     ws: { send: () => {} },
     sender: humanMessageData.sender,
     receivedMessages: [
