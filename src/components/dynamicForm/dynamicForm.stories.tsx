@@ -1,3 +1,4 @@
+import { optionalWsDescription } from '../sharedDescription'
 import UniformsForm from './uniformsForm'
 
 export default {
@@ -6,6 +7,9 @@ export default {
   tags: ['autodocs'],
   parameters: {
     layout: 'centered',
+  },
+  argTypes: {
+    ws: optionalWsDescription,
   },
 }
 
@@ -23,6 +27,7 @@ export const Default = {
       },
       required: ['street', 'zip', 'state'],
     },
+    ws: { send: () => {} },
   },
 }
 
@@ -41,6 +46,29 @@ export const Meeting = {
         saturday: { type: 'boolean' },
         sunday: { type: 'boolean' },
       },
+    },
+    ws: { send: () => {} },
+  },
+}
+
+export const ReadOnly = {
+  args: {
+    title: 'Choose the days',
+    schema: {
+      title: 'Meeting Days',
+      type: 'object',
+      properties: {
+        monday: { type: 'boolean' },
+        tuesday: { type: 'boolean' },
+        wednesday: { type: 'boolean' },
+        thursday: { type: 'boolean' },
+        friday: { type: 'boolean' },
+        saturday: { type: 'boolean' },
+        sunday: { type: 'boolean' },
+      },
+    },
+    data: {
+      thursday: true,
     },
   },
 }

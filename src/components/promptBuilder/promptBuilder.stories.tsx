@@ -175,7 +175,7 @@ function CustomTextInput(props: Omit<QuestionProps, 'options'>) {
       inReplyTo: props.messageId,
     }
 
-    props.ws.send(formattedMessage)
+    props.ws?.send(formattedMessage)
     setIsSubmitted(true)
   }
 
