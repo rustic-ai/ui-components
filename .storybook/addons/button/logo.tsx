@@ -11,7 +11,7 @@ const uiSettleTimeout = 300
 
 const bottomPadding = 10
 
-const logoUrl = '/images/dragonscale-logo.svg'
+const logoUrl = 'images/dragonscale-logo.svg'
 const websiteUrl = 'https://www.dragonscale.ai'
 
 const addLogoToSidebar = () => {
@@ -33,7 +33,7 @@ const addLogoToSidebar = () => {
   logoContainer.className = 'storybook-logo-container'
 
   const logo = document.createElement('img')
-  logo.src = window.location.origin + logoUrl
+  logo.src = logoUrl
   logo.alt = 'Build by Dragonscale'
   logo.className = 'storybook-logo-image'
 
