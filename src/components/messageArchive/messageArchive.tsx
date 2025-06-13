@@ -2,8 +2,9 @@ import './messageArchive.css'
 
 import Alert from '@mui/material/Alert'
 import Chip from '@mui/material/Chip'
+import CircularProgress from '@mui/material/CircularProgress'
 import Box from '@mui/system/Box'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { type ReactNode, useEffect, useRef, useState } from 'react'
 
 import ElementRenderer from '../elementRenderer/elementRenderer'
 import Icon from '../icon/icon'
@@ -15,12 +16,14 @@ import type { ComponentMap, Message } from '../types'
 export interface MessageArchiveProps extends MessageContainerProps {
   /** A component map contains message formats as keys and their corresponding React components as values. */
   supportedElements: ComponentMap
-  /** Previous chat messages */
-  receivedMessages: Message[]
+  /** A function that can be used to get the historic messages */
+  getHistoricMessages: () => Promise<Message[]>
   /** Text label for scroll down button. Default value is 'scroll down'. */
   scrollDownLabel?: string
   /** Info message to display at the top of the message archive */
   infoMessage?: string
+  /** Loading icon to display while fetching historic messages. If not provided, a default spinner will be shown */
+  loadingIcon?: ReactNode
 }
 
 function getCombinedMessages(
@@ -96,7 +99,8 @@ export default function MessageArchive({
   const [chatMessages, setChatMessages] = useState<{
     [messageId: string]: Message[]
   }>({})
-
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string>('')
   const currentMessagesLength = Object.keys(chatMessages).length
   const hideScrollButtonDuration = 2000
 
@@ -121,32 +125,18 @@ export default function MessageArchive({
   function checkIntersection() {
     const container = containerRef.current
     const lastMessage = scrollEndRef.current
+
     if (container && lastMessage) {
       const containerBottom = container.getBoundingClientRect().bottom
       const targetBottom = lastMessage.getBoundingClientRect().bottom
       //targetBottom is slightly larger than containerBottom when it's scrolled to bottom. But the difference is always less than 1.
       const bottomDistanceTolerance = 1
+
       setIsScrolledToBottom(
         targetBottom - bottomDistanceTolerance <= containerBottom
       )
     }
   }
-
-  useEffect(() => {
-    const container = containerRef.current
-
-    checkIntersection()
-
-    if (container) {
-      container.addEventListener('scroll', checkIntersection)
-      window.addEventListener('resize', checkIntersection)
-
-      return () => {
-        container.removeEventListener('scroll', checkIntersection)
-        window.removeEventListener('resize', checkIntersection)
-      }
-    }
-  }, [isScrolledToBottom])
 
   function scrollDown() {
     if (getVideoStatus()) {
@@ -157,6 +147,7 @@ export default function MessageArchive({
         setTimeout(() => {
           hideScrollButton()
           container.scrollTop = container.scrollHeight
+          setIsScrolledToBottom(true)
         }, 0)
       }
     } else {
@@ -165,72 +156,108 @@ export default function MessageArchive({
   }
 
   useEffect(() => {
+    let messageDict: { [messageId: string]: Message[] } = {}
+    props
+      .getHistoricMessages()
+      .then((messages) => {
+        messages.forEach((message) => {
+          const newMessageDict = getCombinedMessages(messageDict, message)
+          messageDict = newMessageDict
+        })
+        setChatMessages(messageDict)
+        setIsLoading(false)
+      })
+      .catch((error) => {
+        const errorDetail = error.response?.data?.detail || error.response?.data
+        setError(errorDetail || 'Failed to load messages')
+        setIsLoading(false)
+      })
+  }, [props.getHistoricMessages])
+
+  useEffect(() => {
+    if (!isLoading && chatMessages) {
+      scrollDown()
+    }
+
+    const container = containerRef.current
+
+    if (container) {
+      checkIntersection()
+
+      container.addEventListener('scroll', checkIntersection)
+      window.addEventListener('resize', checkIntersection)
+
+      return () => {
+        container.removeEventListener('scroll', checkIntersection)
+        window.removeEventListener('resize', checkIntersection)
+      }
+    }
+  }, [isLoading, chatMessages])
+
+  useEffect(() => {
     scrollDown()
   }, [areVideosLoaded])
 
-  useEffect(() => {
-    let messageDict: { [messageId: string]: Message[] } = {}
-
-    props.receivedMessages?.forEach((message) => {
-      const newMessageDict = getCombinedMessages(messageDict, message)
-      messageDict = newMessageDict
-    })
-
-    setChatMessages(messageDict)
-  }, [props.receivedMessages?.length])
-
-  return (
-    <Box className="rustic-message-archive" data-cy="message-archive">
-      {props.infoMessage && (
-        <Alert severity="warning" data-cy="info-message">
-          {' '}
-          {props.infoMessage}
-        </Alert>
-      )}
-      <Box
-        ref={containerRef}
-        className="rustic-message-container"
-        data-cy="message-container"
-      >
-        {Object.keys(chatMessages).map((key, index) => {
-          const messages = chatMessages[key]
-          const latestMessage = messages[messages.length - 1]
-          const hasResponse = latestMessage.format.includes('Response')
-          const inReplyTo = hasResponse && {
-            inReplyTo: messages[0],
-          }
-          return (
-            <MessageCanvas
-              key={key}
-              message={latestMessage}
-              {...inReplyTo}
-              getActionsComponent={props.getActionsComponent}
-              getProfileComponent={props.getProfileComponent}
-              ref={index === currentMessagesLength - 1 ? scrollEndRef : null}
-            >
-              <ElementRenderer
-                messages={hasResponse ? [messages[0]] : messages}
-                supportedElements={props.supportedElements}
-              />
-            </MessageCanvas>
-          )
-        })}
-        {!isScrolledToBottom && !isScrollButtonHidden && (
-          <Chip
-            data-cy="scroll-down-button"
-            color="secondary"
-            className="rustic-scroll-down-button"
-            size="medium"
-            onClick={scrollDown}
-            label={
-              <>
-                {scrollDownLabel}
-                <Icon name="arrow_downward" />
-              </>
-            }
-          />
-        )}
+  if (isLoading) {
+    return (
+      <Box className="rustic-message-archive-loading">
+        {props.loadingIcon ? props.loadingIcon : <CircularProgress />}
       </Box>
-    </Box>
-  )
+    )
+  } else {
+    return (
+      <Box className="rustic-message-archive" data-cy="message-archive">
+        {props.infoMessage && !error && (
+          <Alert severity="warning" data-cy="info-message">
+            {props.infoMessage}
+          </Alert>
+        )}
+        {error && <Alert severity="error">{error}</Alert>}
+        <Box
+          ref={containerRef}
+          className="rustic-message-container"
+          data-cy="message-container"
+        >
+          {Object.keys(chatMessages).map((key, index) => {
+            const messages = chatMessages[key]
+            const latestMessage = messages[messages.length - 1]
+            const hasResponse = latestMessage.format.includes('Response')
+            const inReplyTo = hasResponse && {
+              inReplyTo: messages[0],
+            }
+            return (
+              <MessageCanvas
+                key={key}
+                message={latestMessage}
+                {...inReplyTo}
+                getActionsComponent={props.getActionsComponent}
+                getProfileComponent={props.getProfileComponent}
+                ref={index === currentMessagesLength - 1 ? scrollEndRef : null}
+              >
+                <ElementRenderer
+                  messages={hasResponse ? [messages[0]] : messages}
+                  supportedElements={props.supportedElements}
+                />
+              </MessageCanvas>
+            )
+          })}
+          {!isScrolledToBottom && !isScrollButtonHidden && (
+            <Chip
+              data-cy="scroll-down-button"
+              color="secondary"
+              className="rustic-scroll-down-button"
+              size="medium"
+              onClick={scrollDown}
+              label={
+                <>
+                  {scrollDownLabel}
+                  <Icon name="arrow_downward" />
+                </>
+              }
+            />
+          )}
+        </Box>
+      </Box>
+    )
+  }
 }

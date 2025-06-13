@@ -6,6 +6,13 @@
   overflow: hidden;
 }
 
+.rustic-message-archive-loading {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+}
+
 .rustic-message-archive .rustic-message-container {
   display: flex;
   flex-direction: column;

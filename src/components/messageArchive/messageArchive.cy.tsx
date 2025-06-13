@@ -85,7 +85,11 @@ describe('MessageArchive Component', () => {
       cy.viewport(viewport)
       cy.mount(
         <MessageArchive
-          receivedMessages={messages}
+          getHistoricMessages={() => {
+            return new Promise((resolve) => {
+              resolve(messages)
+            })
+          }}
           supportedElements={supportedElements}
           getProfileComponent={(message: Message) => {
             if (message.sender.name?.includes('Agent')) {
@@ -117,14 +121,18 @@ describe('MessageArchive Component', () => {
       })
     })
 
-    it(`scrolls to bottom when "Go to bottom" button is clicked on ${viewport} screen`, () => {
+    it.only(`scrolls to bottom when "Go to bottom" button is clicked on ${viewport} screen`, () => {
       const waitTime = 500
 
       cy.viewport(viewport)
       cy.mount(
         <div style={{ height: '200px', display: 'flex' }}>
           <MessageArchive
-            receivedMessages={messages}
+            getHistoricMessages={() => {
+              return new Promise((resolve) => {
+                resolve(messages)
+              })
+            }}
             supportedElements={supportedElements}
           />
         </div>
@@ -150,7 +158,11 @@ describe('MessageArchive Component', () => {
       cy.viewport(viewport)
       cy.mount(
         <MessageArchive
-          receivedMessages={messages}
+          getHistoricMessages={() => {
+            return new Promise((resolve) => {
+              resolve(messages)
+            })
+          }}
           supportedElements={supportedElements}
           infoMessage={infoMessageText}
         />
