@@ -124,39 +124,6 @@ const humanMessageData = {
   conversationId,
 }
 
-const timeSeriesData = [
-  {
-    timestamp: 1704096000000,
-    uv: 4000,
-    pv: 2400,
-    amt: 2400,
-  },
-  {
-    timestamp: 1704182400000,
-    uv: 3000,
-    pv: 1398,
-    amt: 2210,
-  },
-  {
-    timestamp: 1704268800000,
-    uv: 2000,
-    pv: 9800,
-    amt: 2290,
-  },
-  {
-    timestamp: 1704355200000,
-    uv: 2780,
-    pv: 3908,
-    amt: 2000,
-  },
-  {
-    timestamp: 1704441600000,
-    uv: 1890,
-    pv: 4800,
-    amt: 2181,
-  },
-]
-
 const code = `function greet(name) {
   console.log('Hello, ' + name + '!');
 }
@@ -200,7 +167,6 @@ const tableData = [
   },
 ]
 
-const chartColors = ['#648FFF', '#785EF0', '#DC267F', '#FE6100', '#FFB000']
 const streamingMarkdownRootMessageId = getUUID()
 export const Default = {
   args: {
@@ -233,29 +199,6 @@ export const Default = {
         threadId: streamingMarkdownRootMessageId,
         data: {
           text: '\n\nThis is a paragraph. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.\n\n- This is an **inline notation**\n- This is a *inline notation*.\n- This is a _inline notation_.\n- This is a __inline notation__.\n- This is a ~~inline notation~~.\n\n```\nconst string = "Hello World"\nconst number = 123\n```\n\n> This is a blockquote.\n\n1. Item 1\n2. Item 2\n3. Item 3\n\n| Column 1 | Column 2 | Column 3 |\n| -------- | -------- | -------- |\n| Item 1   | Item 2   | Item 3   |',
-        },
-      },
-      {
-        ...humanMessageData,
-        id: getUUID(),
-        timestamp: '2024-01-02T00:02:00.000Z',
-        format: 'text',
-        data: {
-          text: 'Could you show me an example of the time series component?',
-        },
-      },
-      {
-        ...agentMessageData,
-        id: getUUID(),
-        timestamp: '2024-01-02T00:03:00.000Z',
-        format: 'timeSeries',
-        data: {
-          title: 'Demo Time Series Chart',
-          timeSeries: timeSeriesData,
-          description:
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-          yAxisLabelWidth: 60,
-          chartColors,
         },
       },
       {
