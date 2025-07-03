@@ -1,5 +1,5 @@
 import Typography from '@mui/material/Typography'
-import type { Meta, StoryFn } from '@storybook/react'
+import type { Meta, StoryFn } from '@storybook/react-webpack5'
 import React, { useState } from 'react'
 
 import Icon from '../icon/icon'

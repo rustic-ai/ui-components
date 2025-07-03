@@ -1,4 +1,4 @@
-import { addons } from '@storybook/manager-api'
+import { addons } from 'storybook/manager-api'
 
 const logoDataAttribute = 'data-storybook-logo-id'
 const logoId = 'storybook-sidebar-custom-logo'

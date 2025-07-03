@@ -1,7 +1,7 @@
 /* eslint-disable no-magic-numbers */
 
 import Button from '@mui/material/Button'
-import type { Meta, StoryFn } from '@storybook/react'
+import type { Meta, StoryFn } from '@storybook/react-webpack5'
 import React, { useState } from 'react'
 
 import { participantDetail } from '../sharedDescription'

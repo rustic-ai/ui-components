@@ -1,7 +1,7 @@
 import CircularProgress from '@mui/material/CircularProgress'
 import Typography from '@mui/material/Typography'
-import type { Meta } from '@storybook/react'
-import type { StoryFn } from '@storybook/react'
+import type { Meta } from '@storybook/react-webpack5'
+import type { StoryFn } from '@storybook/react-webpack5'
 import React from 'react'
 import { v4 as getUUID } from 'uuid'
 

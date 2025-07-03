@@ -1,12 +1,10 @@
-/* eslint-disable storybook/no-uninstalled-addons */
 import type { StorybookConfig } from '@storybook/react-webpack5'
 import path from 'path'
 
 const config: StorybookConfig = {
   stories: ['../src/**/*.stories.@(tsx)', '../docs/*.mdx'],
+
   addons: [
-    '@storybook/addon-toolbars',
-    '@storybook/addon-viewport',
     'storybook-addon-mock',
     {
       name: '@storybook/addon-docs',
@@ -18,9 +16,6 @@ const config: StorybookConfig = {
   framework: {
     name: '@storybook/react-webpack5',
     options: {},
-  },
-  docs: {
-    autodocs: 'tag',
   },
   typescript: {
     // Overrides the default Typescript configuration to allow multi-package components to be documented via Autodocs.

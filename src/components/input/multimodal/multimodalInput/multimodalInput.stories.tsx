@@ -1,4 +1,4 @@
-import type { Meta, StoryFn } from '@storybook/react'
+import type { Meta, StoryFn } from '@storybook/react-webpack5'
 import axios from 'axios'
 import React from 'react'
 import { v4 as getUUID } from 'uuid'

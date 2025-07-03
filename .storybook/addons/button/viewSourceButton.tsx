@@ -1,7 +1,7 @@
-import { Button } from '@storybook/components'
-import { addons, type API, types } from '@storybook/manager-api'
 import React, { useEffect, useState } from 'react'
+import { Button } from 'storybook/internal/components'
 import type { API_LeafEntry } from 'storybook/internal/types'
+import { addons, type API, types } from 'storybook/manager-api'
 
 const ADDON_ID = 'github-source-link'
 const TOOL_ID = `${ADDON_ID}/tool`
