@@ -1,17 +1,19 @@
-import { INITIAL_VIEWPORTS } from '@storybook/addon-viewport'
-import { CssBaseline, ThemeProvider } from '@mui/material'
+import { ThemeProvider } from '@mui/material'
+import CssBaseline from '@mui/material/CssBaseline'
 import { StyledEngineProvider } from '@mui/material/styles'
 import {
-  Title,
-  Subtitle,
+  ArgTypes,
   Description,
   Primary,
-  ArgTypes,
   Stories,
-} from '@storybook/blocks'
-import { rusticLightTheme, rusticDarkTheme } from '../src/rusticTheme'
-
+  Subtitle,
+  Title,
+} from '@storybook/addon-docs/blocks'
+import type { StoryContext, StoryFn } from '@storybook/react-webpack5'
 import React from 'react'
+import { INITIAL_VIEWPORTS } from 'storybook/viewport'
+
+import { rusticDarkTheme, rusticLightTheme } from '../src/rusticTheme'
 
 export const globalTypes = {
   theme: {
@@ -27,7 +29,7 @@ export const globalTypes = {
   },
 }
 
-const withMuiTheme = (Story, context) => {
+const withMuiTheme = (Story: StoryFn, context: StoryContext) => {
   const theme =
     context.globals.theme === 'light' ? rusticLightTheme : rusticDarkTheme
 
@@ -90,11 +92,11 @@ const preview = {
   },
 }
 
-export const webpackFinal = async (config) => {
+export const webpackFinal = async (config: any) => {
   config.module.rules.push({
     test: /\.css$/,
     use: ['style-loader', 'css-loader'],
-    include: path.resolve(__dirname, '../'),
+    include: '../',
   })
 
   config.module.rules.push({

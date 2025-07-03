@@ -20,11 +20,11 @@ const compat = new FlatCompat({
 export default [{
     ignores: ['**/jest.config.js', '**/webpack.config.js', '**/webpack.prod.config.js'],
 }, ...compat.extends(
-  'eslint:recommended',
-  'plugin:@typescript-eslint/recommended',
-  'plugin:cypress/recommended',
-  'plugin:storybook/recommended',
-  'prettier',
+    'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:cypress/recommended',
+    'plugin:storybook/recommended',
+    'prettier',
 ), {
     plugins: {
         "unused-imports": unusedImports,

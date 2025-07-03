@@ -1,7 +1,7 @@
-import { Button } from '@storybook/components'
 import { GithubIcon } from '@storybook/icons'
-import { addons, types } from '@storybook/manager-api'
 import React from 'react'
+import { Button } from 'storybook/internal/components'
+import { addons, types } from 'storybook/manager-api'
 
 const ADDON_ID = 'github-link'
 const TOOL_ID = `${ADDON_ID}/tool`
